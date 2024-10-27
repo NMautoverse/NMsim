@@ -52,13 +52,19 @@
 <h2 class="pkg-version" data-toc-text="0.1.4" id="nmsim-014">NMsim 0.1.4<a class="anchor" aria-label="anchor" href="#nmsim-014"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-4">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-4"></a></h3>
-<ul><li><p><code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code> is a new function that automates sampling of parameter values from an estimated variance-variance matrix in a successful <code>$COVARIANCE</code> step using the <code>simpar</code> R package from Metrum Research Group. The package is currently not on CRAN</p></li>
-<li><p><code><a href="../reference/expandCovLists.html">expandCovLists()</a></code></p></li>
-<li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code></p></li>
+<ul><li><p><code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code> is a new function that automates sampling of parameter values from an estimated variance-variance matrix in a successful <code>$COVARIANCE</code> step using the <code>simpar</code> R package from Metrum Research Group. <code>simpar</code> is currently not on CRAN, so the user must install it from MPN or github to make use of <code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code>. The sampled parameter values can be fed directly to <code>NMsim</code> using the <code>NMsim_VarCov</code> method making it very easy to simulate with parameter uncertainty based on <code>simpar</code>.</p></li>
+<li><p><code><a href="../reference/expandCovLists.html">expandCovLists()</a></code> is a new function that puts together data sets for univariately varying covariates while keeping other at reference values. The function can derive both reference values and covariate values to simulate at by using i.e. <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">median()</a></code> and <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code>.</p></li>
 <li>
 <p><code><a href="../reference/NMsim.html">NMsim()</a></code></p>
-<ul><li><p>Results are now equipped with three columns distinguishing simulated models.</p></li>
-<li><p>No longer requires a <code>.ext</code> file if updating parameter values using PSN’s <code>update_inits</code>. It is still recommended to keep the <code>.ext</code> file since it provides higher accuracy than the <code>.lst</code> file.</p></li>
+<ul><li>Results are now equipped with three columns distinguishing simulated models. This separation of information makes it easier to summarize simulation results within/across models and/or within/across simulation of models.
+<ul><li>
+<code>model</code>: The run name derived from <code>file.mod</code>.</li>
+<li>
+<code>name.sim</code>: The same as provided in the <code>name.sim</code> argument.</li>
+<li>
+<code>model.sim</code> The name of the generated model. In the simple case, this is <code>model</code> and <code>name.sim</code> combined. But in many cases, multiple models are being generated for each simulated control stream.</li>
+</ul></li>
+<li>No longer requires a <code>.ext</code> file if updating parameter values using PSN’s <code>update_inits</code>. It is still recommended to keep the <code>.ext</code> file since it provides higher accuracy than the <code>.lst</code> file.</li>
 </ul></li>
 <li>
 <p><code><a href="../reference/NMexec.html">NMexec()</a></code></p>
@@ -72,12 +78,14 @@
 <li><p><code>col.id</code> argument to specify name of subject id column or to omit altogether using <code>col.id=NA</code>.</p></li>
 <li><p>Now checking that <code>TIME</code> is covering the length of all other arguments. In contrast to other arguments, it does not make much sense to try to extrapolate the <code>TIME</code> argument.</p></li>
 </ul></li>
+<li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code> now has two arguments, <code>TIME</code> and <code>TAPD</code> which allow for specification of time since first dose and time after each dose at which to insert simulation records. The two can even be combined. <code>TIME</code> replaces the now deprecated <code>time.sim</code> argument, and <code>TAPD</code> is new.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-1-4">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-1-4"></a></h3>
-<p>A bug most likely affecting most Windows users for execution of Nonmem has been fixed. If on Windows, you should upgrade to NMsim 0.1.4.</p>
-<ul><li>
-<code><a href="../reference/NMsim.html">NMsim()</a></code>
+<ul><li><p>A bug most likely affecting most Windows users for execution of Nonmem has been fixed. If on Windows, you should upgrade to NMsim 0.1.4.</p></li>
+<li><p>When using <code>method.execute="nmsim"</code> there was an issue with parallellization. This was not a major problem in most simulation applications, but it should now be fixed.</p></li>
+<li>
+<p><code><a href="../reference/NMsim.html">NMsim()</a></code></p>
 <ul><li>When not providing a simulation data set - typically a simulation for a VPC - <code><a href="../reference/NMsim.html">NMsim()</a></code> would fail with messages like</li>
 </ul></li>
 </ul><pre><code>Error in `:=`((col.sim), ..name.sim) :
