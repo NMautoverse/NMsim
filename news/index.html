@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.934</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.935</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.4" id="nmsim-014">NMsim 0.1.4<a class="anchor" aria-label="anchor" href="#nmsim-014"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-4">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-4"></a></h3>
-<ul><li><p><code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code> is a new function that automates sampling of parameter values from an estimated variance-variance matrix in a successful <code>$COVARIANCE</code> step using the <code>simpar</code> R package from Metrum Research Group. <code>simpar</code> is currently not on CRAN, so the user must install it from MPN or github to make use of <code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code>. The sampled parameter values can be fed directly to <code>NMsim</code> using the <code>NMsim_VarCov</code> method making it very easy to simulate with parameter uncertainty based on <code>simpar</code>.</p></li>
+<ul><li><p><code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code> is a new function that automates sampling of parameter values from an estimated variance-variance matrix in a successful <code>$COVARIANCE</code> step using the <code>simpar</code> R package from Metrum Research Group. <code>simpar</code> is currently not on CRAN, so the user must install it from MPN or github to make use of <code><a href="../reference/sampleParsSimpar.html">sampleParsSimpar()</a></code>. The sampled parameter values can be fed directly to <code>NMsim</code> using the <code>NMsim_VarCov</code> method making it very easy to simulate with parameter uncertainty based on <code>simpar</code>. I want to thank Sanaya Shroff for her outstanding work on this functionality and for her exciting work summarizing the available methods for simulation with parameter uncertainty which she will be sharing at ACoP 2024.</p></li>
 <li><p><code><a href="../reference/expandCovLists.html">expandCovLists()</a></code> is a new function that puts together data sets for univariately varying covariates while keeping other at reference values. The function can derive both reference values and covariate values to simulate at by using i.e. <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">median()</a></code> and <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code>.</p></li>
 <li>
 <p><code><a href="../reference/NMsim.html">NMsim()</a></code></p>
