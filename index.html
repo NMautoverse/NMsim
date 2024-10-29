@@ -50,13 +50,13 @@
 </li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">News</a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/philipdelff/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/NMautoverse/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/philipdelff/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/NMautoverse/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -72,7 +72,7 @@
 
 <!-- [![R-CMD-check](https://github.com/philipdelff/NMsim/workflows/R-CMD-check/badge.svg)](https://github.com/philipdelff/NMsim/actions) -->
 <!-- badges: end -->
-<p>Please make sure to read this at <a href="https://philipdelff.github.io/NMsim/"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
+<p>Please make sure to read this at <a href="https://philipdelff.github.io/NMsim/" class="external-link"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
 <p><code>NMsim</code> is an R package that can simulate Nonmem models (using the <code>NMsim</code> function) based on just a simulation data set and a path to an estimation control stream. It will also retrive and combine output tables with input data once Nonmem has finished and return the results to R.</p>
 <p>The interface is “seamless” or fully integrated in R. Run a simulation of the (estimated) model stored in “path/to/file.mod” using the simulation input data set stored in the variable <code>data.sim</code> this way:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -96,7 +96,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">variable</span><span class="op">==</span><span class="st">"Y"</span><span class="op">]</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Hours since first dose"</span>,y<span class="op">=</span><span class="st">"Concentration (ng/mL)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-simple-sim-1.png" width="100%"></p>
-<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>.</p>
+<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>.</p>
 <div class="section level2">
 <h2 id="supported-types-of-simulations">Supported types of simulations<a class="anchor" aria-label="anchor" href="#supported-types-of-simulations"></a>
 </h2>
@@ -112,7 +112,7 @@
 <li>Simulation of typical subjects with all ETAs equal 0 (<code>typical=TRUE</code>)</li>
 <li>Custom modification of control stream sections (<code>modify.sections</code> argument)</li>
 </ul>
-<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>. It is really easy.</p>
+<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>. It is really easy.</p>
 <p>In addition, <code>NMsim</code> can simulate multiple models at a time. E.g., if a bootstrap run of a model is available, NMsim can run the simulation with each of the bootstrap models and collect all the results in one dataset. This provides a robust and easy way to simulate a Nonmem model with uncertainty.</p>
 <p>You can also write your own methods, if you have some other Nonmem-based simulation (or other job) you want to automate using <code>NMsim</code>.</p>
 <p>Many features are available. Prominent ones are:</p>
@@ -197,8 +197,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=NMsim" class="external-link">View on CRAN</a></li>
-<li><a href="https://github.com/philipdelff/NMsim/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/philipdelff/NMsim/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/NMautoverse/NMsim/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/NMautoverse/NMsim/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 

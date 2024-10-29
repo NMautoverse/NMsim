@@ -48,13 +48,13 @@
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">News</a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/philipdelff/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/NMautoverse/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/philipdelff/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/NMautoverse/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -71,7 +71,7 @@
       <h1>Reuse simulated subjects</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/philipdelff/NMsim/blob/main/vignettes/NMsim-ReuseSimSubjects.Rmd" class="external-link"><code>vignettes/NMsim-ReuseSimSubjects.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-ReuseSimSubjects.Rmd" class="external-link"><code>vignettes/NMsim-ReuseSimSubjects.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-ReuseSimSubjects.Rmd</code></div>
     </div>
 
@@ -103,14 +103,14 @@ estimates (essentially individual parameters). It does so by reading and
 simulating from the estimated <code>OMEGA</code> matrix (random-effect
 variance-covariance matrix - a covariance step is not needed to get
 this). The simulation method called <code><a href="../reference/NMsim_known.html">NMsim_known()</a></code> can then
-be used to simulate subjects as stored in this file. See <a href="https://philipdelff.github.io/NMsim/articles/NMsim-known.html"><code>NMsim-known.html</code></a>
+be used to simulate subjects as stored in this file. See <a href="https://philipdelff.github.io/NMsim/articles/NMsim-known.html" class="external-link"><code>NMsim-known.html</code></a>
 for more information on <code>NMsim_known</code>.</p>
 <div class="section level3">
 <h3 id="what-is-a-subject">What is a subject?<a class="anchor" aria-label="anchor" href="#what-is-a-subject"></a>
 </h3>
 <p>What is refered to here by “subject” is really a combination of
 <code>ETA</code>s. Covariates must be handled by the user in the
-simulation input dataset. This is also discussed in <a href="https://philipdelff.github.io/NMsim/articles/NMsim-known.html"><code>NMsim-known.html</code></a>.</p>
+simulation input dataset. This is also discussed in <a href="https://philipdelff.github.io/NMsim/articles/NMsim-known.html" class="external-link"><code>NMsim-known.html</code></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -126,7 +126,7 @@ called <code>xgxr032_simEtas.phi</code>.</p>
 <span>                   seed<span class="op">=</span><span class="fl">238861</span>,</span>
 <span>                   file.phi<span class="op">=</span><span class="st">"xgxr032_simEtas.phi"</span></span>
 <span>                   <span class="op">)</span></span></code></pre></div>
-<p>We’ll just use the simulation data set created in <a href="https://philipdelff.github.io/NMsim/articles/NMsim-DataCreate.html"><code>NMsim-DataCreate.html</code></a></p>
+<p>We’ll just use the simulation data set created in <a href="https://philipdelff.github.io/NMsim/articles/NMsim-DataCreate.html" class="external-link"><code>NMsim-DataCreate.html</code></a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu">read_fst</span><span class="op">(</span>path<span class="op">=</span><span class="st">"simulate-results/dat_sim.fst"</span>,as.data.table<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>And now we can use <code><a href="../reference/NMsim_known.html">NMsim_known()</a></code>.</p>
