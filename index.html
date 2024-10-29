@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Seamless Nonmem Simulation Platform • NMsim</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
@@ -65,14 +71,14 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="nmdata">NMdata<a href="https://philipdelff.github.io/NMdata/" class="external-link"><img src="reference/figures/NMsimlogo_alternate.png" align="right" height="120"></a>
-<a class="anchor" aria-label="anchor" href="#nmdata"></a>
+<div class="page-header"><h1 id="nmsim">NMsim<a href="https://NMautoverse.github.io/NMsim/"><img src="reference/figures/NMsimlogo240.png" align="right" height="120"></a>
+<a class="anchor" aria-label="anchor" href="#nmsim"></a>
 </h1></div>
 <!-- badges: start -->
 
-<!-- [![R-CMD-check](https://github.com/philipdelff/NMsim/workflows/R-CMD-check/badge.svg)](https://github.com/philipdelff/NMsim/actions) -->
+<!-- [![R-CMD-check](https://github.com/NMautoverse/NMsim/workflows/R-CMD-check/badge.svg)](https://github.com/NMautoverse/NMsim/actions) -->
 <!-- badges: end -->
-<p>Please make sure to read this at <a href="https://philipdelff.github.io/NMsim/" class="external-link"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
+<p>Please make sure to read this at <a href="https://NMautoverse.github.io/NMsim/"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
 <p><code>NMsim</code> is an R package that can simulate Nonmem models (using the <code>NMsim</code> function) based on just a simulation data set and a path to an estimation control stream. It will also retrive and combine output tables with input data once Nonmem has finished and return the results to R.</p>
 <p>The interface is “seamless” or fully integrated in R. Run a simulation of the (estimated) model stored in “path/to/file.mod” using the simulation input data set stored in the variable <code>data.sim</code> this way:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -95,8 +101,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">variable</span><span class="op">!=</span><span class="st">"Y"</span><span class="op">]</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">variable</span><span class="op">==</span><span class="st">"Y"</span><span class="op">]</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Hours since first dose"</span>,y<span class="op">=</span><span class="st">"Concentration (ng/mL)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-simple-sim-1.png" width="100%"></p>
-<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>.</p>
+<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>.</p>
 <div class="section level2">
 <h2 id="supported-types-of-simulations">Supported types of simulations<a class="anchor" aria-label="anchor" href="#supported-types-of-simulations"></a>
 </h2>
@@ -112,7 +117,7 @@
 <li>Simulation of typical subjects with all ETAs equal 0 (<code>typical=TRUE</code>)</li>
 <li>Custom modification of control stream sections (<code>modify.sections</code> argument)</li>
 </ul>
-<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>. It is really easy.</p>
+<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>. It is really easy.</p>
 <p>In addition, <code>NMsim</code> can simulate multiple models at a time. E.g., if a bootstrap run of a model is available, NMsim can run the simulation with each of the bootstrap models and collect all the results in one dataset. This provides a robust and easy way to simulate a Nonmem model with uncertainty.</p>
 <p>You can also write your own methods, if you have some other Nonmem-based simulation (or other job) you want to automate using <code>NMsim</code>.</p>
 <p>Many features are available. Prominent ones are:</p>
@@ -144,7 +149,7 @@
 <h2 id="supported-model-types">Supported model types<a class="anchor" aria-label="anchor" href="#supported-model-types"></a>
 </h2>
 <p>The methods currently provided by <code>NMsim</code> will work with (many or most) Pop PK models and most continuous-scale PD models. Methods are currently not provided for for time-to-event models. Also, depending on the coding of the models, other censored data models may not work out of the box, because the model may not have a single variable (in Nonmem) that simulates the wanted information for all data rows, as their interpretation may depend on other values.</p>
-<p>The input data set must contain whatever variables are needed by the Nonmem model. A common issue is if the Nonmem model uses a covariate that is not in the simulation input data set. <code>NMdata</code>’s <a href="https://philipdelff.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a> is a good help identifying input data issues before running Nonmem - and when Nonmem acts unexpectedly.</p>
+<p>The input data set must contain whatever variables are needed by the Nonmem model. A common issue is if the Nonmem model uses a covariate that is not in the simulation input data set. <code>NMdata</code>’s <a href="https://NMautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a> is a good help identifying input data issues before running Nonmem - and when Nonmem acts unexpectedly.</p>
 </div>
 <div class="section level2">
 <h2 id="nmsim-and-speed">NMsim and speed<a class="anchor" aria-label="anchor" href="#nmsim-and-speed"></a>
@@ -190,7 +195,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"NMsim"</span><span class="op">)</span></span>
 <span><span class="co">## From github</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"philipdelff/NMsim"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"NMautoverse/NMsim"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -239,7 +244,7 @@
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://CRAN.R-project.org/package=NMsim" class="external-link"><img src="https://www.r-pkg.org/badges/version/NMsim" alt="CRAN status"></a></li>
 <li><a href="https://cran.r-project.org/package=NMsim" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/NMsim" alt="CRAN downloads"></a></li>
-<li><a href="https://app.codecov.io/gh/philipdelff/NMsim?branch=main" class="external-link"><img src="https://codecov.io/gh/philipdelff/NMsim/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://app.codecov.io/gh/NMautoverse/NMsim?branch=main" class="external-link"><img src="https://codecov.io/gh/NMautoverse/NMsim/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
