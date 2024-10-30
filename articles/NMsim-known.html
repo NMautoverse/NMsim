@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.939</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.940</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
 
     
     
-<p>Built 2024-10-30 using NMsim 0.1.3.939.</p>
+<p>Built 2024-10-30 using NMsim 0.1.3.940.</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -97,10 +97,10 @@ following purposes</p>
 <h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
 </h2>
 <p>You should have configured <code>NMsim</code> with the path to the
-Nonmem installation and maybe also PSN (optional). See <a href="https://philipdelff.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a>.
+Nonmem installation and maybe also PSN (optional). See <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a>.
 Don’t worry - it is very easy.</p>
 <p>You should be familiar with basic <code>NMsim</code> arguments as
-described in <a href="https://philipdelff.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>.
+described in <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-basics.html" class="external-link"><code>NMsim-basics.html</code></a>.
 In that vignette you should have learned to use the default simulation
 method. This vignette will be using the same model and simulation input
 data to demonstrate how to use additional methods and features of
@@ -157,7 +157,7 @@ simulated subjects in multiple simulations for reproducibility and to
 have all difference between say simulation results of different regimens
 be driven by differences in the regimen, and not in the populations.
 This use of <code>NMsim_EBE</code> is on the todo list tog get it’s own
-vignette <a href="https://philipdelff.github.io/NMsim/articles/NMsim-ReuseSimSubjects.html" class="external-link">here</a>.</p></li>
+vignette <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-ReuseSimSubjects.html" class="external-link">here</a>.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -178,7 +178,7 @@ path to the Nonmem executable.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdataConf</span><span class="op">(</span>path.nonmem<span class="op">=</span><span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span><span class="op">)</span></span></code></pre></div>
 <p>For a simulation data set we are using the multiple dose simulation
-data set with a loading dose generated in the <a href="https://philipdelff.github.io/NMsim/articles/NMsim-DataCreate.html" class="external-link">Creation
+data set with a loading dose generated in the <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-DataCreate.html" class="external-link">Creation
 of Simulation Data Sets</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## read model results just to extract the observed ID's. Notice, if</span></span>

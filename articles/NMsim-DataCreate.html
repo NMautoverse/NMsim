@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.939</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.940</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
 
     
     
-<p>Built 2024-10-30 using NMsim 0.1.3.939.</p>
+<p>Built 2024-10-30 using NMsim 0.1.3.940.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
@@ -128,12 +128,12 @@ the data set. We use <code>data.table</code>’s <code><a href="https://rdatatab
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ROW</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
 <p><code>NMsim</code> does not include any plotting functionality, but
 here is a simple way to show dosing amounts and sample times.
-<code><a href="https://philipdelff.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses()</a></code> is used to <em>expand</em> the
+<code><a href="https://rdrr.io/pkg/NMdata/man/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses()</a></code> is used to <em>expand</em> the
 doses coded with <code>ADDL</code>/<code>II</code> in order to get a
 data row to plot for each dose. We also take the sum of the amounts by
 time point in case doses are simultaneous.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://philipdelff.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMdata/man/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="va">dtplot</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">AMT</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">CMT</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dtplot</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">CMT</span><span class="op">)</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">EVID</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -191,12 +191,12 @@ columns to the right</li>
 <span><span class="co">#&gt; 4:     1     2     2     2    NA    NA    NA     1 300 mg then 150 mg QD     4</span></span>
 <span><span class="co">#&gt; 5:     1     3     2     2    NA    NA    NA     1 300 mg then 150 mg QD     5</span></span></code></pre>
 <p>Finally, We check the simulation data set for various potential
-issues in Nonmem data sets using <code><a href="https://philipdelff.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> and
+issues in Nonmem data sets using <code><a href="https://rdrr.io/pkg/NMdata/man/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> and
 summarize the number of doses and observations:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## until NMdata 0.1.7 NMcheckData requires a DV column</span></span>
 <span><span class="va">dat.sim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA_real_</span><span class="op">]</span></span>
-<span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://philipdelff.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
+<span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMdata/man/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No findings. Great!</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -204,7 +204,7 @@ summarize the number of doses and observations:</p>
 </h3>
 <p>Just like for preparation of data set with observed data, time after
 previous dose may be the relevant time to analyze the simulation results
-against. We use <code><a href="https://philipdelff.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
+against. We use <code><a href="https://rdrr.io/pkg/NMdata/man/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
 automatically.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu">addTAPD</span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
@@ -254,8 +254,8 @@ numbers.</p>
 <span><span class="co">#&gt; 4:    NA       1     0     2     300     300</span></span>
 <span><span class="co">#&gt; 5:    NA       1     0     3     300     300</span></span>
 <span><span class="co">#&gt; 6:    NA       1     0     4     300     300</span></span></code></pre></div>
-<p><code>addTAPD</code> uses <code><a href="https://philipdelff.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses</a></code> to make
-sure all dosing times are considered. See <code><a href="https://philipdelff.github.io/NMdata/reference/addTAPD.html" class="external-link">?NMdata::addTAPD</a></code>
+<p><code>addTAPD</code> uses <code><a href="https://rdrr.io/pkg/NMdata/man/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses</a></code> to make
+sure all dosing times are considered. See <code><a href="https://rdrr.io/pkg/NMdata/man/addTAPD.html" class="external-link">?NMdata::addTAPD</a></code>
 for what the other created columns mean and for many useful
 features.</p>
 </div>
