@@ -13,7 +13,7 @@ time."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.945</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,8 @@ time.</p>
 <span>  <span class="va">CMT</span>,</span>
 <span>  EVID <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  <span class="va">args.NMexpandDoses</span>,</span>
+<span>  col.id <span class="op">=</span> <span class="st">"ID"</span>,</span>
+<span>  unique <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">as.fun</span>,</span>
 <span>  <span class="va">doses</span>,</span>
 <span>  <span class="va">time.sim</span></span>
@@ -121,6 +123,14 @@ argument, `addEVID2()` relies on the default `NMexpanDoses()`
 argument values. If this is insufficient, you can specify
 other argument values in a list, or you can call
 `NMdata::NMexpanDoses()` manually before calling `addEVID2()`.</p></dd>
+
+
+<dt id="arg-unique">unique<a class="anchor" aria-label="anchor" href="#arg-unique"></a></dt>
+<dd><p>If `TRUE` (default), events are reduced to unique
+time points before insertion. Sometimes, it's easier to
+combine sequences of time points that overlap (maybe across
+`TIME` and `TAPD`), and let `addEVID2()` clean them. If you
+want to keep your duplicated events, use `unique=FALSE`.</p></dd>
 
 
 <dt id="arg-as-fun">as.fun<a class="anchor" aria-label="anchor" href="#arg-as-fun"></a></dt>
