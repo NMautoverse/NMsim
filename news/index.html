@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.951</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.903</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,23 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NMautoverse/NMsim/blob/v0.1.4/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.5" id="nmsim-015">NMsim 0.1.5<a class="anchor" aria-label="anchor" href="#nmsim-015"></a></h2>
+<div class="section level3">
+<h3 id="improvements-0-1-5">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-1-5"></a></h3>
+<ul><li>
+<code><a href="../reference/expandCovs.html">expandCovs()</a></code> has a new argument <code>reduce.ref</code> which defaults to <code>TRUE</code> meaning that by default there will be only one reference combination. If <code>FALSE</code> <code><a href="../reference/expandCovs.html">expandCovs()</a></code> will return one reference for each covariate. The forest plot can be evaluated with just one reference simulation.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-0-1-5">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-1-5"></a></h3>
+<ul><li><p>NMsim 0.1.4 would not submit jobs to cluster when number of cores was <code>nc=1</code>. Fixed. Workaround, use <code>nc=2</code>.</p></li>
+<li><p>NMsim 0.1.4 erroneously concluded jobs had failed when sent to the cluster if there was no existing queue. This is due to the exit status of <code>qsub</code> in such cases. This has been fixed. As a workaround in 0.1.4, just run your sim again once the queue has been initiated by the first NMsim called.</p></li>
+<li><p>When Nonmem failed in 0.1.4, NMsim might not return debugging info. Fixed.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="nmsim-014">NMsim 0.1.4<a class="anchor" aria-label="anchor" href="#nmsim-014"></a></h2><p class="text-muted">CRAN release: 2024-11-02</p>
 <div class="section level3">
@@ -167,7 +181,7 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="nmsim-010">NMsim 0.1.0<a class="anchor" aria-label="anchor" href="#nmsim-010"></a></h2><p class="text-muted">CRAN release: 2024-02-22</p>
-<p>For the first time NMsim works on Windows. There may still be some limitations but initial testing looks very promising. Make sure to set <code>path.nonmem</code>. See the configuration vignette on the website: <a href="https://philipdelff.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a></p>
+<p>For the first time NMsim works on Windows. There may still be some limitations but initial testing looks very promising. Make sure to set <code>path.nonmem</code>. See the configuration vignette on the website: <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a></p>
 <p>0.1.0 is also an important upgrade that solidifies the way NMsim reads results from simulations. In addition to important bug fixes, it allows for NMsim to wait on Nonmem to complete simulations - even when they are run on a cluster. This means even large simulations with NMsim can be integrated in scripts.</p>
 <div class="section level3">
 <h3 id="new-features-0-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
