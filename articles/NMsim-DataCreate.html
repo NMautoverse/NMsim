@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.907</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.909</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Vignettes</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
-<li><a class="dropdown-item" href="../articles/NMsim-basics.html">Simulation of New Subjects</a></li>
+<li><a class="dropdown-item" href="../articles/NMsim-intro.html">NMsim Introduction</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-VPC.html">Simulations for VPCs</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-config.html">Requirements and Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
@@ -84,7 +84,7 @@
 
     
     
-<p>Built 2024-11-09 using NMsim 0.1.4.907.</p>
+<p>Built 2024-11-10 using NMsim 0.1.4.909.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
@@ -208,7 +208,7 @@ previous dose may be the relevant time to analyze the simulation results
 against. We use <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
 automatically.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu">addTAPD</span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt   ROW</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt; &lt;int&gt;</span></span>
@@ -236,7 +236,7 @@ post-dose, we have to specify how to order <code>EVID</code>
 numbers.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## order.evid=c(1,2) means doses are ordered before EVID=2 records</span></span>
-<span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu">addTAPD</span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## now the TIME=0 sample has TAPD=0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt   ROW</span></span>
