@@ -269,6 +269,9 @@ be created this way:</p>
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,</span>
 <span>                       addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,time.sim<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="creating-dosing-regimens">Creating dosing regimens<a class="anchor" aria-label="anchor" href="#creating-dosing-regimens"></a>
+</h4>
 <p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> creates just the dosing events, and
 <code><a href="../reference/addEVID2.html">addEVID2()</a></code> adds the sampling events. By default, doses are
 indicated using <code>EVID=1</code> and samples by
@@ -294,12 +297,16 @@ Additional <code>NMcreateDoses()</code> examples
 {"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["DOSE"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"2","6":"1","7":"1"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"1"},{"1":"1","2":"24","3":"1","4":"1","5":"1","6":"1","7":"1"},{"1":"2","2":"0","3":"1","4":"1","5":"4","6":"1","7":"2"},{"1":"2","2":"12","3":"1","4":"1","5":"2","6":"1","7":"2"},{"1":"2","2":"24","3":"1","4":"1","5":"2","6":"1","7":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-</details><p> </p>
-<p>For adding sampling times, <code><a href="../reference/addEVID2.html">addEVID2()</a></code> provides a
-similarly flexible interface. It accepts data.frames with covariates
-allowing for different sampling schemes for different subject groups
-(say different dosing regimens), and dosing times can be supplied
-relative to previous dosing times.</p>
+</details>
+</div>
+<div class="section level4">
+<h4 id="adding-sampling-times">Adding sampling times<a class="anchor" aria-label="anchor" href="#adding-sampling-times"></a>
+</h4>
+<p>For adding sampling times to a set of doses and/or samples,
+<code><a href="../reference/addEVID2.html">addEVID2()</a></code> provides a similarly flexible interface. It
+accepts data.frames with covariates allowing for different sampling
+schemes for different subject groups (say different dosing regimens),
+and dosing times can be supplied relative to previous dosing times.</p>
 <details><summary>
 Additional <code>addEVID2()</code> examples
 </summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -329,7 +336,11 @@ Additional <code>addEVID2()</code> examples
 {"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["TAPD"],"name":[7],"type":["int"],"align":["right"]},{"label":["DVID"],"name":[8],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"1","6":"1","7":"NA","8":"NA"},{"1":"1","2":"1","3":"2","4":"2","5":"NA","6":"1","7":"1","8":"Parent"},{"1":"1","2":"1","3":"2","4":"3","5":"NA","6":"1","7":"1","8":"Metabolite"},{"1":"1","2":"2","3":"2","4":"2","5":"NA","6":"1","7":"2","8":"Parent"},{"1":"1","2":"2","3":"2","4":"3","5":"NA","6":"1","7":"2","8":"Metabolite"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"NA","8":"NA"},{"1":"1","2":"13","3":"2","4":"2","5":"NA","6":"1","7":"1","8":"Parent"},{"1":"1","2":"13","3":"2","4":"3","5":"NA","6":"1","7":"1","8":"Metabolite"},{"1":"1","2":"14","3":"2","4":"2","5":"NA","6":"1","7":"2","8":"Parent"},{"1":"1","2":"14","3":"2","4":"3","5":"NA","6":"1","7":"2","8":"Metabolite"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-</details><p> </p>
+</details>
+</div>
+<div class="section level4">
+<h4 id="time-since-previous-dose">Time since previous dose<a class="anchor" aria-label="anchor" href="#time-since-previous-dose"></a>
+</h4>
 <p>While not used in these examples, it’s worth mentioning
 <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> for adding time since previous dose and
 other variables related to previous dose - previous dosing time,
@@ -338,6 +349,7 @@ doses, and culative dose amount. These are often useful to add to a
 simulation dataset:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="typical-subject-simulation">Typical subject simulation<a class="anchor" aria-label="anchor" href="#typical-subject-simulation"></a>
