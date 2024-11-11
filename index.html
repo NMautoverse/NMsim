@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.910</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@
 <!-- [![R-CMD-check](https://github.com/NMautoverse/NMsim/workflows/R-CMD-check/badge.svg)](https://github.com/NMautoverse/NMsim/actions) -->
 <!-- badges: end -->
 <p>Please make sure to read this at <a href="https://NMautoverse.github.io/NMsim/"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
-<p><code>NMsim</code> is an R package that can simulate Nonmem models (using the <code>NMsim</code> function) based on just a simulation data set and a path to an estimation control stream. It will also retrive and combine output tables with input data once Nonmem has finished and return the results to R.</p>
+<p><code>NMsim</code> is an R package that can simulate Nonmem models (using the <code>NMsim</code> function) based on just a simulation data set and a path to an estimation control stream. It will retrive and combine output tables with input data once Nonmem has finished and return the results to R.</p>
 <p>The interface is “seamless” or fully integrated in R. Run a simulation of the (estimated) model stored in “path/to/file.mod” using the simulation input data set stored in the variable <code>data.sim</code> this way:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="st">"/path/to/file.mod"</span>,</span>
@@ -103,14 +103,21 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">variable</span><span class="op">==</span><span class="st">"Y"</span><span class="op">]</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Hours since first dose"</span>,y<span class="op">=</span><span class="st">"Concentration (ng/mL)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-simple-sim-1.png" width="100%"></p>
-<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>.</p>
+<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>. Go there next to get started with <code>NMsim</code>.</p>
+<div class="section level2">
+<h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
+</h2>
+<p>While NONMEM offers great flexibility for estimation of PK and PK/PD models, many users find the simulation features in NONMEM insufficient and turn to alternative software for simulation. This leads to additional work of model reimplementation, with risk of the simulation model deviating from the estimated model, due to bugs in the reimplementation. For a wide range of model types, the limitation is not in NONMEM’s ability to perform such simulations, but rather in the lack of a simple user-interface to obtain the simulations. <a href="https://cran.r-project.org/package=NMsim" class="external-link"><code>NMsim</code></a> provides such an interface as an R package, allowing the modeler to simulate models as soon as an estimate is available.</p>
+<p>The goal for NMsim is to automate the NONMEM simulation workflow and provide a simple, flexible, and powerful R interface. This allows for automation of most simulation-based analyses.</p>
+<p><img src="reference/figures/intro-tab.png" align="right" height="120"></p>
+</div>
 <div class="section level2">
 <h2 id="supported-types-of-simulations">Supported types of simulations<a class="anchor" aria-label="anchor" href="#supported-types-of-simulations"></a>
 </h2>
 <p><code>NMsim</code> has a flexible way to define simulation methods. The following methods are currently provided:</p>
 <ul>
 <li>Simulation of new subjects (default or explicitly with <code>method.sim=NMsim_default</code>)</li>
-<li>Simulation of subjects already estimated in Nonmem model (<code>method.sim=NMsim_known</code>)</li>
+<li>Simulation of subjects already estimated in Nonmem model (<code>method.sim=NMsim_EBE</code>)</li>
 <li>Simulation with parameter uncertainty based on a Nonmem covariance step (<code>method.sim=NMsim_VarCov</code>)</li>
 <li>Simulation “as is” in case you already prepared a simulation control stream and just want to automate the use of it in combination with simulation data sets (<code>method.sim=NMsim_asis</code>)</li>
 </ul>
@@ -119,7 +126,7 @@
 <li>Simulation of typical subjects with all ETAs equal 0 (<code>typical=TRUE</code>)</li>
 <li>Custom modification of control stream sections (<code>modify.sections</code> argument)</li>
 </ul>
-<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-basics.html"><code>NMsim-basics.html</code></a>. It is really easy.</p>
+<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>. It is really easy.</p>
 <p>In addition, <code>NMsim</code> can simulate multiple models at a time. E.g., if a bootstrap run of a model is available, NMsim can run the simulation with each of the bootstrap models and collect all the results in one dataset. This provides a robust and easy way to simulate a Nonmem model with uncertainty.</p>
 <p>You can also write your own methods, if you have some other Nonmem-based simulation (or other job) you want to automate using <code>NMsim</code>.</p>
 <p>Many features are available. Prominent ones are:</p>
@@ -134,18 +141,17 @@
 <div class="section level2">
 <h2 id="how-nmsim-works">How NMsim works<a class="anchor" aria-label="anchor" href="#how-nmsim-works"></a>
 </h2>
-<p>One strength of <code>NMsim</code> is that it does not simulate, translate or otherwise interpret a Nonmem model. Instead, it automates the Nonmem simulation workflow (including execution of Nonmem) and wraps it all into one R function. In the example given above, <code>NMsim</code> will do the following:</p>
+<p><code>NMsim</code> does not simulate, translate or otherwise interpret a NONMEM model. Instead, it automates the NONMEM simulation workflow (including execution of NONMEM) and wraps it all into one R function. Provided with a path to a NONMEM control stream and a data.frame to simulate, <code>NMsim</code> will do the following:</p>
 <ul>
-<li>Save the simulation input data in a csv file for Nonmem</li>
-<li>Create a simulation input control stream based on <code>file.mod</code> ($INPUT and $DATA matching the saved simulation data set; $SIMULATE instead of $ESTIMATION and $COVARIANCE)</li>
+<li>Save the simulation input data in a csv file for NONMEM</li>
+<li>Create a simulation input control stream based on <code>file.mod</code> (<code>$INPUT</code> and <code>$DATA</code> matching the saved simulation data set; <code>$SIMULATE</code> instead of <code>$ESTIMATION</code> and <code>$COVARIANCE</code>)</li>
 <li>Update and fix initial values based on estimate (from <code>file.ext</code>)</li>
-<li>Run Nonmem on the generated simulation control stream</li>
+<li>Run NONMEM on the generated simulation control stream</li>
 <li>Collect output data tables, combine them, and merge with the simulation input data</li>
 <li>Return the collected data in R</li>
 </ul>
-<p>This eliminates the need for re-implementation of a model for simulation purposes. On the other hand, this also means that <code>NMsim</code> can’t work without Nonmem.</p>
-<p><code>NMsim</code> can call Nonmem directly or via <code>PSN</code>. If <code>NMsim</code> is run on a system where Nonmem cannot be executed, <code>NMsim</code> can still prepare the simulation control stream and datafile.</p>
-<p><code>NMsim</code> is in itself a relatively small R package. It makes extensive use of functionality to handle Nonmem data and control streams provided by the R package <a href="https://cran.r-project.org/package=NMdata" class="external-link"><code>NMdata</code></a>.</p>
+<p><code>NMsim</code> can call NONMEM directly or via <code>PSN</code>. If <code>NMsim</code> is run on a system where NONMEM cannot be executed, <code>NMsim</code> can still prepare the simulation control stream and datafile.</p>
+<p><code>NMsim</code> is in itself a relatively small R package. It makes extensive use of functionality to handle NONMEM data and control streams provided by the R package <a href="https://cran.r-project.org/package=NMdata" class="external-link"><code>NMdata</code></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="supported-model-types">Supported model types<a class="anchor" aria-label="anchor" href="#supported-model-types"></a>
