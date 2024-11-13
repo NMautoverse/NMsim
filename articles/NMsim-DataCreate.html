@@ -84,7 +84,7 @@
 
     
     
-<p>Built 2024-11-12 using NMsim 0.1.4.912.</p>
+<p>Built 2024-11-13 using NMsim 0.1.4.912.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
@@ -119,12 +119,12 @@ right away.</p>
 <p><code>dat.sim</code> is now a valid simulation data set with one
 subject. However, even though <code><a href="../reference/addEVID2.html">addEVID2()</a></code> does try to order
 the data in a meaningful way, it is recommended to always manually order
-the data set. We use <code>data.table</code>’s <code><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder()</a></code>.
+the data set. We use <code>data.table</code>’s <code><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder()</a></code>.
 <code>dplyr::arrange</code> can just as well be used. A row identifier
 (counter) can make post-processing easier, so we add that too.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sort data set </span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## Adding a row identifier (generally not necessary but recommended)</span></span>
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ROW</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
 <p><code>NMsim</code> does not include any plotting functionality, but

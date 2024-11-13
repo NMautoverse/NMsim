@@ -84,7 +84,7 @@
 
     
     
-<p>Built 2024-11-12 using NMsim 0.1.4.912.</p>
+<p>Built 2024-11-13 using NMsim 0.1.4.912.</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -144,12 +144,12 @@ model using the simulation input data set rather than hard-coding
 numerical values into <code>modify.model</code>. The following tries a
 number of fold changes to <code>KA</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
 <span><span class="co">## this repeats dat.sim for each of the values in KASCAL - effectively</span></span>
 <span><span class="co">## an outer join</span></span>
-<span><span class="va">dat.sim.varka</span> <span class="op">&lt;-</span> <span class="va">dat.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>KASCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">dat.sim</span><span class="op">]</span></span>
+<span><span class="va">dat.sim.varka</span> <span class="op">&lt;-</span> <span class="va">dat.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>KASCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">dat.sim</span><span class="op">]</span></span>
 <span><span class="va">dat.sim.varka</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">KASCALE</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.varka</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.varka</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                      data<span class="op">=</span><span class="va">dat.sim.varka</span></span>

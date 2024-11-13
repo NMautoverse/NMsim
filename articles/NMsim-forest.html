@@ -79,7 +79,7 @@ Delff</h4>
                                     <h4 data-toc-skip class="author">Boris
 Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">November 12, 2024</h4>
+            <h4 data-toc-skip class="date">November 13, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -192,7 +192,7 @@ sex.</p>
 <p>We sample every 15 minutes for one day in steady-state.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## add a sampling scheme</span></span>
-<span><span class="va">time.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">+</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span>,period<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span>
+<span><span class="va">time.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">+</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span>,period<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span>
 <span><span class="va">dt.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TIME<span class="op">=</span><span class="va">time.sim</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sampleParsSimpar.html">sampleParsSimpar</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">500</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
@@ -236,16 +236,16 @@ sex.</p>
 <span></span>
 <span></span>
 <span></span>
-<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">NMsim</span><span class="fu">:::</span><span class="fu">summarizeCovvar</span><span class="op">(</span><span class="va">simres</span>,</span>
+<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">NMsim</span><span class="fu">:::</span><span class="fu"><a href="../reference/summarizeCovvar.html">summarizeCovvar</a></span><span class="op">(</span><span class="va">simres</span>,</span>
 <span>                                         funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
 <span>                                         by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
 <span>                                         cover.ci<span class="op">=</span><span class="fl">.95</span></span>
 <span>                                         <span class="op">)</span></span></code></pre></div>
 <p>Plotting using <code>coveffectsplot</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sum.uncertain.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">sum.uncertain.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain.plot</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain.plot</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">label</span>,<span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
 <span>         <span class="op">)</span></span>
