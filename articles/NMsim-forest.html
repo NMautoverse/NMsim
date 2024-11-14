@@ -134,7 +134,9 @@ their questions most effectively.</p>
 <span><span class="co">## if you find it useful, please cite as:</span></span></code></pre>
 <pre><code><span><span class="co">## JF Marier, N Teuscher and MS Mouksassi. Evaluation of covariate effects using forest plots and introduction to the coveffectsplot R package. CPT Pharmacometrics Syst Pharmacol. 2022;11:1283-1293. doi:10.1002/psp4.12829</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span> <span class="co">## for printing tables with knitr::kable</span></span>
+<span></span>
+<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span></span>
 <span>    path.nonmem <span class="op">=</span> <span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span>, <span class="co">## path to NONMEM executable</span></span>
 <span>    dir.sims<span class="op">=</span><span class="st">"simtmp-forest"</span>, <span class="co">## where to store temporary simulation results</span></span>
 <span>    dir.res<span class="op">=</span><span class="st">"simres-forest"</span>,   <span class="co">## where to store final simulation results</span></span>
@@ -448,27 +450,13 @@ software installed, and it is robust.</p>
 <span>                      ,data<span class="op">=</span><span class="va">dt.sim</span>, <span class="co"># simulation dataset</span></span>
 <span>                      ,name.sim<span class="op">=</span><span class="st">"forest_mvrnorm"</span> <span class="co"># output name suffix</span></span>
 <span>                      ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
+<span>                      ,nsims<span class="op">=</span><span class="fl">500</span></span>
 <span>                      ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
 <span>                      ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
 <span>                      ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
 <span>                      ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
 <span>                      ,nc<span class="op">=</span><span class="fl">1</span></span>
 <span>                       <span class="op">)</span></span></code></pre></div>
-<p>If you encounter issues with samples that do not run, please consider
-whether any of your uncertainty estimates on <span class="math inline">\(THETA\)</span>’s could lead to sampled THETA’s
-that could make the model be undefined. This would often be absorption
-parameters, clearences, volumes or any other strictly positive parameter
-which is estimated with poor precision. If this happens, you may want to
-go back and estimate that THETA on the log scale to make sure all
-sampled values will be positive.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["par.name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["FIX"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["code"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"THETA(1)","2":"0","3":"0.08040069","4":"LTVKA=THETA(1)"},{"1":"THETA(2)","2":"0","3":"0.01363271","4":"LTVV2=THETA(2)"},{"1":"THETA(3)","2":"0","3":"0.07898119","4":"LTVCL=THETA(3)"},{"1":"THETA(4)","2":"0","3":"0.04819492","4":"LTVV3=THETA(4)"},{"1":"THETA(5)","2":"0","3":"0.02929518","4":"LTVQ=THETA(5)"},{"1":"THETA(6)","2":"0","3":"0.42222998","4":"AGEEFF=THETA(6)"},{"1":"THETA(7)","2":"0","3":"1.91607839","4":"WEIGHTEFF=THETA(7)"},{"1":"THETA(8)","2":"0","3":"0.10415356","4":"MALEEFF=THETA(8)"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 </div>
 <div class="section level3">
 <h3 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
@@ -479,13 +467,35 @@ performed by this function are outlined below. Most importantly, it
 normalizes the exposures by the reference value for each sampled set of
 parameters. Then, it derives median and a confidence interval as
 quantiles in the simulated distribution.</p>
-<p>The step reuired by the user is to define the functions to derive
-relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Read simulation results</span></span>
-<span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_forest_simpar_MetaData.rds"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">### Define exposure metrics</span></span>
+<span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_forest_mvrnorm_MetaData.rds"</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,rm.tmp<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## Check how many models returned simulation results</span></span>
+<span><span class="va">simres</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/data.table/man/duplicated.html" class="external-link">uniqueN</a></span><span class="op">(</span><span class="va">model.sim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 500</span></span></code></pre>
+<p>If you encounter issues with samples that do not run, please consider
+whether any of your uncertainty estimates on <span class="math inline">\(THETA\)</span>’s could lead to sampled THETA’s
+that could make the model be undefined. This would often be absorption
+parameters, clearences, volumes or any other strictly positive parameter
+which is estimated with poor precision. If this happens, you may want to
+go back and estimate that THETA on the log scale to make sure all
+sampled values will be positive. A quick way to look into this is to
+look at the relative standard error for each <code>THETA</code>. In the
+following we merge in the first line in the model using each
+<code>THETA</code> so we can refresh our memory on the interpretation of
+each parameter without relying on a well formatted parameter table.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["par.name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["FIX"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["code"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"THETA(1)","2":"0","3":"0.08040069","4":"LTVKA=THETA(1)"},{"1":"THETA(2)","2":"0","3":"0.01363271","4":"LTVV2=THETA(2)"},{"1":"THETA(3)","2":"0","3":"0.07898119","4":"LTVCL=THETA(3)"},{"1":"THETA(4)","2":"0","3":"0.04819492","4":"LTVV3=THETA(4)"},{"1":"THETA(5)","2":"0","3":"0.02929518","4":"LTVQ=THETA(5)"},{"1":"THETA(6)","2":"0","3":"0.42222998","4":"AGEEFF=THETA(6)"},{"1":"THETA(7)","2":"0","3":"1.91607839","4":"WEIGHTEFF=THETA(7)"},{"1":"THETA(8)","2":"0","3":"0.10415356","4":"MALEEFF=THETA(8)"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The step required by the user is to define the functions to derive
+relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">PRED</span><span class="op">)</span></span>
 <span>   ,<span class="st">"AUC"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/NMcalc/man/trapez.html" class="external-link">trapez</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">TIME</span>,<span class="va">x</span><span class="op">$</span><span class="va">PRED</span><span class="op">)</span></span>
@@ -504,7 +514,7 @@ relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
 <p>We will use the R package <code>coveffectsplot</code> for plotting.
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">label</span>,<span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
@@ -548,8 +558,7 @@ so we adjust those first.</p>
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co">#forest.day1 &lt;- fun.plot(sum.uncertain[period=="Day 1"],plot_title="Day 1")</span></span>
-<span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,plot_title<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as</span></span>
 <span><span class="co">## of ggplot2 3.3.4.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">coveffectsplot</span> package.</span></span>
@@ -558,11 +567,10 @@ so we adjust those first.</p>
 <span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#forest.day1</span></span>
-<span><span class="va">forest.ss</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-11-2.png" width="960"></p>
+<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-12-1.png" width="960"></p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-12-2.png" width="960"></p>
 </div>
 <div class="section level3">
 <h3 id="post-processing-explained-step-by-step">Post processing explained step by step<a class="anchor" aria-label="anchor" href="#post-processing-explained-step-by-step"></a>
@@ -579,7 +587,7 @@ other covariates at reference values.</p>
 <p>Notice, the code below consists of snippets from the
 <code><a href="../reference/summarizeCovvar.html">NMsim::summarizeCovvar()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
