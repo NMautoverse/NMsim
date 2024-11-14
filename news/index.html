@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.913</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,18 +51,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.5" id="nmsim-015">NMsim 0.1.5<a class="anchor" aria-label="anchor" href="#nmsim-015"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.5" id="nmsim-015">NMsim 0.1.5<a class="anchor" aria-label="anchor" href="#nmsim-015"></a></h2><p class="text-muted">CRAN release: 2024-11-14</p>
 <div class="section level3">
 <h3 id="new-features-0-1-5">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-5"></a></h3>
 <ul><li><p><code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> has a new argument called <code>rm.tmp</code> which is used to remove the intermediate NONMEM files if they are successfully read. Remember, <code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> creates a compressed results data set which will be read by <code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> in future function calls, so unless debugging is needed on the simulation control streams and files returned by NONMEM running the simulations, it may be better to delete the intermediate files altogether and save the disk space.</p></li>
 <li><p><code><a href="../reference/expandCovs.html">expandCovs()</a></code> has a new argument <code>reduce.ref</code> which defaults to <code>TRUE</code> meaning that by default there will be only one reference combination. If <code>FALSE</code> <code><a href="../reference/expandCovs.html">expandCovs()</a></code> will return one reference for each covariate. The forest plot can be evaluated with just one reference simulation.</p></li>
+<li><p>New function <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> introduced to summarize simulation results for forest plots. This function is closely related to <code><a href="../reference/expandCovs.html">expandCovs()</a></code></p></li>
 <li><p><code><a href="../reference/NMsim.html">NMsim()</a></code> no longer requires NONMEM to be available if <code>reuse.results=TRUE</code> and NONMEM does not need to be run.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-1-5">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-1-5"></a></h3>
 <ul><li><p>NMsim 0.1.4 would not submit jobs to cluster when number of cores was <code>nc=1</code>. Fixed. Workaround in 0.1.4, use <code>nc=2</code>.</p></li>
 <li><p>NMsim 0.1.4 erroneously concluded jobs had failed when sent to the cluster if there was no existing queue. This is due to the exit status of <code>qsub</code> in such cases. This has been fixed. As a workaround in 0.1.4, just run your sim again once the queue has been initiated by the first NMsim called.</p></li>
-<li><p>When Nonmem failed in 0.1.4, NMsim might not return debugging info. Fixed.</p></li>
+<li><p>When NONMEM failed in 0.1.4, NMsim might not return debugging info. Fixed.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
