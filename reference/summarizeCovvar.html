@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.912</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.913</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ResidVar.html">Simulation with Residual Variability</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Varying Parameter Values</a></li>
+    <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Simulate Models with Modifications</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ReuseSimSubjects.html">Reuse Simulated Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-speed.html">Debugging, Speed, and Disk Space</a></li>
   </ul></li>
@@ -56,7 +56,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarizeCovvar</span><span class="op">(</span><span class="va">data</span>, <span class="va">funs.exposure</span>, <span class="va">cols.value</span>, cover.ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">by</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarizeCovvar</span><span class="op">(</span><span class="va">data</span>, <span class="va">funs.exposure</span>, <span class="va">cols.value</span>, cover.ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">by</span>, <span class="va">as.fun</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -89,7 +89,19 @@ is 0.95.</p></dd>
 <dd><p>a character vector of names columns to perform all
 calculations by. This could be sampling subsets or analyte.</p></dd>
 
+
+<dt id="arg-as-fun">as.fun<a class="anchor" aria-label="anchor" href="#arg-as-fun"></a></dt>
+<dd><p>The default is to return data as a
+`data.frame`. Pass a function (say `tibble::as_tibble`) in
+as.fun to convert to something else. If data.tables are
+wanted, use `as.fun="data.table"`. The default can be
+configured using `NMdataConf()`.</p></dd>
+
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A data.frame</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>These columns are expected to be present, and differences within any of them will lead to separate summarizing (say for a s covariate value to be plotted):

@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.912</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.913</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ResidVar.html">Simulation with Residual Variability</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Varying Parameter Values</a></li>
+    <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Simulate Models with Modifications</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ReuseSimSubjects.html">Reuse Simulated Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-speed.html">Debugging, Speed, and Disk Space</a></li>
   </ul>
@@ -84,7 +84,16 @@
 
     
     
-<p>Built 2024-11-13 using NMsim 0.1.4.912.</p>
+<p>Built 2024-11-14 using NMsim 0.1.4.913.</p>
+<div class="section level2">
+<h2 id="other-relevant-material">Other relevant material<a class="anchor" aria-label="anchor" href="#other-relevant-material"></a>
+</h2>
+<p>Please note the following ACOP2024 poster which is more recent and
+more comprehensive than this document:<br><a href="../reference/figures/NMsim_modified_models_web.pdf"><strong>Simulate
+modified Nonmem models using NMsim</strong></a> (Poster T19)<br>
+Authors: <strong>Simone Cassani, Jahidur Rashid, Christopher Banker,
+Philip Delff</strong></p>
+</div>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -99,13 +108,13 @@ following purposes</p>
 </h2>
 <p>Sometimes we want to simulate with some modification to the estimated
 model. NMsim can make such user-specified modifications to the model
-before simulating through the <code>list.sections</code> argument.</p>
+before simulating through the <code>modify.model</code> argument.</p>
 <p>The SAD study was run with a fast solution formulation. We want to
 see how a slower absorption rate would affect the PK prediction for the
 multiple dose regimen. In the model estimate, <code>TVKA=2.17</code>. We
 now try with a four times slower absorption:</p>
 <p>Notice, until NMsim 0.1.0, the <code>modify.model</code> argument was
-called <code>modify.model</code>. The helper functions <code>add</code>
+called <code>list.sections</code>. The helper functions <code>add</code>
 and <code>overwrite</code> were introduced with NMsim 0.1.3. Until then,
 custom modification functions had to be provided like described in the
 section “Edit control stream using customized functions”.</p>
