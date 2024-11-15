@@ -512,7 +512,7 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
     if(missing(path.nonmem)) path.nonmem <- NULL
     if(missing(method.execute)) method.execute <- NULL
     ## NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execute=method.execute,must.work=execute)
-NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execute=method.execute,must.work=FALSE)
+    NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execute=method.execute,must.work=FALSE)
 
     
     ## after definition of wait and wait.exec, wait is used by
@@ -864,29 +864,72 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
     }
 
+
 ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
     path.rds.exists <- dt.models[,file.exists(path.rds)]
 ### reading results from prior run
     ## if(reuse.results && all(dt.models[,path.rds.exists==TRUE])){
     ## if(reuse.results && all(dt.models[,path.rds.exists==TRUE])){
     if(reuse.results && all(path.rds.exists==TRUE)){
-        if(!quiet) message(sprintf("Reading from simulation results on file:\n%s",dt.models[,paste(unique(path.rds),collapse="\n")]))
+
+###### without needRun()
+        if(F){
+            if(!quiet) message(sprintf("Reading from simulation results on file:\n%s",dt.models[,paste(unique(path.rds),collapse="\n")]))
+            
+            simres <- try(NMreadSim(dt.models[,path.rds],wait=wait,quiet=quiet,progress=progress,as.fun=as.fun))
+            if(!inherits(simres,"try-error")) {
+                return(returnSimres(simres))
+            }
+        }
+###### End without needRun()
+
+###### With needRun()
+### this is not yet complete. How are we carrying the digest tables
+    ### over to be saved with meta data?  digest should always be
+    ### derived so needrun? should always be run?
+        call.NMsim <- sys.call()
+        env.NMsim <- parent.frame()
+        run.fun <- try(
+            lapply(unique(dt.models$path.rds),function(file.meta){
+                needRun(path.meta=file.meta,
+                        funs=list(path.mod=readLines,reuse.results=function(x)NULL),
+                        call=call.NMsim,
+                        env=env.NMsim
+                        )})
+           ,silent=TRUE)
         
-        simres <- try(NMreadSim(dt.models[,path.rds],wait=wait,quiet=quiet,progress=progress,as.fun=as.fun))
-        if(!inherits(simres,"try-error")) {
-            return(returnSimres(simres))
+        if(inherits(run.fun,"try-error")){
+            run.fun <- list(needRun=TRUE
+                           ,digest.new=paste(Sys.time(),"unsuccesful")
+                            )
+        }
+        if(reuse.results && !run.fun$needRun){
+            simres <- try(NMreadSim(dt.models[,path.rds],wait=wait,quiet=quiet,progress=progress,as.fun=as.fun))
+            if(!inherits(simres,"try-error")){
+                message("Found results from identical previous run (and reuse.results is TRUE). Not re-running simulation.")
+                return(returnSimres(simres))
+            } else {
+                message("Tried to reuse results but failed to find/read any. Going to do the simulation.")
+            }
         }
     }
+####### End With needRun()         
 
 
 
     
+    
+
+
+
+
+
 ### clear simulation directories so user does not end up with old results
     if(sim.dir.from.scratch){
         dt.models[,if(dir.exists(dir.sim)) unlink(dir.sim,recursive=TRUE),by=.(ROWMODEL)]
     }
     dt.models[,if(file.exists(path.sim)) unlink(path.sim),by=.(ROWMODEL)]
-    
+
     dt.models[,{if(!dir.exists(dir.sim)){
                     dir.create(dir.sim)
                 }
@@ -906,7 +949,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         ## message(sprintf("* Writing %d simulation control stream(s) and simulation data set(s)",dt.models[,.N]))
         message(sprintf("* Writing simulation control stream(s) and simulation data set(s)"))
     }
-    
+
 ### Generate the first version of file.sim.
     ## It would not need to, but beware PSN's update_inits needs to
     ## create a new file - don't try to overwrite an existing one.
@@ -915,11 +958,11 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
     }
 
 ##### todo all file.xyz arguments must be NULL or of equal length. And this should be done per model
-    
+
     if(method.update.inits=="nmsim" && any(dt.models[,!file.exists(file.ext)])){
         stop(paste("ext file(s) not found. Did you forget to copy it? Normally, NMsim needs that file to find estimated parameter values. If you do not have an ext file and you are running a simulation that does not need it, please use `method.update.inits=\"none\"`. Was expecting to find ",paste(dt.models[!file.exists(file.ext),file.ext],collapse="\n"),sep=""))
     }
-    
+
     if(method.update.inits=="psn"){
 ### this next line is done already. I think it should be removed but testing needed.
         cmd.update.inits <- file.psn(NMsimConf$dir.psn,"update_inits")
@@ -961,7 +1004,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
 
     }
 
-    
+
     dt.models[,{
         
 ### note: insert test for whether run is needed here
@@ -1024,8 +1067,8 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
             NMreplaceDataFile(files=path.sim,path.data=basename(path.data),quiet=TRUE)
         }
     },by=.(ROWMODEL)]
-    
-    
+
+
 
 #### Section start: Output tables ####
 
@@ -1072,8 +1115,8 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
 ### save file.sim
         writeTextFile(lines=lines.sim,file=path.sim)
     },by=.(ROWMODEL)]
-    
-    
+
+
 ###  Section end: Output tables
 #### DEBUG Does the sim control stream have TABLES at this point?    
 
@@ -1082,8 +1125,8 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
     dt.models.gen <- dt.models[,
                                method.sim(file.sim=path.sim,file.mod=file.mod,data.sim=data[[DATAROW]],...)
                               ,by=.(ROWMODEL)]
-    
-    
+
+
     ## when methods return just a vector of path.sim, we need to reorganize
     if(ncol(dt.models.gen)==2 && all(colnames(dt.models.gen)%in%c("ROWMODEL","V1"))){
         setnames(dt.models.gen,"V1","path.sim")
@@ -1103,32 +1146,32 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
 
 
 ##### Moved to after reuse.results - before NMexec()
-        ## if multiple models have been spawned, and files.needed has been generated, the only allowed method.execute is "nmsim"
-        if(nrow(dt.models.gen)>1 && "files.needed"%in%colnames(dt.models.gen)){
-            if(NMsimConf$method.execute!="nmsim"){
-                stop("Multiple simulation runs spawned, and they need additional files than the simulation input control streams. The only way this is supported is using method.execute=\"nmsim\".")
-            }
+    ## if multiple models have been spawned, and files.needed has been generated, the only allowed method.execute is "nmsim"
+    if(nrow(dt.models.gen)>1 && "files.needed"%in%colnames(dt.models.gen)){
+        if(NMsimConf$method.execute!="nmsim"){
+            stop("Multiple simulation runs spawned, and they need additional files than the simulation input control streams. The only way this is supported is using method.execute=\"nmsim\".")
         }
+    }
 
-        ## if multiple models spawned, direct is not allowed
-        if(nrow(dt.models.gen)>1){
-            if(NMsimConf$method.execute=="direct"){
-                stop("method.execute=\"direct\" cannot be used with simulation methods that spawn multiple simulation runs. Try method.execute=\"nmsim\" or method.execute=\"psn\".")
-            }
+    ## if multiple models spawned, direct is not allowed
+    if(nrow(dt.models.gen)>1){
+        if(NMsimConf$method.execute=="direct"){
+            stop("method.execute=\"direct\" cannot be used with simulation methods that spawn multiple simulation runs. Try method.execute=\"nmsim\" or method.execute=\"psn\".")
         }
+    }
 
-        ## if files.needed, psn execute cannot be used.
-        if("files.needed"%in%colnames(dt.models.gen)){
-            if(NMsimConf$method.execute=="psn"){
-                stop("method.execute=\"psn\" cannot be used with simulation methods that need additional files to run. Try method.execute=\"nmsim\".")
-            }
+    ## if files.needed, psn execute cannot be used.
+    if("files.needed"%in%colnames(dt.models.gen)){
+        if(NMsimConf$method.execute=="psn"){
+            stop("method.execute=\"psn\" cannot be used with simulation methods that need additional files to run. Try method.execute=\"nmsim\".")
         }
+    }
 
-    
-    
+
+
     setnames(dt.models,"path.sim","path.sim.main")
     cols.fneed <- cnames.gen[grepl("^files.needed",cnames.gen)]
-    
+
     ## check that all path.sim and files.needed have been generated
     dt.files <- melt(dt.models.gen,measure.vars=c("path.sim",cols.fneed),value.name="file")
     dt.files[,missing:=!file.exists(file)]
@@ -1136,7 +1179,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         message(dt.files[,.("No. of files missing"=sum(missing)),by=.(column=variable)])
         stop("All needed files must be available after running simulation method.")
     }
-    
+
     if(length(cols.fneed)){
         dt.models.gen[,ROW:=.I]
         ## by ROW, paste contents of columns named as described in cols.fneed
@@ -1150,12 +1193,12 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         dt.models,
         by="ROWMODEL"
        ,quiet=TRUE)
-    
+
     ## path.sim.lst is full path to final output control stream to be
     ## read by NMscanData. This must be derived after method.sim may
     ## have spawned more runs.
     dt.models[,path.sim.lst:=fnExtension(path.sim,".lst")]
-    
+
     dt.models[,ROWMODEL2:=.I]
     ## dt.models[,seed:={if(is.function(seed))  seed() else seed},by=.(ROWMODEL2)]
     ## if(is.numeric(dt.models[,seed])) dt.model[,seed:=sprintf("(%s)",seed)]
@@ -1170,14 +1213,14 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         dt.mods.sim[,writeTextFile(lines=mod,file=unique(path.sim)),by=ROWMODEL2]
     }
 
-    
+
     if(do.seed){
         dt.models <- do.call(NMseed,c(list(models=dt.models),seed.nm))
     }
-    
-    
+
+
 ### seed and subproblems
-    
+
     if(do.seed || subproblems>0){
         dt.models[,{
             
@@ -1223,7 +1266,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
             NMwriteSection(files=path.sim,list.sections=modify.model,quiet=TRUE,backup=FALSE)
         },by=.(ROWMODEL)]
     }
-    
+
 ### Section end: Additional control stream modifications specified by user - modify.model
 
 
@@ -1242,7 +1285,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
 
 
 ###### store transform
-    
+
     if(nrow(dt.models)==1){
         dt.models[,funs.transform:=list()]
     } else {
@@ -1250,12 +1293,12 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
     }
     dt.models[,funs.transform:=list(list(transform))]
 
-    
-    
-    
+
+
+
 #### Section start: Execute ####
 
-    
+
 ### files needed can vary, so NMexec must be run for one model at a time
     simres <- NULL
 
@@ -1346,7 +1389,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
 
 ###  Section end: Execute
 
-    
+
     dt.models.save <- split(dt.models,by="path.rds")
     addClass(dt.models,"NMsimModTab")
     files.rds <- lapply(1:length(dt.models.save),function(I){
@@ -1359,7 +1402,7 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
     })
 
 #### Section start: Read results if requested ####
-    
+
     if(execute && (wait.exec||wait)){
 
 ##### Messaging user
@@ -1367,11 +1410,11 @@ NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execut
         ## if(!quiet) message("* Collecting Nonmem results")
         simres <- NMreadSim(unlist(files.rds),wait=wait,progress=progress,quiet=quiet,as.fun=as.fun)
     }
-    
+
 ### Section end: Read results if requested
 
 ##### return results to user
-    
+
     ## if(!wait) return(simres$lst)
     ## if(execute && (wait.exec||wait)){
     if(is.NMsimRes(simres) || (execute && (wait.exec||wait))){

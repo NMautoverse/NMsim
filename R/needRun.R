@@ -50,39 +50,6 @@ if(F){
 
 
 
-##' get arguments passed to a function
-##'
-##' Within a function, run callArgs to get a list of all arguments
-##' passed to the function.
-##' @param which The number of environment levels to move. Default is
-##'     1 because that means the result is concerns the
-##'     function/environment in which callArgs() is executed.
-##' @return List of arguments
-##' @examples
-##' funfoo <- function(a,b){
-##'   NMsim:::callArgs()
-##' }
-##' funfoo(a=1)
-##' @keywords internal
-
-callArgs <- function(which=-1){
-    
-### args in call.
-    ## no args are needed for this
-    args.call <- as.list(
-        match.call(
-            definition = sys.function(which=which),
-            call = sys.call(which=which)
-        )
-    )[-1]
-    
-### should this be envir=parent.frame(-which) ?
-    argsconts <- lapply(args.call, eval, envir = parent.frame(n=-which))
-    ##    digest(argsconts)
-
-    argsconts
-}
-
 
 ##' Derive digests of argument values or their contents
 ##' 
@@ -128,7 +95,7 @@ digestElements <- function(obj,funs){
 ##'     arguments
 ##' @return A list of info of whether run is needed and digest values
 ##' @keywords internal
-needRun <- function(path.res,path.digest,funs,which=-2){
+needRun <- function(path.meta,funs,call,env){
     
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 
@@ -140,19 +107,24 @@ needRun <- function(path.res,path.digest,funs,which=-2){
     
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
-    
     run.fun <- TRUE
     digest.old <- NULL
-    if(file.exists(path.digest)){
+
+    if(file.exists(path.meta)){
         digest.old <- readRDS(path.digest)
+        meta <- readRDS(path.meta)
+        digest.old <- attributes(meta)$digest
     }
+
+
     digest.new <- NULL
-    if(file.exists(path.res)){
-        
-        obj.fun <- callArgs(which = which)
-        digest.new <- digestElements(obj.fun,funs=funs)
-    }
+### why would this depend on whether files exist?
+    ##    if(file.exists(path.meta)){
+    obj.fun <- NMdata:::getArgs(call=call,env=env)
+    digest.new <- digestElements(obj.fun,funs=funs)
+    ##    }
     digest.all <- NULL
+
     if(!is.null(digest.old)&&!is.null(digest.new)){
         
         digest.all <- try(merge(digest.new,digest.old,by="name",suffixes=c(".new",".old"),all.x=T,all.y=T))
