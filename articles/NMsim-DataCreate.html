@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.901</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
 
     
     
-<p>Built 2024-11-14 using NMsim 0.1.5.</p>
+<p>Built 2024-11-16 using NMsim 0.1.5.901.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
@@ -143,7 +143,12 @@ time point in case doses are simultaneous.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span>,shape<span class="op">=</span><span class="st">"|"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Time (hours)"</span>,y<span class="op">=</span><span class="st">"Compartment"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-DataCreate_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<div class="figure">
+<img src="NMsim-DataCreate_files/figure-html/unnamed-chunk-4-1.png" alt="After using `NMexpandDoses()` the simulation data set is plottet." width="672"><p class="caption">
+After using <code>NMexpandDoses()</code> the simulation data set is
+plottet.
+</p>
+</div>
 <p>A brief overview of the number of events broken down by event type
 <code>EVID</code> and dose amount <code>AMT</code>:</p>
 <table class="table">
