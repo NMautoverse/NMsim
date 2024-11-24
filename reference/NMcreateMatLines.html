@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.902</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.903</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMcreateMatLines</span><span class="op">(</span><span class="va">omegas</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMcreateMatLines</span><span class="op">(</span><span class="va">omegas</span>, as.one.block <span class="op">=</span> <span class="cn">FALSE</span>, fix <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,12 +65,30 @@
 
 
 <dl><dt id="arg-omegas">omegas<a class="anchor" aria-label="anchor" href="#arg-omegas"></a></dt>
-<dd><p>See NMdata::NMreadExt and the pars element returned
+<dd><p>A data.table with at least `i`, `j` and `value`
+columns. See `NMdata::NMreadExt` and the pars element returned
 by that function.</p></dd>
 
 
+<dt id="arg-as-one-block">as.one.block<a class="anchor" aria-label="anchor" href="#arg-as-one-block"></a></dt>
+<dd><p>If `TRUE`, all values are printed as one
+block. If `FALSE` (default), matrix will be separeted into
+blocks based on position non-zero off-diagonal
+values. Generally speaking, for `OMEGA` matrices (var-cov
+matrices for ETAs), this should be `FALSE`, and for
+variance-covariance matrices (like `THETAP`), this should be
+`TRUE`.</p></dd>
+
+
+<dt id="arg-fix">fix<a class="anchor" aria-label="anchor" href="#arg-fix"></a></dt>
+<dd><p>Include `FIX` for all lines? If not, none will be
+fixed. Currently, there is no support for keeping</p></dd>
+
+
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>The matrix type. OMEGA or SIGMA - case in-sensitive.</p></dd>
+<dd><p>The matrix type. `OMEGA` or `SIGMA` - case
+in-sensitive. Will be used to print say `$OMEGA` in front of
+each line.</p></dd>
 
 </dl></div>
     <div class="section level2">
