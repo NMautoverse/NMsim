@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.905</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.906</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,11 @@
 <h3 id="bugfixes-0-1-6">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-1-6"></a></h3>
 <ul><li><p><code><a href="../reference/overwrite.html">overwrite()</a></code> is a helper function intended to use in <code><a href="../reference/NMsim.html">NMsim()</a></code>’s <code>modify.model</code> argument. It would not work correctly for strings containing some special, at least. Fixed.</p></li>
 <li><p><code>NMsim_NWPRI</code> would not always paste the full variance-covariance matrix for theta estimates into <code>$THETAPV</code> which would make NONMEM fail. Fixed.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-improvements-0-1-6">Other improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-1-6"></a></h3>
+<ul><li>
+<code><a href="../reference/NMexec.html">NMexec()</a></code> now does a better job looking for NMtran errors during model runs. This can identify a terminated Nonmem run instead of waiting for it to finish.</li>
 </ul></div>
 </div>
     <div class="section level2">
