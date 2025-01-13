@@ -312,18 +312,281 @@ Additional <code>NMcreateDoses()</code> examples
 </summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## arguments are expanded - makes loading easy</span></span>
 <span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span>,<span class="fl">36</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"2","6":"1"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1"},{"1":"1","2":"24","3":"1","4":"1","5":"1","6":"1"},{"1":"1","2":"36","3":"1","4":"1","5":"1","6":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="kable-table">
+<table class="table">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+MDV
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Different doses by covariate</span></span>
 <span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>,DOSE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["DOSE"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"2","6":"1","7":"1"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"1"},{"1":"1","2":"24","3":"1","4":"1","5":"1","6":"1","7":"1"},{"1":"2","2":"0","3":"1","4":"1","5":"4","6":"1","7":"2"},{"1":"2","2":"12","3":"1","4":"1","5":"2","6":"1","7":"2"},{"1":"2","2":"24","3":"1","4":"1","5":"2","6":"1","7":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="kable-table">
+<table class="table">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+MDV
+</th>
+<th style="text-align:right;">
+DOSE
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </details>
 </div>
@@ -343,26 +606,660 @@ Additional <code>addEVID2()</code> examples
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sampling based on time since previous dose</span></span>
 <span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["TAPD"],"name":[7],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"1","6":"1","7":"NA"},{"1":"1","2":"1","3":"2","4":"2","5":"NA","6":"1","7":"1"},{"1":"1","2":"2","3":"2","4":"2","5":"NA","6":"1","7":"2"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"NA"},{"1":"1","2":"13","3":"2","4":"2","5":"NA","6":"1","7":"1"},{"1":"1","2":"14","3":"2","4":"2","5":"NA","6":"1","7":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="kable-table">
+<table class="table">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+MDV
+</th>
+<th style="text-align:right;">
+TAPD
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## TIME and TAPD can be combined - adding a follow-up</span></span>
 <span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,TIME<span class="op">=</span><span class="fl">96</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["TAPD"],"name":[7],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"1","6":"1","7":"NA"},{"1":"1","2":"1","3":"2","4":"2","5":"NA","6":"1","7":"1"},{"1":"1","2":"2","3":"2","4":"2","5":"NA","6":"1","7":"2"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"NA"},{"1":"1","2":"13","3":"2","4":"2","5":"NA","6":"1","7":"1"},{"1":"1","2":"14","3":"2","4":"2","5":"NA","6":"1","7":"2"},{"1":"1","2":"96","3":"2","4":"2","5":"NA","6":"1","7":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="kable-table">
+<table class="table">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+MDV
+</th>
+<th style="text-align:right;">
+TAPD
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+96
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sampling two compartments - naming them</span></span>
 <span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["TIME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["EVID"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CMT"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["AMT"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["MDV"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["TAPD"],"name":[7],"type":["int"],"align":["right"]},{"label":["DVID"],"name":[8],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"0","3":"1","4":"1","5":"1","6":"1","7":"NA","8":"NA"},{"1":"1","2":"1","3":"2","4":"2","5":"NA","6":"1","7":"1","8":"Parent"},{"1":"1","2":"1","3":"2","4":"3","5":"NA","6":"1","7":"1","8":"Metabolite"},{"1":"1","2":"2","3":"2","4":"2","5":"NA","6":"1","7":"2","8":"Parent"},{"1":"1","2":"2","3":"2","4":"3","5":"NA","6":"1","7":"2","8":"Metabolite"},{"1":"1","2":"12","3":"1","4":"1","5":"1","6":"1","7":"NA","8":"NA"},{"1":"1","2":"13","3":"2","4":"2","5":"NA","6":"1","7":"1","8":"Parent"},{"1":"1","2":"13","3":"2","4":"3","5":"NA","6":"1","7":"1","8":"Metabolite"},{"1":"1","2":"14","3":"2","4":"2","5":"NA","6":"1","7":"2","8":"Parent"},{"1":"1","2":"14","3":"2","4":"3","5":"NA","6":"1","7":"2","8":"Metabolite"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="kable-table">
+<table class="table">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+MDV
+</th>
+<th style="text-align:right;">
+TAPD
+</th>
+<th style="text-align:left;">
+DVID
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Parent
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Metabolite
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Parent
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Metabolite
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Parent
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Metabolite
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Parent
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Metabolite
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </details>
 </div>
