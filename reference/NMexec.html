@@ -11,7 +11,7 @@ still be reproduced if the input data files should be updated."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.941</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,20 +69,21 @@ still be reproduced if the input data files should be updated.</p>
 <span>  <span class="va">dir</span>,</span>
 <span>  sge <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">input.archive</span>,</span>
-<span>  nc <span class="op">=</span> <span class="fl">64</span>,</span>
+<span>  <span class="va">nc</span>,</span>
 <span>  dir.data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  wait <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">args.psn.execute</span>,</span>
+<span>  <span class="va">path.nonmem</span>,</span>
 <span>  update.only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  nmquiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">fun.post</span>,</span>
 <span>  <span class="va">method.execute</span>,</span>
 <span>  <span class="va">dir.psn</span>,</span>
-<span>  <span class="va">path.nonmem</span>,</span>
-<span>  <span class="va">system.type</span>,</span>
+<span>  <span class="va">args.psn.execute</span>,</span>
 <span>  <span class="va">files.needed</span>,</span>
 <span>  clean <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  backup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nmquiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">system.type</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -139,10 +140,15 @@ function that needs to wait for the output of the Nonmem run
 to be available for further processing.</p></dd>
 
 
-<dt id="arg-args-psn-execute">args.psn.execute<a class="anchor" aria-label="anchor" href="#arg-args-psn-execute"></a></dt>
-<dd><p>A character string with arguments passed
-to execute. Default is
-"-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml".</p></dd>
+<dt id="arg-path-nonmem">path.nonmem<a class="anchor" aria-label="anchor" href="#arg-path-nonmem"></a></dt>
+<dd><p>The path to the nonmem executable. Only used if
+<code>method.execute="direct"</code> or
+<code>method.execute="nmsim"</code> (which is not default). If this
+argument is not supplied, NMexec will try to run nmfe75,
+i.e. this has to be available in the path of the underlying
+shell. The default value can be modified using
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdata::NMdataConf</a></code>, like
+<code>NMdataConf(path.nonmem="/path/to/nonmem")</code></p></dd>
 
 
 <dt id="arg-update-only">update.only<a class="anchor" aria-label="anchor" href="#arg-update-only"></a></dt>
@@ -150,9 +156,12 @@ to execute. Default is
 updated since last run?</p></dd>
 
 
-<dt id="arg-nmquiet">nmquiet<a class="anchor" aria-label="anchor" href="#arg-nmquiet"></a></dt>
-<dd><p>Suppress terminal output from `Nonmem`. This is
-likely to only work on linux/unix systems.</p></dd>
+<dt id="arg-fun-post">fun.post<a class="anchor" aria-label="anchor" href="#arg-fun-post"></a></dt>
+<dd><p>A function of the path to the control stream
+(`file.mod`) that generates bash code to be evaluated once
+Nonmem is done. This can be used to automatically run a
+goodness-of-fit script or a simulation script after model
+estimation.</p></dd>
 
 
 <dt id="arg-method-execute">method.execute<a class="anchor" aria-label="anchor" href="#arg-method-execute"></a></dt>
@@ -183,21 +192,10 @@ about where to find them (i.e. want to use a specific
 installed version of PSN).</p></dd>
 
 
-<dt id="arg-path-nonmem">path.nonmem<a class="anchor" aria-label="anchor" href="#arg-path-nonmem"></a></dt>
-<dd><p>The path to the nonmem executable. Only used if
-<code>method.execute="direct"</code> or
-<code>method.execute="nmsim"</code> (which is not default). If this
-argument is not supplied, NMexec will try to run nmfe75,
-i.e. this has to be available in the path of the underlying
-shell. The default value can be modified using
-<code><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdata::NMdataConf</a></code>, like
-<code>NMdataConf(path.nonmem="/path/to/nonmem")</code></p></dd>
-
-
-<dt id="arg-system-type">system.type<a class="anchor" aria-label="anchor" href="#arg-system-type"></a></dt>
-<dd><p>A charachter string, either \"windows\" or
-\"linux\" - case insensitive. Windows is only experimentally
-supported. Default is to use <code>Sys.info()[["sysname"]]</code>.</p></dd>
+<dt id="arg-args-psn-execute">args.psn.execute<a class="anchor" aria-label="anchor" href="#arg-args-psn-execute"></a></dt>
+<dd><p>A character string with arguments passed
+to execute. Default is
+"-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml".</p></dd>
 
 
 <dt id="arg-files-needed">files.needed<a class="anchor" aria-label="anchor" href="#arg-files-needed"></a></dt>
@@ -226,6 +224,17 @@ deleted before running.</p></dd>
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
 <dd><p>Suppress messages on what NMexec is doing? Default is
 FALSE.</p></dd>
+
+
+<dt id="arg-nmquiet">nmquiet<a class="anchor" aria-label="anchor" href="#arg-nmquiet"></a></dt>
+<dd><p>Suppress terminal output from `Nonmem`. This is
+likely to only work on linux/unix systems.</p></dd>
+
+
+<dt id="arg-system-type">system.type<a class="anchor" aria-label="anchor" href="#arg-system-type"></a></dt>
+<dd><p>A charachter string, either \"windows\" or
+\"linux\" - case insensitive. Windows is only experimentally
+supported. Default is to use <code>Sys.info()[["sysname"]]</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
