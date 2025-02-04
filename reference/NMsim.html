@@ -248,8 +248,10 @@ provided. If constructing a new output table with
 <dt id="arg-text-sim">text.sim<a class="anchor" aria-label="anchor" href="#arg-text-sim"></a></dt>
 <dd><p>A character string to be pasted into
 $SIMULATION. This must not contain seed or SUBPROBLEM which
-are handled separately. Default is to include "ONLYSIM". To
-avoid that, use text.sim="".</p></dd>
+are handled separately. Default is to include "ONLYSIM". You
+cannot avoid that using `text.sim`. If you need to drop
+`ONLYSIM`, use
+`modify.model=list(simulation=list(overwrite("ONLYSIM","")))`.</p></dd>
 
 
 <dt id="arg-method-sim">method.sim<a class="anchor" aria-label="anchor" href="#arg-method-sim"></a></dt>
