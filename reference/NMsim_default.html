@@ -9,7 +9,7 @@ and $COVARIANCE sections by a $SIMULATION section."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.955</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.956</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,6 +65,7 @@ and $COVARIANCE sections by a $SIMULATION section.</p>
 <span>  <span class="va">file.mod</span>,</span>
 <span>  <span class="va">data.sim</span>,</span>
 <span>  nsims <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  onlysim <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  replace.sim <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  return.text <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -89,6 +90,11 @@ and $COVARIANCE sections by a $SIMULATION section.</p>
 <dt id="arg-nsims">nsims<a class="anchor" aria-label="anchor" href="#arg-nsims"></a></dt>
 <dd><p>Number of replications wanted. The default is 1. If
 greater, multiple control streams will be generated.</p></dd>
+
+
+<dt id="arg-onlysim">onlysim<a class="anchor" aria-label="anchor" href="#arg-onlysim"></a></dt>
+<dd><p>Include `ONLYSIM` in `$SIMULATION`? Default is
+`TRUE`. Only applied when `replace.sim=`TRUE`.</p></dd>
 
 
 <dt id="arg-replace-sim">replace.sim<a class="anchor" aria-label="anchor" href="#arg-replace-sim"></a></dt>
