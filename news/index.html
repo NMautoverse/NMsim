@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.956</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.6" id="nmsim-016">NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#nmsim-016"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.6" id="nmsim-016">NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
 <ul><li><p>A major improvement is implemented on <code>NMSim_NWPRI()</code>, the simulation method that leverages the Nonmem <code>NWPRI</code> subroutine to simulate models with parameter uncertainty. This method was first included in NMsim 0.1.3 but - as was clearly declared in that version - it could only be trusted for simulation of <code>THETA</code>s. After further development in both <code>NMsim</code> and <code>NMdata</code> to support this as well as bugfixes in the new Nonmem 7.6.0, NMsim provides full support for simulation with parameter uncertainty using the inverse Wishart distribution through this simple interface.</p></li>
 <li><p>A new arguments <code>inits</code> is introduced to manually specify parameter (initial) values. This is the values that go into <code>$THETA</code>, <code>$OMEGA</code> and <code>SIGMA</code> sections of the control stream. To simulate with the final estimated values (stored in a <code>.ext</code> file), simply add <code>inits=list("theta(1)"=list(init=1.2))</code>. For simulation, only the parameter values (init) may be of interest, but if you are using NMsim for estimation too, bounds and whether parameters are fixed can now also controlled. <code>BLOCK</code> structures in <code>$OMEGA</code> and <code>SIGMA</code> can currently not be changed (say, correlation of two random effects cannot be introduced or removed).</p></li>
 <li><p>The <code>$SIZES</code> can now easily be controlled using the simple <code>sizes</code> argument in <code><a href="../reference/NMsim.html">NMsim()</a></code>. It leverages a new function <code><a href="../reference/NMupdateSizes.html">NMupdateSizes()</a></code> which can be used to edit <code>$SIZES</code> independently of the <code><a href="../reference/NMsim.html">NMsim()</a></code> function. In <code><a href="../reference/NMsim.html">NMsim()</a></code> just add the argument like <code>sizes=list(PD=100)</code> which will update or add <code>$SIZES PD=100</code> as needed. See documentation for more details.</p></li>
