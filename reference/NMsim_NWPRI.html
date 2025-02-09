@@ -69,7 +69,7 @@ this method, see `NMsim()`. See examples.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMsim_NWPRI</span><span class="op">(</span><span class="va">file.sim</span>, <span class="va">file.mod</span>, <span class="va">data.sim</span>, PLEV <span class="op">=</span> <span class="fl">0.999</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMsim_NWPRI</span><span class="op">(</span><span class="va">file.sim</span>, <span class="va">file.mod</span>, <span class="va">data.sim</span>, PLEV <span class="op">=</span> <span class="fl">0.999</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -95,6 +95,10 @@ value of THETA will actually be obtained using a truncated
 multivariate normal distribution, i.e. from an ellipsoidal
 region R1 over which  only  a fraction of mass of the
 normal occurs. This fraction is given by PLEV.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional arguments passed to `NMsim_default()`.</p></dd>
 
 </dl></div>
     <div class="section level2">

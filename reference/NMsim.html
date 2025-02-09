@@ -190,12 +190,12 @@ simulations will still be rerun.</p></dd>
 
 
 <dt id="arg-seed-r">seed.R<a class="anchor" aria-label="anchor" href="#arg-seed-r"></a></dt>
-<dd><p>A value passed to <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>. It may be
-better use <code>seed.R</code> rather than calling <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>
-manually because the seed can then be captured and stored by
-<code>NMsim()</code> for reproducibility. See <code>seed.nm</code> for
-finer control of the seeds that are used in the Nonmem control
-streams.</p></dd>
+<dd><p>A value passed to <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>. It is
+recommended to use <code>seed.R</code> rather than calling
+<code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> manually because the seed can then be
+captured and stored by <code>NMsim()</code> for reproducibility. See
+<code>seed.nm</code> for finer control of the seeds that are used in
+the Nonmem control streams.</p></dd>
 
 
 <dt id="arg-seed-nm">seed.nm<a class="anchor" aria-label="anchor" href="#arg-seed-nm"></a></dt>
@@ -582,7 +582,7 @@ additional information such as factor levels.</p></dd>
     handling seeds are NMsim features that are done in addition to
     the <code>method.sim</code>. Also the <code>modeify.model</code> argument
     is handled in addition to the <code>method.sim</code>. The
-    <code>subproblems</code> and <code>seed</code> arguments are available to
+    <code>subproblems</code> and <code>seed.nm</code> arguments are available to
     all methods creating a <code>$SIMULATION</code> section.</p>
 <p>Notice, the following functions are internally available to
 `NMsim` so you can run them by say <code>method.sim=NMsim_EBE</code>
