@@ -79,7 +79,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">February 09, 2025</h4>
+            <h4 data-toc-skip class="date">February 11, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-intro.Rmd" class="external-link"><code>vignettes/NMsim-intro.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-intro.Rmd</code></div>
@@ -292,22 +292,17 @@ results)</li>
 <p>As long as those requirements are met, there are no requirements to
 how the data sets are created. So if you already have a prefered way to
 do this, that’s fine. NMsim provides convenient helper functions that
-can optionally be used. E.g., the data set used in these simulations can
-be created this way:</p>
+can optionally be used. <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> creates just the
+dosing events, and <code><a href="../reference/addEVID2.html">addEVID2()</a></code> adds the sampling events. By
+default, doses are indicated using <code>EVID=1</code> and samples by
+<code>EVID=2</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,</span>
 <span>                       addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,time.sim<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="creating-dosing-regimens">Creating dosing regimens<a class="anchor" aria-label="anchor" href="#creating-dosing-regimens"></a>
-</h4>
-<p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> creates just the dosing events, and
-<code><a href="../reference/addEVID2.html">addEVID2()</a></code> adds the sampling events. By default, doses are
-indicated using <code>EVID=1</code> and samples by
-<code>EVID=2</code>.</p>
-<p>Notice, <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> has convenient behaviours. See
-<code><a href="../reference/NMcreateDoses.html">?NMcreateDoses</a></code> and the vignette ond creating simulation
-data sets for more.</p>
+<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p>Notice, <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> has many flexible and convenient
+features. See <code><a href="../reference/NMcreateDoses.html">?NMcreateDoses</a></code> and the vignette ond creating
+simulation data sets for more.</p>
 <details><summary>
 Additional <code>NMcreateDoses()</code> examples
 </summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -589,9 +584,7 @@ DOSE
 </tbody>
 </table>
 </div>
-</details>
-</div>
-<div class="section level4">
+</details><div class="section level4">
 <h4 id="adding-sampling-times">Adding sampling times<a class="anchor" aria-label="anchor" href="#adding-sampling-times"></a>
 </h4>
 <p>For adding sampling times to a set of doses and/or samples,
