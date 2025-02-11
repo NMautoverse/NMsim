@@ -6,6 +6,7 @@ articles:
   NMsim-config: NMsim-config.html
   NMsim-DataCreate: NMsim-DataCreate.html
   NMsim-forest: NMsim-forest.html
+  NMsim-intro-noFolding: NMsim-intro-noFolding.html
   NMsim-intro: NMsim-intro.html
   NMsim-known: NMsim-known.html
   NMsim-ParamUncertain: NMsim-ParamUncertain.html
@@ -16,7 +17,7 @@ articles:
   NMsim-TypSubj: NMsim-TypSubj.html
   NMsim-varyPars: NMsim-varyPars.html
   NMsim-VPC: NMsim-VPC.html
-last_built: 2025-02-11T17:19Z
+last_built: 2025-02-11T17:22Z
 urls:
   reference: https://NMautoverse.github.io/NMsim/reference
   article: https://NMautoverse.github.io/NMsim/articles

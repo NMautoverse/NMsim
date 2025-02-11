@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.101</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.102</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,14 @@
       <small>Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.6" id="since-nmsim-016">Since NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#since-nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
+<div class="section level3">
+<h3 id="other-changes-0-1-6">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-1-6"></a></h3>
+<ul><li>
+<code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="nmsim-016">NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
 <ul><li><p>A major improvement is implemented on <code>NMSim_NWPRI()</code>, the simulation method that leverages the Nonmem <code>NWPRI</code> subroutine to simulate models with parameter uncertainty. This method was first included in NMsim 0.1.3 but - as was clearly declared in that version - it could only be trusted for simulation of <code>THETA</code>s. After further development in both <code>NMsim</code> and <code>NMdata</code> to support this as well as bugfixes in the new Nonmem 7.6.0, NMsim provides full support for simulation with parameter uncertainty using the inverse Wishart distribution through this simple interface.</p></li>
