@@ -145,7 +145,8 @@ numbers, and it must contain all variables needed to run the NONMEM
 model. We simulate daily dosing of 30 mg.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span>,AMT<span class="op">=</span><span class="fl">30</span>,ADDL<span class="op">=</span><span class="fl">100</span>,II<span class="op">=</span><span class="fl">24</span>,col.id<span class="op">=</span><span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">doses</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">doses</span></span></code></pre></div>
+<div class="kable-table">
 <table class="table">
 <thead><tr class="header">
 <th align="right">TIME</th>
@@ -166,6 +167,7 @@ model. We simulate daily dosing of 30 mg.</p>
 <td align="right">1</td>
 </tr></tbody>
 </table>
+</div>
 <p><code><a href="../reference/expandCovs.html">NMsim::expandCovs()</a></code> can be used to construct a set of
 simulations needed to derive a forest plot. It varies one covariate at a
 time, keeping all other covariates at their reference value. It can
@@ -187,8 +189,8 @@ sex.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">## adding distinct ID's for each combination of covariates</span></span>
 <span><span class="va">covs</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">type</span>,<span class="va">covvar</span>,<span class="va">covval</span><span class="op">)</span><span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">covs</span></span></code></pre></div>
+<div class="kable-table">
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="11%">
@@ -337,6 +339,7 @@ sex.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p>We now have all combinations of covariates in the object called
 <code>covs</code>. Notice the <code>type</code> column which
 distinguishes the reference combination in contrast to the other
@@ -344,7 +347,8 @@ simulations where one covariate is being varied at a time.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## repeating the doses for all combinations of covariates</span></span>
 <span><span class="va">dt.dos</span> <span class="op">&lt;-</span> <span class="va">covs</span><span class="op">[</span>,<span class="va">doses</span><span class="op">[</span><span class="op">]</span>,by<span class="op">=</span><span class="va">covs</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/dims.html" class="external-link">dims</a></span><span class="op">(</span><span class="va">covs</span>,<span class="va">doses</span>,<span class="va">dt.dos</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/dims.html" class="external-link">dims</a></span><span class="op">(</span><span class="va">covs</span>,<span class="va">doses</span>,<span class="va">dt.dos</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
 <table class="table">
 <thead><tr class="header">
 <th align="left">data</th>
@@ -369,6 +373,7 @@ simulations where one covariate is being varied at a time.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p>We sample every 15 minutes on the first day and one day in
 steady-state.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -378,7 +383,8 @@ steady-state.</p>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">+</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span>,period<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">dt.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TIME<span class="op">=</span><span class="va">time.sim</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/dims.html" class="external-link">dims</a></span><span class="op">(</span><span class="va">dt.dos</span>,<span class="va">time.sim</span>,<span class="va">dt.sim</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/dims.html" class="external-link">dims</a></span><span class="op">(</span><span class="va">dt.dos</span>,<span class="va">time.sim</span>,<span class="va">dt.sim</span><span class="op">)</span> </span></code></pre></div>
+<div class="kable-table">
 <table class="table">
 <thead><tr class="header">
 <th align="left">data</th>
@@ -403,6 +409,7 @@ steady-state.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p>There is only one analyte in this data set. If for instance, you have
 a parent and a metabolite, adding sampling times could look like
 this:</p>
@@ -449,23 +456,24 @@ software installed, and it is robust.</p>
 <span>                      ,nc<span class="op">=</span><span class="fl">1</span></span>
 <span>                       <span class="op">)</span></span></code></pre></div>
 <p>If you encounter issues with samples that do not run, consider
-whether any of your uncertainty estimates on <code>THETA</code>’s could
-lead to sampled <code>THETA</code>’s that could make the model be
-undefined. This would often be absorption parameters, clearences,
-volumes or any other strictly positive parameter which is estimated with
-poor precision. If this happens, you may want to go back and estimate
-that THETA on the log scale to make sure all sampled values will be
-positive. A quick way to look for this is by combining parameter
-estimates (from the <code>.ext</code> file) and the automatic labeling
-of the parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>:</p>
+whether any of the uncertainty estimates on <code>THETA</code>’s could
+lead to not allowed sampled <code>THETA</code>’s. This would often be
+absorption parameters, clearences, volumes or any other strictly
+positive parameter estimated with poor precision. If this happens, you
+may want to go back and estimate that THETA on the log scale to make
+sure all sampled values will be positive. A quick way to look for this
+is by combining parameter estimates (from the <code>.ext</code> file)
+and the automatic labeling of the parameters using
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span><span class="va">value</span>,RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
+<div class="kable-table">
 <table class="table">
 <thead><tr class="header">
 <th align="left">par.name</th>
 <th align="right">FIX</th>
+<th align="right">value</th>
 <th align="right">RSE</th>
 <th align="left">code</th>
 </tr></thead>
@@ -473,53 +481,62 @@ of the parameters using <code><a href="https://nmautoverse.github.io/NMdata/refe
 <tr class="odd">
 <td align="left">THETA(1)</td>
 <td align="right">0</td>
+<td align="right">0.795533</td>
 <td align="right">0.0804007</td>
 <td align="left">LTVKA=THETA(1)</td>
 </tr>
 <tr class="even">
 <td align="left">THETA(2)</td>
 <td align="right">0</td>
+<td align="right">4.311820</td>
 <td align="right">0.0136327</td>
 <td align="left">LTVV2=THETA(2)</td>
 </tr>
 <tr class="odd">
 <td align="left">THETA(3)</td>
 <td align="right">0</td>
+<td align="right">1.481340</td>
 <td align="right">0.0789812</td>
 <td align="left">LTVCL=THETA(3)</td>
 </tr>
 <tr class="even">
 <td align="left">THETA(4)</td>
 <td align="right">0</td>
+<td align="right">5.072070</td>
 <td align="right">0.0481949</td>
 <td align="left">LTVV3=THETA(4)</td>
 </tr>
 <tr class="odd">
 <td align="left">THETA(5)</td>
 <td align="right">0</td>
+<td align="right">2.132450</td>
 <td align="right">0.0292952</td>
 <td align="left">LTVQ=THETA(5)</td>
 </tr>
 <tr class="even">
 <td align="left">THETA(6)</td>
 <td align="right">0</td>
+<td align="right">0.340819</td>
 <td align="right">0.4222300</td>
 <td align="left">AGEEFF=THETA(6)</td>
 </tr>
 <tr class="odd">
 <td align="left">THETA(7)</td>
 <td align="right">0</td>
+<td align="right">0.188402</td>
 <td align="right">1.9160784</td>
 <td align="left">WEIGHTEFF=THETA(7)</td>
 </tr>
 <tr class="even">
 <td align="left">THETA(8)</td>
 <td align="right">0</td>
+<td align="right">1.170320</td>
 <td align="right">0.1041536</td>
 <td align="left">MALEEFF=THETA(8)</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div class="section level3">
 <h3 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
@@ -536,31 +553,9 @@ quantiles in the simulated distribution.</p>
 <span><span class="co">## Check how many models returned simulation results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/data.table/man/duplicated.html" class="external-link">uniqueN</a></span><span class="op">(</span><span class="va">model.sim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 500</span></span></code></pre>
-<p>If you encounter issues with samples that do not run, please consider
-whether any of your uncertainty estimates on <span class="math inline">\(THETA\)</span>’s could lead to sampled THETA’s
-that could make the model be undefined. This would often be absorption
-parameters, clearences, volumes or any other strictly positive parameter
-which is estimated with poor precision. If this happens, you may want to
-go back and estimate that THETA on the log scale to make sure all
-sampled values will be positive. A quick way to look into this is to
-look at the relative standard error for each <code>THETA</code>. In the
-following we merge in the first line in the model using each
-<code>THETA</code> so we can refresh our memory on the interpretation of
-each parameter without relying on a well formatted parameter table.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span></span>
-<span>            <span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span></span>
-<span>                <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["par.name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["FIX"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["code"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"THETA(1)","2":"0","3":"0.08040069","4":"LTVKA=THETA(1)"},{"1":"THETA(2)","2":"0","3":"0.01363271","4":"LTVV2=THETA(2)"},{"1":"THETA(3)","2":"0","3":"0.07898119","4":"LTVCL=THETA(3)"},{"1":"THETA(4)","2":"0","3":"0.04819492","4":"LTVV3=THETA(4)"},{"1":"THETA(5)","2":"0","3":"0.02929518","4":"LTVQ=THETA(5)"},{"1":"THETA(6)","2":"0","3":"0.42222998","4":"AGEEFF=THETA(6)"},{"1":"THETA(7)","2":"0","3":"1.91607839","4":"WEIGHTEFF=THETA(7)"},{"1":"THETA(8)","2":"0","3":"0.10415356","4":"MALEEFF=THETA(8)"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 <p>The step required by the user is to define the functions to derive
 relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">PRED</span><span class="op">)</span></span>
@@ -580,7 +575,7 @@ relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
 <p>We will use the R package <code>coveffectsplot</code> for plotting.
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
@@ -634,10 +629,10 @@ so we adjust those first.</p>
 <span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-13-1.png" width="960"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-12-1.png" width="960"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-13-2.png" width="960"></p>
+<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-12-2.png" width="960"></p>
 </div>
 <div class="section level3">
 <h3 id="post-processing-explained-step-by-step">Post processing explained step by step<a class="anchor" aria-label="anchor" href="#post-processing-explained-step-by-step"></a>
@@ -653,7 +648,7 @@ effect for a subject with other covariates at reference values.</p>
 <p>Notice, the code below consists of snippets from the
 <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
