@@ -106,23 +106,22 @@ selected and efficiently stored key result data.</p></li>
 <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h2>
 <p><code>NMsim</code> itself and many features will work in any newer R
-installation. Integration with Nonmem for a seamless simulation
-experience within R, Nonmem installations on linux, Windows and Mac are
-supported. Multi-threaded execution may currently not work on
-Windows.</p>
-<p><code>NMsim</code> relies on Nonmem for running simulations. The most
-important requirement for a fully seamless simulation experience within
-R, NMsim must be able to execute Nonmem. The simplest example where this
-is easily achieved, is when R and Nonmem run on the same system. If they
-are on separate system, the questions are: Do R and Nonmem share access
-to a data structure where the relevant files can be stored and executed?
-And can R login to that other system to run Nonmem, for instance through
-SSH? In case these two criteria are met, the fully seamless experience
-should still be possible.</p>
-<p>If your system does not meet these requirements in this document, it
-does not mean that NMsim can’t work. It can still put together your
-Nonmem simulation control streams and data and make everything ready for
-Nonmem to execute. Once you have run Nonmem, you can then use
+installation. For a seamless simulation experience within R, Nonmem
+installations on linux, Windows and Mac are supported. Multi-threaded
+execution may currently not work on Windows.</p>
+<p><code>NMsim</code> relies on Nonmem for running simulations. For a
+fully seamless simulation experience within R, NMsim must be able to
+execute Nonmem. The simplest example where this is easily achieved, is
+when R and Nonmem run on the same system. If they are on separate
+systems, the questions are: Do R and Nonmem share access to a data
+structure where the relevant files can be stored and executed? And can R
+login to that other system to run Nonmem, for instance through SSH? In
+case these two criteria are met, the fully seamless experience should
+still be possible.</p>
+<p>If your system does not meet these requirements, it does not mean
+that NMsim can’t work. It can still put together your Nonmem simulation
+control streams and data and make everything ready for Nonmem to
+execute. Once you have run Nonmem, you can then use
 <code><a href="../reference/NMreadSim.html">NMsim::NMreadSim()</a></code> to collect the results.</p>
 </div>
 <div class="section level2">
