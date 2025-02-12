@@ -1390,9 +1390,11 @@ simulations.</li>
 subjects. We use <code><a href="../reference/NMsim.html">NMsim()</a></code>’s <code>name.sim</code> argument
 to distinguish the simulation in output data and simulation output
 files.</p>
-<summary>
-Simulate 1000 new subjects using <code>$SUBPROBLEMS</code>
-</summary><div class="fold s">
+<ul>
+<li>Simulate 1000 new subjects using <code>$SUBPROBLEMS</code>
+</li>
+</ul>
+<div class="fold s">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tablevars</span><span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span>,<span class="va">Y</span><span class="op">)</span></span>
 <span><span class="va">simres.subprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
@@ -1404,9 +1406,10 @@ Simulate 1000 new subjects using <code>$SUBPROBLEMS</code>
 <span>                        reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
 <span>                        <span class="op">)</span></span></code></pre></div>
 </div>
-<summary>
-Simulate 1000 new subjects with covariate sampling
-</summary><div class="fold s">
+<ul>
+<li>Simulate 1000 new subjects with covariate sampling</li>
+</ul>
+<div class="fold s">
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Replicating input data set allows for manual resampling of covariates.</span></span>
 <span></span>
@@ -1439,9 +1442,10 @@ Simulate 1000 new subjects with covariate sampling
 <span>                        reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
 <span>                        <span class="op">)</span></span></code></pre></div>
 </div>
-<summary>
-Derive and plot 90% prediction intervals
-</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<ul>
+<li>Derive and plot 90% prediction intervals</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Collect and stack simulation results </span></span>
 <span><span class="va">simres.newpops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.subprob</span><span class="op">)</span>,</span>
 <span>                        <span class="va">simres.datarep</span>,fill<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
@@ -1483,9 +1487,8 @@ simulation we did in this article, we can do this:</p>
 was not provided for that first simulation, in which case “noname” is
 used as a placeholder. In fact, if we look at the console output from
 NMsim, it is telling us exactly that (look at the last line).</p>
-<summary>
-Click to show R console output from NMsim
-</summary><div class="fold o">
+<p>Click to show R console output from NMsim</p>
+<div class="fold o">
 <pre><code>&gt; simres &lt;- NMsim(file.mod=file.mod,data=data.sim)
 Location(s) of intermediate files and Nonmem execution:
   simtmp-intro/xgxr021_noname
