@@ -81,7 +81,7 @@ Delff</h4>
                                     <h4 data-toc-skip class="author">Boris
 Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">February 12, 2025</h4>
+            <h4 data-toc-skip class="date">February 16, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -456,15 +456,19 @@ software installed, and it is robust.</p>
 <span>                      ,nc<span class="op">=</span><span class="fl">1</span></span>
 <span>                       <span class="op">)</span></span></code></pre></div>
 <p>If you encounter issues with samples that do not run, consider
-whether any of the uncertainty estimates on <code>THETA</code>’s could
-lead to not allowed sampled <code>THETA</code>’s. This would often be
-absorption parameters, clearences, volumes or any other strictly
-positive parameter estimated with poor precision. If this happens, you
-may want to go back and estimate that THETA on the log scale to make
-sure all sampled values will be positive. A quick way to look for this
-is by combining parameter estimates (from the <code>.ext</code> file)
-and the automatic labeling of the parameters using
-<code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>:</p>
+whether any of your uncertainty estimates on <code>THETA</code>’s could
+lead to sampled <code>THETA</code>’s that could make the model be
+undefined. This would often be absorption parameters, clearences,
+volumes or any other strictly positive parameter which is estimated with
+poor precision. If this happens, you may want to go back and estimate
+that <code>THETA</code> on the log scale to make sure all sampled values
+will be positive.</p>
+<summary>
+Click to show example
+</summary><div class="fold s">
+<p>A quick way to look for this is by combining parameter estimates
+(from the <code>.ext</code> file) and the automatic labeling of the
+parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
@@ -527,6 +531,7 @@ and the automatic labeling of the parameters using
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <p>A large RSE is a potential issue for strictly positive parameters
 (RSE=0.25 for a parameter with a positive estimate corresponds to
