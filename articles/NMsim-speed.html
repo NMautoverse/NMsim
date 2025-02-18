@@ -90,50 +90,85 @@
 <code>NMsim</code>. The list is somewhat prioritized, most important
 first.</p>
 <ul>
-<li><p>Reduce amount of data written to file<br>
-Almost always use the <code>table.vars</code> argument. See the example
-below too.</p></li>
-<li><p>Break the simulation into multiple Nonmem runs</p></li>
-<li><p>Use <code>data.table</code> Depending on the data sets this can
-make a very large difference. Consider using
-<code>NMdataConf(as.fun="data.tabe")</code></p></li>
-<li><p>Use <code>method.execute="nmsim"</code><br>
-If you provide the path to the Nonmem executable using
+<li>Reduce amount of data written to file
+<ul>
+<li>Almost always use the <code>table.vars</code> argument. Only include
+the variables you need out of Nonmem. There is no reason to list
+variables in input data since <code>NMsim</code> can merge those back
+on. NMsim versions after 0.1.6 have a <code>carry.out</code> argument to
+control which input data variables will be recovered. The default is
+<code>carry.out=TRUE</code> which means that all input data variables
+will be added back on the results. If your data set is very large, and
+your input data set has many columns, you can reduce this. You could do
+something as little as <code>table.vars=c(PRED, IPRED)</code> and
+<code>carry.out=c("ID", "TIME","TRT")</code>.</li>
+</ul>
+</li>
+<li>If running multiple simulations, run them in parallel
+<ul>
+<li>Use <code>sge=TRUE</code> to submit all simulation runs to the
+cluster</li>
+</ul>
+</li>
+<li>Break the simulation into multiple Nonmem runs
+<ul>
+<li>For example, instead of running <code>subproblems=1000</code>, you
+could do <code>subproblems=50, nsims=20, sge=TRUE</code>. In the first
+case, one Nonmem model is going through 1000 subproblems. In the second
+case, 20 Nonmem runs are going through 50 subproblems each, and the
+Nonmem runs are executed in parellel. See example under “Speeding up
+large simulations” too.</li>
+</ul>
+</li>
+<li>Use <code>data.table</code>
+<ul>
+<li>Depending on the data sets this can make a very large difference.
+Consider using <code>NMdataConf(as.fun="data.tabe")</code>
+</li>
+</ul>
+</li>
+<li>Use <code>method.execute="nmsim"</code>
+<ul>
+<li>If you provide the path to the Nonmem executable using
 <code>path.nonmem</code>, <code><a href="../reference/NMsim.html">NMsim()</a></code> will be default use
 <code>method.execute="nmsim"</code>. Trick: configure this once and for
 all in the top of your script with something like
-<code>NMdata::NMdataConf(path.nonmem="/path/to/nmfe75")</code>.</p></li>
-<li><p>Parellilize individual runs<br>
-NMsim does support parellilization (performing a Nonmem run using
-multiple cores). However, this is rarely worth it for simulations. Most
-of the time, input/output (reading/writing to disk) is the bottleneck,
-and splitting the data set into multiple runs will most often reduce run
-times more.</p></li>
+<code>NMdata::NMdataConf(path.nonmem="/path/to/nmfe75")</code>.</li>
+</ul>
+</li>
+<li>Parellilize individual runs
+<ul>
+<li>NMsim does support parellilization (performing a Nonmem run using
+multiple cores). For instance, use 16 cores for each Nonmem run by
+adding <code>nc=16</code>
+</li>
+<li>However, this is rarely worth it for simulations. Most of the time,
+input/output (reading/writing to disk) is the bottleneck, and splitting
+the data set into multiple runs will most often reduce run times
+more.</li>
+</ul>
+</li>
 </ul>
 <div class="section level2">
 <h2 id="most-common-reasons-for-nmsim-to-fail-or-be-slow">Most common reasons for <code>NMsim</code> to fail or be slow<a class="anchor" aria-label="anchor" href="#most-common-reasons-for-nmsim-to-fail-or-be-slow"></a>
 </h2>
-<p>If <code>NMsim</code> can find the Nonmem executable and/or PSN, it
-should work on basically any models where where it makes sense to
-replace the <code>$ESTIMATION</code> by a <code>$SIMULATION</code>. If
-<code>NMsim</code> fails or behaves unexpectedly, make sure to read the
-output from Nonmem in the R console. If <code>NMsim</code> complains it
-cannot find the output tables, it is likely because Nonmem failed and
-did not generate them.</p>
-<p>There is one thing about the Nonmem model evaluation you have to
-remember. Any variable that is used in Nonmem must be defined either
-inside the model or in the data set. There may be a covariate in the
-estimated model that you did not include in your simulation data set -
-the simulation will break. Sometimes the estimation models include
-variables in output tables that were not used for anything else by
-Nonmem than being read from the input data set and printed in output
-tables. Imagine you cleverly included a unique row identifier called
-<code>ROW</code> in your estimation data set and listed it in
-<code>$TABLE</code> to reliably combine input and output data. It is not
-used for anything else in the data. If we do not customize the output
-table in <code><a href="../reference/NMsim.html">NMsim()</a></code> using the <code>table.vars</code> argument
-and the simulation input data set does not include a numeric
-<code>ROW</code> column, we get this error:</p>
+<p>If <code>NMsim</code> fails or behaves unexpectedly, make sure to
+read the output from Nonmem in the R console. If <code>NMsim</code>
+complains it cannot find the output tables, it is likely because Nonmem
+failed and did not generate them.</p>
+<p>Any variable that is used in Nonmem must be defined either inside the
+model or in the data set. There may be a covariate in the estimated
+model that you did not include in your simulation data set - the
+simulation will break. Sometimes the estimation models include variables
+in output tables that were not used for anything else by Nonmem than
+being read from the input data set and printed in output tables. Imagine
+you cleverly included a unique row identifier called <code>ROW</code> in
+your estimation data set and listed it in <code>$TABLE</code> to
+reliably combine input and output data. It is not used for anything else
+in the data. If we do not customize the output table in
+<code><a href="../reference/NMsim.html">NMsim()</a></code> using the <code>table.vars</code> argument and the
+simulation input data set does not include a numeric <code>ROW</code>
+column, we get this error:</p>
 <pre><code>Starting NMTRAN
  
  AN ERROR WAS FOUND IN THE CONTROL STATEMENTS.
@@ -172,6 +207,35 @@ independent simulations. This will typically be distinct subjects which
 can be simulated without regard to each other. The simple way to do this
 is to split the data set into a list of data sets and pass that list in
 the <code><a href="../reference/NMsim.html">NMsim()</a></code> <code>data</code> argument.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://NMautoverse.github.io/NMsim/">NMsim</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dose1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,</span>
+<span>                       addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span>,col.id<span class="op">=</span><span class="cn">NA</span>,</span>
+<span>                       as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="va">dose1</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>ID<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span>,by<span class="op">=</span><span class="va">dose1</span><span class="op">]</span></span>
+<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## say dt.sim is a large data set with 1000 subjects. We want 10 data</span></span>
+<span><span class="co">## sets with 100 subjects in each.</span></span>
+<span><span class="va">dat.sim</span><span class="op">$</span><span class="va">IDGRP</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ID</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span><span class="fl">100</span><span class="op">+</span><span class="fl">1</span></span>
+<span><span class="co">## Now IDGRP is the grouping of the ID's</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>minID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span>,maxID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">IDGRP</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co">### with data.table, we easily split the data in a list of data.tables based on that grouping variable</span></span>
+<span><span class="va">data.multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">dt.sim</span>,by<span class="op">=</span><span class="st">"IDGRP"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## using sge=TRUE we are now sending the run to the cluster as 10 parellel Nonmem runs.</span></span>
+<span><span class="va">path.multidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span>,</span>
+<span>                          data<span class="op">=</span><span class="va">data.multiple</span></span>
+<span>                         ,table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span>,<span class="st">"IPRED"</span>,<span class="st">"Y"</span><span class="op">)</span>,</span>
+<span>                         ,name.sim<span class="op">=</span><span class="st">"datalist_01"</span></span>
+<span>                         ,sge<span class="op">=</span><span class="cn">TRUE</span></span>
+<span>                          <span class="op">)</span></span>
+<span><span class="co">### If we want to wait and read the results when they are ready, use wait=TRUE. NMsim will automatically combine them into one data set as if they were from just one Nonmem run.</span></span>
+<span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="va">path.multidata</span>,wait<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
