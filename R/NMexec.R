@@ -263,6 +263,8 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
         }
         
         if(!isFALSE(input.archive(file.mod))){
+            
+
             fn.input <- input.archive(file.mod)
 
             ## copy input data

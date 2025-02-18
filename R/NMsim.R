@@ -613,7 +613,6 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
     ## if(missing(col.row)) col.row <- NULL
     ## col.row <- NMdata:::NMdataDecideOption("col.row",col.row)
 
-    
     input.archive <- inputArchiveDefault
 
     if(missing(modify.model)) modify.model <- NULL
@@ -659,13 +658,21 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
         }
     }
 
+
 ### fast.tables is true if table.vars is provided and table.options are untouched.
 
+
+    ### TODO: This must be handled differently for missing data. It must be done by file.mod.
+        all.names <- unique(unlist(lapply(data,colnames)))
+        col.row <- tmpcol(names=all.names,base="NMROW")
+
+    
     if(subproblems>0 &&
        !is.null(table.vars)
        ## this has not been resolved in NMdata
        ## && packageVersion("NMdata")<"1.1.7"
        ){
+        
         names.table.vars <- names(table.vars)
         if(!is.null(names.table.vars)){
             names.table.vars <- sub("(.+)","\\1=",names.table.vars)
@@ -857,8 +864,7 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
                     x
                 }})
         }
-        all.names <- unique(unlist(lapply(data,colnames)))
-        col.row <- tmpcol(names=all.names,base="NMROW")
+
         data <- lapply(data,function(d)d[,(col.row):=(1:.N)/1000])
         if(order.columns) data <- lapply(data,NMorderColumns,col.row=col.row)
         dt.models[,col.row:=..col.row]
@@ -868,22 +874,17 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
         dt.models <- egdt(dt.models,dt.data,quiet=TRUE)
         
         dt.models[,ROWMODEL:=.I]
-
-####### TODO
-        ## construct model-specific paths to data sets on file. say parent dir of fn.sim, then data/name_data.csv. They must be a column in dt.models
         
-        ## save the unique data:datapath combinations
-
-        ## indicate for those that data should not be re-saved. The caveat is the VPC style probably has te be different.
-
-        ## rewrite where NMwriteData is done to only generate text. Or even do that here?
-        
-
     }
+
     if(is.null(data)){
         dt.models[,data.name:=""]
-    } 
+        dt.models[,data.method:="vpc"]
+    } else {
+        dt.models[,data.method:="default"]
+    }
 
+    
     
 
 ### name.mod and name.sim are confusing. name.mod is the name
@@ -920,19 +921,13 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
     ## fn.data is the data file name, no path
     
     ## dt.models[,fn.data:=paste0("NMsimData_",fnAppend(fnExtension(name.mod,".csv"),name.sim))]
-    dt.models[,fn.data:=paste0("NMsimData_",fnAppend(fnExtension(model,".csv"),name.sim))]
+    ### dt.models[,fn.data:=paste0("NMsimData_",fnAppend(fnExtension(model,".csv"),name.sim))]
+    dt.models[,fn.data:=fnExtension(paste("NMsimData",DATAROW,name.sim,"_"),".csv")]
     dt.models[,fn.data:=fnAppend(fn.data,data.name),by=.(ROWMODEL)]
     ## dt.models[,fn.data:=gsub(" ","_",fn.data)]
     dt.models[,fn.data:=cleanStrings(fn.data)]
 
-    dt.models[,dir.data.sim:=dir.sim]
-#### A data-efficient way to store data sets as needed
-    if(FALSE){
-        dt.models[,dir.data.sim:=file.path(dir.sim,"data")]
-    }
 
-    dt.models[,path.data:=file.path(dir.data.sim,fn.data)]
-    
     ## path.rds - Where to save table of runs
     if(missing(dir.res)) {
         dt.models[,dir.res:=dir.sim]
@@ -966,6 +961,25 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
     }
 
 
+    ########  Data paths
+        ### save a copy of data for each model
+    if(FALSE){
+        dt.models[,dir.data.sim:=dir.sim]
+    }
+#### A data-efficient way to store data sets as needed. Data will be stored for each model. But reused for nsims.
+    if(TRUE){
+        ## dt.models[,dir.data.sim:=file.path(dir.sim,"data")]
+        dt.models[,dir.data.sim:=file.path(dir.sim)]
+    }
+
+        dt.models[,{if(!dir.exists(dir.data.sim)){
+                        dir.create(dir.data.sim)
+                }},
+                        by=.(ROWMODEL)]
+
+    
+    dt.models[,path.data:=file.path(dir.data.sim,fn.data)]
+    
 
     
 ### clear simulation directories so user does not end up with old results
@@ -977,9 +991,6 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
     dt.models[,{if(!dir.exists(dir.sim)){
                     dir.create(dir.sim)
                 }
-                    if(!dir.exists(dir.data.sim)){
-                        dir.create(dir.data.sim)
-                    }   
     },by=.(ROWMODEL)
     ]
 
@@ -1081,12 +1092,29 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
         order.columns <- FALSE
     }
 
+    
+dt.data <- unique(dt.models[,.(DATAROW,path.data,data.method)])
+
+dt.data[,ROWDTDATA:=.I]
+dt.data[,
+NMwriteData(data[[DATAROW]],file=path.data,
+            ## args.NMgenText=list(dir.data=".")
+                             ,formats.write=c("csv",format.data.complete)
+                              ## if NMsim is not controlling $DATA, we don't know what can be dropped.
+           ,csv.trunc.as.nm=data.method!="vpc"
+                             ,script=script
+           ,quiet=TRUE),
+by=.(ROWDTDATA)
+        ]
+
+    
+    
     dt.models[,{
         
 ### note: insert test for whether run is needed here
         ## if data is NULL, we will re-use data used in file.mod. Adding row counter if not found.
 
-        if(is.null(data)){
+        if(data.method=="vpc"){
             data.this <- NMscanInput(file.mod,recover.cols=FALSE,translate=FALSE,apply.filters=FALSE,col.id=NULL,as.fun="data.table")
             col.row <- tmpcol(data,base="NMROW")
             dt.models[,col.row:=..col.row]
@@ -1124,17 +1152,34 @@ NMsim <- function(file.mod,data,dir.sims, name.sim,
 
         
 ### save data and replace $input and $data
+
+###### Save data-sets
+    ####### TODO
+        ## construct model-specific paths to data sets on file. say parent dir of fn.sim, then data/name_data.csv. They must be a column in dt.models
+        
+        ## save the unique data:datapath combinations
+
+        ## indicate for those that data should not be re-saved. The caveat is the VPC style probably has to be different.
+
+        ## rewrite where NMwriteData is done to only generate text. Or even do that here?
+
+
+
+
 #### multiple todo: save only for each unique path.data
         
         
         ## format.data.complete <- "fst"
-        nmtext <- NMwriteData(data.this,file=path.data,
-                              args.NMgenText=list(dir.data=".")
-                             ,formats.write=c("csv",format.data.complete)
-                              ## if NMsim is not controlling $DATA, we don't know what can be dropped.
-                             ,csv.trunc.as.nm=rewrite.data.section
-                             ,script=script
-                             ,quiet=TRUE)
+        ## nmtext <- NMwriteData(data.this,file=path.data,
+        ##                       args.NMgenText=list(dir.data=".")
+        ##                      ,formats.write=c("csv",format.data.complete)
+        ##                       ## if NMsim is not controlling $DATA, we don't know what can be dropped.
+        ##                      ,csv.trunc.as.nm=rewrite.data.section
+        ##                      ,script=script
+        ##                      ,quiet=TRUE)
+
+        
+nmtext <- NMgenText(data.this,file=relative_path(path.data,dirname(path.sim)))
         
         ## input
         if(exists("section.input")){
