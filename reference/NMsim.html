@@ -17,7 +17,7 @@ get the most out of this."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.103</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.223</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,8 @@ get the most out of this.</p>
 <span>  <span class="va">args.psn.execute</span>,</span>
 <span>  <span class="va">table.vars</span>,</span>
 <span>  <span class="va">table.options</span>,</span>
+<span>  <span class="va">table.format</span>,</span>
+<span>  carry.out <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  text.sim <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  method.sim <span class="op">=</span> <span class="va">NMsim_default</span>,</span>
 <span>  typical <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -100,6 +102,7 @@ get the most out of this.</p>
 <span>  create.dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">dir.psn</span>,</span>
 <span>  <span class="va">modify.model</span>,</span>
+<span>  <span class="va">nmrep</span>,</span>
 <span>  <span class="va">sizes</span>,</span>
 <span>  sim.dir.from.scratch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">col.row</span>,</span>
@@ -108,8 +111,6 @@ get the most out of this.</p>
 <span>  <span class="va">nmquiet</span>,</span>
 <span>  <span class="va">progress</span>,</span>
 <span>  <span class="va">as.fun</span>,</span>
-<span>  <span class="va">suffix.sim</span>,</span>
-<span>  <span class="va">text.table</span>,</span>
 <span>  system.type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">dir.res</span>,</span>
 <span>  <span class="va">file.res</span>,</span>
@@ -118,9 +119,11 @@ get the most out of this.</p>
 <span>  <span class="va">clean</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check.mod <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  format.data.complete <span class="op">=</span> <span class="st">"rds"</span>,</span>
+<span>  <span class="va">text.table</span>,</span>
+<span>  <span class="va">suffix.sim</span>,</span>
 <span>  <span class="va">seed</span>,</span>
 <span>  <span class="va">list.sections</span>,</span>
-<span>  format.data.complete <span class="op">=</span> <span class="st">"rds"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -243,6 +246,19 @@ provided. If constructing a new output table with
 <code>NOAPPEND</code> and <code>NOPRINT</code>. You can modify that with
 <code>table.options</code>. Do not try to modify output filename -
 <code>NMsim</code> takes care of that.</p></dd>
+
+
+<dt id="arg-table-format">table.format<a class="anchor" aria-label="anchor" href="#arg-table-format"></a></dt>
+<dd><p>A format for `$TABLE`. Only used if
+`table.vars` is provided.</p></dd>
+
+
+<dt id="arg-carry-out">carry.out<a class="anchor" aria-label="anchor" href="#arg-carry-out"></a></dt>
+<dd><p>Variables from input data that should be included
+in results. Default is to include everything. If working with
+large data sets, it may be wanted to provide a subset of the
+columns here. If doing very large simulations, this may also
+be a way to save memory.</p></dd>
 
 
 <dt id="arg-text-sim">text.sim<a class="anchor" aria-label="anchor" href="#arg-text-sim"></a></dt>
@@ -381,6 +397,14 @@ of analyses, like modifying parameter values. See vignettes
 for further information.</p></dd>
 
 
+<dt id="arg-nmrep">nmrep<a class="anchor" aria-label="anchor" href="#arg-nmrep"></a></dt>
+<dd><p>Include `NMREP` as counter of subproblems? The
+default is to do so if `subproblems&gt;0`. This will insert a
+counter called `NMREP` in the `$ERROR` section and include
+that in the output table(s). At this point, nothing is done to
+avoid overwriting existing variables.</p></dd>
+
+
 <dt id="arg-sizes">sizes<a class="anchor" aria-label="anchor" href="#arg-sizes"></a></dt>
 <dd><p>If needed, adjust the `$SIZES` section by providing a
 list of arguments to `NMupdateSizes()`. Example:
@@ -453,16 +477,6 @@ a function (say `tibble::as_tibble`) in as.fun to convert to
 something else. If data.tables are wanted, use
 as.fun="data.table". The default can be configured using
 NMdataConf.</p></dd>
-
-
-<dt id="arg-suffix-sim">suffix.sim<a class="anchor" aria-label="anchor" href="#arg-suffix-sim"></a></dt>
-<dd><p>Deprecated. Use name.sim instead.</p></dd>
-
-
-<dt id="arg-text-table">text.table<a class="anchor" aria-label="anchor" href="#arg-text-table"></a></dt>
-<dd><p>A character string including the variables to
-export from Nonmem. Deprecated. Use `table.vars` and
-`table.options` instead.</p></dd>
 
 
 <dt id="arg-system-type">system.type<a class="anchor" aria-label="anchor" href="#arg-system-type"></a></dt>
@@ -544,14 +558,6 @@ of such a feature of your control stream, you know how it
 impacts simulation, and you want to get rid of warnings.</p></dd>
 
 
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Deprecated. See <code>seed.R</code> and <code>seed.nm</code>.</p></dd>
-
-
-<dt id="arg-list-sections">list.sections<a class="anchor" aria-label="anchor" href="#arg-list-sections"></a></dt>
-<dd><p>Deprecated. Use modify.model instead.</p></dd>
-
-
 <dt id="arg-format-data-complete">format.data.complete<a class="anchor" aria-label="anchor" href="#arg-format-data-complete"></a></dt>
 <dd><p>For development purposes - users do
 not need this argument. Controls what format the complete
@@ -560,6 +566,23 @@ input data set is saved in.  Possible values are `rds`
 and use less disk space but factor levels may be lost from
 input data to output data. `csv` will also lead to loss of
 additional information such as factor levels.</p></dd>
+
+
+<dt id="arg-text-table">text.table<a class="anchor" aria-label="anchor" href="#arg-text-table"></a></dt>
+<dd><p>Deprecated. Use `table.vars` and `table.options`
+instead.</p></dd>
+
+
+<dt id="arg-suffix-sim">suffix.sim<a class="anchor" aria-label="anchor" href="#arg-suffix-sim"></a></dt>
+<dd><p>Deprecated. Use name.sim instead.</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>Deprecated. See <code>seed.R</code> and <code>seed.nm</code>.</p></dd>
+
+
+<dt id="arg-list-sections">list.sections<a class="anchor" aria-label="anchor" href="#arg-list-sections"></a></dt>
+<dd><p>Deprecated. Use modify.model instead.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -582,8 +605,8 @@ additional information such as factor levels.</p></dd>
     handling seeds are NMsim features that are done in addition to
     the <code>method.sim</code>. Also the <code>modeify.model</code> argument
     is handled in addition to the <code>method.sim</code>. The
-    <code>subproblems</code> and <code>seed.nm</code> arguments are available to
-    all methods creating a <code>$SIMULATION</code> section.</p>
+    <code>subproblems</code> and <code>seed.nm</code> arguments are available
+    to all methods creating a <code>$SIMULATION</code> section.</p>
 <p>Notice, the following functions are internally available to
 `NMsim` so you can run them by say <code>method.sim=NMsim_EBE</code>
 without quotes. To see the code of that method, type

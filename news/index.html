@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.103</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.223</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,10 +52,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="since-nmsim-016">Since NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#since-nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
+<p>New handling of data files has been implemented</p>
 <div class="section level3">
 <h3 id="other-changes-0-1-6">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-1-6"></a></h3>
-<ul><li>
-<code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</li>
+<ul><li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
+<li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code> only requires <code>CMT</code> argument when the column of the same name is present in <code>data</code>. Not all models require <code>CMT</code> and this change allows for building such data sets with <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> and <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
