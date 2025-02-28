@@ -79,7 +79,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">February 26, 2025</h4>
+            <h4 data-toc-skip class="date">February 28, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-intro.Rmd" class="external-link"><code>vignettes/NMsim-intro.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-intro.Rmd</code></div>
@@ -1395,6 +1395,9 @@ files.</p>
 </li>
 </ul>
 <div class="fold s">
+<p>Notice the following reuses the input data set 1000 times, and a
+column called <code>NMREP</code> will count the subproblem number in the
+output.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tablevars</span><span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span>,<span class="va">Y</span><span class="op">)</span></span>
 <span><span class="va">simres.subprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
@@ -1405,12 +1408,29 @@ files.</p>
 <span>                        seed.R<span class="op">=</span><span class="fl">764</span>, <span class="co">## NMsim() will set the R seed for reproducibility</span></span>
 <span>                        reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
 <span>                        <span class="op">)</span></span></code></pre></div>
+<p>To generate a prediction interval, this format is sufficient. If you
+want to distinguish the subjects, you can update the <code>ID</code>
+column to reflect unique combinations of <code>ID</code> and
+<code>NMREP</code>. With <code>data.table</code>, this can be done this
+way:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## data.table:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.subprob</span><span class="op">)</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">NMREP</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">## dplyr:</span></span>
+<span><span class="va">simres.subprob</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">NMREP</span>,<span class="va">ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>ID <span class="op">=</span> <span class="fu">cur_group_id</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>By the way, if you would like <code><a href="../reference/NMsim.html">NMsim()</a></code> to return
+<code>data.table</code> objects, just run
+<code>NMdataConf(as.fun="data.table")</code>. If you want tibbles, run
+<code>NMdataConf(as.fun=tibble::as_tibble)</code>.</p>
 </div>
 <ul>
 <li>Simulate 1000 new subjects with covariate sampling</li>
 </ul>
 <div class="fold s">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Replicating input data set allows for manual resampling of covariates.</span></span>
 <span></span>
 <span><span class="co">## NMdata::findCovs() extracts unique values of column that do not vary within `by`. Since `by` is here the subject ID, that means we are finding subject level and globally equal variables only.</span></span>
@@ -1445,7 +1465,7 @@ files.</p>
 <ul>
 <li>Derive and plot 90% prediction intervals</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Collect and stack simulation results </span></span>
 <span><span class="va">simres.newpops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.subprob</span><span class="op">)</span>,</span>
 <span>                        <span class="va">simres.datarep</span>,fill<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
@@ -1480,7 +1500,7 @@ saved by <code>NMsim</code>. Instead, use arguments
 make sure to get a meaningful structure for the generated files. Then
 read the results with <code><a href="../reference/NMreadSim.html">NMreadSim()</a></code>. To re-read the first
 simulation we did in this article, we can do this:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-intro/xgxr021_noname_MetaData.rds"</span><span class="op">)</span></span></code></pre></div>
 <p>The folder and file names were constructed based on
 <code>dir.res="simres-intro"</code> and because <code>name.sim</code>
