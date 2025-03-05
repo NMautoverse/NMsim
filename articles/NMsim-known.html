@@ -86,7 +86,7 @@
 
     
     
-<p>Built 2025-03-02 using NMsim 0.1.6.223.</p>
+<p>Built 2025-03-05 using NMsim 0.1.6.223.</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -197,7 +197,7 @@ of Simulation Data Sets</a>.</p>
 <span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">ids</span>,</span>
 <span>                       <span class="va">dat.sim</span></span>
 <span>                       <span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## check data</span></span>
 <span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span></span>
@@ -226,7 +226,7 @@ individual dosing history.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/data/xgxr_pd.rds"</span>,package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## some code below makes use of data.table features so we make it a data.table</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span></code></pre></div>
 <p>For a PK model without time-varying covariates, suggested steps to
 generate the data for the simulation are:</p>
 <ul>
@@ -264,7 +264,7 @@ records to simulation records (<code>EVID=2</code> instead of
 <span><span class="va">pdsim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA</span><span class="op">]</span></span>
 <span><span class="co">## only include subjects that were included in the PK model</span></span>
 <span><span class="va">pdsim</span> <span class="op">&lt;-</span> <span class="va">pdsim</span><span class="op">[</span><span class="va">ID</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">pkres</span><span class="op">$</span><span class="va">ID</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">pdsim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">pdsim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
 <p>Then run <code>NMsim</code> like this. We are renaming the prediction
 columns using Nonmem <code>$TABLE</code> statement not to confuse PK
 predictions and PD predictions.</p>

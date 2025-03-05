@@ -250,7 +250,7 @@ the bootstrap samples).</p>
 <span>                fill<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## long format so calculations can be done by prediction type.</span></span>
-<span><span class="va">allresl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">allres</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span><span class="va">allresl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">allres</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span>,</span>
 <span>                measure.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span>,<span class="st">"IPRED"</span><span class="op">)</span>,</span>
 <span>                variable.name<span class="op">=</span><span class="st">"pred.type"</span>,</span>
 <span>                value.name<span class="op">=</span><span class="st">"pred.value"</span><span class="op">)</span></span>

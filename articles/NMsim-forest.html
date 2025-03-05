@@ -81,7 +81,7 @@ Delff</h4>
                                     <h4 data-toc-skip class="author">Boris
 Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">March 02, 2025</h4>
+            <h4 data-toc-skip class="date">March 05, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -379,8 +379,8 @@ steady-state.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## add a sampling scheme</span></span>
 <span><span class="va">time.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span>,period<span class="op">=</span><span class="st">"Day 1"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">+</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span>,period<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span>,period<span class="op">=</span><span class="st">"Day 1"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">+</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span>,period<span class="op">=</span><span class="st">"Steady-State"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">dt.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TIME<span class="op">=</span><span class="va">time.sim</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/dims.html" class="external-link">dims</a></span><span class="op">(</span><span class="va">dt.dos</span>,<span class="va">time.sim</span>,<span class="va">dt.sim</span><span class="op">)</span> </span></code></pre></div>
@@ -553,7 +553,7 @@ quantiles in the simulated distribution.</p>
 <code class="sourceCode R"><span><span class="co">### Read simulation results</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_forest_mvrnorm_MetaData.rds"</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,rm.tmp<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Check how many models returned simulation results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/data.table/man/duplicated.html" class="external-link">uniqueN</a></span><span class="op">(</span><span class="va">model.sim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/duplicated.html" class="external-link">uniqueN</a></span><span class="op">(</span><span class="va">model.sim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 500</span></span></code></pre>
 <p>The step required by the user is to define the functions to derive
 relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
@@ -578,8 +578,8 @@ relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">label</span>,<span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
 <span>         <span class="op">)</span></span>
@@ -644,7 +644,7 @@ effect for a subject with other covariates at reference values.</p>
 to be used on its own.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
-<span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
 <span></span>
 <span><span class="co">### summarizing exposure metrics for each subject in each model,</span></span>
@@ -654,7 +654,7 @@ to be used on its own.</p>
 <span></span>
 <span><span class="co">### the exposure metrics in long format.</span></span>
 <span><span class="va">mvars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">funs.exposure</span><span class="op">)</span></span>
-<span><span class="va">resp.model.l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resp.model</span>,measure.vars<span class="op">=</span><span class="va">mvars</span>,variable.name<span class="op">=</span><span class="st">"metric.var"</span>,value.name<span class="op">=</span><span class="st">"metric.val"</span><span class="op">)</span></span>
+<span><span class="va">resp.model.l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resp.model</span>,measure.vars<span class="op">=</span><span class="va">mvars</span>,variable.name<span class="op">=</span><span class="st">"metric.var"</span>,value.name<span class="op">=</span><span class="st">"metric.val"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co">## deriving median by model and time to have a single value per</span></span>

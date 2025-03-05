@@ -103,6 +103,7 @@ get the most out of this.</p>
 <span>  <span class="va">dir.psn</span>,</span>
 <span>  <span class="va">modify.model</span>,</span>
 <span>  <span class="va">nmrep</span>,</span>
+<span>  <span class="va">filters</span>,</span>
 <span>  <span class="va">sizes</span>,</span>
 <span>  sim.dir.from.scratch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">col.row</span>,</span>
@@ -403,6 +404,18 @@ default is to do so if `subproblems&gt;0`. This will insert a
 counter called `NMREP` in the `$ERROR` section and include
 that in the output table(s). At this point, nothing is done to
 avoid overwriting existing variables.</p></dd>
+
+
+<dt id="arg-filters">filters<a class="anchor" aria-label="anchor" href="#arg-filters"></a></dt>
+<dd><p>Edit data filters (`IGNORE`/`ACCEPT` statements)
+before running model. This should normally only be used if no
+data set is provided. It can be useful if simulating for a VPC
+but a different subset of data needs to be simulated than the
+one used for estimation. A common example on this is inclusion
+of BLQ's in the VPC even if they were excluded in the
+estimation. See `?NMreadFilters` which returns a table you can
+edit and pass to `filters`. You can also just pass a string
+representing the full set of filters to be used.</p></dd>
 
 
 <dt id="arg-sizes">sizes<a class="anchor" aria-label="anchor" href="#arg-sizes"></a></dt>
