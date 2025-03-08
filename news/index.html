@@ -52,7 +52,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="since-nmsim-016">Since NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#since-nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
-<p>New handling of data files has been implemented</p>
+<div class="section level3">
+<h3 id="improvements-0-1-6">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-1-6"></a></h3>
+<ul><li>New handling of data files has been implemented. This improves speed, reduced memory usage, and adds features. It is fully backward compatible with the user interface of earlier versions.
+<ul><li>Data sets are only saved once for each model.</li>
+<li>Output tables are written and read more efficently. This is obtained by a combination of default <code>TABLE</code> options and an efficient method to read the tables if those options have not been changed by the user. If the user does change them, a more robust but slower and more memory intensive method is used.</li>
+<li>Input and output data are now by default merged using a row identifier inserted by NMsim. This makes NMsim robust to NONMEM code that does not simulate all rows in input data.</li>
+</ul></li>
+</ul></div>
 <div class="section level3">
 <h3 id="other-changes-0-1-6">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-1-6"></a></h3>
 <ul><li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
