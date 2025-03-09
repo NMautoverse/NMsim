@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.223</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.901</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,17 +51,25 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.6" id="since-nmsim-016">Since NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#since-nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="nmsim-020">NMsim 0.2.0<a class="anchor" aria-label="anchor" href="#nmsim-020"></a></h2>
 <div class="section level3">
-<h3 id="improvements-0-1-6">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-1-6"></a></h3>
+<h3 id="improvements-0-2-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-2-0"></a></h3>
 <ul><li>New handling of data files has been implemented. This improves speed, reduced memory usage, and adds features. It is fully backward compatible with the user interface of earlier versions.
 <ul><li>Data sets are only saved once for each model.</li>
 <li>Output tables are written and read more efficently. This is obtained by a combination of default <code>TABLE</code> options and an efficient method to read the tables if those options have not been changed by the user. If the user does change them, a more robust but slower and more memory intensive method is used.</li>
-<li>Input and output data are now by default merged using a row identifier inserted by NMsim. This makes NMsim robust to NONMEM code that does not simulate all rows in input data.</li>
+<li>Input and output data are now by default merged using a row identifier inserted by NMsim. This makes NMsim robust to Nonmem code that does not simulate all rows in input data.</li>
+<li>Subproblems are automatically counted in the <code>NMREP</code> column in output. Force the inclusion of this column using the <code>nmrep</code> argument if needed even if not using <code>subproblems</code>.</li>
 </ul></li>
+<li>Variables from input data to be included in results can be specified using the new <code>carry.out</code> argument. The default behavior by <code><a href="../reference/NMsim.html">NMsim()</a></code> is to include all variables from input data on the result. However, if the data set contains many rows or columns, this can be memory demanding. Now you can minimize memory use and maximize speed by limiting the variables in both input and output. For example</li>
+</ul><pre><code><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span>,<span class="va">data</span>,</span>
+<span>                table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span>,<span class="st">"IPRED"</span>,<span class="st">"Y"</span><span class="op">)</span>,</span>
+<span>                carry.out<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>,<span class="st">"TIME"</span>,<span class="va">`EVID`</span><span class="op">)</span></span>
+<span>                <span class="op">)</span></span></code></pre>
+<p><code>simres</code> will in this case contain only <code>PRED</code>, <code>IPRED</code>, and <code>Y</code> from the output table, and only <code>ID</code>, <code>TIME</code>, and <code>EVID</code> from the input <code>data.frame</code> (<code>data</code>). <code><a href="../reference/NMsim.html">NMsim()</a></code> also takes a new argument <code>table.format</code> whic can be used to adjust the table format. But normally, that is not be necessary. There is no reason to list <code>ID</code> or any other column from the input data in <code>table.vars</code> since they can be carried over directly fro the input data, avoiding potential loss of accuracy in writing and reading to and from text files. You do not need to worry about merging input and output data correctly - <code><a href="../reference/NMsim.html">NMsim()</a></code> handles that internally using its own row identifier.</p>
+<ul><li>Handling of Nonmem data filters. In case a sim is run without an simulation input data set, <code><a href="../reference/NMsim.html">NMsim()</a></code> by default reuses the estimation data set and the <code>IGNORE</code> and <code>ACCEPT</code> statements in the estimation control stream. This is very useful for visual predictive check (VPC) simulations. However, the aim may be to run the simulation on the same data set with differnt inclusions. A common example of the is if the estimation was run without samples below the quantification limit (M1), but the simulation also be performed on those samples. This can now be done by passing new filters to <code><a href="../reference/NMsim.html">NMsim()</a></code>. In fact, this can even be done by first reading the filters from the control stream, then easily editing them, before passing them to <code><a href="../reference/NMsim.html">NMsim()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="other-changes-0-1-6">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-1-6"></a></h3>
+<h3 id="other-changes-0-2-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-2-0"></a></h3>
 <ul><li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
 <li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code> only requires <code>CMT</code> argument when the column of the same name is present in <code>data</code>. Not all models require <code>CMT</code> and this change allows for building such data sets with <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> and <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p></li>
 </ul></div>
