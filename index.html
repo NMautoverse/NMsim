@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.902</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.101</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,7 +118,7 @@
 <ul>
 <li>Simulation of new subjects (default or explicitly with <code>method.sim=NMsim_default</code>)</li>
 <li>Simulation of subjects already estimated in Nonmem model (<code>method.sim=NMsim_EBE</code>)</li>
-<li>Simulation with parameter uncertainty based on a Nonmem covariance step (<code>method.sim=NMsim_VarCov</code>)</li>
+<li>Simulation with parameter uncertainty based on a Nonmem covariance step (<code>method.sim=NMsim_VarCov</code> and <code>method.sim=NMsim_NWPRI</code>)</li>
 <li>Simulation “as is” in case you already prepared a simulation control stream and just want to automate the use of it in combination with simulation data sets (<code>method.sim=NMsim_asis</code>)</li>
 </ul>
 <p>In addition, <code>NMsim</code> provides other features to further modify the simulation control stream</p>
@@ -131,9 +131,12 @@
 <p>You can also write your own methods, if you have some other Nonmem-based simulation (or other job) you want to automate using <code>NMsim</code>.</p>
 <p>Many features are available. Prominent ones are:</p>
 <ul>
+<li>Can update and edit parameter values using the <code>inits</code> argument.</li>
+<li>Can very flexibly modify the simulation control stream on the fly through the simple <code>modify.model</code> argument.</li>
+<li>Provides a simple interface <code><a href="reference/NMreadSim.html">NMreadSim()</a></code> to read previously performed simulation results. Automatically stores results in a compressed format that can be separated from intermediate results files.</li>
+<li>Results on file can be reused if available using <code>reuse.results=TRUE</code>.</li>
 <li>Can use submit jobs to clusters. It can wait for the simulations to be done and automatically collect the results like in the example above.</li>
 <li>Simulation replicates using Nonmem <code>SUBPROBLEMS</code> feature avaible through the <code>subproblems</code> argument</li>
-<li>Can modify the simulation control stream on the fly - a powerful feature for studying the effect of varying model parameters</li>
 <li>Simulations of models on transformed observations can be automatically transformed back using the <code>transform</code> argument.</li>
 </ul>
 <p>If residual variability is not implemented in the simulated model, <code>NMsim</code> provides a way (<code><a href="reference/addResVar.html">addResVar()</a></code>) to add residual variability in R after the simulation has been run.</p>

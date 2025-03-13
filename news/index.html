@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.902</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.101</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="nmsim-020">NMsim 0.2.0<a class="anchor" aria-label="anchor" href="#nmsim-020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="nmsim-020">NMsim 0.2.0<a class="anchor" aria-label="anchor" href="#nmsim-020"></a></h2><p class="text-muted">CRAN release: 2025-03-13</p>
 <div class="section level3">
 <h3 id="improvements-0-2-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-2-0"></a></h3>
 <ul><li>A greatly improved handling of data files has been implemented. This improves speed, reduced memory and disk usage, and adds features. It is fully backward compatible with the user interface of earlier versions.
@@ -70,7 +70,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="other-changes-0-2-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-2-0"></a></h3>
-<ul><li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
+<ul><li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s argument <code>modify.model</code> has been renamed to <code>modify</code>. This is to align argument names with other arguments available for model modification, namely <code>inits</code>, <code>sizes</code>, and <code>filters</code>.</p></li>
+<li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
 <li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code> only requires <code>CMT</code> argument when the column of the same name is present in <code>data</code>. Not all models require <code>CMT</code> and this change allows for building such data sets with <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> and <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p></li>
 </ul></div>
 </div>
