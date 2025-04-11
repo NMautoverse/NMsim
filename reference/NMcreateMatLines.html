@@ -57,7 +57,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMcreateMatLines</span><span class="op">(</span><span class="va">omegas</span>, as.one.block <span class="op">=</span> <span class="cn">FALSE</span>, fix <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NMcreateMatLines</span><span class="op">(</span><span class="va">omegas</span>, as.one.block <span class="op">=</span> <span class="cn">FALSE</span>, fix <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">type</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,8 +82,10 @@ variance-covariance matrices (like `THETAP`), this should be
 
 
 <dt id="arg-fix">fix<a class="anchor" aria-label="anchor" href="#arg-fix"></a></dt>
-<dd><p>Include `FIX` for all lines? If not, none will be
-fixed. Currently, there is no support for keeping</p></dd>
+<dd><p>Include `FIX` for all lines? If `FALSE`, fixing will
+not be modified. Notice, `fix=TRUE` will fix everything -
+individual parameters cannot be controlled. For finer control
+and way more features, see `NMdata::NMwriteInits()`.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
