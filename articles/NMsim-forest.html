@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.201</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.202</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,6 @@
     <li><a class="dropdown-item" href="../articles/NMsim-VPC.html">Simulations for VPCs</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-config.html">Requirements and Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-TypSubj.html">Simulate Typical Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-forest.html">Simulation-based forest plots with NMsim</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
@@ -79,7 +78,7 @@
                         <h4 data-toc-skip class="author">Philip Delff,
 Boris Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">April 11, 2025</h4>
+            <h4 data-toc-skip class="date">April 12, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -458,10 +457,9 @@ volumes or any other strictly positive parameter which is estimated with
 poor precision. If this happens, you may want to go back and estimate
 that <code>THETA</code> on the log scale to make sure all sampled values
 will be positive.</p>
-<summary>
+<details><summary>
 Click to show example
-</summary><div class="fold s">
-<p>A quick way to look for this is by combining parameter estimates
+</summary><p>A quick way to look for this is by combining parameter estimates
 (from the <code>.ext</code> file) and the automatic labeling of the
 parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -533,7 +531,7 @@ roughly 1/10,000 chance that a sample is negative). In this case,
 <code>THETA</code>s are estimated on log scale, and the covariate
 effects could be negative, so this model does not seem to have such
 issues.</p>
-</div>
+</details>
 </div>
 <div class="section level3">
 <h3 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
@@ -634,7 +632,10 @@ exposure metric. This is derived by <code><a href="../reference/summarizeCovs.ht
 as quantiles of the exposure relative to the reference subject. The
 confidence interval hence expresses the uncertainty on the covariate
 effect for a subject with other covariates at reference values.</p>
-<p>Notice, the code below consists of snippets from the
+<details><summary>
+Details on code used for summarizing forest plot statistics (click to
+show)
+</summary><p>Notice, the code below consists of snippets from the
 <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code> function. The code is not intended
 to be used on its own.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -668,6 +669,7 @@ to be used on its own.</p>
 <span>   ,<span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">predm</span><span class="op">/</span><span class="va">val.exp.ref</span>,probs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">cover.ci</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span>,<span class="fl">.5</span>,<span class="fl">1</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">cover.ci</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"predml"</span>,<span class="st">"predmm"</span>,<span class="st">"predmu"</span><span class="op">)</span><span class="op">)</span></span>
 <span>   ,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">allby</span>,<span class="st">"metric.var"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+</details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

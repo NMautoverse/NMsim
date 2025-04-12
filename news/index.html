@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.201</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.202</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,6 @@
     <li><a class="dropdown-item" href="../articles/NMsim-VPC.html">Simulations for VPCs</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-config.html">Requirements and Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-TypSubj.html">Simulate Typical Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-forest.html">Simulation-based forest plots with NMsim</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
@@ -59,7 +58,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-1">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-1"></a></h3>
-<ul><li>Version 0.2.0 gave some warnings about non-existing columns. The warnings are benign and can be safely ignored. However, they are avoided in Version 0.2.1.</li>
+<ul><li><p><code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> would not include <code>$OMEGA</code> and <code>$SIGMA</code> blocks which lead to errors in Nonmem. This bug was likely introduced in NMsim 0.1.6 and has now been fixed.</p></li>
+<li><p>Version 0.2.0 gave some warnings about non-existing columns. The warnings are benign and can be safely ignored. However, they are avoided in Version 0.2.1.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
