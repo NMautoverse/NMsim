@@ -153,14 +153,14 @@ want to keep your duplicated events, use `unique=FALSE`.</p></dd>
 
 
 <dt id="arg-extras-are-covs">extras.are.covs<a class="anchor" aria-label="anchor" href="#arg-extras-are-covs"></a></dt>
-<dd><p>If `TIME` and/or `TAPD` are `data.frame`s
+<dd><p>If <code>TIME</code> and/or `TAPD` are `data.frame`s
 and contain other columns than `TIME` and/or `TAPD`, those are
-by default assumed to be covariates to be merged with
+by default assumed to be subject-level covariates to be merged with
 data. More specifically, they will be merged by when the
 sample times are added. If `extras.are.covs=FALSE`, they will
-not be merged by. Instead, they will just be kept as
+not be merged by. Instead, they will be kept as
 additional columns with specified values, aligned with the
-sample times.</p></dd>
+sample times. See examples.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
@@ -225,8 +225,8 @@ configured using `NMdataConf()`.</p></dd>
 <span class="r-in"><span><span class="co">## Separate sampling schemes depending on covariate values</span></span></span>
 <span class="r-in"><span><span class="va">dt.doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SD"</span>,<span class="st">"MD"</span>,<span class="st">"MD"</span><span class="op">)</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">12</span><span class="op">)</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fl">10</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">seq.time.sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"SD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">seq.time.md</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"MD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seq.time.sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"SD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seq.time.md</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"MD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">seq.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">seq.time.sd</span>,<span class="va">seq.time.md</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">NMaddSamples</span><span class="op">(</span><span class="va">dt.doses</span>,TIME<span class="op">=</span><span class="va">seq.time</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ID TIME EVID CMT AMT MDV regimen</span>
@@ -235,15 +235,32 @@ configured using `NMdataConf()`.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   1    1    2   2  NA   1      SD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   1    2    2   2  NA   1      SD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5   1    3    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   1    4    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   1    5    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   1    6    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2    0    1   1  10   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2    0    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2   12    1   1  10   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2   12    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2   24    2   2  NA   1      MD</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## All subjects get all samples (extras.are.covs=FALSE)</span></span></span>
+<span class="r-in"><span><span class="fu">NMaddSamples</span><span class="op">(</span><span class="va">dt.doses</span>,TIME<span class="op">=</span><span class="va">seq.time</span>,extras.are.covs<span class="op">=</span><span class="cn">FALSE</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ID TIME EVID CMT AMT MDV regimen</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1    0    1   1  10   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1    0    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1    0    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1    1    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1    2    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   1    3    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   1   12    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   1   24    2   2  NA   1      MD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9   2    0    1   1  10   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2    0    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2    4    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2   12    1   1  10   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2   12    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2   24    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2    0    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2    0    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2    1    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2    2    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2    3    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2   12    1   1  10   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2   12    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2   24    2   2  NA   1      MD</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## an observed sample scheme and additional simulation times</span></span></span>
 <span class="r-in"><span><span class="va">df.doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span>,AMT<span class="op">=</span><span class="fl">50</span>,addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fl">2</span>,II<span class="op">=</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
