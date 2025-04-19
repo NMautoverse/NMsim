@@ -420,9 +420,10 @@ for the analysis. We have to remember to do the postprocessing by the
 values in that column. If you are looking at multiple analytes, remember
 to postprocess by the column that distringuishes those, too. In this
 example, that would be <code>analyte</code>.</p>
-<div class="section level3">
-<h3 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="simulation-with-parameter-uncertainty">Simulation With Parameter Uncertainty<a class="anchor" aria-label="anchor" href="#simulation-with-parameter-uncertainty"></a>
+</h2>
 <p>We need to run the simulations repeatedly, sampling parameters based
 on uncertainty estimates. This can be done in various ways. First of
 all, one must choose between non-parametric and parametric sampling.
@@ -538,9 +539,9 @@ effects could be negative, so this model does not seem to have such
 issues.</p>
 </details>
 </div>
-<div class="section level3">
-<h3 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
-</h3>
+<div class="section level2">
+<h2 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
+</h2>
 <p><code>NMsim</code> provides a function to do the post processing of
 the set of simulations setup by <code><a href="../reference/expandCovs.html">expandCovs()</a></code>. The key steps
 performed by this function are outlined below. Most importantly, it
@@ -569,9 +570,9 @@ relevant exposure metrics. We will use AUC 0-24h and Cmax.</p>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span></span>
 <span>                                 <span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
-</h3>
+<div class="section level2">
+<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
 <p>We will use the R package <code>coveffectsplot</code> for plotting.
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first.</p>
@@ -626,9 +627,9 @@ so we adjust those first.</p>
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/unnamed-chunk-12-2.png" width="960"></p>
 </div>
-<div class="section level3">
-<h3 id="post-processing-explained-step-by-step">Post processing explained step by step<a class="anchor" aria-label="anchor" href="#post-processing-explained-step-by-step"></a>
-</h3>
+<div class="section level2">
+<h2 id="post-processing-explained-step-by-step">Post processing explained step by step<a class="anchor" aria-label="anchor" href="#post-processing-explained-step-by-step"></a>
+</h2>
 <p>We are including the code from the main steps in the post processing
 function, <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code>. It is important that the
 scientist understands that what the forest plots derived in this
@@ -675,7 +676,6 @@ to be used on its own.</p>
 <span>             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"predml"</span>,<span class="st">"predmm"</span>,<span class="st">"predmu"</span><span class="op">)</span><span class="op">)</span></span>
 <span>   ,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">allby</span>,<span class="st">"metric.var"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 </details>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
