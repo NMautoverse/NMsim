@@ -61,14 +61,16 @@
 <h3 id="bugfixes-0-2-1">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-1"></a></h3>
 <ul><li><p><code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> would not include <code>$OMEGA</code> and <code>$SIGMA</code> blocks which lead to errors in Nonmem. This bug was likely introduced in NMsim 0.1.6 and has now been fixed.</p></li>
 <li><p>Version 0.2.0 gave some warnings about non-existing columns. The warnings are benign and can be safely ignored. They are avoided in Version 0.2.1.</p></li>
-<li><p>Updating initial values in models using <code>SAME</code> argument on random effects (e.g. in between-occasion variability) would fail if the effects were fixed. Thanks to Sergio Iadevaia for reporting this.</p></li>
+<li><p>Updating initial values in models using <code>SAME</code> argument on random effects (e.g. in between-occasion variability) would fail if the effects were fixed. Resolved. Thanks to Sergio Iadevaia for reporting this.</p></li>
 <li><p>Data sets with commas in character columns would make <code>NMsim</code> fail. Support for such data sets had not been carried over with the new data handling approach implemented in version 0.2.0. This has now been resolved.</p></li>
 <li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> had a bug in the <code>addl.lastonly</code> feature which would throw errors when <code>TIME</code> was longer than two. <code>addl.lastonly=TRUE</code> is default and means that if the length of the <code>ADDL</code> argument is one, it will be applied to the last dose only. This is for the common case where initial doses (say a load or an initial escalation phase) are followed by a maintenance regimen. The bug has been resolved.</p></li>
+<li><p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> would fail if using the <code>TAPD</code> argument when <code>TAPD</code> was already available as a column in data. Fixed.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-improvements-0-2-1">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-1"></a></h3>
 <ul><li><p>The configuration of job submission is simplified when jobs are run in parallel with single-core processing.</p></li>
 <li><p>Checks have been included in <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> for whether <code>NA</code>’s are produced. <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> is used to summarize simulated covariate effects (typically for forest plots). Especially, if for some reason the reference exposure is zero (likely an error by the modeler), <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> would throw an error. Now <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> will try to identify this, give useful messages back, and report the estimates.</p></li>
+<li><p>Consistent ordering of columns in simulation results independently of <code>col.id</code> and <code>col.time</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
