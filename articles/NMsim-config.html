@@ -146,11 +146,11 @@ function. Say you want to run Nonmem with
 path could look be</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdataConf</span><span class="op">(</span>path.nonmem <span class="op">=</span><span class="st">"C:/nm75g64/run/nmfe75.bat"</span><span class="op">)</span></span></code></pre></div>
-<p>If you normally use PSN as your Nonmem interface, and you therefore
-do not know where Nonmem is installed, you can check this using PSN. The
-following command should give you the Nonmem installation paths that PSN
-is configured with. However, you likely still need to add the last piece
-of the path from the installation directory to the nonmem binary.</p>
+<p>If you normally use PSN as your Nonmem interface, and you do not know
+where Nonmem is installed, you can check this using PSN. The following
+command should give you the Nonmem installation paths that PSN is
+configured with. However, you likely still need to add the last piece of
+the path from the installation directory to the nonmem binary.</p>
 <pre><code><span><span class="va">psn</span> <span class="op">-</span><span class="va">nm_versions</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -167,6 +167,16 @@ running:</p>
 <code class="sourceCode R"><span><span class="fu">NMdataConf</span><span class="op">(</span>dir.psn<span class="op">=</span><span class="st">"/opt/PSN"</span><span class="op">)</span></span></code></pre></div>
 <p>Notice <code>dir.psn</code> refers to a directory while
 <code>path.nonmem</code> refers to a file.</p>
+</div>
+<div class="section level3">
+<h3 id="test-nmsim-configuration">Test NMsim Configuration<a class="anchor" aria-label="anchor" href="#test-nmsim-configuration"></a>
+</h3>
+<p>Whether NMsim finds Nonmem after the configuration steps above can be
+checked by running <code><a href="../reference/NMsimTestConf.html">NMsimTestConf()</a></code>. Look for
+<code>$path.nonmem</code> (where NMsim is looking for the executable),
+<code>$exists.path.nonmem</code> (whethere the executable is found), and
+<code>$method.execute</code> (which method is selected - “nmsim” is
+prefered).</p>
 </div>
 <div class="section level3">
 <h3 id="configure-the-directories-nmsim-writes-to">Configure the directories <code>NMsim</code> writes to<a class="anchor" aria-label="anchor" href="#configure-the-directories-nmsim-writes-to"></a>
@@ -233,36 +243,27 @@ advantages over <code>method.execute="nmsim"</code>. In contrast, there
 are simulation types that will only work with
 <code>method.execute="nmsim"</code>. You need to tell NMsim where to
 find Nonmem (by setting <code>path.nonmem</code>) for this to work.</p>
-<p>Nonmem execution with <code><a href="../reference/NMexec.html">NMexec()</a></code> (typically, for
-estimation and not simulation) is a slightly different discussion. See
-<code><a href="../reference/NMexec.html">?NMexec</a></code> for that.</p>
 </div>
 <div class="section level3">
 <h3 id="psn-or-not-for-updating-initial-values">PSN or not for updating initial values<a class="anchor" aria-label="anchor" href="#psn-or-not-for-updating-initial-values"></a>
 </h3>
 <p>NMsim needs to update initial values using the model estimate prior
-to running a simulation. PSN provides the <code>update_inits</code>
-function to do this, and if available, this is the default method in
-NMsim. Again, we refer to this by the argument name,
-<code>method.update.inits="psn"</code>.</p>
+to running a simulation.</p>
+<p>PSN provides the <code>update_inits</code> function to do this. We
+refer to this by how it is enabled in NMsim,
+<code>inits=list(method="psn")</code>.</p>
 <p>NMsim also provides a similar functionality internally, referred to
-as <code>method.update.inits="NMsim"</code>. This will be used if PSN is
-not found - or if you ask for it.</p>
-<p><code>method.update.inits="psn"</code> has two advantages over the
-NMsim-provided method. It is widely used, and it keeps comments in
-affected control stream sections (<code>$THETA</code>,
-<code>$OMEGA</code>, <code>$SIGMA</code>).
-<code>method.update.inits="nmsim"</code> will drop all comments in
-affected sections. I have in the past seen issues with some methods to
-update <code>$OMEGA</code> sections with off-diagonal elements
-(<code>BLOCK</code>). <code>method.update.inits="nmsim"</code> takes a
-very simple approach. Reading the <code>OMEGA</code> matrix from the
-<code>.ext</code> file, this is not relying on interpreting Nonmem code
-at all. The support of systems without <code>PSN</code> would be the
-main reason one would choose <code>method.update.inits="nmsim"</code>
-over <code>method.update.inits="psn"</code>.</p>
-<p>In order to make use of <code>method.update.inits="psn"</code>, you
-need to make sure NMsim can find PSN.</p>
+as <code>inits=list(method="NMsim")</code>. This is the default method
+and comes with advanced features such as conservation of structure and
+comments of parameter sections, and a fully featured interface to
+specify values and features such as “fix” or limits of parameters.</p>
+<p><code>inits=list(method="psn")</code> may be prefered by users who
+are familiar with PSN. <code>inits=list(method="psn")</code> has
+additional features, and no known down-sides.</p>
+<p>In order to make use of <code>inits=list(method="psn")</code>, you
+need to make sure NMsim can find PSN. If you want to use
+<code>inits=list(method="NMsim")</code> you don’t need to do
+anything.</p>
 </div>
 <div class="section level3">
 <h3 id="input-model-file-name-extensions">Input model file name extensions<a class="anchor" aria-label="anchor" href="#input-model-file-name-extensions"></a>
@@ -275,9 +276,6 @@ control stream. <code>NMsim</code> function documentation and their
 argument <code>file.mod</code> refer to input control streams by
 <code>.mod</code>. However, the input control stream can have any
 extension (e.g., <code>.ctl</code> or <code>.txt</code>).</p>
-<p>If your input control streams are named differently than
-<code>.mod</code>, avoid setting <code>file.mod</code> using
-<code>NMdata::NMdataConf(file.mod)</code>.</p>
 <p>The estimate files (<code>.ext</code>, <code>.phi</code> if known
 subjects simulated, <code>.cov</code> if simulating parameters from the
 covariance step) are by default expected to carry the same file name but
@@ -295,11 +293,7 @@ output tables. This is because these estimation methods leave
 <code>PHI</code> instead of <code>ETA</code> in the <code>.phi</code>
 file. For emperical Bayes estimates, <code>NMsim</code> needs the
 <code>ETA</code>s.</p>
-<p>There are no limitations to the file names of the output tables. If
-needed, file names will be automatically identified and read using
-<code><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMdata::NMscanData</a></code>. For <code>$TABLE</code> options,
-subsetting is supported using <code>FIRSTONLY</code> and
-<code>LASTONLY</code>.</p>
+<p>There are no limitations to the file names of the output tables.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
