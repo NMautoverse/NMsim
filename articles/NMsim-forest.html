@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Philip Delff,
 Boris Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">April 20, 2025</h4>
+            <h4 data-toc-skip class="date">April 21, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -103,17 +103,32 @@ for generation of forest plots.</p>
 plots using NMsim is intended to make the user ready to perform the
 following steps.</p>
 <ul>
-<li>Generate simulation data sets designed for forest plot simulations –
-Dosing and sampling scheme using <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> – Specify
-covariates to simulate using <code><a href="../reference/expandCovs.html">expandCovs()</a></code>
+<li>Generate simulation data sets designed for forest plot simulations
+<ul>
+<li>Dosing and sampling scheme using <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code>
 </li>
-<li>Simulate with parameter uncertainty by one of – Based on $COV using
-<code><a href="../reference/NMsim_NWPRI.html">NMsim_NWPRI()</a></code> or <code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> – Using an
-existent bootstrap estimation (e.g. from PSN)</li>
-<li>Postprocess simulation for plotting/tabulation – Define end-points,
-such as an AUC, Cmax or any simulation-based endpoint – Summarize
-covariate effect estimates with confidence intervals, using
-<code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code> – Plot the summary as a forest plot</li>
+<li>Specify covariates to simulate using <code><a href="../reference/expandCovs.html">expandCovs()</a></code>
+</li>
+</ul>
+</li>
+<li>Simulate with parameter uncertainty by one of
+<ul>
+<li>Based on $COV using <code><a href="../reference/NMsim_NWPRI.html">NMsim_NWPRI()</a></code> or
+<code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code>
+</li>
+<li>Using an existent bootstrap estimation (e.g. from PSN)</li>
+</ul>
+</li>
+<li>Postprocess simulation for plotting/tabulation
+<ul>
+<li>Define end-points, such as an AUC, Cmax or any simulation-based
+endpoint</li>
+<li>Summarize covariate effect estimates with confidence intervals,
+using <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code>
+</li>
+<li>Plot the summary as a forest plot</li>
+</ul>
+</li>
 </ul>
 <p>Each step is facilitated with efficient interfaces (R functions) and
 automated execution. Essentially, each step above is one function
@@ -131,20 +146,29 @@ be provided for additional features.</p>
 </h3>
 <ul>
 <li>An estimated Nonmem model - at least, input control stream and
-<code>.ext</code> file. – If simulating based on
-<code>$COVARIANCE</code>, the <code>.cov</code> file. – If simulating
-based on bootstrap, either a summary of or all the <code>.ext</code>
-files from the boot strap estimations must be available. – If references
-and/or covariate quantile values are to be calculated by NMsim (easiest
-option), ideally all output (<code>$TABLE</code>) data sets and the
-input data set used for the estimation are available.</li>
+<code>.ext</code> file.
+<ul>
+<li>If simulating based on <code>$COVARIANCE</code>, the
+<code>.cov</code> file.</li>
+<li>If simulating based on bootstrap, either a summary of or all the
+<code>.ext</code> files from the boot strap estimations must be
+available.</li>
+<li>If references and/or covariate quantile values are to be calculated
+by NMsim (easiest option), ideally all output (<code>$TABLE</code>) data
+sets and the input data set used for the estimation are available.</li>
+</ul>
+</li>
 <li>Familiarity with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>,
-at least including “A first simulation with <code><a href="../reference/NMsim.html">NMsim()</a></code>”. –
-Configuration of NMsim so user can succesfully do simulation using
-<code><a href="../reference/NMsim.html">NMsim()</a></code>. – Familiarity with methods to simulate with
-parameter uncertainty can be helpful. Before settling on your final
-forest plot simulation, it is recommended to understand pros and cons of
-the different methods provided by NMsim as described in <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html"><code>NMsim-ParamUncertain.html</code></a>.</li>
+at least including “A first simulation with <code><a href="../reference/NMsim.html">NMsim()</a></code>”.
+<ul>
+<li>Configuration of NMsim so user can succesfully do simulation using
+<code><a href="../reference/NMsim.html">NMsim()</a></code>.</li>
+<li>Familiarity with methods to simulate with parameter uncertainty can
+be helpful. Before settling on your final forest plot simulation, it is
+recommended to understand pros and cons of the different methods
+provided by NMsim as described in <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html"><code>NMsim-ParamUncertain.html</code></a>.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section level3">
@@ -313,7 +337,7 @@ sex. Here is a short example:</p>
 <span><span class="va">data.ref</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Specifying the covariates</span></span>
 <span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expandCovs.html">expandCovs</a></span><span class="op">(</span></span>
-<span>    AGE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="fl">55</span>,values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>,<span class="fl">45</span>,<span class="fl">65</span>,<span class="fl">75</span><span class="op">)</span><span class="op">/</span><span class="fl">100</span>,label<span class="op">=</span><span class="st">"Age (years)"</span><span class="op">)</span>, <span class="co">## Age by specific values</span></span>
+<span>    AGE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="fl">55</span>,values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>,<span class="fl">45</span>,<span class="fl">65</span>,<span class="fl">75</span><span class="op">)</span>,label<span class="op">=</span><span class="st">"Age (years)"</span><span class="op">)</span>, <span class="co">## Age by specific values</span></span>
 <span>    <span class="co">## notice, values OR quantiles can be provided</span></span>
 <span>    WEIGHTB<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="va">median</span>, quantiles<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">25</span>,<span class="fl">75</span>,<span class="fl">90</span><span class="op">)</span><span class="op">/</span><span class="fl">100</span>, label<span class="op">=</span><span class="st">"Bodyweigt (kg)"</span><span class="op">)</span>, <span class="co">## Bodyweight by quantiles</span></span>
 <span>    MALEN<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Female<span class="op">=</span><span class="fl">0</span><span class="op">)</span>, values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Male<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, label<span class="op">=</span><span class="st">"Sex"</span><span class="op">)</span>, <span class="co">## Sex is treated categorical</span></span>
@@ -346,16 +370,16 @@ how many data points they contribute.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      covvar covval covvalc       covlabel covref   type   AGE MALEN WEIGHTB</span></span>
 <span><span class="co">##      &lt;char&gt;  &lt;num&gt;  &lt;char&gt;         &lt;char&gt;  &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">##  1:    &lt;NA&gt;     NA    &lt;NA&gt;           &lt;NA&gt;     NA    ref 55.00     0     110</span></span>
-<span><span class="co">##  2:     AGE   0.35    0.35    Age (years)     55  value  0.35     0     110</span></span>
-<span><span class="co">##  3:     AGE   0.45    0.45    Age (years)     55  value  0.45     0     110</span></span>
-<span><span class="co">##  4:     AGE   0.65    0.65    Age (years)     55  value  0.65     0     110</span></span>
-<span><span class="co">##  5:     AGE   0.75    0.75    Age (years)     55  value  0.75     0     110</span></span>
-<span><span class="co">##  6: WEIGHTB  85.00      85 Bodyweigt (kg)    110  value 55.00     0      85</span></span>
-<span><span class="co">##  7: WEIGHTB  96.00      96 Bodyweigt (kg)    110  value 55.00     0      96</span></span>
-<span><span class="co">##  8: WEIGHTB 130.00     130 Bodyweigt (kg)    110  value 55.00     0     130</span></span>
-<span><span class="co">##  9: WEIGHTB 140.00     140 Bodyweigt (kg)    110  value 55.00     0     140</span></span>
-<span><span class="co">## 10:   MALEN   1.00    Male            Sex      0  value 55.00     1     110</span></span>
+<span><span class="co">##  1:    &lt;NA&gt;     NA    &lt;NA&gt;           &lt;NA&gt;     NA    ref    55     0     110</span></span>
+<span><span class="co">##  2:     AGE     35      35    Age (years)     55  value    35     0     110</span></span>
+<span><span class="co">##  3:     AGE     45      45    Age (years)     55  value    45     0     110</span></span>
+<span><span class="co">##  4:     AGE     65      65    Age (years)     55  value    65     0     110</span></span>
+<span><span class="co">##  5:     AGE     75      75    Age (years)     55  value    75     0     110</span></span>
+<span><span class="co">##  6: WEIGHTB     85      85 Bodyweigt (kg)    110  value    55     0      85</span></span>
+<span><span class="co">##  7: WEIGHTB     96      96 Bodyweigt (kg)    110  value    55     0      96</span></span>
+<span><span class="co">##  8: WEIGHTB    130     130 Bodyweigt (kg)    110  value    55     0     130</span></span>
+<span><span class="co">##  9: WEIGHTB    140     140 Bodyweigt (kg)    110  value    55     0     140</span></span>
+<span><span class="co">## 10:   MALEN      1    Male            Sex      0  value    55     1     110</span></span>
 <span><span class="co">##        ID</span></span>
 <span><span class="co">##     &lt;int&gt;</span></span>
 <span><span class="co">##  1:     1</span></span>
@@ -591,10 +615,10 @@ equivalence is included.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
-<span>         <span class="co">## cc(covvalf,predmm,predml,predmu,metric.var),</span></span>
-<span>         <span class="co">## cc(label,mid,lower,upper,paramname)</span></span>
-<span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
-<span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
+<span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
+<span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">label</span>,<span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
+<span>         <span class="co">##cc(predmm,predml,predmu,metric.var),</span></span>
+<span>         <span class="co">##cc(mid,lower,upper,paramname)</span></span>
 <span>         <span class="op">)</span></span>
 <span></span>
 <span><span class="va">sum.uncertain</span><span class="op">[</span>,<span class="va">MEANVAL</span><span class="op">:=</span><span class="va">mid</span><span class="op">]</span></span>
@@ -642,7 +666,7 @@ equivalence is included.</p>
 <p><img src="NMsim-forest_files/figure-html/unnamed-chunk-10-2.png" width="960"></p>
 </div>
 <div class="section level2">
-<h2 id="post-processing-explained-step-by-step">Post processing explained step by step<a class="anchor" aria-label="anchor" href="#post-processing-explained-step-by-step"></a>
+<h2 id="post-processing-step-by-step">Post-processing step-by-step<a class="anchor" aria-label="anchor" href="#post-processing-step-by-step"></a>
 </h2>
 <p>We are including the code from the main steps in the post processing
 function, <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code>. It is important that the
