@@ -406,19 +406,10 @@ require additional software installed, and it is robust.</p>
 <span>                              ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
 <span>                              ,nc<span class="op">=</span><span class="fl">1</span></span>
 <span>                               <span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##       Column Unique values</span></span>
-<span><span class="co">##       &lt;fctr&gt;         &lt;int&gt;</span></span>
-<span><span class="co">## 1:     model             1</span></span>
-<span><span class="co">## 2: model.sim             1</span></span>
-<span><span class="co">## 3:     NMREP           500</span></span></code></pre>
 </details><details><summary>
 Simulation using simpar for parameter sampling
-</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
-<span></span>
-<span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sampleParsSimpar.html">sampleParsSimpar</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,seed.R<span class="op">=</span><span class="fl">6789</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span><span class="co">## source("~/wdirs/NMdata/R/addBlocks.R")</span></span>
-<span><span class="co">## ext.simpar &lt;- addBlocks(ext.simpar)[]</span></span>
+</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sampleParsSimpar.html">sampleParsSimpar</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,seed.R<span class="op">=</span><span class="fl">6789</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                             ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
@@ -430,55 +421,17 @@ Simulation using simpar for parameter sampling
 <span>                             ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
 <span>                             ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
 <span>                             ,nc<span class="op">=</span><span class="fl">1</span></span>
-<span>                              <span class="op">)</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="co">## source("~/wdirs/NMdata/R/addBlocks.R")</span></span>
-<span><span class="co">## ext.simpar &lt;- addBlocks(ext.simpar)[]</span></span>
-<span><span class="co">## load_all("~/wdirs/NMdata")</span></span>
-<span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
-<span><span class="co">## NMdataConf(</span></span>
-<span><span class="co">##     path.nonmem = "/opt/NONMEM/nm75/run/nmfe75", ## path to NONMEM executable</span></span>
-<span><span class="co">##     dir.sims="simtmp-forest", ## where to store temporary simulation results</span></span>
-<span><span class="co">##     dir.res="simres-forest"   ## where to store final simulation results</span></span>
-<span><span class="co">## )</span></span>
-<span></span>
-<span></span>
-<span><span class="co">## simres.forest.simpar &lt;- NMsim(file.mod # path to NONMEM model</span></span>
-<span><span class="co">##                              ,data=dt.sim.covs, # simulation dataset</span></span>
-<span><span class="co">##                              ,name.sim="simpar_forest_tmp" # output name suffix</span></span>
-<span><span class="co">##                              ,method.sim=NMsim_VarCov # sampling with mvrnorm</span></span>
-<span><span class="co">##                              ,ext=ext.simpar[model&lt;=5]</span></span>
-<span><span class="co">##                              ,typical=TRUE # FALSE to include BSV</span></span>
-<span><span class="co">##                              ,table.vars=cc(PRED,IPRED) # output table variables</span></span>
-<span><span class="co">##                              ,seed.R=342 # seed for reproducibility</span></span>
-<span><span class="co">##                              ,sge=FALSE # TRUE if submitting to a cluster</span></span>
-<span><span class="co">##                              ## ,nc=1</span></span>
-<span><span class="co">##                               )</span></span></code></pre></div>
+<span>                              <span class="op">)</span></span></code></pre></div>
 </details><details><summary>
 Simulation using bootstrap for parameter sampling
-</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">load_all</span><span class="op">(</span><span class="st">"~/wdirs/NMsim"</span><span class="op">)</span></span>
-<span><span class="fu">load_all</span><span class="op">(</span><span class="st">"~/wdirs/NMdata"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span></span>
-<span>    path.nonmem <span class="op">=</span> <span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span>, <span class="co">## path to NONMEM executable</span></span>
-<span>    dir.sims<span class="op">=</span><span class="st">"simtmp-forest"</span>, <span class="co">## where to store temporary simulation results</span></span>
-<span>    dir.res<span class="op">=</span><span class="st">"simres-forest"</span>   <span class="co">## where to store final simulation results</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co">## dir.bs &lt;- "NMsim-forest-models/xgxr134_bs_N250/modelfit_dir1/"</span></span>
-<span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/modelfit_dir1/"</span></span>
+</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/modelfit_dir1/"</span></span>
 <span><span class="va">lsts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.lst$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## fun.name &lt;- function(file)sub(".*/NM_run([0-9]+)/psn....","boot\\1",file)</span></span>
 <span><span class="va">fun.name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*/NM_run([0-9]+)/psn...."</span>,<span class="st">"\\1"</span>,<span class="va">file</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
 <span>                          <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## sort(fun.name(lsts.bs))</span></span>
-<span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">lsts.bs</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">lsts.bs</span>,modelname<span class="op">=</span><span class="va">fun.name</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span><span class="co">##ext.boot &lt;- NMreadExt(lsts.bs,modelname=identity,as.fun="data.table")</span></span>
-<span><span class="co">##ext.boot[,model:=fun.name(model)]</span></span>
 <span></span>
 <span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                           ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
@@ -504,7 +457,7 @@ Show example
 </summary><p>A quick way to look for this is by combining parameter estimates
 (from the <code>.ext</code> file) and the automatic labeling of the
 parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
 <pre><code><span><span class="co">##    par.name   FIX        RSE               code</span></span>
@@ -541,7 +494,7 @@ with <code>typical=TRUE</code> so <code>PRED</code> and
 <code>IPRED</code> should be the same. However, with depending on the
 Nonmem version, <code>NWPRI</code> works a little differently, and
 <code>IPRED</code> has to be used prior to Nonmem 7.6.0.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">IPRED</span><span class="op">)</span></span>
@@ -562,7 +515,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first. An acceptance region such as the 80%-125% bio
 equivalence is included.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
@@ -611,12 +564,12 @@ equivalence is included.</p>
 <span></span>
 <span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-1.png" width="960"></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-2.png" width="960"></p>
 <details><summary>
 Comparison of different simulation methods
-</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -630,23 +583,14 @@ Comparison of different simulation methods
 <span>                           ,fill<span class="op">=</span><span class="cn">T</span></span>
 <span>                           <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>,<span class="va">uniqueN</span><span class="op">)</span>,.SDcols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,by<span class="op">=</span><span class="va">method</span><span class="op">]</span><span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span>measure.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,variable.name<span class="op">=</span><span class="st">"Column"</span>,value.name<span class="op">=</span><span class="st">"Unique values"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        method    Column Unique values</span></span>
-<span><span class="co">##        &lt;char&gt;    &lt;fctr&gt;         &lt;int&gt;</span></span>
-<span><span class="co">##  1:     NWPRI     model             1</span></span>
-<span><span class="co">##  2:   mvrnorm     model             1</span></span>
-<span><span class="co">##  3: Bootstrap     model             1</span></span>
-<span><span class="co">##  4:    Simpar     model             1</span></span>
-<span><span class="co">##  5:     NWPRI model.sim             1</span></span>
-<span><span class="co">##  6:   mvrnorm model.sim          1000</span></span>
-<span><span class="co">##  7: Bootstrap model.sim          1000</span></span>
-<span><span class="co">##  8:    Simpar model.sim          1000</span></span>
-<span><span class="co">##  9:     NWPRI     NMREP          1000</span></span>
-<span><span class="co">## 10:   mvrnorm     NMREP             1</span></span>
-<span><span class="co">## 11: Bootstrap     NMREP             1</span></span>
-<span><span class="co">## 12:    Simpar     NMREP             1</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">method</span>,<span class="va">model.sim</span>,<span class="va">NMREP</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="va">.N</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">method</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##       method     N</span></span>
+<span><span class="co">##       &lt;char&gt; &lt;int&gt;</span></span>
+<span><span class="co">## 1:     NWPRI  1000</span></span>
+<span><span class="co">## 2:   mvrnorm  1000</span></span>
+<span><span class="co">## 3: Bootstrap  1000</span></span>
+<span><span class="co">## 4:    Simpar  1000</span></span></code></pre>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
 <span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarizeCovs.html">summarizeCovs</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
 <span>                               funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
@@ -687,7 +631,7 @@ show)
 </summary><p>Notice, the code below consists of snippets from the
 <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
