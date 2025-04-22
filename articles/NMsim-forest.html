@@ -580,11 +580,11 @@ equivalence is included.</p>
 <span>        facet_space <span class="op">=</span> <span class="st">"free_y"</span>,</span>
 <span>        xy_facet_text_bold <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>        plot_table_ratio <span class="op">=</span> <span class="fl">1.7</span>, </span>
-<span>        <span class="co">## table_text_size = 3,</span></span>
-<span>        <span class="co">## x_label_text_size = textsize,</span></span>
-<span>        <span class="co">## y_label_text_size = textsize, </span></span>
-<span>        <span class="co">## x_facet_text_size = textsize, </span></span>
-<span>        <span class="co">## y_facet_text_size = textsize,</span></span>
+<span>        table_text_size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>        x_label_text_size <span class="op">=</span> <span class="va">textsize</span>,</span>
+<span>        y_label_text_size <span class="op">=</span> <span class="va">textsize</span>, </span>
+<span>        x_facet_text_size <span class="op">=</span> <span class="va">textsize</span>, </span>
+<span>        y_facet_text_size <span class="op">=</span> <span class="va">textsize</span>,</span>
 <span>        base_size<span class="op">=</span><span class="va">textsize</span>,</span>
 <span>        strip_placement <span class="op">=</span> <span class="st">"outside"</span>,</span>
 <span>        table_position <span class="op">=</span> <span class="st">"right"</span>,</span>
@@ -599,10 +599,60 @@ equivalence is included.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-9-1.png" width="960"></p>
+<p><img src="NMsim-forest_files/figure-html/plot1-1.png" width="960"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/unnamed-chunk-9-2.png" width="960"></p>
+<p><img src="NMsim-forest_files/figure-html/plot1-2.png" width="960"></p>
+<details><summary>
+How to sample multiple endpoints
+</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_boot_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">T</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">simres.forest.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres.forest.nwpri</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"NWPRI"</span><span class="op">]</span>,</span>
+<span>                           <span class="va">simres.forest.mvrnorm</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"mvrnorm"</span><span class="op">]</span>,</span>
+<span>                           <span class="va">simres.forest.boot</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Bootstrap"</span><span class="op">]</span></span>
+<span>                          ,<span class="va">simres.forest.simpar</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Simpar"</span><span class="op">]</span></span>
+<span>                           ,fill<span class="op">=</span><span class="cn">T</span></span>
+<span>                           <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>,<span class="va">uniqueN</span><span class="op">)</span>,.SDcols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,by<span class="op">=</span><span class="va">method</span><span class="op">]</span><span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span>measure.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,variable.name<span class="op">=</span><span class="st">"Column"</span>,value.name<span class="op">=</span><span class="st">"Unique values"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##        method    Column Unique values</span></span>
+<span><span class="co">##        &lt;char&gt;    &lt;fctr&gt;         &lt;int&gt;</span></span>
+<span><span class="co">##  1:     NWPRI     model             1</span></span>
+<span><span class="co">##  2:   mvrnorm     model             1</span></span>
+<span><span class="co">##  3: Bootstrap     model             1</span></span>
+<span><span class="co">##  4:    Simpar     model             1</span></span>
+<span><span class="co">##  5:     NWPRI model.sim             1</span></span>
+<span><span class="co">##  6:   mvrnorm model.sim          1000</span></span>
+<span><span class="co">##  7: Bootstrap model.sim          1000</span></span>
+<span><span class="co">##  8:    Simpar model.sim          1000</span></span>
+<span><span class="co">##  9:     NWPRI     NMREP          1000</span></span>
+<span><span class="co">## 10:   mvrnorm     NMREP             1</span></span>
+<span><span class="co">## 11: Bootstrap     NMREP             1</span></span>
+<span><span class="co">## 12:    Simpar     NMREP             1</span></span></code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
+<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarizeCovs.html">summarizeCovs</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
+<span>                               funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
+<span>                               by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
+<span>                               cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
+<span>                               as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
+<span>                               <span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">covvalf</span>,colour<span class="op">=</span><span class="va">method</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="va">predml</span>,xmax<span class="op">=</span><span class="va">predmu</span>,ymin<span class="op">=</span><span class="va">covvalf</span>,ymax<span class="op">=</span><span class="va">covvalf</span><span class="op">)</span>,position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">covlabel</span><span class="op">~</span><span class="va">metric.var</span>,scales<span class="op">=</span><span class="st">"free_y"</span>,switch<span class="op">=</span><span class="st">"y"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fl">1</span>,linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">""</span>,x<span class="op">=</span><span class="st">"Relative Covariate Effect"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NMsim-forest_files/figure-html/sumAll-1.png" width="700"></p>
+</details>
 </div>
 <div class="section level2">
 <h2 id="post-processing-step-by-step">Post-processing step-by-step<a class="anchor" aria-label="anchor" href="#post-processing-step-by-step"></a>
@@ -621,7 +671,7 @@ show)
 </summary><p>Notice, the code below consists of snippets from the
 <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
@@ -652,53 +702,6 @@ to be used on its own.</p>
 <span>   ,<span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">predm</span><span class="op">/</span><span class="va">val.exp.ref</span>,probs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">cover.ci</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span>,<span class="fl">.5</span>,<span class="fl">1</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">cover.ci</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"predml"</span>,<span class="st">"predmm"</span>,<span class="st">"predmu"</span><span class="op">)</span><span class="op">)</span></span>
 <span>   ,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">allby</span>,<span class="st">"metric.var"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_boot_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">T</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">simres.forest.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres.forest.nwpri</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"NWPRI"</span><span class="op">]</span>,</span>
-<span>                           <span class="va">simres.forest.mvrnorm</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"mvrnorm"</span><span class="op">]</span>,</span>
-<span>                           <span class="va">simres.forest.boot</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Bootstrap"</span><span class="op">]</span></span>
-<span>                          ,<span class="va">simres.forest.simpar</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Simpar"</span><span class="op">]</span></span>
-<span>                           ,fill<span class="op">=</span><span class="cn">T</span></span>
-<span>                           <span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>,<span class="va">uniqueN</span><span class="op">)</span>,.SDcols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,by<span class="op">=</span><span class="va">method</span><span class="op">]</span><span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span>measure.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>,<span class="st">"model.sim"</span>,<span class="st">"NMREP"</span><span class="op">)</span>,variable.name<span class="op">=</span><span class="st">"Column"</span>,value.name<span class="op">=</span><span class="st">"Unique values"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        method    Column Unique values</span></span>
-<span><span class="co">##        &lt;char&gt;    &lt;fctr&gt;         &lt;int&gt;</span></span>
-<span><span class="co">##  1:     NWPRI     model             1</span></span>
-<span><span class="co">##  2:   mvrnorm     model             1</span></span>
-<span><span class="co">##  3: Bootstrap     model             1</span></span>
-<span><span class="co">##  4:    Simpar     model             1</span></span>
-<span><span class="co">##  5:     NWPRI model.sim             1</span></span>
-<span><span class="co">##  6:   mvrnorm model.sim          1000</span></span>
-<span><span class="co">##  7: Bootstrap model.sim          1000</span></span>
-<span><span class="co">##  8:    Simpar model.sim          1000</span></span>
-<span><span class="co">##  9:     NWPRI     NMREP          1000</span></span>
-<span><span class="co">## 10:   mvrnorm     NMREP             1</span></span>
-<span><span class="co">## 11: Bootstrap     NMREP             1</span></span>
-<span><span class="co">## 12:    Simpar     NMREP             1</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
-<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarizeCovs.html">summarizeCovs</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
-<span>                               funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
-<span>                               by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
-<span>                               cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
-<span>                               as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
-<span>                               <span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">covvalf</span>,colour<span class="op">=</span><span class="va">method</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="va">predml</span>,xmax<span class="op">=</span><span class="va">predmu</span>,ymin<span class="op">=</span><span class="va">covvalf</span>,ymax<span class="op">=</span><span class="va">covvalf</span><span class="op">)</span>,position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">covlabel</span><span class="op">~</span><span class="va">metric.var</span>,scales<span class="op">=</span><span class="st">"free_y"</span>,switch<span class="op">=</span><span class="st">"y"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fl">1</span>,linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">""</span>,x<span class="op">=</span><span class="st">"Relative Covariate Effect"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/sumAll-1.png" width="700"></p>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
