@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.931</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.932</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,23 +104,32 @@ for generation of forest plots.</p>
 plots using NMsim is intended to make the user ready to perform the
 following steps.</p>
 <ul>
-<li>Generate simulation data sets designed for forest plot
-simulations</li>
+<li>Generate simulation data sets designed for forest plot simulations
+<ul>
 <li>Dosing and sampling scheme using <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code>
 </li>
-<li>Specify covariates to simulate using
-<code>forestDefineCovs()</code>
+<li>Define covariates to simulate using
+<code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code>
 </li>
-<li>Simulate with parameter uncertainty by one of</li>
-<li>Based on $COV using <code><a href="../reference/NMsim_NWPRI.html">NMsim_NWPRI()</a></code> or
-<code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code>
+</ul>
+</li>
+<li>Simulate with parameter uncertainty by one of
+<ul>
+<li>Based on <code>$COV</code> using <code><a href="../reference/NMsim_NWPRI.html">NMsim_NWPRI()</a></code>
+</li>
+<li>Based on <code>$COV</code> using <code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code>
 </li>
 <li>Using an existent bootstrap estimation (e.g. from PSN)</li>
-<li>Postprocess simulation for plotting/tabulation</li>
+</ul>
+</li>
+<li>Postprocess simulation for plotting/tabulation
+<ul>
 <li>Define end-points, such as an AUC, Cmax or any simulation-based
 endpoint</li>
 <li>Summarize covariate effect estimates with confidence intervals,
-using <code>forestSummarize()</code>
+using <code><a href="../reference/forestSummarize.html">forestSummarize()</a></code>
+</li>
+</ul>
 </li>
 <li>Plot the summary as a forest plot</li>
 </ul>
@@ -264,9 +273,9 @@ example, that would be <code>analyte</code>.</p>
 </details>
 </div>
 <div class="section level3">
-<h3 id="specify-covariates-to-analyze">Specify covariates to analyze<a class="anchor" aria-label="anchor" href="#specify-covariates-to-analyze"></a>
+<h3 id="define-covariates-to-analyze">Define covariates to analyze<a class="anchor" aria-label="anchor" href="#define-covariates-to-analyze"></a>
 </h3>
-<p><code>NMsim::forestDefineCovs()</code> can be used to construct a set
+<p><code><a href="../reference/forestDefineCovs.html">NMsim::forestDefineCovs()</a></code> can be used to construct a set
 of covariate value combinations needed to derive a forest plot. It
 varies one covariate at a time, keeping all other covariates at their
 reference value. It can derive references and quantiles from a data
@@ -279,7 +288,7 @@ sex. Here is a short example:</p>
 <span><span class="co">## reference values and quantiles.</span></span>
 <span><span class="va">data.ref</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Specifying the covariates</span></span>
-<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu">forestDefineCovs</span><span class="op">(</span></span>
+<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forestDefineCovs.html">forestDefineCovs</a></span><span class="op">(</span></span>
 <span>    AGE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="fl">55</span>,values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>,<span class="fl">45</span>,<span class="fl">65</span>,<span class="fl">75</span><span class="op">)</span>,label<span class="op">=</span><span class="st">"Age (years)"</span><span class="op">)</span>, <span class="co">## Age by specific values</span></span>
 <span>    <span class="co">## notice, values OR quantiles can be provided</span></span>
 <span>    WEIGHTB<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="va">median</span>, quantiles<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">25</span>,<span class="fl">75</span>,<span class="fl">90</span><span class="op">)</span><span class="op">/</span><span class="fl">100</span>, label<span class="op">=</span><span class="st">"Bodyweight (kg)"</span><span class="op">)</span>, <span class="co">## Bodyweight by quantiles</span></span>
@@ -289,20 +298,20 @@ sex. Here is a short example:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>We read the estimation data set <code>data.ref</code>, and pass that
-as the <code>data</code> argument to <code>forestDefineCovs()</code>.
-Using this, <code>forestDefineCovs()</code> can evaluate specified
+as the <code>data</code> argument to <code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code>.
+Using this, <code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code> can evaluate specified
 quantiles of covariates on the observed or any desired population.</li>
 <li>We specify reference values and simulation covariate values as
 specific values (see <code>AGE</code>) or covariate quantiles
 (<code>WEIGHTB</code>). If quantiles are derived by
-<code>forestDefineCovs()</code>, the names of the covariates (here,
+<code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code>, the names of the covariates (here,
 <code>AGE</code>, <code>WEIGTB</code>, <code>MALEN</code>) must be
 columns in <code>data</code>.</li>
 <li>For categorical variables, we can label numeric values like
 <code>ref=c(Female=0)</code> which means we label <code>MALEN==0</code>
 as “Female”.</li>
 </ul>
-<p>When deriving quantiles, <code>forestDefineCovs()</code> will first
+<p>When deriving quantiles, <code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code> will first
 derive unique covariate values for each subject in the data set, then
 derive the quantiles. Each subject hence contributes equally,
 independently of how many data points they contribute.</p>
@@ -429,7 +438,7 @@ issues.</p>
 <h2 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
 </h2>
 <p><code>NMsim</code> provides a function to do the post processing of
-the set of simulations setup by <code>forestDefineCovs()</code>. The key
+the set of simulations setup by <code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code>. The key
 steps performed by this function are outlined below. Most importantly,
 it normalizes the exposures by the reference value for each sampled set
 of parameters. Then, it derives median and a confidence interval as
@@ -449,7 +458,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <span>    <span class="co">## ,"Concentration at 4 hours"=function(x) x$value[x$TAPD==4]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">forestSummarize</span><span class="op">(</span><span class="va">simres</span>,</span>
+<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forestSummarize.html">forestSummarize</a></span><span class="op">(</span><span class="va">simres</span>,</span>
 <span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span></span>
@@ -599,7 +608,7 @@ Comparison of different simulation methods
 <span><span class="co">## 3: Bootstrap  1000</span></span>
 <span><span class="co">## 4:    Simpar  1000</span></span></code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">forestSummarize</span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
+<code class="sourceCode R"><span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forestSummarize.html">forestSummarize</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
 <span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
@@ -626,11 +635,11 @@ Comparison of different simulation methods
 <h2 id="post-processing-step-by-step">Post-processing step-by-step<a class="anchor" aria-label="anchor" href="#post-processing-step-by-step"></a>
 </h2>
 <p>We are including the code from the main steps in the post processing
-function, <code>NMsim::forestSummarize()</code>. It is important that
+function, <code><a href="../reference/forestSummarize.html">NMsim::forestSummarize()</a></code>. It is important that
 the scientist understands that what the forest plots derived in this
 document represent is the relative effect of the covariate on the
 exposure metric. This is derived by
-<code>NMsim::forestSummarize()</code> as quantiles of the exposure
+<code><a href="../reference/forestSummarize.html">NMsim::forestSummarize()</a></code> as quantiles of the exposure
 relative to the reference subject. The confidence interval hence
 expresses the uncertainty on the covariate effect for a subject with
 other covariates at reference values.</p>
@@ -638,7 +647,7 @@ other covariates at reference values.</p>
 Details on code used for summarizing forest plot statistics (click to
 show)
 </summary><p>Notice, the code below consists of snippets from the
-<code>NMsim::forestSummarize()</code> function. The code is not intended
+<code><a href="../reference/forestSummarize.html">NMsim::forestSummarize()</a></code> function. The code is not intended
 to be used on its own.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
