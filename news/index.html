@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.917</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.931</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <h3 id="new-features-0-2-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-1"></a></h3>
 <ul><li><p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> replaces the <code><a href="../reference/addEVID2.html">addEVID2()</a></code> function. <code><a href="../reference/addEVID2.html">addEVID2()</a></code> will still work and redirects to <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> for backward compatibility. Your existing work will still work but you will get a (suppressable) message about the name change. Especially due to work on optimal sampling with <code>NMsim</code> by Ahmed Abulfathi and myself, we need a more flexible interface for adding samples.</p></li>
 <li><p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> comes with a new argument <code>DV</code>. By default <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> (used to be, <code><a href="../reference/addEVID2.html">addEVID2()</a></code>) adds rows without <code>DV</code> values and with <code>EVID=2</code> and <code>MDV=1</code>. If <code>DV</code> is supplied, <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> will include that value in the <code>DV</code> column and by default use <code>EVID=0</code> and <code>MDV=0</code>. An example where this is useful is when generating datasets for <code>$DESIGN</code> where <code>DV=0</code> is often used.</p></li>
+<li><p><code>samplePars</code></p></li>
 <li><p><code><a href="../reference/simPopEtas.html">simPopEtas()</a></code> by default does not overwrite an existing <code>.phi</code> file. <code><a href="../reference/simPopEtas.html">simPopEtas()</a></code> is used to generate sampled <code>ETA</code>s for use in future model simulations with the same synthetic population (<code>ETA</code>s). If the <code>.phi</code> file that stores the <code>ETA</code>s gets overwritten using a new seed, it will affect simulations using that <code>.phi</code> file. Overwriting the <code>.phi</code> file with different seeds should therefore be avoided, and this new behavior of protecting the generated <code>.phi</code> files reduces that risk.</p></li>
 </ul></div>
 <div class="section level3">

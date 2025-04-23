@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.917</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.931</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,8 @@ following steps.</p>
 simulations</li>
 <li>Dosing and sampling scheme using <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code>
 </li>
-<li>Specify covariates to simulate using <code><a href="../reference/expandCovs.html">expandCovs()</a></code>
+<li>Specify covariates to simulate using
+<code>forestDefineCovs()</code>
 </li>
 <li>Simulate with parameter uncertainty by one of</li>
 <li>Based on $COV using <code><a href="../reference/NMsim_NWPRI.html">NMsim_NWPRI()</a></code> or
@@ -119,7 +120,7 @@ simulations</li>
 <li>Define end-points, such as an AUC, Cmax or any simulation-based
 endpoint</li>
 <li>Summarize covariate effect estimates with confidence intervals,
-using <code><a href="../reference/summarizeCovs.html">summarizeCovs()</a></code>
+using <code>forestSummarize()</code>
 </li>
 <li>Plot the summary as a forest plot</li>
 </ul>
@@ -265,10 +266,11 @@ example, that would be <code>analyte</code>.</p>
 <div class="section level3">
 <h3 id="specify-covariates-to-analyze">Specify covariates to analyze<a class="anchor" aria-label="anchor" href="#specify-covariates-to-analyze"></a>
 </h3>
-<p><code><a href="../reference/expandCovs.html">NMsim::expandCovs()</a></code> can be used to construct a set of
-covariate value combinations needed to derive a forest plot. It varies
-one covariate at a time, keeping all other covariates at their reference
-value. It can derive references and quantiles from a data set.</p>
+<p><code>NMsim::forestDefineCovs()</code> can be used to construct a set
+of covariate value combinations needed to derive a forest plot. It
+varies one covariate at a time, keeping all other covariates at their
+reference value. It can derive references and quantiles from a data
+set.</p>
 <p>For reference values we use median in the observed population for
 continuous covariates and manually select “Female” as the reference for
 sex. Here is a short example:</p>
@@ -277,7 +279,7 @@ sex. Here is a short example:</p>
 <span><span class="co">## reference values and quantiles.</span></span>
 <span><span class="va">data.ref</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Specifying the covariates</span></span>
-<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expandCovs.html">expandCovs</a></span><span class="op">(</span></span>
+<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu">forestDefineCovs</span><span class="op">(</span></span>
 <span>    AGE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="fl">55</span>,values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>,<span class="fl">45</span>,<span class="fl">65</span>,<span class="fl">75</span><span class="op">)</span>,label<span class="op">=</span><span class="st">"Age (years)"</span><span class="op">)</span>, <span class="co">## Age by specific values</span></span>
 <span>    <span class="co">## notice, values OR quantiles can be provided</span></span>
 <span>    WEIGHTB<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ref<span class="op">=</span><span class="va">median</span>, quantiles<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">25</span>,<span class="fl">75</span>,<span class="fl">90</span><span class="op">)</span><span class="op">/</span><span class="fl">100</span>, label<span class="op">=</span><span class="st">"Bodyweight (kg)"</span><span class="op">)</span>, <span class="co">## Bodyweight by quantiles</span></span>
@@ -287,23 +289,23 @@ sex. Here is a short example:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>We read the estimation data set <code>data.ref</code>, and pass that
-as the <code>data</code> argument to <code><a href="../reference/expandCovs.html">expandCovs()</a></code>. Using
-this, <code><a href="../reference/expandCovs.html">expandCovs()</a></code> can evaluate specified quantiles of
-covariates on the observed or any desired population.</li>
+as the <code>data</code> argument to <code>forestDefineCovs()</code>.
+Using this, <code>forestDefineCovs()</code> can evaluate specified
+quantiles of covariates on the observed or any desired population.</li>
 <li>We specify reference values and simulation covariate values as
 specific values (see <code>AGE</code>) or covariate quantiles
 (<code>WEIGHTB</code>). If quantiles are derived by
-<code><a href="../reference/expandCovs.html">expandCovs()</a></code>, the names of the covariates (here,
+<code>forestDefineCovs()</code>, the names of the covariates (here,
 <code>AGE</code>, <code>WEIGTB</code>, <code>MALEN</code>) must be
 columns in <code>data</code>.</li>
 <li>For categorical variables, we can label numeric values like
 <code>ref=c(Female=0)</code> which means we label <code>MALEN==0</code>
 as “Female”.</li>
 </ul>
-<p>When deriving quantiles, <code><a href="../reference/expandCovs.html">expandCovs()</a></code> will first derive
-unique covariate values for each subject in the data set, then derive
-the quantiles. Each subject hence contributes equally, independently of
-how many data points they contribute.</p>
+<p>When deriving quantiles, <code>forestDefineCovs()</code> will first
+derive unique covariate values for each subject in the data set, then
+derive the quantiles. Each subject hence contributes equally,
+independently of how many data points they contribute.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## adding distinct ID's for each combination of covariates</span></span>
 <span><span class="va">covs</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">type</span>,<span class="va">covvar</span>,<span class="va">covval</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
@@ -388,63 +390,8 @@ please refer to <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-Para
 <span>                            ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
 <span>                            ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
 <span>                             <span class="op">)</span></span></code></pre></div>
-<details><summary>
-Simulation using multivariate normal distribution
-</summary><p>We shall use the method provided by NMsim based on the multivariate
-normal distribution (<code>mvrnorm</code>). This method is selected
-because it is adequate for sampling <code>THETA</code>’s, it does not
-require additional software installed, and it is robust.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
-<span>                              ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
-<span>                              ,name.sim<span class="op">=</span><span class="st">"mvrnorm_forest"</span> <span class="co"># output name suffix</span></span>
-<span>                              ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
-<span>                              ,nsims<span class="op">=</span><span class="fl">1000</span></span>
-<span>                              ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
-<span>                              ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
-<span>                              ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
-<span>                              ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
-<span>                              ,nc<span class="op">=</span><span class="fl">1</span></span>
-<span>                               <span class="op">)</span></span></code></pre></div>
-</details><details><summary>
-Simulation using simpar for parameter sampling
-</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sampleParsSimpar.html">sampleParsSimpar</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,seed.R<span class="op">=</span><span class="fl">6789</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
-<span>                             ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
-<span>                             ,name.sim<span class="op">=</span><span class="st">"simpar_forest"</span> <span class="co"># output name suffix</span></span>
-<span>                             ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
-<span>                             ,ext<span class="op">=</span><span class="va">ext.simpar</span></span>
-<span>                             ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
-<span>                             ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
-<span>                             ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
-<span>                             ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
-<span>                             ,nc<span class="op">=</span><span class="fl">1</span></span>
-<span>                              <span class="op">)</span></span></code></pre></div>
-</details><details><summary>
-Simulation using bootstrap for parameter sampling
-</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/modelfit_dir1/"</span></span>
-<span><span class="va">lsts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.lst$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## fun.name &lt;- function(file)sub(".*/NM_run([0-9]+)/psn....","boot\\1",file)</span></span>
-<span><span class="va">fun.name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*/NM_run([0-9]+)/psn...."</span>,<span class="st">"\\1"</span>,<span class="va">file</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
-<span>                          <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">lsts.bs</span>,modelname<span class="op">=</span><span class="va">fun.name</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
-<span>                           ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
-<span>                           ,name.sim<span class="op">=</span><span class="st">"boot_forest"</span> <span class="co"># output name suffix</span></span>
-<span>                           ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
-<span>                           ,ext<span class="op">=</span><span class="va">ext.boot</span></span>
-<span>                           ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
-<span>                           ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
-<span>                           ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
-<span>                           ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
-<span>                           ,nc<span class="op">=</span><span class="fl">1</span></span>
-<span>                            <span class="op">)</span></span></code></pre></div>
-</details><p>If you encounter issues with samples that do not run, consider
+
+<p>If you encounter issues with samples that do not run, consider
 whether any of your uncertainty estimates on <code>THETA</code>’s could
 lead to sampled <code>THETA</code>’s that could make the model be
 undefined. This would often be absorption parameters, clearences,
@@ -457,7 +404,7 @@ Show example
 </summary><p>A quick way to look for this is by combining parameter estimates
 (from the <code>.ext</code> file) and the automatic labeling of the
 parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
 <pre><code><span><span class="co">##    par.name   FIX        RSE               code</span></span>
@@ -482,10 +429,10 @@ issues.</p>
 <h2 id="post-processing">Post processing<a class="anchor" aria-label="anchor" href="#post-processing"></a>
 </h2>
 <p><code>NMsim</code> provides a function to do the post processing of
-the set of simulations setup by <code><a href="../reference/expandCovs.html">expandCovs()</a></code>. The key steps
-performed by this function are outlined below. Most importantly, it
-normalizes the exposures by the reference value for each sampled set of
-parameters. Then, it derives median and a confidence interval as
+the set of simulations setup by <code>forestDefineCovs()</code>. The key
+steps performed by this function are outlined below. Most importantly,
+it normalizes the exposures by the reference value for each sampled set
+of parameters. Then, it derives median and a confidence interval as
 quantiles in the simulated distribution.</p>
 <p>The step required by the user is to define the functions to derive
 relevant exposure metrics. We will use AUC 0-24h and Cmax. We are using
@@ -494,7 +441,7 @@ with <code>typical=TRUE</code> so <code>PRED</code> and
 <code>IPRED</code> should be the same. However, with depending on the
 Nonmem version, <code>NWPRI</code> works a little differently, and
 <code>IPRED</code> has to be used prior to Nonmem 7.6.0.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">IPRED</span><span class="op">)</span></span>
@@ -502,11 +449,14 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <span>    <span class="co">## ,"Concentration at 4 hours"=function(x) x$value[x$TAPD==4]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarizeCovs.html">summarizeCovs</a></span><span class="op">(</span><span class="va">simres</span>,</span>
-<span>                               funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
-<span>                               by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
-<span>                               cover.ci<span class="op">=</span><span class="fl">.95</span></span>
-<span>                               <span class="op">)</span></span></code></pre></div>
+<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">forestSummarize</span><span class="op">(</span><span class="va">simres</span>,</span>
+<span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
+<span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
+<span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span></span>
+<span>                                 <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
+<span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">covlabel</span><span class="op">==</span><span class="st">"Bodyweigt (kg)"</span>,<span class="va">covlabel</span><span class="op">:=</span><span class="st">"Bodyweight (kg)"</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
@@ -515,13 +465,11 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first. An acceptance region such as the 80%-125% bio
 equivalence is included.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">label</span>,<span class="va">mid</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">paramname</span><span class="op">)</span></span>
-<span>         <span class="co">##cc(predmm,predml,predmu,metric.var),</span></span>
-<span>         <span class="co">##cc(mid,lower,upper,paramname)</span></span>
 <span>         <span class="op">)</span></span>
 <span></span>
 <span><span class="va">sum.uncertain</span><span class="op">[</span>,<span class="va">MEANVAL</span><span class="op">:=</span><span class="va">mid</span><span class="op">]</span></span>
@@ -564,12 +512,71 @@ equivalence is included.</p>
 <span></span>
 <span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-1.png" width="960"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-2.png" width="960"></p>
 <details><summary>
-Comparison of different simulation methods
+Simulation using multivariate normal distribution
+</summary><p>We shall use the method provided by NMsim based on the multivariate
+normal distribution (<code>mvrnorm</code>). This method is selected
+because it is adequate for sampling <code>THETA</code>’s, it does not
+require additional software installed, other than Nonmem.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
+<span><span class="va">ext.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"mvrnorm"</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
+<span>                              ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
+<span>                              ,name.sim<span class="op">=</span><span class="st">"mvrnorm_forest"</span> <span class="co"># output name suffix</span></span>
+<span>                              ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
+<span>                              ,ext<span class="op">=</span><span class="va">ext.mvrnorm</span></span>
+<span>                              ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
+<span>                              ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
+<span>                              ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
+<span>                              ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
+<span>                              ,nc<span class="op">=</span><span class="fl">1</span></span>
+<span>                               <span class="op">)</span></span></code></pre></div>
+</details><details><summary>
+Simulation using simpar for parameter sampling
+</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"simpar"</span>,seed.R<span class="op">=</span><span class="fl">789</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
+<span>                             ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
+<span>                             ,name.sim<span class="op">=</span><span class="st">"simpar_forest"</span> <span class="co"># output name suffix</span></span>
+<span>                             ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
+<span>                             ,ext<span class="op">=</span><span class="va">ext.simpar</span></span>
+<span>                             ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
+<span>                             ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
+<span>                             ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
+<span>                             ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
+<span>                             ,nc<span class="op">=</span><span class="fl">1</span></span>
+<span>                              <span class="op">)</span></span></code></pre></div>
+</details><details><summary>
+Simulation using bootstrap for parameter sampling
 </summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/modelfit_dir1/"</span></span>
+<span><span class="va">lsts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.lst$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## fun.name &lt;- function(file)sub(".*/NM_run([0-9]+)/psn....","boot\\1",file)</span></span>
+<span><span class="va">fun.name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*/NM_run([0-9]+)/psn...."</span>,<span class="st">"\\1"</span>,<span class="va">file</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">lsts.bs</span>,modelname<span class="op">=</span><span class="va">fun.name</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
+<span>                           ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
+<span>                           ,name.sim<span class="op">=</span><span class="st">"boot_forest"</span> <span class="co"># output name suffix</span></span>
+<span>                           ,method.sim<span class="op">=</span><span class="va">NMsim_VarCov</span> <span class="co"># sampling with mvrnorm</span></span>
+<span>                           ,ext<span class="op">=</span><span class="va">ext.boot</span></span>
+<span>                           ,typical<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># FALSE to include BSV</span></span>
+<span>                           ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span> <span class="co"># output table variables</span></span>
+<span>                           ,seed.R<span class="op">=</span><span class="fl">342</span> <span class="co"># seed for reproducibility</span></span>
+<span>                           ,sge<span class="op">=</span><span class="cn">TRUE</span> <span class="co"># TRUE if submitting to a cluster</span></span>
+<span>                           ,nc<span class="op">=</span><span class="fl">1</span></span>
+<span>                            <span class="op">)</span></span></code></pre></div>
+</details><details><summary>
+Comparison of different simulation methods
+</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -580,11 +587,10 @@ Comparison of different simulation methods
 <span>                           <span class="va">simres.forest.mvrnorm</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"mvrnorm"</span><span class="op">]</span>,</span>
 <span>                           <span class="va">simres.forest.boot</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Bootstrap"</span><span class="op">]</span></span>
 <span>                          ,<span class="va">simres.forest.simpar</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"Simpar"</span><span class="op">]</span></span>
-<span>                           ,fill<span class="op">=</span><span class="cn">T</span></span>
+<span>                          ,fill<span class="op">=</span><span class="cn">T</span></span>
 <span>                           <span class="op">)</span></span>
-<span><span class="co">## simres.forest.all[,.N,by=covlabel]</span></span>
-<span><span class="va">simres.forest.all</span><span class="op">[</span><span class="va">covlabel</span><span class="op">==</span><span class="st">"Bodyweigt (kg)"</span>,<span class="va">covlabel</span><span class="op">:=</span><span class="st">"Bodyweight (kg)"</span><span class="op">]</span></span>
 <span></span>
+<span><span class="co">### How many samples used with each method?</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">method</span>,<span class="va">model.sim</span>,<span class="va">NMREP</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="va">.N</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">method</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##       method     N</span></span>
 <span><span class="co">##       &lt;char&gt; &lt;int&gt;</span></span>
@@ -592,23 +598,22 @@ Comparison of different simulation methods
 <span><span class="co">## 2:   mvrnorm  1000</span></span>
 <span><span class="co">## 3: Bootstrap  1000</span></span>
 <span><span class="co">## 4:    Simpar  1000</span></span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
-<span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarizeCovs.html">summarizeCovs</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
-<span>                               funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
-<span>                               by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
-<span>                               cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
-<span>                               as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
-<span>                               <span class="op">)</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu">forestSummarize</span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
+<span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
+<span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
+<span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
+<span>                                 as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
+<span>                                 <span class="op">)</span></span>
 <span></span>
 <span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">covvalf</span>,colour<span class="op">=</span><span class="va">method</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="fl">.8</span>,xmax<span class="op">=</span><span class="fl">1.2</span>,ymin<span class="op">=</span><span class="op">-</span><span class="cn">Inf</span>,ymax<span class="op">=</span><span class="cn">Inf</span>,colour<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>,fill<span class="op">=</span><span class="st">"grey90"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="fl">.8</span>,xmax<span class="op">=</span><span class="fl">1.2</span>,ymin<span class="op">=</span><span class="op">-</span><span class="cn">Inf</span>,ymax<span class="op">=</span><span class="cn">Inf</span>,colour<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>,fill<span class="op">=</span><span class="st">"grey85"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="co">## geom_segment(aes(x=predml,xend=predmu,y=covvalf,yend=covvalf),</span></span>
 <span>    <span class="co">##           position=ggstance::position_dodgev(height=0.5))+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="va">predml</span>,xmax<span class="op">=</span><span class="va">predmu</span>,ymin<span class="op">=</span><span class="va">covvalf</span>,ymax<span class="op">=</span><span class="va">covvalf</span><span class="op">)</span>,</span>
-<span>               position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>              position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>position<span class="op">=</span><span class="fu">ggstance</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggstance/man/position-vertical.html" class="external-link">position_dodgev</a></span><span class="op">(</span>height<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">covlabel</span><span class="op">~</span><span class="va">metric.var</span>,scales<span class="op">=</span><span class="st">"free_y"</span>,switch<span class="op">=</span><span class="st">"y"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fl">1</span>,linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
@@ -621,20 +626,21 @@ Comparison of different simulation methods
 <h2 id="post-processing-step-by-step">Post-processing step-by-step<a class="anchor" aria-label="anchor" href="#post-processing-step-by-step"></a>
 </h2>
 <p>We are including the code from the main steps in the post processing
-function, <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code>. It is important that the
-scientist understands that what the forest plots derived in this
+function, <code>NMsim::forestSummarize()</code>. It is important that
+the scientist understands that what the forest plots derived in this
 document represent is the relative effect of the covariate on the
-exposure metric. This is derived by <code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code>
-as quantiles of the exposure relative to the reference subject. The
-confidence interval hence expresses the uncertainty on the covariate
-effect for a subject with other covariates at reference values.</p>
+exposure metric. This is derived by
+<code>NMsim::forestSummarize()</code> as quantiles of the exposure
+relative to the reference subject. The confidence interval hence
+expresses the uncertainty on the covariate effect for a subject with
+other covariates at reference values.</p>
 <details><summary>
 Details on code used for summarizing forest plot statistics (click to
 show)
 </summary><p>Notice, the code below consists of snippets from the
-<code><a href="../reference/summarizeCovs.html">NMsim::summarizeCovs()</a></code> function. The code is not intended
+<code>NMsim::forestSummarize()</code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
