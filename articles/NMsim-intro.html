@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.933</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">April 24, 2025</h4>
+            <h4 data-toc-skip class="date">April 25, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-intro.Rmd" class="external-link"><code>vignettes/NMsim-intro.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-intro.Rmd</code></div>
@@ -245,10 +245,13 @@ final results (<code>dir.res</code>).</p>
 <p>When providing a simulation data set, the default
 <code><a href="../reference/NMsim.html">NMsim()</a></code> behavior is to sample a new subject (ETA’s).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
+<code class="sourceCode R"><span><span class="co">## Point to the model to estimate</span></span>
+<span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
 <span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
-<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/derived/dat_sim1.csv"</span>,</span>
-<span>                                 package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Easily create a muliple-dose simulation data set with a loading dose</span></span>
+<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">## Simulate</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,data<span class="op">=</span><span class="va">data.sim</span><span class="op">)</span></span></code></pre></div>
 <p>The simulation input data set is a data.frame, and
 <code><a href="../reference/NMsim.html">NMsim()</a></code> returns a data.frame. Plot of simulation results

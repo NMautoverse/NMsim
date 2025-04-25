@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.933</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -566,8 +566,7 @@ normal distribution (<code>mvrnorm</code>). This method is selected
 because it is adequate for sampling <code>THETA</code>’s, it does not
 require additional software installed, other than Nonmem.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## load_all("~/wdirs/NMsim")</span></span>
-<span><span class="va">ext.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"mvrnorm"</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ext.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"mvrnorm"</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                              ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
@@ -599,13 +598,9 @@ Simulation using simpar for parameter sampling
 </details><details><summary>
 Simulation using bootstrap for parameter sampling
 </summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/modelfit_dir1/"</span></span>
-<span><span class="va">lsts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.lst$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## fun.name &lt;- function(file)sub(".*/NM_run([0-9]+)/psn....","boot\\1",file)</span></span>
-<span><span class="va">fun.name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*/NM_run([0-9]+)/psn...."</span>,<span class="st">"\\1"</span>,<span class="va">file</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
-<span>                         <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">lsts.bs</span>,modelname<span class="op">=</span><span class="va">fun.name</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/m1"</span></span>
+<span><span class="va">exts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.ext$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">exts.bs</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                           ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
