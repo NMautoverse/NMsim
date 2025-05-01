@@ -71,13 +71,14 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Creation of Simulation Data Sets</h1>
-            
+                        <h4 data-toc-skip class="author">Philip
+Delff</h4>
+                        
+            <h4 data-toc-skip class="date">May 01, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-DataCreate.Rmd" class="external-link"><code>vignettes/NMsim-DataCreate.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-DataCreate.Rmd</code></div>
@@ -107,11 +108,46 @@ right away.</p>
 <span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">doses</span>,trt<span class="op">=</span><span class="st">"300 mg then 150 mg QD"</span><span class="op">)</span></span>
 <span><span class="co">## Notice, the ID and MDV columns are included</span></span>
-<span><span class="va">doses</span></span>
-<span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:     1     0     1     1   300     0     0     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 2:     1    24     1     1   150    24     5     1 300 mg then 150 mg QD</span></span></code></pre></div>
+<span><span class="va">doses</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+<th align="left">trt</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">24</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Now we add the sample records using <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Add simulation records - longer for QD regimens</span></span>
@@ -192,17 +228,88 @@ like. Notice that the following are <em>not</em> issues:</p>
 <li>Columns are not sorted in Nonmem-friendly style with non-numeric
 columns to the right</li>
 </ul>
-<pre><code><span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt   ROW</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:     1     0     1     1   300     0     0     1 300 mg then 150 mg QD     1</span></span>
-<span><span class="co">#&gt; 2:     1     0     2     2    NA    NA    NA     1 300 mg then 150 mg QD     2</span></span>
-<span><span class="co">#&gt; 3:     1     1     2     2    NA    NA    NA     1 300 mg then 150 mg QD     3</span></span>
-<span><span class="co">#&gt; 4:     1     2     2     2    NA    NA    NA     1 300 mg then 150 mg QD     4</span></span>
-<span><span class="co">#&gt; 5:     1     3     2     2    NA    NA    NA     1 300 mg then 150 mg QD     5</span></span></code></pre>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+<th align="left">trt</th>
+<th align="right">ROW</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Finally, We check the simulation data set for various potential
 issues in Nonmem data sets using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> and
 summarize the number of doses and observations:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## until NMdata 0.1.7 NMcheckData requires a DV column</span></span>
 <span><span class="va">dat.sim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA_real_</span><span class="op">]</span></span>
 <span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
@@ -215,25 +322,159 @@ summarize the number of doses and observations:</p>
 previous dose may be the relevant time to analyze the simulation results
 against. We use <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
 automatically.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt   ROW</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:     1     0     1     1   300     0     0     1 300 mg then 150 mg QD     1</span></span>
-<span><span class="co">#&gt; 2:     1     0     2     2    NA    NA    NA     1 300 mg then 150 mg QD     2</span></span>
-<span><span class="co">#&gt; 3:     1     1     2     2    NA    NA    NA     1 300 mg then 150 mg QD     3</span></span>
-<span><span class="co">#&gt; 4:     1     2     2     2    NA    NA    NA     1 300 mg then 150 mg QD     4</span></span>
-<span><span class="co">#&gt; 5:     1     3     2     2    NA    NA    NA     1 300 mg then 150 mg QD     5</span></span>
-<span><span class="co">#&gt; 6:     1     4     2     2    NA    NA    NA     1 300 mg then 150 mg QD     6</span></span>
-<span><span class="co">#&gt;       DV DOSCUMN TPDOS  TAPD PDOSAMT DOSCUMA</span></span>
-<span><span class="co">#&gt;    &lt;num&gt;   &lt;int&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA       1     0     0     300     300</span></span>
-<span><span class="co">#&gt; 2:    NA       0    NA    NA      NA       0</span></span>
-<span><span class="co">#&gt; 3:    NA       1     0     1     300     300</span></span>
-<span><span class="co">#&gt; 4:    NA       1     0     2     300     300</span></span>
-<span><span class="co">#&gt; 5:    NA       1     0     3     300     300</span></span>
-<span><span class="co">#&gt; 6:    NA       1     0     4     300     300</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="5%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="3%">
+<col width="5%">
+<col width="4%">
+<col width="22%">
+<col width="4%">
+<col width="3%">
+<col width="8%">
+<col width="6%">
+<col width="5%">
+<col width="8%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+<th align="left">trt</th>
+<th align="right">ROW</th>
+<th align="right">DV</th>
+<th align="right">DOSCUMN</th>
+<th align="right">TPDOS</th>
+<th align="right">TAPD</th>
+<th align="right">PDOSAMT</th>
+<th align="right">DOSCUMA</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">4</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">5</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">6</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Here is something important to decide for simulations. Notice
 <code>TAPD</code> for the sample at <code>TIME==0</code>.
 <code>addTAPD</code> does not use the order of the data set to determine
@@ -242,27 +483,161 @@ the time-order or the records. The default behavior of
 as a dose as a pre-dose. If instead we want them to be considered
 post-dose, we have to specify how to order <code>EVID</code>
 numbers.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## order.evid=c(1,2) means doses are ordered before EVID=2 records</span></span>
 <span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## now the TIME=0 sample has TAPD=0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt   ROW</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:     1     0     1     1   300     0     0     1 300 mg then 150 mg QD     1</span></span>
-<span><span class="co">#&gt; 2:     1     0     2     2    NA    NA    NA     1 300 mg then 150 mg QD     2</span></span>
-<span><span class="co">#&gt; 3:     1     1     2     2    NA    NA    NA     1 300 mg then 150 mg QD     3</span></span>
-<span><span class="co">#&gt; 4:     1     2     2     2    NA    NA    NA     1 300 mg then 150 mg QD     4</span></span>
-<span><span class="co">#&gt; 5:     1     3     2     2    NA    NA    NA     1 300 mg then 150 mg QD     5</span></span>
-<span><span class="co">#&gt; 6:     1     4     2     2    NA    NA    NA     1 300 mg then 150 mg QD     6</span></span>
-<span><span class="co">#&gt;       DV DOSCUMN TPDOS  TAPD PDOSAMT DOSCUMA</span></span>
-<span><span class="co">#&gt;    &lt;num&gt;   &lt;int&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA       1     0     0     300     300</span></span>
-<span><span class="co">#&gt; 2:    NA       1     0     0     300     300</span></span>
-<span><span class="co">#&gt; 3:    NA       1     0     1     300     300</span></span>
-<span><span class="co">#&gt; 4:    NA       1     0     2     300     300</span></span>
-<span><span class="co">#&gt; 5:    NA       1     0     3     300     300</span></span>
-<span><span class="co">#&gt; 6:    NA       1     0     4     300     300</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="5%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="3%">
+<col width="5%">
+<col width="4%">
+<col width="22%">
+<col width="4%">
+<col width="3%">
+<col width="8%">
+<col width="6%">
+<col width="5%">
+<col width="8%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+<th align="left">trt</th>
+<th align="right">ROW</th>
+<th align="right">DV</th>
+<th align="right">DOSCUMN</th>
+<th align="right">TPDOS</th>
+<th align="right">TAPD</th>
+<th align="right">PDOSAMT</th>
+<th align="right">DOSCUMA</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">4</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">5</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="right">6</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">300</td>
+<td align="right">300</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p><code>addTAPD</code> uses <code><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses</a></code> to make
 sure all dosing times are considered. See <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">?NMdata::addTAPD</a></code>
 for what the other created columns mean and for many useful
@@ -273,27 +648,113 @@ features.</p>
 </h3>
 <p>Pass a data.frame to <code>addEVID2</code>’s CMT argument to include
 multiple endpoints.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span>,time.sim<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `addEVID2()` has been renamed to `NMaddSamples()`. `addEVID2()` still works to ensure</span></span>
 <span><span class="co">#&gt; backward-compatibility.</span></span>
-<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span>
-<span><span class="co">#&gt;       ID  TIME  EVID   CMT   AMT    II  ADDL   MDV                   trt</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;                &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:     1     0     1     1   300     0     0     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 2:     1     1     2     2    NA    NA    NA     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 3:     1     1     2     3    NA    NA    NA     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 4:     1     2     2     2    NA    NA    NA     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 5:     1     2     2     3    NA    NA    NA     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt; 6:     1    24     1     1   150    24     5     1 300 mg then 150 mg QD</span></span>
-<span><span class="co">#&gt;          DVID</span></span>
-<span><span class="co">#&gt;        &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:       &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2:     Parent</span></span>
-<span><span class="co">#&gt; 3: Metabolite</span></span>
-<span><span class="co">#&gt; 4:     Parent</span></span>
-<span><span class="co">#&gt; 5: Metabolite</span></span>
-<span><span class="co">#&gt; 6:       &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span></code></pre></div>
+<div class="kable-table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="4%">
+<col width="7%">
+<col width="7%">
+<col width="6%">
+<col width="6%">
+<col width="4%">
+<col width="7%">
+<col width="6%">
+<col width="33%">
+<col width="16%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+<th align="left">trt</th>
+<th align="left">DVID</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">Metabolite</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">Metabolite</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">24</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">300 mg then 150 mg QD</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section level3">
 <h3 id="cohort-dependent-or-individual-sampling-schemes">Cohort-dependent or individual sampling schemes<a class="anchor" aria-label="anchor" href="#cohort-dependent-or-individual-sampling-schemes"></a>
