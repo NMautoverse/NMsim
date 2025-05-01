@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.905</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.906</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,6 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
@@ -80,6 +78,7 @@
                         <h4 data-toc-skip class="author">Philip Delff,
 Boris Grinshpun</h4>
                         
+            <h4 data-toc-skip class="date">May 01, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
@@ -234,11 +233,33 @@ multiple subjects.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span>,AMT<span class="op">=</span><span class="fl">30</span>,ADDL<span class="op">=</span><span class="fl">30</span>,II<span class="op">=</span><span class="fl">24</span><span class="op">)</span></span>
 <span><span class="va">doses</span></span></code></pre></div>
-<pre><code><span><span class="co">##   ID TIME EVID CMT AMT II ADDL MDV</span></span>
-<span><span class="co">## 1  1    0    1   1  30 24   30   1</span></span></code></pre>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">24</td>
+<td align="right">30</td>
+<td align="right">1</td>
+</tr></tbody>
+</table>
+</div>
 <p>We sample every 15 minutes on the first day and one day in
 steady-state.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## add a sampling scheme</span></span>
 <span><span class="va">time.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span>,<span class="fl">.25</span><span class="op">)</span>, <span class="co">## Day 1</span></span>
@@ -247,30 +268,58 @@ steady-state.</p>
 <span><span class="va">dt.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="va">time.sim</span>,CMT<span class="op">=</span><span class="fl">2</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## `addEVID2()` has been renamed to `NMaddSamples()`. `addEVID2()` still works to ensure</span></span>
 <span><span class="co">## backward-compatibility.</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt.sim</span><span class="op">[</span><span class="va">TIME</span><span class="op">&lt;=</span><span class="fl">24</span>,<span class="va">period</span><span class="op">:=</span><span class="st">"Day 1"</span><span class="op">]</span></span>
 <span><span class="va">dt.sim</span><span class="op">[</span><span class="va">TIME</span><span class="op">&gt;=</span><span class="fl">30</span><span class="op">*</span><span class="fl">24</span><span class="op">&amp;</span><span class="va">TIME</span><span class="op">&lt;=</span><span class="fl">31</span><span class="op">*</span><span class="fl">24</span>,<span class="va">period</span><span class="op">:=</span><span class="st">"Steady-State"</span><span class="op">]</span></span></code></pre></div>
 <p>The following table summarizes the number of doses and samples.
 Notice, the doses are repeated.</p>
-<pre><code><span><span class="co">## Key: &lt;period, EVID, ADDL, II&gt;</span></span>
-<span><span class="co">##          period  EVID  ADDL    II     N</span></span>
-<span><span class="co">##          &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;</span></span>
-<span><span class="co">## 1:        Day 1     1    30    24     1</span></span>
-<span><span class="co">## 2:        Day 1     2    NA    NA    97</span></span>
-<span><span class="co">## 3: Steady-State     2    NA    NA    97</span></span></code></pre>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">period</th>
+<th align="right">EVID</th>
+<th align="right">ADDL</th>
+<th align="right">II</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Day 1</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">24</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Day 1</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">97</td>
+</tr>
+<tr class="odd">
+<td align="left">Steady-State</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">97</td>
+</tr>
+</tbody>
+</table>
+</div>
 <details><summary>
 How to sample multiple endpoints
 </summary><p>There is only one analyte in this data set. If for instance, you have
 a parent and a metabolite, adding sampling times could look like
 this:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt.sim.parent.metab</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="va">time.sim</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>analyte<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parent"</span>,<span class="st">"metabolite"</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## `addEVID2()` has been renamed to `NMaddSamples()`. `addEVID2()` still works to ensure</span></span>
 <span><span class="co">## backward-compatibility.</span></span></code></pre>
 <p>We also add “Time after previous dose” which is helpful for plotting.
 This is done using <code>NMdata::TAPD()</code></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dt.sim</span><span class="op">)</span></span></code></pre></div>
 <p>We used the <code>period</code> column to distinguish time intervals
 for the analysis. We have to remember to do the postprocessing by the
@@ -290,7 +339,7 @@ set.</p>
 <p>For reference values we use median in the observed population for
 continuous covariates and manually select “Female” as the reference for
 sex. Here is a short example:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## reading output and input tables from estimation. Used to determine</span></span>
 <span><span class="co">## reference values and quantiles.</span></span>
 <span><span class="va">data.ref</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
@@ -322,40 +371,166 @@ as “Female”.</li>
 derive unique covariate values for each subject in the data set, then
 derive the quantiles. Each subject hence contributes equally,
 independently of how many data points they contribute.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## adding distinct ID's for each combination of covariates</span></span>
 <span><span class="va">covs</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">type</span>,<span class="va">covvar</span>,<span class="va">covval</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##      covvar covval covvalc        covlabel covref   type   AGE MALEN WEIGHTB</span></span>
-<span><span class="co">##      &lt;char&gt;  &lt;num&gt;  &lt;char&gt;          &lt;char&gt;  &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">##  1:    &lt;NA&gt;     NA    &lt;NA&gt;            &lt;NA&gt;     NA    ref    55     0     110</span></span>
-<span><span class="co">##  2:     AGE     35      35     Age (years)     55  value    35     0     110</span></span>
-<span><span class="co">##  3:     AGE     45      45     Age (years)     55  value    45     0     110</span></span>
-<span><span class="co">##  4:     AGE     65      65     Age (years)     55  value    65     0     110</span></span>
-<span><span class="co">##  5:     AGE     75      75     Age (years)     55  value    75     0     110</span></span>
-<span><span class="co">##  6: WEIGHTB     85      85 Bodyweight (kg)    110  value    55     0      85</span></span>
-<span><span class="co">##  7: WEIGHTB     96      96 Bodyweight (kg)    110  value    55     0      96</span></span>
-<span><span class="co">##  8: WEIGHTB    130     130 Bodyweight (kg)    110  value    55     0     130</span></span>
-<span><span class="co">##  9: WEIGHTB    140     140 Bodyweight (kg)    110  value    55     0     140</span></span>
-<span><span class="co">## 10:   MALEN      1    Male             Sex      0  value    55     1     110</span></span>
-<span><span class="co">##        ID</span></span>
-<span><span class="co">##     &lt;int&gt;</span></span>
-<span><span class="co">##  1:     1</span></span>
-<span><span class="co">##  2:     2</span></span>
-<span><span class="co">##  3:     3</span></span>
-<span><span class="co">##  4:     4</span></span>
-<span><span class="co">##  5:     5</span></span>
-<span><span class="co">##  6:     6</span></span>
-<span><span class="co">##  7:     7</span></span>
-<span><span class="co">##  8:     8</span></span>
-<span><span class="co">##  9:     9</span></span>
-<span><span class="co">## 10:    10</span></span></code></pre>
+<div class="kable-table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="10%">
+<col width="9%">
+<col width="10%">
+<col width="21%">
+<col width="9%">
+<col width="8%">
+<col width="5%">
+<col width="8%">
+<col width="10%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">covvar</th>
+<th align="right">covval</th>
+<th align="left">covvalc</th>
+<th align="left">covlabel</th>
+<th align="right">covref</th>
+<th align="left">type</th>
+<th align="right">AGE</th>
+<th align="right">MALEN</th>
+<th align="right">WEIGHTB</th>
+<th align="right">ID</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="left">ref</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">110</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AGE</td>
+<td align="right">35</td>
+<td align="left">35</td>
+<td align="left">Age (years)</td>
+<td align="right">55</td>
+<td align="left">value</td>
+<td align="right">35</td>
+<td align="right">0</td>
+<td align="right">110</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">AGE</td>
+<td align="right">45</td>
+<td align="left">45</td>
+<td align="left">Age (years)</td>
+<td align="right">55</td>
+<td align="left">value</td>
+<td align="right">45</td>
+<td align="right">0</td>
+<td align="right">110</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">AGE</td>
+<td align="right">65</td>
+<td align="left">65</td>
+<td align="left">Age (years)</td>
+<td align="right">55</td>
+<td align="left">value</td>
+<td align="right">65</td>
+<td align="right">0</td>
+<td align="right">110</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">AGE</td>
+<td align="right">75</td>
+<td align="left">75</td>
+<td align="left">Age (years)</td>
+<td align="right">55</td>
+<td align="left">value</td>
+<td align="right">75</td>
+<td align="right">0</td>
+<td align="right">110</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">WEIGHTB</td>
+<td align="right">85</td>
+<td align="left">85</td>
+<td align="left">Bodyweight (kg)</td>
+<td align="right">110</td>
+<td align="left">value</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">85</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">WEIGHTB</td>
+<td align="right">96</td>
+<td align="left">96</td>
+<td align="left">Bodyweight (kg)</td>
+<td align="right">110</td>
+<td align="left">value</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">96</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">WEIGHTB</td>
+<td align="right">130</td>
+<td align="left">130</td>
+<td align="left">Bodyweight (kg)</td>
+<td align="right">110</td>
+<td align="left">value</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">130</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">WEIGHTB</td>
+<td align="right">140</td>
+<td align="left">140</td>
+<td align="left">Bodyweight (kg)</td>
+<td align="right">110</td>
+<td align="left">value</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">140</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">MALEN</td>
+<td align="right">1</td>
+<td align="left">Male</td>
+<td align="left">Sex</td>
+<td align="right">0</td>
+<td align="left">value</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">110</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>We now have all combinations of covariates in the object called
 <code>covs</code>. Notice the <code>type</code> column which
 distinguishes the reference combination in contrast to the other
 simulations where one covariate is being varied at a time.</p>
 <details><summary>
 Plots of Typical-Subject Simulations
-</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## repeating the doses for all combinations of covariates. Using NMdata::egdt()</span></span>
 <span><span class="va">dt.sim.noid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dt.sim</span><span class="op">)</span><span class="op">[</span>,<span class="op">!</span><span class="op">(</span><span class="st">"ID"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">dt.sim.covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/egdt.html" class="external-link">egdt</a></span><span class="op">(</span><span class="va">dt.sim.noid</span>,<span class="va">covs</span><span class="op">)</span></span></code></pre></div>
@@ -364,21 +539,21 @@ Plots of Typical-Subject Simulations
 <span><span class="co">## 1:    dt1   195    13</span></span>
 <span><span class="co">## 2:    dt2    10    10</span></span>
 <span><span class="co">## 3: result  1950    23</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### same thing, the data.table way</span></span>
 <span><span class="co">## dt.sim.covs &lt;- covs[,dt.sim.noid[],by=covs]</span></span>
 <span><span class="co">### same thing, dplyr way</span></span>
 <span><span class="co">## dt.sim.covs &lt;- dplyr::select(dt.sim,-ID) |&gt;</span></span>
 <span><span class="co">##   cross_join(covs)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dt.sim.covs</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.typ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                data<span class="op">=</span><span class="va">dt.sim.covs</span>,</span>
 <span>                name.sim<span class="op">=</span><span class="st">"singlesubj_covs"</span>,</span>
 <span>                table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span><span class="op">)</span>,</span>
 <span>                typical<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.typ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_singlesubj_covs_MetaData.rds"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.ref</span> <span class="op">&lt;-</span> <span class="va">simres.typ</span><span class="op">[</span><span class="va">type</span><span class="op">==</span><span class="st">"ref"</span><span class="op">]</span></span>
 <span></span>
@@ -395,7 +570,7 @@ Plots of Typical-Subject Simulations
 <span></span>
 <span></span>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">all.plots</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-forest_files/figure-html/plot-singlesubjs-1.png" width="700"></p>
+<p><img src="NMsim-forest_files/figure-html/plot-singlesubjs-1.png" width="672"></p>
 </details>
 </div>
 </div>
@@ -424,7 +599,7 @@ excels in being fast to execute because it simulates all the parameter
 sets sequentially in one Nonmem run. It is important to run this with
 <code>typical=TRUE</code>. If between-subject variability is desired,
 please refer to <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html"><code>NMsim-ParamUncertain.html</code></a>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                            ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
 <span>                            ,name.sim<span class="op">=</span><span class="st">"nwpri_forest"</span> <span class="co"># output name suffix</span></span>
@@ -448,19 +623,69 @@ Show example
 </summary><p>A quick way to look for this is by combining parameter estimates
 (from the <code>.ext</code> file) and the automatic labeling of the
 parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
-<pre><code><span><span class="co">##    par.name   FIX        RSE               code</span></span>
-<span><span class="co">##      &lt;char&gt; &lt;num&gt;      &lt;num&gt;             &lt;char&gt;</span></span>
-<span><span class="co">## 1: THETA(1)     0 0.08040069     LTVKA=THETA(1)</span></span>
-<span><span class="co">## 2: THETA(2)     0 0.01363271     LTVV2=THETA(2)</span></span>
-<span><span class="co">## 3: THETA(3)     0 0.07898119     LTVCL=THETA(3)</span></span>
-<span><span class="co">## 4: THETA(4)     0 0.04819492     LTVV3=THETA(4)</span></span>
-<span><span class="co">## 5: THETA(5)     0 0.02929518      LTVQ=THETA(5)</span></span>
-<span><span class="co">## 6: THETA(6)     0 0.42222998    AGEEFF=THETA(6)</span></span>
-<span><span class="co">## 7: THETA(7)     0 1.91607839 WEIGHTEFF=THETA(7)</span></span>
-<span><span class="co">## 8: THETA(8)     0 0.10415356   MALEEFF=THETA(8)</span></span></code></pre>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">par.name</th>
+<th align="right">FIX</th>
+<th align="right">RSE</th>
+<th align="left">code</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">THETA(1)</td>
+<td align="right">0</td>
+<td align="right">0.0804007</td>
+<td align="left">LTVKA=THETA(1)</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(2)</td>
+<td align="right">0</td>
+<td align="right">0.0136327</td>
+<td align="left">LTVV2=THETA(2)</td>
+</tr>
+<tr class="odd">
+<td align="left">THETA(3)</td>
+<td align="right">0</td>
+<td align="right">0.0789812</td>
+<td align="left">LTVCL=THETA(3)</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(4)</td>
+<td align="right">0</td>
+<td align="right">0.0481949</td>
+<td align="left">LTVV3=THETA(4)</td>
+</tr>
+<tr class="odd">
+<td align="left">THETA(5)</td>
+<td align="right">0</td>
+<td align="right">0.0292952</td>
+<td align="left">LTVQ=THETA(5)</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(6)</td>
+<td align="right">0</td>
+<td align="right">0.4222300</td>
+<td align="left">AGEEFF=THETA(6)</td>
+</tr>
+<tr class="odd">
+<td align="left">THETA(7)</td>
+<td align="right">0</td>
+<td align="right">1.9160784</td>
+<td align="left">WEIGHTEFF=THETA(7)</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(8)</td>
+<td align="right">0</td>
+<td align="right">0.1041536</td>
+<td align="left">MALEEFF=THETA(8)</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>A large RSE is a potential issue for strictly positive parameters
 (RSE=0.25 for a parameter with a positive estimate corresponds to
 roughly 1/10,000 chance that a sample is negative). In this case,
@@ -485,7 +710,7 @@ with <code>typical=TRUE</code> so <code>PRED</code> and
 <code>IPRED</code> should be the same. However, with depending on the
 Nonmem version, <code>NWPRI</code> works a little differently, and
 <code>IPRED</code> has to be used prior to Nonmem 7.6.0.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">IPRED</span><span class="op">)</span></span>
@@ -498,7 +723,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span></span>
 <span>                                 <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">covlabel</span><span class="op">==</span><span class="st">"Bodyweigt (kg)"</span>,<span class="va">covlabel</span><span class="op">:=</span><span class="st">"Bodyweight (kg)"</span><span class="op">]</span></span></code></pre></div>
 </div>
@@ -509,7 +734,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first. An acceptance region such as the 80%-125% bio
 equivalence is included.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
@@ -556,7 +781,7 @@ equivalence is included.</p>
 <span></span>
 <span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-1.png" width="960"></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-2.png" width="960"></p>
 <details><summary>
@@ -565,7 +790,7 @@ Simulation using multivariate normal distribution
 normal distribution (<code>mvrnorm</code>). This method is selected
 because it is adequate for sampling <code>THETA</code>’s, it does not
 require additional software installed, other than Nonmem.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"mvrnorm"</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
@@ -581,7 +806,7 @@ require additional software installed, other than Nonmem.</p>
 <span>                               <span class="op">)</span></span></code></pre></div>
 </details><details><summary>
 Simulation using simpar for parameter sampling
-</summary><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"simpar"</span>,seed.R<span class="op">=</span><span class="fl">789</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
@@ -597,7 +822,7 @@ Simulation using simpar for parameter sampling
 <span>                              <span class="op">)</span></span></code></pre></div>
 </details><details><summary>
 Simulation using bootstrap for parameter sampling
-</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/m1"</span></span>
 <span><span class="va">exts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.ext$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">exts.bs</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -626,7 +851,7 @@ similarities in the results based on the parametric models and bootstrap
 cannot be generalized based on this.</p>
 <details><summary>
 Collecting, Summarizing, and Plotting all Results
-</summary><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -642,20 +867,40 @@ Collecting, Summarizing, and Plotting all Results
 <span></span>
 <span><span class="co">### How many samples used with each method?</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">simres.forest.all</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">method</span>,<span class="va">model.sim</span>,<span class="va">NMREP</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="va">.N</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">method</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##       method     N</span></span>
-<span><span class="co">##       &lt;char&gt; &lt;int&gt;</span></span>
-<span><span class="co">## 1:     NWPRI  1000</span></span>
-<span><span class="co">## 2:   mvrnorm  1000</span></span>
-<span><span class="co">## 3: Bootstrap  1000</span></span>
-<span><span class="co">## 4:    Simpar  1000</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">method</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NWPRI</td>
+<td align="right">1000</td>
+</tr>
+<tr class="even">
+<td align="left">mvrnorm</td>
+<td align="right">1000</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap</td>
+<td align="right">1000</td>
+</tr>
+<tr class="even">
+<td align="left">Simpar</td>
+<td align="right">1000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forestSummarize.html">forestSummarize</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
 <span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
 <span>                                 as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
 <span>                                 <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot.compare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">covvalf</span>,colour<span class="op">=</span><span class="va">method</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="fl">.8</span>,xmax<span class="op">=</span><span class="fl">1.2</span>,ymin<span class="op">=</span><span class="op">-</span><span class="cn">Inf</span>,ymax<span class="op">=</span><span class="cn">Inf</span>,colour<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>,fill<span class="op">=</span><span class="st">"grey85"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="va">predml</span>,xmax<span class="op">=</span><span class="va">predmu</span>,ymin<span class="op">=</span><span class="va">covvalf</span>,ymax<span class="op">=</span><span class="va">covvalf</span><span class="op">)</span>,</span>
@@ -665,7 +910,7 @@ Collecting, Summarizing, and Plotting all Results
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept<span class="op">=</span><span class="fl">1</span>,linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">""</span>,x<span class="op">=</span><span class="st">"Relative Covariate Effect"</span>,colour<span class="op">=</span><span class="st">"Simulation Method"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-</details><p><img src="NMsim-forest_files/figure-html/show-plot-compare-1.png" width="700"></p>
+</details><p><img src="NMsim-forest_files/figure-html/show-plot-compare-1.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -686,7 +931,7 @@ show)
 </summary><p>Notice, the code below consists of snippets from the
 <code><a href="../reference/forestSummarize.html">NMsim::forestSummarize()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>

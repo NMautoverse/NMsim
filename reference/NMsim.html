@@ -17,7 +17,7 @@ get the most out of this."><meta name="google-site-verification" content="-8n-8O
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.905</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.906</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@ get the most out of this.</p>
 <span>  <span class="va">name.sim</span>,</span>
 <span>  <span class="va">table.vars</span>,</span>
 <span>  <span class="va">table.options</span>,</span>
-<span>  <span class="va">table.format</span>,</span>
+<span>  table.format <span class="op">=</span> <span class="st">"s1PE16.9"</span>,</span>
 <span>  carry.out <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  method.sim <span class="op">=</span> <span class="va">NMsim_default</span>,</span>
 <span>  typical <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -214,12 +214,14 @@ provided. If constructing a new output table with
 <code>table.vars</code> the default is to add two options,
 <code>NOAPPEND</code> and <code>NOPRINT</code>. You can modify that with
 <code>table.options</code>. Do not try to modify output filename -
-<code>NMsim</code> takes care of that.</p></dd>
+<code>NMsim</code> takes care of that. See `table.format` too.</p></dd>
 
 
 <dt id="arg-table-format">table.format<a class="anchor" aria-label="anchor" href="#arg-table-format"></a></dt>
 <dd><p>A format for `$TABLE`. Only used if
-`table.vars` is provided.</p></dd>
+`table.vars` is provided. Default is "s1PE16.9". NMsim needs a
+high-resolution format. The Nonmem default "s1PE11.4" is
+insufficient for simulation data sets of 1e5 rows or more.</p></dd>
 
 
 <dt id="arg-carry-out">carry.out<a class="anchor" aria-label="anchor" href="#arg-carry-out"></a></dt>
