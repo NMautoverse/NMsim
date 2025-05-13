@@ -13,7 +13,7 @@ time. This function was previously called `addEVID2()`."><meta name="google-site
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.901</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@ time. This function was previously called `addEVID2()`.</p>
 <span>  col.id <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>  <span class="va">args.NMexpandDoses</span>,</span>
 <span>  unique <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  extras.are.covs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">by</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">as.fun</span>,</span>
 <span>  <span class="va">doses</span>,</span>
@@ -152,17 +152,6 @@ combine sequences of time points that overlap (maybe across
 want to keep your duplicated events, use `unique=FALSE`.</p></dd>
 
 
-<dt id="arg-extras-are-covs">extras.are.covs<a class="anchor" aria-label="anchor" href="#arg-extras-are-covs"></a></dt>
-<dd><p>If <code>TIME</code> and/or `TAPD` are `data.frame`s
-and contain other columns than `TIME` and/or `TAPD`, those are
-by default assumed to be subject-level covariates to be merged with
-data. More specifically, they will be merged by when the
-sample times are added. If `extras.are.covs=FALSE`, they will
-not be merged by. Instead, they will be kept as
-additional columns with specified values, aligned with the
-sample times. See examples.</p></dd>
-
-
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
 <dd><p>Suppress messages? Default is `FALSE`.</p></dd>
 
@@ -182,10 +171,23 @@ configured using `NMdataConf()`.</p></dd>
 <dt id="arg-time-sim">time.sim<a class="anchor" aria-label="anchor" href="#arg-time-sim"></a></dt>
 <dd><p>Deprecated. Use `TIME`.</p></dd>
 
+
+<dt id="arg-extras-are-covs">extras.are.covs<a class="anchor" aria-label="anchor" href="#arg-extras-are-covs"></a></dt>
+<dd><p>If <code>TIME</code> and/or `TAPD` are `data.frame`s
+and contain other columns than `TIME` and/or `TAPD`, those are
+by default assumed to be subject-level covariates to be merged with
+data. More specifically, they will be merged by when the
+sample times are added. If `extras.are.covs=FALSE`, they will
+not be merged by. Instead, they will be kept as
+additional columns with specified values, aligned with the
+sample times. See examples.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with dosing records</p>
+    <p>A data.frame with dosing records
+only using column names in covs.data (from data) that are not in TIME.</p>
+<p>All rows in TIME get reused for all matches by column names common with covs.data - the identified subject-level covariates (and col.id). This is with the exception of the TIME column itself, because in case of single dose, TIME would be carried over.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
