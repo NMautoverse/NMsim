@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.901</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.904</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">May 13, 2025</h4>
+            <h4 data-toc-skip class="date">May 14, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-DataCreate.Rmd" class="external-link"><code>vignettes/NMsim-DataCreate.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-DataCreate.Rmd</code></div>
@@ -86,7 +86,7 @@ Delff</h4>
 
     
     
-<p>Built 2025-05-13 using NMsim 0.2.2.901.</p>
+<p>Built 2025-05-14 using NMsim 0.2.2.904.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
@@ -154,7 +154,7 @@ right away.</p>
 <span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,time.sim<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `addEVID2()` has been renamed to `NMaddSamples()`. `addEVID2()` still works to ensure</span></span>
 <span><span class="co">#&gt; backward-compatibility.</span></span>
-<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME and/or TAPD instead.</span></span></code></pre></div>
 <p><code>dat.sim</code> is now a valid simulation data set with one
 subject. However, even though <code><a href="../reference/addEVID2.html">addEVID2()</a></code> does try to order
 the data in a meaningful way, it is recommended to always manually order
@@ -652,7 +652,7 @@ multiple endpoints.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span>,time.sim<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `addEVID2()` has been renamed to `NMaddSamples()`. `addEVID2()` still works to ensure</span></span>
 <span><span class="co">#&gt; backward-compatibility.</span></span>
-<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME and/or TAPD instead.</span></span></code></pre></div>
 <div class="kable-table">
 <table style="width:100%;" class="table">
 <colgroup>
