@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.904</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,28 @@
       <small>Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.3" id="nmsim-023">NMsim 0.2.3<a class="anchor" aria-label="anchor" href="#nmsim-023"></a></h2>
+<p>Posters</p>
+<p>VPC - filters</p>
+<p>Streamlined sim with variability</p>
+<p>Forest plot vignette</p>
+<div class="section level3">
+<h3 id="new-features-0-2-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-3"></a></h3>
+<p>NMaddSamples by</p>
+<p>addEVID2 back in</p>
+<p>Streamlining of NMsim_VarCov and samplePars</p>
+<p>samplePars() throws</p>
+</div>
+<div class="section level3">
+<h3 id="bugfixes-0-2-3">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-3"></a></h3>
+<p>NMsim_VarCov() sampling of OMEGA/SIGMA. Affects simulation with between-subject variability. Big thanks to Sanaya Shroff for reporting and fixing.</p>
+</div>
+<div class="section level3">
+<h3 id="other-improvements-0-2-3">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-3"></a></h3>
+<ul><li>Improved defaults for whether to suppress Nonmem messages (<code>nmquiet</code> argument). Particularly, when <code>NMsim</code> is not waiting on Nonmem runs, it will by default suppress those messages. Basically, NMsim will now by default only show Nonmem terminal messages if it is waiting, and only one Nonmem model is executed. Notice, that <code>quiet=TRUE</code> implies suppressing both <code>NMsim</code> and Nonmem messages and <code>nmquiet=TRUE</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="nmsim-022">NMsim 0.2.2<a class="anchor" aria-label="anchor" href="#nmsim-022"></a></h2><p class="text-muted">CRAN release: 2025-05-06</p>
 <div class="section level3">

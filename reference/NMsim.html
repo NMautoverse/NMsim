@@ -17,7 +17,7 @@ get the most out of this."><meta name="google-site-verification" content="-8n-8O
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.904</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -494,8 +494,7 @@ simulations are run locally but not to if they are sent to the
 cluster. Waiting for them means that the results will be read
 when simulations are done. If not waiting, path(s) to `rds`
 files to read will be returned. Pass them through
-`NMreadSim()` (which also supports waiting for the simulations
-to finish).</p></dd>
+`NMreadSim()`. Conveniently, NMreadSim() also takes the `wait` argument too, allowing flexibility to run Nonmem in the background, and then read the results, still waiting for Nonmem to finish.</p></dd>
 
 
 <dt id="arg-text-sim">text.sim<a class="anchor" aria-label="anchor" href="#arg-text-sim"></a></dt>

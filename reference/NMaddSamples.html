@@ -13,7 +13,7 @@ time. This function was previously called `addEVID2()`."><meta name="google-site
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.904</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -240,27 +240,20 @@ only using column names in covs.data (from data) that are not in TIME.</p>
 <span class="r-in"><span><span class="va">seq.time.sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"SD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">seq.time.md</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>regimen<span class="op">=</span><span class="st">"MD"</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">seq.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">seq.time.sd</span>,<span class="va">seq.time.md</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">NMaddSamples</span><span class="op">(</span><span class="va">dt.doses</span>,TIME<span class="op">=</span><span class="va">seq.time</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">NMaddSamples</span><span class="op">(</span><span class="va">dt.doses</span>,TIME<span class="op">=</span><span class="va">seq.time</span>,CMT<span class="op">=</span><span class="fl">2</span>,by<span class="op">=</span><span class="st">"regimen"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ID TIME EVID CMT AMT MDV regimen</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1    0    1   1  10   1      SD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   1    0    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1    0    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1    1    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1    2    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   1    3    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   1   12    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   1   24    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2    0    1   1  10   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2    0    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2    0    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2    1    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2    2    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2    3    2   2  NA   1      SD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2   12    1   1  10   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2   12    2   2  NA   1      MD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2   24    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1    1    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1    2    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1    3    2   2  NA   1      SD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2    0    1   1  10   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2    0    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2   12    1   1  10   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2   12    2   2  NA   1      MD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2   24    2   2  NA   1      MD</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## All subjects get all samples (by=FALSE)</span></span></span>
+<span class="r-in"><span><span class="co">## All subjects get all samples</span></span></span>
 <span class="r-in"><span><span class="fu">NMaddSamples</span><span class="op">(</span><span class="va">dt.doses</span>,TIME<span class="op">=</span><span class="va">seq.time</span>,by<span class="op">=</span><span class="cn">FALSE</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ID TIME EVID CMT AMT MDV regimen</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1    0    1   1  10   1      SD</span>

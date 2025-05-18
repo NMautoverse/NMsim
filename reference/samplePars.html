@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.904</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ generate. Passed to `simpar`.</p></dd>
 <dd><p>The sampling method. Options are "mvrnorm" and
 "simpar". Each have pros and cons. Notice that both methods
 are fully automated as long as ".ext" and ".cov" files are
-available.</p></dd>
+available from model estimation.</p></dd>
 
 
 <dt id="arg-seed-r">seed.R<a class="anchor" aria-label="anchor" href="#arg-seed-r"></a></dt>
@@ -105,9 +105,23 @@ NMdataConf.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function was originally create by Sanaya Shroff and
-    Philip Delff for sampling using `simpar`. It has since been
-    generalized to support sampling with `mvrnorm()` too.</p>
+    <p>samplePars() uses internal methods to sample using
+    mvrnorm or simpar. Also be aware of NMsim_NWPRI which is based
+    on the Nonmem-internal NWPRI subroutine. NMsim_NWPRI is much
+    faster to execute.  Simulation with paramater uncertainty on
+    variance components (`OMEGA` and `SIGMA`) is only reliable
+    starting from Nonmem 7.6.0.</p>
+<p>mvrorm: The multivariate normal distribution does not ensure
+non-negative variances. Negative variances are not allowed and can
+not be simulated. To avoid this, `method=mvrnorm` truncates negative variance diagonal
+elements at zero.</p>
+<p>simpar: simpar must be installed.</p>
+<p>Please refer to publications and vignettes for more information on
+sampling methods.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
+    <p>Sanaya Shroff, Philip Delff</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
