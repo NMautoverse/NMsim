@@ -296,13 +296,13 @@ results)</li>
 how the data sets are created. So if you already have a prefered way to
 do this, that’s fine. NMsim provides convenient helper functions that
 can optionally be used. <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> creates just the
-dosing events, and <code><a href="../reference/addEVID2.html">addEVID2()</a></code> adds the sampling events. By
-default, doses are indicated using <code>EVID=1</code> and samples by
+dosing events, and <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> adds the sampling events.
+By default, doses are indicated using <code>EVID=1</code> and samples by
 <code>EVID=2</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,</span>
 <span>                       addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>Notice, <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> has many flexible and convenient
 features. See <code><a href="../reference/NMcreateDoses.html">?NMcreateDoses</a></code> and the vignette ond creating
 simulation data sets for more.</p>
@@ -591,18 +591,18 @@ DOSE
 <h4 id="adding-sampling-times">Adding sampling times<a class="anchor" aria-label="anchor" href="#adding-sampling-times"></a>
 </h4>
 <p>For adding sampling times to a set of doses and/or samples,
-<code><a href="../reference/addEVID2.html">addEVID2()</a></code> provides a similarly flexible interface. It
+<code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> provides a similarly flexible interface. It
 accepts data.frames with covariates allowing for different sampling
 schemes for different subject groups (say different dosing regimens),
 and dosing times can be supplied relative to previous dosing times.</p>
 <details><summary>
-Additional <code>addEVID2()</code> examples
+Additional <code>NMaddSamples()</code> examples
 </summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## a dosing data set with two doses</span></span>
 <span><span class="va">dt.dos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sampling based on time since previous dose</span></span>
-<span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
 <table class="table">
 <thead><tr>
@@ -772,7 +772,7 @@ NA
 </div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## TIME and TAPD can be combined - adding a follow-up</span></span>
-<span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,TIME<span class="op">=</span><span class="fl">96</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,TIME<span class="op">=</span><span class="fl">96</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
 <table class="table">
 <thead><tr>
@@ -965,7 +965,7 @@ NA
 </div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sampling two compartments - naming them</span></span>
-<span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
 <table class="table">
 <thead><tr>
