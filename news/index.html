@@ -24,7 +24,7 @@
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-forest.html">Simulation-based forest plots with NMsim</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
+    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Data Set Creation with NMsim</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ResidVar.html">Simulation with Residual Variability</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Simulate Models with Modifications</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ReuseSimSubjects.html">Reuse Simulated Subjects</a></li>
@@ -57,9 +57,9 @@
 <p>Forest plot vignette</p>
 <div class="section level3">
 <h3 id="new-features-0-2-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-3"></a></h3>
-<p>NMaddSamples by</p>
-<p>addEVID2 back in</p>
-<p>Streamlining of NMsim_VarCov and samplePars</p>
+<ul><li>
+<code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> gains a <code>by</code> argument.</li>
+</ul><p>Streamlining of NMsim_VarCov and samplePars</p>
 <p>samplePars() throws</p>
 </div>
 <div class="section level3">
@@ -69,6 +69,10 @@
 <div class="section level3">
 <h3 id="other-improvements-0-2-3">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-3"></a></h3>
 <ul><li>Improved defaults for whether to suppress Nonmem messages (<code>nmquiet</code> argument). Particularly, when <code>NMsim</code> is not waiting on Nonmem runs, it will by default suppress those messages. Basically, NMsim will now by default only show Nonmem terminal messages if it is waiting, and only one Nonmem model is executed. Notice, that <code>quiet=TRUE</code> implies suppressing both <code>NMsim</code> and Nonmem messages and <code>nmquiet=TRUE</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-0-2-3">Other Changes<a class="anchor" aria-label="anchor" href="#other-changes-0-2-3"></a></h3>
+<ul><li>The deprecated <code><a href="../reference/addEVID2.html">addEVID2()</a></code> is kept as a snapshot of when <code>NMsamples()</code> was introduced. The new <code>by</code> argument is not compatible with the default behavior of the deprecated <code><a href="../reference/addEVID2.html">addEVID2()</a></code>. This is to ensure reproducibility of existing code on the user side.</li>
 </ul></div>
 </div>
     <div class="section level2">

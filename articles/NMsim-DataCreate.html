@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Creation of Simulation Data Sets • NMsim</title>
+<title>Data Set Creation with NMsim • NMsim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="Creation of Simulation Data Sets">
+<script src="../extra.js"></script><meta property="og:title" content="Data Set Creation with NMsim">
 <meta name="google-site-verification" content="-8n-8OfzJii_lVruWfxXOhzUATKSgMdiSxMhOQoscu4">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-forest.html">Simulation-based forest plots with NMsim</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
+    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Data Set Creation with NMsim</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ResidVar.html">Simulation with Residual Variability</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Simulate Models with Modifications</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ReuseSimSubjects.html">Reuse Simulated Subjects</a></li>
@@ -74,7 +74,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Creation of Simulation Data Sets</h1>
+      <h1>Data Set Creation with NMsim</h1>
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
@@ -87,14 +87,37 @@ Delff</h4>
     
     
 <p>Built 2025-05-19 using NMsim 0.2.2.911.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>The purpose of data sets of interest in this vignette is succesfull
+and meaningful simulation with <code><a href="../reference/NMsim.html">NMsim()</a></code>.</p>
+<p>The data argument to NMsim() is essential to any simulation. For a
+simulation of new subjects, the <code>data</code> may be the only need
+argument In addition to a control stream file path.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,data<span class="op">=</span><span class="va">data.sim</span><span class="op">)</span></span></code></pre></div>
+<p><code>NMsim</code> and <code>NMdata</code> provide concise and
+feature-rich methods to create and check such data sets.</p>
+<p>NMsim() does not require simulation data sets to be created using
+NMsim functions. If already accustumed to other data set generation
+tools, you can most likely continue using those with
+<code><a href="../reference/NMsim.html">NMsim()</a></code>.</p>
+<p>However created, The NMsim() <code>data</code> argument must</p>
+<ul>
+<li>be a <code>data.frame</code>
+</li>
+<li>its columns names are exact NONMEM <code>$DATA</code> variables</li>
+</ul>
+<p>Checking the data set before running Nonmem can significantly
+simplify identification of data set issues. This vignette uses
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> for automated checks of several value
+types and other properties of data sets. Like <code>NMsim</code>,
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> does not depend on how the data set was
+created.</p>
 <div class="section level3">
 <h3 id="a-basic-simulation-data-set">A basic simulation data set<a class="anchor" aria-label="anchor" href="#a-basic-simulation-data-set"></a>
 </h3>
-<p>As long as a simulation data set is in a <code>data.frame</code>
-structure with columns and values compatible with the Nonmem model(s) to
-be simulated, it does not matter to <code>NMsim</code> how it was
-created. However, <code>NMsim</code> and <code>NMdata</code> do provide
-powerful methods to easily create such data sets.</p>
 <p>As an example we create a regimen with a loading dose of 300 mg
 followed by 150 QD for 6 days. We dose into compartment 1, and we want
 to simulate samples in the second compartment. These numbers depend on
@@ -102,7 +125,7 @@ the model which the data set is intended to be used with.</p>
 <p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> is a flexible function that creates
 dosing records based on a concise syntax. We add a label to the regimen
 right away.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### multiple dose regimens with loading are easily created with NMcreateDoses too</span></span>
 <span><span class="co">## We use ADDL+II (either method easy)</span></span>
 <span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
@@ -148,19 +171,18 @@ right away.</p>
 </tbody>
 </table>
 </div>
-<p>Now we add the sample records using <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Add simulation records - longer for QD regimens</span></span>
-<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,time.sim<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `addEVID2()` is deprecated and is no longer maintained. Use `NMaddSamples()` instead.</span></span>
-<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span></code></pre></div>
-<p><code>dat.sim</code> is now a valid simulation data set with one
-subject. However, even though <code><a href="../reference/addEVID2.html">addEVID2()</a></code> does try to order
-the data in a meaningful way, it is recommended to always manually order
-the data set. We use <code>data.table</code>’s <code><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder()</a></code>.
-<code>dplyr::arrange</code> can just as well be used. A row identifier
-(counter) can make post-processing easier, so we add that too.</p>
+<p>Now we add the sample records using <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Add simulation records - longer for QD regimens</span></span>
+<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><code>dat.sim</code> is now a valid simulation data set with one
+subject. However, even though <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> does try to
+order the data in a meaningful way, it is recommended to always manually
+order the data set. We use <code>data.table</code>’s
+<code><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder()</a></code>. <code>dplyr::arrange</code> can just as well be
+used. A row identifier (counter) can make post-processing easier, so we
+add that too.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sort data set </span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## Adding a row identifier (generally not necessary but recommended)</span></span>
@@ -171,7 +193,7 @@ here is a simple way to show dosing amounts and sample times.
 doses coded with <code>ADDL</code>/<code>II</code> in order to get a
 data row to plot for each dose. We also take the sum of the amounts by
 time point in case doses are simultaneous.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="va">dtplot</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">AMT</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">CMT</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
@@ -308,11 +330,14 @@ columns to the right</li>
 <p>Finally, We check the simulation data set for various potential
 issues in Nonmem data sets using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> and
 summarize the number of doses and observations:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## until NMdata 0.1.7 NMcheckData requires a DV column</span></span>
 <span><span class="va">dat.sim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA_real_</span><span class="op">]</span></span>
 <span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No findings. Great!</span></span></code></pre></div>
+<p>Be aware that <code><a href="../reference/NMsim.html">NMsim()</a></code> does <em>not</em> reorder rows
+before simulation. The user is responsible for ordering the simulation
+data.</p>
 </div>
 <div class="section level3">
 <h3 id="add-time-after-previous-dose-and-related-information">Add time after previous dose and related information<a class="anchor" aria-label="anchor" href="#add-time-after-previous-dose-and-related-information"></a>
@@ -321,7 +346,7 @@ summarize the number of doses and observations:</p>
 previous dose may be the relevant time to analyze the simulation results
 against. We use <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
 automatically.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
@@ -474,15 +499,14 @@ automatically.</p>
 </tbody>
 </table>
 </div>
-<p>Here is something important to decide for simulations. Notice
-<code>TAPD</code> for the sample at <code>TIME==0</code>.
+<p>Notice <code>TAPD</code> for the sample at <code>TIME==0</code>.
 <code>addTAPD</code> does not use the order of the data set to determine
 the time-order or the records. The default behavior of
 <code>addTAPD</code> is to treat a sample taken at the exact same time
 as a dose as a pre-dose. If instead we want them to be considered
 post-dose, we have to specify how to order <code>EVID</code>
 numbers.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## order.evid=c(1,2) means doses are ordered before EVID=2 records</span></span>
 <span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## now the TIME=0 sample has TAPD=0</span></span>
@@ -645,12 +669,10 @@ features.</p>
 <div class="section level3">
 <h3 id="multiple-endpoints-e-g--parent-and-metabolite">Multiple endpoints (e.g. parent and metabolite)<a class="anchor" aria-label="anchor" href="#multiple-endpoints-e-g--parent-and-metabolite"></a>
 </h3>
-<p>Pass a data.frame to <code>addEVID2</code>’s CMT argument to include
-multiple endpoints.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">doses</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span>,time.sim<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `addEVID2()` is deprecated and is no longer maintained. Use `NMaddSamples()` instead.</span></span>
-<span><span class="co">#&gt; Argument time.sim is deprecated. Use TIME instead.</span></span></code></pre></div>
+<p>Pass a data.frame to <code>NMaddSamples</code>’s CMT argument to
+include multiple endpoints.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span>,TIME<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
 <table style="width:100%;" class="table">
 <colgroup>
@@ -757,9 +779,9 @@ multiple endpoints.</p>
 <div class="section level3">
 <h3 id="cohort-dependent-or-individual-sampling-schemes">Cohort-dependent or individual sampling schemes<a class="anchor" aria-label="anchor" href="#cohort-dependent-or-individual-sampling-schemes"></a>
 </h3>
-<p>Same way as for the <code>CMT</code> argument, <code>time.sim</code>
-can also be a <code>data.frame</code>. If it contains a covariate found
-in the doses data, the added simulation times will be merged on
+<p>Same way as for the <code>CMT</code> argument, <code>TIME</code> can
+also be a <code>data.frame</code>. If it contains a covariate found in
+the doses data, the added simulation times will be merged on
 accordingly. You can use say a cohort identifier, or it could be
 <code>ID</code> which allows you to reuse (all or parts of) the observed
 sample times.</p>
@@ -771,6 +793,7 @@ sample times.</p>
 <code>EVID=2</code> (which means they are neither doses, samples, nor
 resetting events) for these records. Should you want to change that
 (maybe to <code>EVID=0</code>), use the <code>EVID</code> argument.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
