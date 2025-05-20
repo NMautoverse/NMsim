@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.911</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.922</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,16 +51,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.3" id="nmsim-023">NMsim 0.2.3<a class="anchor" aria-label="anchor" href="#nmsim-023"></a></h2>
-<p>Posters</p>
-<p>VPC - filters</p>
-<p>Streamlined sim with variability</p>
-<p>Forest plot vignette</p>
 <div class="section level3">
 <h3 id="new-features-0-2-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-3"></a></h3>
-<ul><li>
-<code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> gains a <code>by</code> argument.</li>
-</ul><p>Streamlining of NMsim_VarCov and samplePars</p>
-<p>samplePars() throws</p>
+<ul><li><p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> gains a <code>by</code> argument. This makes <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> easy to use for generation of both nominal sampling schemes and recreation of observed sampling schemes.</p></li>
+<li><p>Streamlining of <code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> and <code><a href="../reference/samplePars.html">samplePars()</a></code>. <code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> now always calls <code><a href="../reference/samplePars.html">samplePars()</a></code> internally. <code><a href="../reference/samplePars.html">samplePars()</a></code> uses the <code>method</code> argument to switch between <code>mvrnorm</code>(multivariate normal distribution) and <code>simpar</code> (inverse Wishart distribution.</p></li>
+<li><p><code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> gains <code>method.sample</code> argument which is passed as <code>method</code> to <code><a href="../reference/samplePars.html">samplePars()</a></code>. This means <code><a href="../reference/NMsim_VarCov.html">NMsim_VarCov()</a></code> can be used to simulated with parameter uncertainty using either <code>mvrnorm</code> or <code>simpar</code>.</p></li>
+</ul><p>Messages have been implemented in samplePars() to summarize number of truncations in case <code>mvrnorm</code> results in negative variance parameters.</p>
 </div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-3">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-3"></a></h3>
