@@ -3,6 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   examples: examples.html
+  examples2: examples2.html
   NMsim-basics: NMsim-basics.html
   NMsim-config: NMsim-config.html
   NMsim-DataCreate: NMsim-DataCreate.html
@@ -20,7 +21,7 @@ articles:
   NMsim-TypSubj: NMsim-TypSubj.html
   NMsim-varyPars: NMsim-varyPars.html
   NMsim-VPC: NMsim-VPC.html
-last_built: 2025-05-28T03:01Z
+last_built: 2025-05-29T23:01Z
 urls:
   reference: https://NMautoverse.github.io/NMsim/reference
   article: https://NMautoverse.github.io/NMsim/articles
