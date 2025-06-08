@@ -88,8 +88,8 @@ extention on `file.mod` with `.ext`. This is only used if
 
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
 <dd><p>A list of lists. Each list specifies a parameter
-with named elements. Must be named by the parameter name. ll,
-ul and fix can be supplied to modify the parameter. See
+with named elements. Must be named by the parameter name. lower,
+upper and fix can be supplied to modify the parameter. See
 examples. Notice, you can use `...` instead. `values` may be easier for programming but other than that, most users will find `...` more intuitive.</p></dd>
 
 
@@ -116,11 +116,6 @@ as a new input control stream.</p></dd>
 <span class="r-in"><span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="st">"theta(2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             <span class="st">"THETA(3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FIX<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             <span class="st">"omega(2,2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">NMwriteInits</span><span class="op">(</span><span class="va">file.mod</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"theta(2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"THETA(3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FIX<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"omega(2,2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
