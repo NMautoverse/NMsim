@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>NMsim - Seamless NONMEM Simulation Platform in R • NMsim</title>
+<title>Simulation with Modifications to Parameters and Model Code • NMsim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="NMsim - Seamless NONMEM Simulation Platform in R">
+<script src="../extra.js"></script><meta property="og:title" content="Simulation with Modifications to Parameters and Model Code">
 <meta name="google-site-verification" content="1z2VLiQgr7hTGMX0G9VbQ3MzwU_Q9WWRLpdXynhsg30">
 </head>
 <body>
@@ -73,7 +73,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>NMsim - Seamless NONMEM Simulation Platform in R</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Simulation with Modifications to Parameters and Model Code</h1>
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                                     <h4 data-toc-skip class="author">Simone
@@ -180,15 +180,15 @@ div.data {
 <!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> --><div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette introduce the <code>NMsim</code> feature that allows
-users to specify modifications to a <code>NONMEM</code> model. The
-NONMEM control stream can be edited directly from within the
-<code>NMsim</code> function call in the <code>R</code> script via the
-flexible interface provided by the argument <code>modify.model</code>.
-The edits can be applied to any section of the control stream, and most
-commonly they will affect the <code>$PK</code> or <code>$PRED</code>
-sections, or even the <code>$DES</code> or <code>$MODEL</code> sections
-when needed. Note that, since the data related sections
+<p>This vignette introduce <code>NMsim</code> features that allows users
+to specify modifications to a <code>NONMEM</code> model. The NONMEM
+control stream can be edited directly from within the <code>NMsim</code>
+function call in the <code>R</code> script via the flexible interface
+provided by the argument <code>modify.model</code>. The edits can be
+applied to any section of the control stream, and most commonly they
+will affect the <code>$PK</code> or <code>$PRED</code> sections, or even
+the <code>$DES</code> or <code>$MODEL</code> sections when needed. Note
+that, since the data related sections
 (<code>$INPUT</code>,<code>$DATA</code>,<code>$TABLE</code>) are
 automatically handled by NMsim, it will be rarely necessary that they
 are edited via the <code>modify.model</code> argument. Additionally the
@@ -240,7 +240,7 @@ Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections
 None of these configurations are specific to using the modify.model argument. In a prerequisites section, you can mention that the user may need to config a little (as described in te intro vignette) and then you can omit this section. --><!-- REFERENCED in INTRO and removed from here --- NMsim must be configured with the path to the NONMEM executable. This can be done for each `NMsim()` call using the `path.nonmem` argument, but more easily it can be configured globally the following way. Also including where NMsim will run NONMEM and store intermediate files (`dir.sims`) and where to store final results (`dir.res`). --><!-- ```{r,echo=TRUE,eval=FALSE} --><!-- library(NMdata) --><!-- library(NMsim) --><!-- ## Point NMsim to your NONMEM exectuable - looks like this on linux/osx --><!-- NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75") --><!-- ## or on Windows, it could be --><!-- NMdataConf(path.nonmem = "c:/nm75g64/run/nmfe75.bat") --><!-- NMdataConf(dir.sims="simtmp-modify", ## location of sim tmp files --><!--            dir.res="simres-modify", --><!--            as.fun="data.table")  ## location of sim results --><!-- ``` -->
 </div>
 <div class="section level2">
-<h2 id="change-in-formulation-example-">Change in formulation Example.<a class="anchor" aria-label="anchor" href="#change-in-formulation-example-"></a>
+<h2 id="example-change-in-formulation">Example: Change in formulation<a class="anchor" aria-label="anchor" href="#example-change-in-formulation"></a>
 </h2>
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 
