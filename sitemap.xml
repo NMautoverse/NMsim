@@ -64,6 +64,7 @@
 <url><loc>https://NMautoverse.github.io/NMsim/reference/add.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/addEVID2.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/addResVar.html</loc></url>
+<url><loc>https://NMautoverse.github.io/NMsim/reference/as.NMctl.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/callNonmemDirect.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/checkTimes.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/cleanStrings.html</loc></url>
@@ -85,6 +86,7 @@
 <url><loc>https://NMautoverse.github.io/NMsim/reference/prettyMatLines.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/print.summary_NMsimRes.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/prioritizePaths.html</loc></url>
+<url><loc>https://NMautoverse.github.io/NMsim/reference/readCtl.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/readParsWide.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/sampleCovs.html</loc></url>
 <url><loc>https://NMautoverse.github.io/NMsim/reference/samplePars.html</loc></url>
