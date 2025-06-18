@@ -62,7 +62,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">June 14, 2025 using NMsim
+            <h4 data-toc-skip class="date">June 18, 2025 using NMsim
 0.2.3.906</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
@@ -87,10 +87,10 @@ following purposes</p>
 internal Nonmem execution method. That means, we need to provide the
 path to the Nonmem executable.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span>path.nonmem<span class="op">=</span><span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span><span class="op">)</span></span></code></pre></div>
-<p>More information on configuration and test of configuration at <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a>.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMsim/reference/NMdataConf.html">NMdataConf</a></span><span class="op">(</span>path.nonmem<span class="op">=</span><span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span><span class="op">)</span></span></code></pre></div>
+<p>More information on configuration and test of configuration at <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-config.html"><code>NMsim-config.html</code></a>.</p>
 <p>You should be familiar with basic <code>NMsim</code> arguments as
-described in <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html" class="external-link"><code>NMsim-intro.html</code></a>.
+described in <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>.
 That vignette mostly talks about the default simulation method (new
 subjects). This vignette provides various examples on how the
 <code>NMsim_EBE</code> simulation method can be used to simulate “known”
@@ -150,7 +150,7 @@ curves we use hourly sampling.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## read model results just to extract the observed ID's. Notice, if</span></span>
 <span><span class="co">## your model uses covariates, those should be retrieved too.</span></span>
-<span><span class="va">res.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">res.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMsim/reference/NMscanData.html">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res.mod</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>,<span class="st">"WEIGHTB"</span>,<span class="st">"AGE"</span>,<span class="st">"MALEN"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Repeat the simulation data set for each ID and order accordingly</span></span>
@@ -158,12 +158,12 @@ curves we use hourly sampling.</p>
 <span><span class="co">## we will merge with all the observed subjects in stead of the single</span></span>
 <span><span class="co">## ID in the original data set.</span></span>
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/egdt.html" class="external-link">egdt</a></span><span class="op">(</span><span class="va">ids</span>,</span>
+<span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMsim/reference/egdt.html">egdt</a></span><span class="op">(</span><span class="va">ids</span>,</span>
 <span>                      <span class="va">dat.sim</span></span>
 <span>                      <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## check data</span></span>
-<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://nmautoverse.github.io/NMsim/reference/NMcheckData.html">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                      data<span class="op">=</span><span class="va">dat.sim.known</span>,</span>
@@ -203,7 +203,7 @@ simulated subjects in multiple simulations for reproducibility and to
 have all difference between say simulation results of different regimens
 be driven by differences in the regimen, and not in the populations.
 This use of <code>NMsim_EBE</code> is on the todo list tog get it’s own
-vignette <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-ReuseSimSubjects.html" class="external-link">here</a>.</p></li>
+vignette <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-ReuseSimSubjects.html">here</a>.</p></li>
 </ul>
 <div class="section level3">
 <h3 id="simulate-individual-dosing-history-at-new-individual-sampling-times-for-a-pkpd-dataset">Simulate individual dosing history at new individual sampling times
@@ -245,7 +245,7 @@ records to simulation records (<code>EVID=2</code> instead of
 <code>EVID=0</code>).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Take dose records from PK model estimation input data</span></span>
-<span><span class="va">pkres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">pkres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMsim/reference/NMscanData.html">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">pkdos</span> <span class="op">&lt;-</span> <span class="va">pkres</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">1</span>,<span class="fu">.</span><span class="op">(</span><span class="va">ID</span>, <span class="va">TIME</span>, <span class="va">EVID</span>, <span class="va">CMT</span>, <span class="va">AMT</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">## Take PD data observation records (`pdsamples`)</span></span>
 <span><span class="va">pdsamples</span> <span class="op">&lt;-</span> <span class="va">pd</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">0</span>,<span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">LIDV</span><span class="op">)</span><span class="op">]</span></span>

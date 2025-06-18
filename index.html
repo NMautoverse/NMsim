@@ -19,7 +19,7 @@
 <script src="extra.js"></script><meta property="og:title" content="Seamless Nonmem Simulation Platform">
 <meta name="description" content="A complete and seamless Nonmem simulation interface within R. Turns Nonmem control streams into simulation control streams, executes them with specified simulation input data and returns the results. The simulation is performed by Nonmem, eliminating manual work and risks of re-implementation of models in other tools.">
 <meta property="og:description" content="A complete and seamless Nonmem simulation interface within R. Turns Nonmem control streams into simulation control streams, executes them with specified simulation input data and returns the results. The simulation is performed by Nonmem, eliminating manual work and risks of re-implementation of models in other tools.">
-<meta property="og:image" content="https://NMautoverse.github.io/NMsim/logo.png">
+<meta property="og:image" content="https://nmautoverse.github.io/NMsim/logo.png">
 <meta name="google-site-verification" content="1z2VLiQgr7hTGMX0G9VbQ3MzwU_Q9WWRLpdXynhsg30">
 </head>
 <body>
@@ -66,7 +66,7 @@
 </div>
 <!-- badges: start -->
 
-<p>Please make sure to read this at <a href="https://NMautoverse.github.io/NMsim/"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
+<p>Please make sure to read this at <a href="https://NMautoverse.github.io/NMsim/" class="external-link"><code>The NMsim website</code></a> where you can browse several vignettes with examples on specific topics.</p>
 <p><code>NMsim</code> is an R package that can simulate Nonmem models (using the <code>NMsim</code> function) based on just a simulation data set and a path to an estimation control stream. It will retrive and combine output tables with input data once Nonmem has finished and return the results to R.</p>
 <p>The interface is “seamless” or fully integrated in R. Run a simulation of the (estimated) model stored in “path/to/file.mod” using the simulation input data set stored in the variable <code>data.sim</code> this way:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -90,7 +90,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="va">variable</span><span class="op">==</span><span class="st">"Y"</span><span class="op">]</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Hours since first dose"</span>,y<span class="op">=</span><span class="st">"Concentration (ng/mL)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-simple-sim-1.png" width="100%"></p>
-<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>. Go there next to get started with <code>NMsim</code>.</p>
+<p>This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html" class="external-link"><code>NMsim-intro.html</code></a>. Go there next to get started with <code>NMsim</code>.</p>
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
@@ -114,7 +114,7 @@
 <li>Specify parameter values, other than final estimates (<code>inits</code> argument)</li>
 <li>Custom modification of control stream sections (<code>modify</code> argument)</li>
 </ul>
-<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>. It is really easy.</p>
+<p>To learn how to run these simulations on your Nonmem models, get started with <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html" class="external-link"><code>NMsim-intro.html</code></a>. It is really easy.</p>
 <p>In addition, <code>NMsim</code> can simulate multiple models at a time. E.g., if a bootstrap run of a model is available, NMsim can run the simulation with each of the bootstrap models and collect all the results in one dataset. This provides a robust and easy way to simulate a Nonmem model with uncertainty.</p>
 <p>You can also write your own methods, if you have some other Nonmem-based simulation (or other job) you want to automate using <code>NMsim</code>.</p>
 <p>Many features are available. Prominent ones are:</p>
