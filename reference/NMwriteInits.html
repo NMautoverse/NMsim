@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.908</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.909</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,7 @@
 <span>  update <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  file.ext <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">ext</span>,</span>
+<span>  <span class="va">inits.tab</span>,</span>
 <span>  <span class="va">values</span>,</span>
 <span>  <span class="va">newfile</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -63,7 +64,9 @@
 
 <dt id="arg-update">update<a class="anchor" aria-label="anchor" href="#arg-update"></a></dt>
 <dd><p>If `TRUE` (default), the parameter values are
-updated based on the `.ext` file.</p></dd>
+updated based on the `.ext` file. The path to the `.ext` file
+can be specified with `file.ext` but that is normally not
+necessary.</p></dd>
 
 
 <dt id="arg-file-ext">file.ext<a class="anchor" aria-label="anchor" href="#arg-file-ext"></a></dt>
@@ -73,11 +76,26 @@ extention on `file.mod` with `.ext`. This is only used if
 `update=TRUE`.</p></dd>
 
 
+<dt id="arg-ext">ext<a class="anchor" aria-label="anchor" href="#arg-ext"></a></dt>
+<dd><p>An long-format parameter table as returned by
+`NMreadExt()`. Can contain multiple models if `file.mod` does
+not.</p></dd>
+
+
+<dt id="arg-inits-tab">inits.tab<a class="anchor" aria-label="anchor" href="#arg-inits-tab"></a></dt>
+<dd><p>A wide-format parameter table, well suited for
+customizing initial values, limits, and for fixing
+parameters. For multiple custom parameter specifications, this
+may be the most suitable argument.</p></dd>
+
+
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
 <dd><p>A list of lists. Each list specifies a parameter
-with named elements. Must be named by the parameter name. lower,
-upper and fix can be supplied to modify the parameter. See
-examples. Notice, you can use `...` instead. `values` may be easier for programming but other than that, most users will find `...` more intuitive.</p></dd>
+with named elements. Must be named by the parameter
+name. `lower`, `upper` and `fix` can be supplied to modify the
+parameter. See examples. Notice, you can use `...`
+instead. `values` may be easier for programming but other than
+that, most users will find `...` more intuitive.</p></dd>
 
 
 <dt id="arg-newfile">newfile<a class="anchor" aria-label="anchor" href="#arg-newfile"></a></dt>
@@ -93,16 +111,28 @@ as a new input control stream.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a control stream as lines in a character vector.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Limitations:</p><ul><li><p>`NMwriteInits()` can only update specifications of existing
+parameters. It cannot insert new parameters.</p></li>
+<li><p>lower, init, and upper must be on same line</p></li>
+<li><p>If using something like CL=(.1,4,15), two of those cannot be
+on the same line</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Requires NMdata 0.1.9</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span> </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,package<span class="op">=</span><span class="st">"NMdata"</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="fu">NMwriteInits</span><span class="op">(</span><span class="va">file.mod</span>,</span></span>
 <span class="r-in"><span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="st">"theta(2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             <span class="st">"THETA(3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FIX<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             <span class="st">"omega(2,2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">NMwriteInits</span><span class="op">(</span><span class="va">file.mod</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"theta(2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">1.4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"THETA(3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FIX<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"omega(2,2)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>

@@ -17,7 +17,7 @@ get the most out of this."><meta property="og:image" content="https://nmautovers
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.908</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.909</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -409,7 +409,7 @@ specific installation of PSN on your system.</p></dd>
 
 <dt id="arg-args-psn-execute">args.psn.execute<a class="anchor" aria-label="anchor" href="#arg-args-psn-execute"></a></dt>
 <dd><p>A charachter string that will be passed as
-arguments PSN's `execute`.</p></dd>
+arguments PSN's `execute`. Notice, if `path.nonmem` is provided, the default is not to use PSN.</p></dd>
 
 
 <dt id="arg-args-nmscandata">args.NMscanData<a class="anchor" aria-label="anchor" href="#arg-args-nmscandata"></a></dt>
@@ -486,8 +486,8 @@ files to read will be returned. Pass them through
 <dt id="arg-text-sim">text.sim<a class="anchor" aria-label="anchor" href="#arg-text-sim"></a></dt>
 <dd><p>A character string to be pasted into
 $SIMULATION. This must not contain seed or SUBPROBLEM which
-are handled separately. Default is to include "ONLYSIM". You
-cannot avoid that using `text.sim`. Instead, you can use
+is handled separately. Default is to include "ONLYSIM". You
+cannot avoid that using `text.sim`. If needed, you can use
 `onlysim=FALSE` which will be passed to `NMsim_default()`.</p></dd>
 
 
@@ -562,7 +562,7 @@ instead.</p></dd>
 
 
 <dt id="arg-file-ext">file.ext<a class="anchor" aria-label="anchor" href="#arg-file-ext"></a></dt>
-<dd><p>Depecated. Use
+<dd><p>Deprecated. Use
 `inits=list(file.ext="path/to/file.ext")` instead. Optionally
 provide a parameter estimate file from Nonmem. This is
 normally not needed since `NMsim` will by default use the ext
@@ -647,7 +647,6 @@ valid for simulation of `$THETA` variability. The method accepts a
 table of parameter values that can be produced with other tools
 than `NMsim`. For simulation with parameter variability based on
 bootstrap results, use <code>NMsim_default</code>.</p></li>
-<li><p><code>NMsim_typical</code> Deprecated. Use <code>typical=TRUE</code> instead.</p></li>
 </ul></div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
