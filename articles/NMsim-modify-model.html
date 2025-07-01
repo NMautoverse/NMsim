@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.910</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.913</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,16 +56,16 @@
 </nav><div class="container template-article">
 
 
-<div class="row">
+
+<link href="NMsim-modify-model_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="NMsim-modify-model_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="NMsim-modify-model_files/highlight-8.9.1/highlight.min.js"></script><script src="NMsim-modify-model_files/difflib-1/difflib.js"></script><link href="NMsim-modify-model_files/codediff-1/codediff.css" rel="stylesheet">
+<link href="NMsim-modify-model_files/codediff-1/googlecode.css" rel="stylesheet">
+<script src="NMsim-modify-model_files/codediff-1/codediff.js"></script><script src="NMsim-modify-model_files/diffr-binding-0.3.0/diffr.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simulation with Modifications to Parameters and Model Code</h1>
-                        <h4 data-toc-skip class="author">Philip
-Delff</h4>
-                                    <h4 data-toc-skip class="author">Simone
-Cassani</h4>
+                        <h4 data-toc-skip class="author">Simone Cassani,
+Philip Delff</h4>
                         
-            <h4 data-toc-skip class="date">June 26, 2025 using NMsim
-0.2.3.910</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-modify-model.Rmd" class="external-link"><code>vignettes/NMsim-modify-model.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-modify-model.Rmd</code></div>
@@ -76,137 +76,130 @@ Cassani</h4>
 <style type="text/css">
 
 body{
-  font-size: 12pt;
+    font-size: 12pt;
 }
 
 h1.title {
-  font-size: 24px;
-  color: DarkRed;
-  margin-top: 2em;
-  margin-bottom: 1em;
+    font-size: 24px;
+    color: DarkRed;
+    margin-top: 2em;
+    margin-bottom: 1em;
 }
 h1 { /* Header 1 */
-  font-size: 20px;
-  color: DarkBlue;
+    font-size: 20px;
+    color: DarkBlue;
 }
 h2 { /* Header 2 */
-  margin-top: 1em;
-  font-size: 20px;
-  color: DarkBlue;
+    margin-top: 1em;
+    font-size: 20px;
+    color: DarkBlue;
 }
 h3 { /* Header 3 */
-  font-size: 18px;
-  font-family: "Times New Roman", Times, serif;
-  color: DarkBlue;
+    font-size: 18px;
+    font-family: "Times New Roman", Times, serif;
+    color: DarkBlue;
 }
 h4 { /* Header 4 */
-  font-size: 16px;
-  font-family: "Times New Roman", Times, serif;
-  color: DarkBlue;
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+    color: DarkBlue;
 }
 table.Rtable1 {
     font-size: 12px;
 }
 
 .superbigimage{
-      overflow-x:scroll;
-      white-space: nowrap;
-  }
+    overflow-x:scroll;
+    white-space: nowrap;
+}
 
 .superbigimage img{
-     max-width: none;
-  }
-  
+    max-width: none;
+}
+
 h4.author {
-  font-weight:bold;
-  font-style:italic;
-  margin-top: 0em;
-  margin-bottom: 1em;
+    font-weight:bold;
+    font-style:italic;
+    margin-top: 0em;
+    margin-bottom: 1em;
 }
 h4.date {
-  font-weight:bold;
-  margin-top: 0em;
-  margin-bottom: 5em;
+    font-weight:bold;
+    margin-top: 0em;
+    margin-bottom: 5em;
 }
 
 
 /* -----------div tips------------- */
 
 div.summary {
- padding: 1em;
- margin: 1em;
- padding-left: 50px;
- background-size: 30px;
- background-repeat: no-repeat;
- background-position: 10px 10px;
- min-height: 40px;
- font-size: 16px;
- color: #000000;
- background-color: #bed3ec;
- border: solid 5px #dfedff;
- /* background-image: url("Summary_ffffff.png"); */
+    padding: 1em;
+    margin: 1em;
+    padding-left: 50px;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    min-height: 40px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #bed3ec;
+    border: solid 5px #dfedff;
+    /* background-image: url("Summary_ffffff.png"); */
 }
 
 div.data {
- padding: 1em;
- margin: 1em;
- padding-left: 50px;
- background-size: 30px;
- background-repeat: no-repeat;
- background-position: 10px 10px;
- min-height: 40px;
- font-size: 16px;
- color: #000000;
- background-color: #FAD07D;
- border: solid 5px #FFDE9C;
- /* background-image: url("Stats graph_ffffff.png"); */
+    padding: 1em;
+    margin: 1em;
+    padding-left: 50px;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    min-height: 40px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #FAD07D;
+    border: solid 5px #FFDE9C;
+    /* background-image: url("Stats graph_ffffff.png"); */
 }
 
 </style>
 <!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> --><div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette introduce <code>NMsim</code> features that allows users
-to specify modifications to a <code>NONMEM</code> model. The NONMEM
-control stream can be edited directly from within the <code>NMsim</code>
-function call in the <code>R</code> script via the flexible interface
-provided by the argument <code>modify.model</code>. The edits can be
-applied to any section of the control stream, and most commonly they
-will affect the <code>$PK</code> or <code>$PRED</code> sections, or even
-the <code>$DES</code> or <code>$MODEL</code> sections when needed. Note
-that, since the data related sections
-(<code>$INPUT</code>,<code>$DATA</code>,<code>$TABLE</code>) are
-automatically handled by NMsim, it will be rarely necessary that they
-are edited via the <code>modify.model</code> argument. Additionally the
-<code>NMsim</code> function has specific arguments regarding the
-<code>$TABLE</code> sections, namely <code>table.vars</code> and
-<code>table.options</code>.</p>
-<p>Notice, until NMsim 0.1.0, the <code>modify.model</code> argument was
-called <code>list.sections</code>, and it was characterized by a
-different formatting and level of flexibility. The helper functions
-<code>add</code> and <code>overwrite</code> were introduced with NMsim
-0.1.3, to add and overwrite control stream lines, respectively. Until
-then, custom modification functions had to be provided like described in
-the section “Edit control stream using customized functions’.</p>
-<p>This vignette illustrates some examples and applications of the use
-of the <code>modify.model</code> argument.</p>
-<p>An initial configuration, described in the Introductory NMsim
-vignette <strong>add_link</strong>, might be necessary for the correct
-functioning of the NMsim library.</p>
+<p>The introduction examples and the other examples show how to perform
+various types of simulations, such as typical subject simulations,
+simulations of new subjects, simulation of known subjects, and
+simulation with parameter uncertainty. As different as these simulations
+may be, they are all simulations of a model, exactly as specified or
+exactly as estimated. The examples in this document focus on how
+modifications to the estimated model can be specified. As will be shown,
+NMsim provides very flexible and easy-to-use methods to obtain such
+modifications, all contained within the <code><a href="../reference/NMsim.html">NMsim()</a></code> interface
+itself.</p>
 </div>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
-<!-- DONE --- Philip comments:
-The introduction can be clearer. I would say we can assume the reader is familiar with basic use of NMsim at this point. A prerequisite section can even lay that out, and that can be the NMsim-intro vignette.
-This vignette rather allows NMsim user to specify modifications to nonmem models to be simulated. The current wording "run a model" is technically correct but for now, I think we should just focus on simulation, so I would use that verb rather than "run". 
-"This option" is not clear. The modfify.model argument  should probably be very briefly introduced, maybe in an "Introduction" section before this. It is a flexible interface to edit the control stream before simulation. -->
-<p>The examples described below use the <code>modify.model</code>
-argument to modify the NONMEM control stream and to address the
-following pharmacometric questions:</p>
+<p>This document aims at enabling you to do the following tasks.</p>
+<ul>
+<li><p>Control whether and how to update parameter values according to
+the final model parameter estimates using the <code>inits</code>
+argument.</p></li>
+<li><p>Modify model parameter values (<code>$THETA</code>,
+<code>$OMEGA</code> and <code>SIGMA</code>) to specify values using the
+<code>inits</code> argument</p></li>
+<li><p>Use the <code>modify</code> argument to do custom manipulations
+of any parts of the control stream before simulation.</p></li>
+<li><p>Modify data exclusions/inclusions (<code>$IGNORE/$ACCEPT</code>)
+using the <code>filters</code> argument.</p></li>
+<li><p>Adjust <code>$SIZES</code> variables using the <code>sizes</code>
+argument.</p></li>
+</ul>
 <!-- DONE --- Philip comments :
 The examples are great. This is the "Objectives" section. So maybe before each question, say what is done, like: 
-Modify KA: How is the conc-time profile.....? -->
+Modify KA: How is the conc-time profile.....? --><p>The examples described below use the <code>modify</code> argument to
+modify the NONMEM control stream and to address the following
+pharmacometric questions:</p>
 <ul>
 <li>Modify <code>KA</code>: How is the concentration-time profile
 affected if switching formulation (reducing absorption rate) by a range
@@ -221,12 +214,85 @@ integrate AUC during model simulation leveraging the benefits of using a
 sparse grid via <code>NMsim</code>?</li>
 </ul>
 <!-- DONE --- Philip comment: This wording can be clearer. Use nonmem to integrate AUC, with benefit that a sparse simulation grid can be used? --><!-- REMOVED # Variable Parameters --><!-- DONE Philip comment:
-The first part of this section could be elaborated a little and be called "Introduction" and put before the "objectives". list.sections is not formatted the same way as modify.model.  --><!-- modify.model is a flexible interface that allows for modification of control stream sections before a simulation is performed. modify.model can be used to edit any section in a control stream but most commonly, this would be the $PK or $PRED section, or it could be $DES and $MODEL if needed. --><!-- Remember that data related sections like $INPUT, $DATA, and $TABLE are automatically handled by NMsim, and it should not be necessary to consider those. For the $TABLE section specifically, look at the `table.vars` and `table.options` arguments instead. --><!-- MOVED TO INMTRODUCTION :Sometimes we want to simulate with some modification to the estimated model. NMsim canmake such user-specified modifications to the model before simulating through the `modify.model` argument.
-Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections`. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions." --><!-- # Configuration --><!-- DONE : Philip comment:
-None of these configurations are specific to using the modify.model argument. In a prerequisites section, you can mention that the user may need to config a little (as described in te intro vignette) and then you can omit this section. --><!-- REFERENCED in INTRO and removed from here --- NMsim must be configured with the path to the NONMEM executable. This can be done for each `NMsim()` call using the `path.nonmem` argument, but more easily it can be configured globally the following way. Also including where NMsim will run NONMEM and store intermediate files (`dir.sims`) and where to store final results (`dir.res`). --><!-- ```{r,echo=TRUE,eval=FALSE} --><!-- library(NMdata) --><!-- library(NMsim) --><!-- ## Point NMsim to your NONMEM exectuable - looks like this on linux/osx --><!-- NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75") --><!-- ## or on Windows, it could be --><!-- NMdataConf(path.nonmem = "c:/nm75g64/run/nmfe75.bat") --><!-- NMdataConf(dir.sims="simtmp-modify", ## location of sim tmp files --><!--            dir.res="simres-modify", --><!--            as.fun="data.table")  ## location of sim results --><!-- ``` -->
+The first part of this section could be elaborated a little and be called "Introduction" and put before the "objectives". list.sections is not formatted the same way as modify.  --><!-- modify is a flexible interface that allows for modification of control stream sections before a simulation is performed. modify can be used to edit any section in a control stream but most commonly, this would be the $PK or $PRED section, or it could be $DES and $MODEL if needed. --><!-- Remember that data related sections like $INPUT, $DATA, and $TABLE are automatically handled by NMsim, and it should not be necessary to consider those. For the $TABLE section specifically, look at the `table.vars` and `table.options` arguments instead. --><!-- MOVED TO INMTRODUCTION :Sometimes we want to simulate with some modification to the estimated model. NMsim canmake such user-specified modifications to the model before simulating through the `modify` argument.
+Notice, until NMsim 0.1.0, the `modify` argument was called `list.sections`. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions." --><!-- # Configuration --><!-- DONE : Philip comment:
+None of these configurations are specific to using the modify argument. In a prerequisites section, you can mention that the user may need to config a little (as described in te intro vignette) and then you can omit this section. --><!-- REFERENCED in INTRO and removed from here --- NMsim must be configured with the path to the NONMEM executable. This can be done for each `NMsim()` call using the `path.nonmem` argument, but more easily it can be configured globally the following way. Also including where NMsim will run NONMEM and store intermediate files (`dir.sims`) and where to store final results (`dir.res`). --><!-- ```{r,echo=TRUE,eval=FALSE} --><!-- library(NMdata) --><!-- library(NMsim) --><!-- ## Point NMsim to your NONMEM exectuable - looks like this on linux/osx --><!-- NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75") --><!-- ## or on Windows, it could be --><!-- NMdataConf(path.nonmem = "c:/nm75g64/run/nmfe75.bat") --><!-- NMdataConf(dir.sims="simtmp-modify", ## location of sim tmp files --><!--            dir.res="simres-modify", --><!--            as.fun="data.table")  ## location of sim results --><!-- ``` --><div class="section level3">
+<h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
+</h3>
+<p>To reproduce the examples, you will need to have NMsim configured to
+find your Nonmem installation. Also, you should be familiar with how to
+use NMsim for running basic simulation workflows. If you need to revisit
+those topics, please go to <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html"><code>NMsim-intro.html</code></a>.
+Especially, it will be helpful to be familiar with simple workflows with
+NMsim to understand that certain “model mofifications” such as handling
+data sections are done automatically by NMsim, and so methods described
+in this document are unnecessary for those.</p>
+</div>
+<div class="section level3">
+<h3 id="selecting-a-model-and-generating-simulation-data">Selecting a Model and Generating Simulation Data<a class="anchor" aria-label="anchor" href="#selecting-a-model-and-generating-simulation-data"></a>
+</h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
+<span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
+<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">## data.sim &lt;- NMreadCsv(system.file("examples/derived/dat_sim1.csv",</span></span>
+<span><span class="co">##                                   package="NMsim"))</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="control-parameter-values-inits">Control Parameter Values (<code>inits</code>)<a class="anchor" aria-label="anchor" href="#control-parameter-values-inits"></a>
+</h3>
+<p>First, we collect an overview of the parameters in the model, their
+initial values as specified in the control stream, and the estimated
+values, as read from the <code>.ext</code> file. We are using functions
+from NMdata to get these. If you are interested in learning more about
+these functions, <a href="">This NMdata vignette</a> is a good place to
+start.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">partab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadParsText.html" class="external-link">NMreadParsText</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span>,format<span class="op">=</span><span class="st">"%init;%symbol"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span>,by<span class="op">=</span><span class="st">"parameter"</span>,all.x<span class="op">=</span><span class="cn">TRUE</span>,common.cols<span class="op">=</span><span class="st">"drop.y"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co">## |&gt;</span></span>
+<span><span class="co">## mergeCheck(NMreadInits(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE)</span></span>
+<span><span class="co">## partab[,.(par.name,symbol,init,lower,upper,FIX,est)]</span></span>
+<span><span class="va">partab</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">symbol</span>,<span class="va">init</span>,<span class="va">est</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##       par.name   symbol    init         est</span></span>
+<span><span class="co">##         &lt;fctr&gt;   &lt;char&gt;  &lt;char&gt;       &lt;num&gt;</span></span>
+<span><span class="co">##  1:   THETA(1)    POPKA   (0,1)   2.1665600</span></span>
+<span><span class="co">##  2:   THETA(2)    POPV2 (0,100)  75.7289000</span></span>
+<span><span class="co">##  3:   THETA(3)    POPCL   (0,3)  13.9777000</span></span>
+<span><span class="co">##  4:   THETA(4)    POPV3  (0,50) 150.0600000</span></span>
+<span><span class="co">##  5:   THETA(5)      TVQ  (0,.5)   8.4865100</span></span>
+<span><span class="co">##  6: OMEGA(1,1)   BSV KA   0 FIX   0.0000000</span></span>
+<span><span class="co">##  7: OMEGA(2,2)   BSV V2     0.1   0.1786660</span></span>
+<span><span class="co">##  8: OMEGA(3,3)   BSV CL     0.1   0.2497790</span></span>
+<span><span class="co">##  9: OMEGA(4,4)   BSV V3   0 FIX   0.0000000</span></span>
+<span><span class="co">## 10: OMEGA(5,5)    BSV Q   0 FIX   0.0000000</span></span>
+<span><span class="co">## 11: SIGMA(1,1) Prop Err     0.1   0.0822435</span></span>
+<span><span class="co">## 12: SIGMA(2,2)  Add Err   0 FIX   0.0000000</span></span></code></pre>
+<p>Let’s run a simple simulation without specifying
+<code>inits</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                name.sim<span class="op">=</span><span class="st">"basic-sim"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">diffr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffr/man/diffr.html" class="external-link">diffr</a></span><span class="op">(</span><span class="va">file.mod</span>,<span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span><span class="op">)</span></span></code></pre></div>
+<div class="diffr html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:355.2px;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"message":["function (..., domain = NULL, appendLF = TRUE) ","{","    cond <- if (...length() == 1L && inherits(..1, \"condition\")) {","        if (nargs() > 1L) ","            warning(\"additional arguments ignored in message()\")","        ..1","    }","    else {","        msg <- .makeMessage(..., domain = domain, appendLF = appendLF)","        call <- sys.call()","        simpleMessage(msg, call)","    }","    defaultHandler <- function(c) {","        cat(conditionMessage(c), file = stderr(), sep = \"\")","    }","    withRestarts({","        signalCondition(cond)","        defaultHandler(cond)","    }, muffleMessage = function() NULL)","    invisible()","}"],"contextSize":3,"minJumpSize":10,"wordWrap":true,"file1":"/home/runner/work/_temp/Library/NMsim/examples/nonmem/xgxr021.mod","file2":"simtmp-modify/xgxr021_basicsim/xgxr021_basicsim.mod","f1":"$PROBLEM    018 with 2 comp\n\n$INPUT ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY\nBLQ CYCLE DOSE PART PROFDAY PROFTIME WEIGHTB eff0\n\n$DATA     ../data/xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA  (0,1)             ; POPKA\n$THETA  (0,100)             ; POPV2\n$THETA  (0,3)             ; POPCL\n$THETA  (0,50)             ; POPV3\n$THETA  (0,.5)             ; TVQ\n\n$OMEGA 0 FIX  ; BSV KA\n$OMEGA 0.1   ; BSV V2\n$OMEGA 0.1  ; BSV CL\n$OMEGA 0 FIX ; BSV V3\n$OMEGA 0 FIX  ; BSV Q\n\n$SIGMA 0.1  ; Prop Err\n$SIGMA 0 FIX ; Add Err\n\n$ESTIMATION METHOD=1 POSTHOC INTER MAXEVAL=9999 NSIG=2 SIGL=9\n            PRINT=10 NOABORT MSFO=xgxr021.msf\n\n$COV \n\n$TABLE TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_res.txt","f2":"$PROBLEM    018 with 2 comp\n\n$INPUT NMROW ID TIME EVID CMT AMT II ADDL DV MDV\n\n$DATA NMsimData_xgxr021_basicsim.csv\nIGN=@\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA (0,2.16656)  ; POPKA\n$THETA (0,75.7289)  ; POPV2\n$THETA (0,13.9777)  ; POPCL\n$THETA (0,150.06)   ; POPV3\n$THETA (0,8.48651)  ; TVQ\n\n\n$OMEGA 0 FIX     ; BSV KA\n$OMEGA 0.178666  ; BSV V2\n$OMEGA 0.249779  ; BSV CL\n$OMEGA 0 FIX     ; BSV V3\n$OMEGA 0 FIX     ; BSV Q\n\n\n$SIGMA 0.0822435  ; Prop Err\n$SIGMA 0 FIX      ; Add Err\n\n\n\n\n\n\n$SIMULATION ONLYSIM (1629095608) \n\n$TABLE NMROW TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_basicsim.tab\n"},"evals":[],"jsHooks":[]}</script><p>Now, adding some custom values</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.inits1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                       data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                       inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"theta(1)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.54</span><span class="op">)</span></span>
+<span>                                 ,<span class="st">"omega(3,3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">.5</span><span class="op">)</span></span>
+<span>                                  <span class="op">)</span>,</span>
+<span>                       name.sim<span class="op">=</span><span class="st">"inits1"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">diffr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffr/man/diffr.html" class="external-link">diffr</a></span><span class="op">(</span><span class="va">file.mod</span>,<span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres.inits1</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span><span class="op">)</span></span></code></pre></div>
+<div class="diffr html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:355.2px;"></div>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"message":["function (..., domain = NULL, appendLF = TRUE) ","{","    cond <- if (...length() == 1L && inherits(..1, \"condition\")) {","        if (nargs() > 1L) ","            warning(\"additional arguments ignored in message()\")","        ..1","    }","    else {","        msg <- .makeMessage(..., domain = domain, appendLF = appendLF)","        call <- sys.call()","        simpleMessage(msg, call)","    }","    defaultHandler <- function(c) {","        cat(conditionMessage(c), file = stderr(), sep = \"\")","    }","    withRestarts({","        signalCondition(cond)","        defaultHandler(cond)","    }, muffleMessage = function() NULL)","    invisible()","}"],"contextSize":3,"minJumpSize":10,"wordWrap":true,"file1":"/home/runner/work/_temp/Library/NMsim/examples/nonmem/xgxr021.mod","file2":"simtmp-modify/xgxr021_inits1/xgxr021_inits1.mod","f1":"$PROBLEM    018 with 2 comp\n\n$INPUT ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY\nBLQ CYCLE DOSE PART PROFDAY PROFTIME WEIGHTB eff0\n\n$DATA     ../data/xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA  (0,1)             ; POPKA\n$THETA  (0,100)             ; POPV2\n$THETA  (0,3)             ; POPCL\n$THETA  (0,50)             ; POPV3\n$THETA  (0,.5)             ; TVQ\n\n$OMEGA 0 FIX  ; BSV KA\n$OMEGA 0.1   ; BSV V2\n$OMEGA 0.1  ; BSV CL\n$OMEGA 0 FIX ; BSV V3\n$OMEGA 0 FIX  ; BSV Q\n\n$SIGMA 0.1  ; Prop Err\n$SIGMA 0 FIX ; Add Err\n\n$ESTIMATION METHOD=1 POSTHOC INTER MAXEVAL=9999 NSIG=2 SIGL=9\n            PRINT=10 NOABORT MSFO=xgxr021.msf\n\n$COV \n\n$TABLE TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_res.txt","f2":"$PROBLEM    018 with 2 comp\n\n$INPUT NMROW ID TIME EVID CMT AMT II ADDL DV MDV\n\n$DATA NMsimData_xgxr021_inits1.csv\nIGN=@\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA (0,0.54)     ; POPKA\n$THETA (0,75.7289)  ; POPV2\n$THETA (0,13.9777)  ; POPCL\n$THETA (0,150.06)   ; POPV3\n$THETA (0,8.48651)  ; TVQ\n\n\n$OMEGA 0 FIX     ; BSV KA\n$OMEGA 0.178666  ; BSV V2\n$OMEGA 0.5       ; BSV CL\n$OMEGA 0 FIX     ; BSV V3\n$OMEGA 0 FIX     ; BSV Q\n\n\n$SIGMA 0.0822435  ; Prop Err\n$SIGMA 0 FIX      ; Add Err\n\n\n\n\n\n\n$SIMULATION ONLYSIM (1579623536) \n\n$TABLE NMROW TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_inits1.tab\n"},"evals":[],"jsHooks":[]}</script>
+</div>
 </div>
 <div class="section level2">
-<h2 id="example-change-in-formulation">Example: Change in formulation<a class="anchor" aria-label="anchor" href="#example-change-in-formulation"></a>
+<h2 id="example-modify-change-in-formulation">Example (<code>modify</code>): Change in formulation<a class="anchor" aria-label="anchor" href="#example-modify-change-in-formulation"></a>
 </h2>
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 
@@ -235,56 +301,50 @@ Suggest: "Modify parameter values by editing the $PK section"-->
 <p>The effect on the concentration-time profile of a change in
 formulation that reduces absorption rate <code>KA</code> is explored
 with the use of a scaling factor <code>KASCALE=c(1,4,10)</code> included
-to the NONMEM control stream via the <code>modify.model</code> argument.
-The absorption rate reduction is provided through the <code>NMsim</code>
+to the NONMEM control stream via the <code>modify</code> argument. The
+absorption rate reduction is provided through the <code>NMsim</code>
 simulation data <code>dat.sim.varka</code> containing dosing events,
 simulation time steps and the value of <code>KASCALE</code> for each
 simulated patient.</p>
 <p>First <code>KASCALE</code> is added to the simulation data</p>
 <!-- Philip comment: remove unused code -->
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
-<span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
-<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadCsv.html" class="external-link">NMreadCsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/derived/dat_sim1.csv"</span>,</span>
-<span>                                 package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#data.sim=setDT(data.sim)</span></span>
-<span><span class="co"># add KASCALE and copy patient info for each value of KASCALE</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add KASCALE and copy patient info for each value of KASCALE</span></span>
 <span><span class="va">dat.sim.varka</span> <span class="op">&lt;-</span> <span class="va">data.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>KASCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">data.sim</span><span class="op">]</span> </span>
 <span><span class="va">dat.sim.varka</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">KASCALE</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span> <span class="co"># update patient IDs</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.varka</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span> <span class="co"># order rows</span></span></code></pre></div>
 <p>Then the <code>NMsim</code> function is used to run the simulation in
-which the <code>modify.model</code> argument is used to simulate a
-modified model with different absorption rates, scaled by the parameter
+which the <code>modify</code> argument is used to simulate a modified
+model with different absorption rates, scaled by the parameter
 <code>KASCALE</code>. Two different approaches are demonstrated:</p>
 <ol style="list-style-type: lower-alpha">
 <li>the effect of the scaling factor <code>KASCALE</code> is added at
 the end of the <code>PK</code> section in the NONMEM control
 stream.</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span> <span class="co"># NONMEM control stream</span></span>
-<span>          ,data<span class="op">=</span><span class="va">dat.sim.varka</span> <span class="co"># simulation data file</span></span>
-<span>          ,name.sim<span class="op">=</span><span class="st">"varka"</span></span>
-<span>          ,modify.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"KA=KA/KASCALE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                     ,data<span class="op">=</span><span class="va">dat.sim.varka</span> <span class="co"># simulation data file</span></span>
+<span>                     ,name.sim<span class="op">=</span><span class="st">"varka"</span></span>
+<span>                     ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"KA=KA/KASCALE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>the specific line that defines <code>TVKA</code> is modified to
 include the effect of the scaling factor <code>KASCALE</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
-<span>          ,data<span class="op">=</span><span class="va">dat.sim.varka</span></span>
-<span>          ,name.sim<span class="op">=</span><span class="st">"varka2"</span></span>
-<span>          ,modify.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/overwrite.html">overwrite</a></span><span class="op">(</span><span class="st">"THETA(1)"</span>,<span class="st">"THETA(1)/KASCALE"</span><span class="op">)</span><span class="op">)</span></span>
-<span>          <span class="op">)</span></span></code></pre></div>
+<span>                      ,data<span class="op">=</span><span class="va">dat.sim.varka</span></span>
+<span>                      ,name.sim<span class="op">=</span><span class="st">"varka2"</span></span>
+<span>                      ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/overwrite.html">overwrite</a></span><span class="op">(</span><span class="st">"THETA(1)"</span>,<span class="st">"THETA(1)/KASCALE"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                       <span class="op">)</span></span></code></pre></div>
 <p>The code below returns the plot</p>
 <!-- Philip comment:
 This is really nice. 
 I suggest
 - comment on the strengths and weaknesses of add and overwrite. I think typically, most users should use "add" because it's simpler. "add" is really simple but it can only patch after the rest of PK has already been processed. If something in PK is derived from the variables being modified, it will not work. "overwrite" is the CAS9 approach which can be very powerful and suffers from off-target risk. And also, the code needed may be more specific to a model. In this example, overwrite refers to THETA(1) which is model specific. add referring to KA only may be more generic. 
 It would be very good to include some diffr() snippets to show what happened to the PK sections. If the PK section is simple, NMreadSection(sim.mod,section="PK") may be sufficient. sim.mod should be the generated simulation control streams. You may be able to run it on all of the control streams (the estimated, and the two simulated) at once, put it into a data.table, and show the control stream lines side by side as a table. -->
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka</span><span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.varka</span><span class="op">)</span></span>
 <span><span class="va">simres.varka2</span><span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.varka2</span><span class="op">)</span></span>
 <span><span class="va">simres.both</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres.varka</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"a. add()"</span><span class="op">]</span>,</span>
@@ -292,11 +352,11 @@ It would be very good to include some diffr() snippets to show what happened to 
 <span>                     <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">simres.both</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">PRED</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">KASCALE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Fold absorption prolongation, KASCALE"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">168</span>,by<span class="op">=</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">method</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Fold absorption prolongation, KASCALE"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">168</span>,by<span class="op">=</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">method</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="NMsim-modify-model_files/figure-html/varka-sim-plot-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified models **a** (left) and **b** (right). The equivalence and robustness of the two modified models is supported by the matching results, corresponding to reduced `PRED` values for higher values of `KASCALE` (lower absorption rate)." width="100%"><p class="caption">
 Concentration (<code>PRED</code>) profile as a function of time computed
@@ -310,7 +370,7 @@ reduced <code>PRED</code> values for higher values of
 <p>NOTE: the NMsim <code>overwrite</code> function prior to version
 0.1.6 has a bug that was fixed in the0.1.5.902 github release; it can be
 installed with</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
 <span><span class="fu">install_github</span><span class="op">(</span><span class="st">"NMautoverse/NMsim"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -381,7 +441,7 @@ DDI.2
 </table>
 <p>First the <code>CL</code> and <code>F1</code> data is added to the
 patient data</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 'Outer join'</span></span>
 <span><span class="va">dat.sim.DDI</span><span class="op">=</span><span class="va">data.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>CLSCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
 <span>                                ,FSCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1.2</span>,<span class="fl">1.1</span><span class="op">)</span></span>
@@ -390,19 +450,18 @@ patient data</p>
 <span><span class="va">dat.sim.DDI</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">lab</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.DDI</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
 <p>Then, the DDI driven change in parameters is added at the end of the
-PK section of the NONMEM control stream via the
-<code>modify.model</code> argument in the <code><a href="../reference/NMsim.html">NMsim()</a></code>
-function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+PK section of the NONMEM control stream via the <code>modify</code>
+argument in the <code><a href="../reference/NMsim.html">NMsim()</a></code> function.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.DDI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
-<span>            ,data<span class="op">=</span><span class="va">dat.sim.DDI</span></span>
-<span>            ,name.sim<span class="op">=</span><span class="st">"DDI"</span></span>
-<span>            ,modify.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"CL=CL*CLSCALE"</span></span>
+<span>                   ,data<span class="op">=</span><span class="va">dat.sim.DDI</span></span>
+<span>                   ,name.sim<span class="op">=</span><span class="st">"DDI"</span></span>
+<span>                   ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"CL=CL*CLSCALE"</span></span>
 <span>                                      ,<span class="st">"F1=FSCALE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The effect on the concentration-time profile is shown in the figure
 below</p>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-11-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified model for different DDIs. The modified model correctly simulates (i) a higher value of `Cmax` on day 1 for higher biovalability; (ii) a higher `PRED` value  at steady state for lower apparent clearance effect `CLSCALE/FSCALE` values." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-19-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified model for different DDIs. The modified model correctly simulates (i) a higher value of `Cmax` on day 1 for higher biovalability; (ii) a higher `PRED` value  at steady state for lower apparent clearance effect `CLSCALE/FSCALE` values." width="100%"><p class="caption">
 Concentration (<code>PRED</code>) profile as a function of time computed
 by <code>NMsim</code> modified model for different DDIs. The modified
 model correctly simulates (i) a higher value of <code>Cmax</code> on day
@@ -422,19 +481,19 @@ including three parameters in the dataset: the dose number
 <code>DOSCUMN</code>, obtained with <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code>, the
 specific number of the delayed dose <code>DELAYDOS</code> and the time
 delay <code>ALAG</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim.alag</span> <span class="op">=</span> <span class="va">data.sim</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># expand doses and add dose number</span></span>
 <span><span class="va">dat.sim.alag</span><span class="op">[</span>,<span class="va">ROW</span><span class="op">:=</span><span class="va">.I</span><span class="op">]</span> <span class="co"># restore ROW with correct value</span></span>
-<span><span class="co"># add delayed dose</span></span>
+<span>                                        <span class="co"># add delayed dose</span></span>
 <span><span class="va">dat.sim.dos.delay</span><span class="op">=</span><span class="va">dat.sim.alag</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>DELAYDOS<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
-<span>                                ,by<span class="op">=</span><span class="va">dat.sim.alag</span><span class="op">]</span></span>
-<span><span class="co"># add dose delay </span></span>
+<span>                              ,by<span class="op">=</span><span class="va">dat.sim.alag</span><span class="op">]</span></span>
+<span>                                        <span class="co"># add dose delay </span></span>
 <span><span class="va">dat.sim.alag.final</span><span class="op">=</span><span class="va">dat.sim.dos.delay</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>ALAG<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">6</span>,<span class="fl">12</span>,<span class="fl">18</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span></span>
-<span>                                     ,by<span class="op">=</span><span class="va">dat.sim.dos.delay</span><span class="op">]</span></span>
-<span><span class="co"># update ID </span></span>
+<span>                                    ,by<span class="op">=</span><span class="va">dat.sim.dos.delay</span><span class="op">]</span></span>
+<span>                                        <span class="co"># update ID </span></span>
 <span><span class="va">dat.sim.alag.final</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">ALAG</span>,<span class="va">DELAYDOS</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.alag.final</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
-<span><span class="co">#dat.sim.alag.final = dat.sim.alag.final |&gt; fill(DOSCUMN)</span></span></code></pre></div>
+<span>                                        <span class="co">#dat.sim.alag.final = dat.sim.alag.final |&gt; fill(DOSCUMN)</span></span></code></pre></div>
 <p>The following patient has a 6 hours delay to the administration of
 dose 2.</p>
 <table class="table">
@@ -583,29 +642,29 @@ where the dose delay on compartment 1 <code>ALAG1</code> is modified for
 the dose with dose number <code>DOSCUMN</code> equal to the target
 delayed dose number <code>DELAYDOS</code></p>
 <!-- Philip comment: This explanation is easier to follow than the first one -->
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.alag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
-<span>              ,data<span class="op">=</span><span class="va">dat.sim.alag.final</span></span>
-<span>              ,name.sim<span class="op">=</span><span class="st">"alag"</span></span>
-<span>              ,modify.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span></span>
-<span>                    <span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"IF(DOSCUMN.EQ.DELAYDOS) ALAG1=ALAG"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                    ,data<span class="op">=</span><span class="va">dat.sim.alag.final</span></span>
+<span>                    ,name.sim<span class="op">=</span><span class="st">"alag"</span></span>
+<span>                    ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span></span>
+<span>                                     <span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"IF(DOSCUMN.EQ.DELAYDOS) ALAG1=ALAG"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The effect on concentration-time profiles and daily AUC are shown in
 the two images below.</p>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-16-1.png" alt="Effect of time delay (0, 12 and 24 hours on dose 2) on concentration (`PRED`) profile as a function of time computed by `NMsim` modified model. The implementation of the modified model simply consists of the addition of the variables `DOSCUMN`, `DELAYDOS`, and `ALAG` to the original data set, and the addition of one line of code to the PK section of the control stream via `modify.model`." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-24-1.png" alt="Effect of time delay (0, 12 and 24 hours on dose 2) on concentration (`PRED`) profile as a function of time computed by `NMsim` modified model. The implementation of the modified model simply consists of the addition of the variables `DOSCUMN`, `DELAYDOS`, and `ALAG` to the original data set, and the addition of one line of code to the PK section of the control stream via `modify`." width="100%"><p class="caption">
 Effect of time delay (0, 12 and 24 hours on dose 2) on concentration
 (<code>PRED</code>) profile as a function of time computed by
 <code>NMsim</code> modified model. The implementation of the modified
 model simply consists of the addition of the variables
 <code>DOSCUMN</code>, <code>DELAYDOS</code>, and <code>ALAG</code> to
 the original data set, and the addition of one line of code to the PK
-section of the control stream via <code>modify.model</code>.
+section of the control stream via <code>modify</code>.
 </p>
 </div>
 <!-- Philip comment: The AUC vs dose delay needs a little explanation. I think the intro to the dose delay example should explain we want to study the effect of delaying doses on predicted exposure. And then also just a sentence or two before this plot. -->
 <!-- Philip comment would be good to include AUC/cmax derivation as folded code. -->
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-17-1.png" alt="Daily exposure on day 3 as a function of time delay for dose 2 (left) and dose 3 (right). The simulation results predict an increased risk for possible safety concerns (left panel, over-exposure) and loss of efficacy (right panel, under-exposure) as dose time delay gets larger." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-25-1.png" alt="Daily exposure on day 3 as a function of time delay for dose 2 (left) and dose 3 (right). The simulation results predict an increased risk for possible safety concerns (left panel, over-exposure) and loss of efficacy (right panel, under-exposure) as dose time delay gets larger." width="100%"><p class="caption">
 Daily exposure on day 3 as a function of time delay for dose 2 (left)
 and dose 3 (right). The simulation results predict an increased risk for
 possible safety concerns (left panel, over-exposure) and loss of
@@ -626,97 +685,97 @@ spaced time steps of <code>0.25</code>, <code>1</code>, and
 trapez</strong>
 </li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file.mod.auc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr046.mod"</span>,</span>
-<span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
+<span>                            package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
 <span><span class="va">data.sim.auc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadCsv.html" class="external-link">NMreadCsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/derived/dat_sim1.csv"</span>,</span>
-<span>                                 package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                      package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data.sim.auc</span><span class="op">[</span>,<span class="va">AMT</span><span class="op">:=</span><span class="fl">1000</span><span class="op">*</span><span class="va">AMT</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># time step 1hr</span></span>
+<span>                                        <span class="co"># time step 1hr</span></span>
 <span><span class="va">data.sim.1hr</span><span class="op">=</span><span class="va">data.sim.auc</span></span>
 <span><span class="va">data.sim.1hr</span><span class="op">[</span>,<span class="va">TSTEP</span><span class="op">:=</span><span class="st">"1hr"</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># time step 0.25hr</span></span>
+<span>                                        <span class="co"># time step 0.25hr</span></span>
 <span><span class="va">data.sim.0.25hr</span><span class="op">=</span><span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">data.sim.auc</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>,CMT<span class="op">=</span><span class="fl">2</span>,time.sim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">192</span>,by<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data.sim.0.25hr</span><span class="op">[</span>,<span class="va">TSTEP</span><span class="op">:=</span><span class="st">"0.25hr"</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># time step 4hr</span></span>
+<span>                                        <span class="co"># time step 4hr</span></span>
 <span><span class="va">data.sim.4hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">data.sim.auc</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>,CMT<span class="op">=</span><span class="fl">2</span>,time.sim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">192</span>,by<span class="op">=</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data.sim.4hr</span><span class="op">[</span>,<span class="va">TSTEP</span><span class="op">:=</span><span class="st">"4hr"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">sres.trapez</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod.auc</span></span>
-<span>      ,data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data.sim.1hr</span> <span class="co"># run NMsim on a list of data sets to run all different scenarios at once</span></span>
-<span>                 ,<span class="va">data.sim.0.25hr</span></span>
-<span>                 ,<span class="va">data.sim.4hr</span><span class="op">)</span></span>
-<span>      ,seed<span class="op">=</span><span class="fl">12345</span></span>
-<span>      ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span></span>
-<span>      ,name.sim<span class="op">=</span><span class="st">"AUC.trapez"</span></span>
-<span>      ,reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
-<span>      <span class="op">)</span></span>
+<span>                    ,data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data.sim.1hr</span> <span class="co"># run NMsim on a list of data sets to run all different scenarios at once</span></span>
+<span>                              ,<span class="va">data.sim.0.25hr</span></span>
+<span>                              ,<span class="va">data.sim.4hr</span><span class="op">)</span></span>
+<span>                    ,seed<span class="op">=</span><span class="fl">12345</span></span>
+<span>                    ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span><span class="op">)</span></span>
+<span>                    ,name.sim<span class="op">=</span><span class="st">"AUC.trapez"</span></span>
+<span>                    ,reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
+<span>                     <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># daily AUC computation</span></span>
+<span>                                        <span class="co"># daily AUC computation</span></span>
 <span><span class="va">sim.auc</span><span class="op">=</span><span class="va">sres.trapez</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span>,<span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">PRED</span>,time.step<span class="op">=</span><span class="va">TSTEP</span><span class="op">)</span><span class="op">]</span> </span>
 <span><span class="va">sim.auc</span><span class="op">[</span>,<span class="va">DAY</span><span class="op">:=</span><span class="op">(</span><span class="va">TIME</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span><span class="fl">24</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="co"># define DAY variable</span></span>
-<span><span class="co"># create duplicate time steps for end-of-day</span></span>
-<span><span class="co"># (e.g 24h belongs to both day 1 and day2)</span></span>
+<span>                                        <span class="co"># create duplicate time steps for end-of-day</span></span>
+<span>                                        <span class="co"># (e.g 24h belongs to both day 1 and day2)</span></span>
 <span><span class="va">sim.dupli.24h</span><span class="op">=</span><span class="va">sim.auc</span><span class="op">[</span><span class="va">TIME</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span><span class="fl">24</span><span class="op">==</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">TIME</span><span class="op">&gt;</span><span class="fl">0</span>,<span class="fu">.</span><span class="op">(</span><span class="va">ID</span></span>
-<span>                                             ,DAY<span class="op">=</span><span class="va">DAY</span><span class="op">-</span><span class="fl">1</span></span>
-<span>                                             ,<span class="va">TIME</span></span>
-<span>                                             ,<span class="va">PRED</span></span>
-<span>                                             ,<span class="va">time.step</span><span class="op">)</span><span class="op">]</span></span>
+<span>                                            ,DAY<span class="op">=</span><span class="va">DAY</span><span class="op">-</span><span class="fl">1</span></span>
+<span>                                            ,<span class="va">TIME</span></span>
+<span>                                            ,<span class="va">PRED</span></span>
+<span>                                            ,<span class="va">time.step</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">sim.auc.final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sim.auc</span></span>
-<span>                       ,<span class="va">sim.dupli.24h</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">DAY</span>,<span class="va">TIME</span>,<span class="va">time.step</span><span class="op">)</span></span>
+<span>                      ,<span class="va">sim.dupli.24h</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">DAY</span>,<span class="va">TIME</span>,<span class="va">time.step</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim.auc.trapez</span><span class="op">&lt;-</span><span class="va">sim.auc.final</span><span class="op">[</span><span class="va">DAY</span><span class="op">&lt;</span><span class="fl">8</span>,<span class="fu">.</span><span class="op">(</span>AUC<span class="op">=</span><span class="fu">NMcalc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NMcalc/man/trapez.html" class="external-link">trapez</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">PRED</span><span class="op">)</span><span class="op">)</span></span>
 <span>                             ,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">DAY</span>,<span class="va">time.step</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co"># stmp=sres1[EVID==2,.(ID,TIME,PRED)]</span></span>
-<span><span class="co"># stmp[,DAY:=(TIME%/%24)+1]</span></span>
-<span><span class="co"># sAUC&lt;-stmp[,.(AUC=NMcalc::trapez(TIME,PRED)),by=.(ID,DAY)]</span></span></code></pre></div>
+<span>                                        <span class="co"># stmp=sres1[EVID==2,.(ID,TIME,PRED)]</span></span>
+<span>                                        <span class="co"># stmp[,DAY:=(TIME%/%24)+1]</span></span>
+<span>                                        <span class="co"># sAUC&lt;-stmp[,.(AUC=NMcalc::trapez(TIME,PRED)),by=.(ID,DAY)]</span></span></code></pre></div>
 <ul>
 <li>at run time, with an <code>NMsim</code> modified script, on a course
 grid with evenly spaced time steps of <code>24</code> hours, labelled
 <strong>AUC $DES</strong>. Of note, this task requires additions to the
 control stream in multiple sections.</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># AUC with NMsim -  time step 24hr</span></span>
 <span><span class="va">data.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">data.sim.auc</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>,CMT<span class="op">=</span><span class="fl">2</span>,time.sim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,by<span class="op">=</span><span class="fl">24</span>,length.out<span class="op">=</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sres.des</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod.auc</span></span>
-<span>          ,data<span class="op">=</span><span class="va">data.sim2</span></span>
-<span>          ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span>,<span class="va">AUCNMSIM</span><span class="op">)</span></span>
-<span>          ,name.sim<span class="op">=</span><span class="st">"AUC.nmsim"</span></span>
-<span>          ,seed<span class="op">=</span><span class="fl">12345</span></span>
-<span>          ,reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
-<span>          ,modify.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MODEL<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"COMP=(AUC)"</span><span class="op">)</span></span>
-<span>                  ,DES<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"DADT(3)=A(2)/V2"</span><span class="op">)</span></span>
-<span>                  ,ERROR<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"AUCCUM=A(3)"</span></span>
-<span>                             ,<span class="st">"IF(NEWIND.NE.2) OLDAUCCUM=0"</span></span>
-<span>                             ,<span class="st">"AUCNMSIM = AUCCUM-OLDAUCCUM"</span></span>
-<span>                             ,<span class="st">"OLDAUCCUM = AUCCUM"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>                 ,data<span class="op">=</span><span class="va">data.sim2</span></span>
+<span>                 ,table.vars<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span>,<span class="va">AUCNMSIM</span><span class="op">)</span></span>
+<span>                 ,name.sim<span class="op">=</span><span class="st">"AUC.nmsim"</span></span>
+<span>                 ,seed<span class="op">=</span><span class="fl">12345</span></span>
+<span>                 ,reuse.results<span class="op">=</span><span class="va">reuse.results</span></span>
+<span>                 ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MODEL<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"COMP=(AUC)"</span><span class="op">)</span></span>
+<span>                             ,DES<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"DADT(3)=A(2)/V2"</span><span class="op">)</span></span>
+<span>                             ,ERROR<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"AUCCUM=A(3)"</span></span>
+<span>                                       ,<span class="st">"IF(NEWIND.NE.2) OLDAUCCUM=0"</span></span>
+<span>                                       ,<span class="st">"AUCNMSIM = AUCCUM-OLDAUCCUM"</span></span>
+<span>                                       ,<span class="st">"OLDAUCCUM = AUCCUM"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sres.des</span><span class="op">[</span>,<span class="va">DAY</span><span class="op">:=</span><span class="va">TIME</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span><span class="fl">24</span><span class="op">]</span></span>
 <span><span class="va">sres.des</span><span class="op">[</span>,<span class="va">AUC.NMsim</span><span class="op">:=</span><span class="va">AUCNMSIM</span><span class="op">]</span></span>
 <span><span class="va">sres.auc.des</span><span class="op">=</span><span class="va">sres.des</span><span class="op">[</span><span class="va">AUCNMSIM</span><span class="op">!=</span><span class="fl">0</span>,<span class="fu">.</span><span class="op">(</span><span class="va">TIME</span>,<span class="va">DAY</span>,<span class="va">PRED</span>,<span class="va">AUC.NMsim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>The plot comparing the <code>DES</code> and <code>trapez</code> AUC
 is obtained with the code below</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sres.final</span><span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="va">sim.auc.trapez</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">DAY</span>,<span class="va">AUC</span>,<span class="va">time.step</span><span class="op">)</span><span class="op">]</span></span>
-<span>                      ,<span class="va">sres.auc.des</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">DAY</span>,<span class="va">AUC.NMsim</span><span class="op">)</span><span class="op">]</span></span>
-<span>                      ,by<span class="op">=</span><span class="st">"DAY"</span><span class="op">)</span></span>
+<span>                     ,<span class="va">sres.auc.des</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">DAY</span>,<span class="va">AUC.NMsim</span><span class="op">)</span><span class="op">]</span></span>
+<span>                     ,by<span class="op">=</span><span class="st">"DAY"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">sres.final</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">AUC.NMsim</span>,<span class="va">AUC</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">time.step</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">4</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Time step in fine grid"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"AUC 0-24h by trapez method, on fine grid"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"AUC 0-24h by integration through $DES, on coarse grid"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">4</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Time step in fine grid"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"AUC 0-24h by trapez method, on fine grid"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"AUC 0-24h by integration through $DES, on coarse grid"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-20-1.png" alt="Daily exposures computed at run time ($DES, coarse grid, x-axis) and post-processing time (`trapez`, fine grids, y-axis). AUC (trapez) converges to the value computed with $DES method as the time step is reduced. Includes identity line." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-28-1.png" alt="Daily exposures computed at run time ($DES, coarse grid, x-axis) and post-processing time (`trapez`, fine grids, y-axis). AUC (trapez) converges to the value computed with $DES method as the time step is reduced. Includes identity line." width="100%"><p class="caption">
 Daily exposures computed at run time ($DES, coarse grid, x-axis) and
 post-processing time (<code>trapez</code>, fine grids, y-axis). AUC
 (trapez) converges to the value computed with $DES method as the time
