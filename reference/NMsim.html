@@ -409,20 +409,19 @@ specific installation of PSN on your system.</p></dd>
 
 <dt id="arg-args-psn-execute">args.psn.execute<a class="anchor" aria-label="anchor" href="#arg-args-psn-execute"></a></dt>
 <dd><p>A charachter string that will be passed as
-arguments PSN's `execute`. Notice, if `path.nonmem` is provided, the default is not to use PSN.</p></dd>
+arguments PSN's `execute`. Notice, if `path.nonmem` is
+provided, the default is not to use PSN.</p></dd>
 
 
 <dt id="arg-args-nmscandata">args.NMscanData<a class="anchor" aria-label="anchor" href="#arg-args-nmscandata"></a></dt>
-<dd><p>If <code>table.options</code> is used, NMsim
-turns to `NMdata::NMscanData()` for a general method to read
-the output tables. Use `args.NMscanData` to pass additional
-arguments (in a list) to that function if you want the results
-to be read in a specific way. This can be if the model for
-some reason drops rows, and you need to merge by a row
-identifier. You would do `args.NMscanData=list(col.row="ROW")`
-to merge by a column called `ROW`. This is only used in rare
-cases. Better just stick to NMsim's optimized default
-`table.options` and related methods for reading results.</p></dd>
+<dd><p>If <code>execute=TRUE&amp;sge=FALSE</code>, NMsim
+will normally read the results using <code>NMreadSim</code>. Use
+this argument to pass additional arguments (in a list) to that
+function if you want the results to be read in a specific
+way. This can be if the model for some reason drops rows, and
+you need to merge by a row identifier. You would do
+`args.NMscanData=list(col.row="ROW")` to merge by a column
+called `ROW`. This is only used in rare cases.</p></dd>
 
 
 <dt id="arg-as-fun">as.fun<a class="anchor" aria-label="anchor" href="#arg-as-fun"></a></dt>
@@ -480,7 +479,10 @@ simulations are run locally but not to if they are sent to the
 cluster. Waiting for them means that the results will be read
 when simulations are done. If not waiting, path(s) to `rds`
 files to read will be returned. Pass them through
-`NMreadSim()`. Conveniently, NMreadSim() also takes the `wait` argument too, allowing flexibility to run Nonmem in the background, and then read the results, still waiting for Nonmem to finish.</p></dd>
+`NMreadSim()`. Conveniently, NMreadSim() also takes the `wait`
+argument too, allowing flexibility to run Nonmem in the
+background, and then read the results, still waiting for
+Nonmem to finish.</p></dd>
 
 
 <dt id="arg-text-sim">text.sim<a class="anchor" aria-label="anchor" href="#arg-text-sim"></a></dt>
