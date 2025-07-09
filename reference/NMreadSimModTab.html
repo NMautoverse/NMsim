@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.915</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.917</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,6 +104,12 @@ waiting for an `lst` file. If Nonmem fails, it will normally
 generate an `lst` file. But if `NMTRAN` fails (checks of
 control stream prior to running Nonmem), the `lst` file is not
 generated.  Default is not to wait.</p></dd>
+
+
+<dt id="arg-skip-missing">skip.missing<a class="anchor" aria-label="anchor" href="#arg-skip-missing"></a></dt>
+<dd><p>Skip models where results are not available?
+Default is `FALSE` meaning an error will be thrown if one or
+more models do not have completed results.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>

@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.915</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.917</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@
 <span>  wait <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">progress</span>,</span>
+<span>  skip.missing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rm.tmp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">as.fun</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -113,6 +114,12 @@ Default is to report the messages.</p></dd>
 FALSE and more than one model is being read. The progress
 tracking is based on the number of models completed/read, not
 the status of the individual models.</p></dd>
+
+
+<dt id="arg-skip-missing">skip.missing<a class="anchor" aria-label="anchor" href="#arg-skip-missing"></a></dt>
+<dd><p>Skip models where results are not available?
+Default is `FALSE` meaning an error will be thrown if one or
+more models do not have completed results.</p></dd>
 
 
 <dt id="arg-rm-tmp">rm.tmp<a class="anchor" aria-label="anchor" href="#arg-rm-tmp"></a></dt>

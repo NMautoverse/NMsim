@@ -22,7 +22,7 @@ studied population."><meta property="og:image" content="https://nmautoverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.915</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.917</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,22 +123,22 @@ NMdataConf.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nmautoverse.github.io/NMdata/" class="external-link">NMdata</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data.covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr134.mod"</span>,package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model:  xgxr134 </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Model: xgxr134</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of rows, columns and distinct ID's</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> N's by source table, shown as used/available:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                       file     rows columns   IDs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   xgxr134_res.txt (output)  731/731   12/12 90/90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  xgxr134_etas.txt (output)  731/731     5/5 90/90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>      xgxr2covs.rds (input) 731/1502   24/26 90/90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                   (result)      731    41+2    90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input and output data merged by:ROW</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Used tables, contents shown as used/total:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   file     rows columns   IDs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        xgxr134_res.txt  731/731   12/12 90/90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       xgxr134_etas.txt  731/731     5/5 90/90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  xgxr2covs.rds (input) 731/1502   24/26 90/90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               (result)      731    41+2    90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Input and output data merged by: ROW </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Distribution of rows on event types in returned data:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  EVID CMT output result</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0   2    641    641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1   1     90     90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   All All    731    731</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Distribution of rows on event types</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Shown for output tables and result:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  EVID CMT output result</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     0   2    641    641</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     1   1     90     90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   All All    731    731</span>
 <span class="r-in"><span><span class="va">dos.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span>,AMT<span class="op">=</span><span class="fl">100</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="va">data.sim.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dos.1</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">sampleCovs</span><span class="op">(</span>data<span class="op">=</span><span class="va">data.sim.1</span>,Nsubjs<span class="op">=</span><span class="fl">3</span>,col.id.covs<span class="op">=</span><span class="st">"ID"</span>,data.covs<span class="op">=</span><span class="va">data.covs</span>,covs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WEIGHTB"</span>,<span class="st">"eff0"</span><span class="op">)</span><span class="op">)</span></span></span>
