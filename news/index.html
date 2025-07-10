@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.918</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.919</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,13 +46,23 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.4" id="nmsim-024">NMsim 0.2.4<a class="anchor" aria-label="anchor" href="#nmsim-024"></a></h2>
-<ul><li><p><code>NMREP</code> in <code>$PRED</code> models and in VPC mode</p></li>
-<li><p><code>skip.missing</code> argument</p></li>
-<li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s support for control of initial values has been greatly improved.</p></li>
-<li><p><code><a href="../reference/NMwriteInits.html">NMwriteInits()</a></code> supports <code>ext</code> and <code>inits.tab</code> arguments. These interfaces to specifying parameter values greatly improves flexibility for programming, and for specifying multiple new parameter sets.</p></li>
-<li><p><code>NMaddSamples</code> only inserts <code>MDV</code> column if <code>MDV</code> is already present in <code>data</code>.</p></li>
+<div class="section level3">
+<h3 id="new-features-0-2-4">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-4"></a></h3>
+<ul><li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s support for control of initial values has been greatly improved.</p></li>
+<li><p><code><a href="../reference/NMwriteInits.html">NMwriteInits()</a></code> supports <code>ext</code> and <code>inits.tab</code> arguments. These are interfaces to specifying parameter values greatly improves flexibility for programming, and for specifying multiple new parameter sets.</p></li>
+<li><p><code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> gains the <code>skip.missing</code> argument</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-0-2-4">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-4"></a></h3>
+<ul><li>
+<code>NMREP</code> in PREDPP (<code>$PRED</code>) models and in VPC mode</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-improvements-0-2-4">Other improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-4"></a></h3>
+<ul><li><p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> only inserts <code>MDV</code> column if <code>MDV</code> is already present in <code>data</code>.</p></li>
 <li><p><code><a href="../reference/NMexec.html">NMexec()</a></code> uses the <code>-maxlim=2</code> option when executing Nonmem. This is implemented on both the internal execution method and when PSN’s execute is used.</p></li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.3" id="nmsim-023">NMsim 0.2.3<a class="anchor" aria-label="anchor" href="#nmsim-023"></a></h2><p class="text-muted">CRAN release: 2025-05-20</p>
 <div class="section level3">
