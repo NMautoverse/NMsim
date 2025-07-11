@@ -48,14 +48,14 @@
 <h2 class="pkg-version" data-toc-text="0.2.4" id="nmsim-024">NMsim 0.2.4<a class="anchor" aria-label="anchor" href="#nmsim-024"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-2-4">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-4"></a></h3>
-<ul><li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s support for control of initial values has been greatly improved.</p></li>
-<li><p><code><a href="../reference/NMwriteInits.html">NMwriteInits()</a></code> supports <code>ext</code> and <code>inits.tab</code> arguments. These are interfaces to specifying parameter values greatly improves flexibility for programming, and for specifying multiple new parameter sets.</p></li>
-<li><p><code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> gains the <code>skip.missing</code> argument</p></li>
+<ul><li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s support for handling and control of initial values (the <code>inits</code> argument) has been greatly improved. In recent versions a new method for reading, updating, and writing the parameter definitions in control streams has been implemented. This allows for modification of this information and for fixing/unfixing parameters. The downside is it comes with some limitations to control stream syntax. With 0.2.4 those limitations are getting rare. The original much simpler method is still available and provides a robust alternative for many simulation purposes and is kept as a fallback workaround.</p></li>
+<li><p><code><a href="../reference/NMsim.html">NMsim()</a></code>’s <code>init</code> argument supports <code>ext</code> and <code>inits.tab</code> formats. These interfaces to specifying parameter values greatly improves flexibility for programming, and for specifying multiple new parameter sets for series of model runs.</p></li>
+<li><p><code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> gains the <code>skip.missing</code> argument. In case some model runs fail or haven’t finished, this allows <code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> to read whatever it can and skip the ones missing.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-4">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-4"></a></h3>
 <ul><li>
-<code>NMREP</code> in PREDPP (<code>$PRED</code>) models and in VPC mode</li>
+<code>NMREP</code> is a data column that <code><a href="../reference/NMsim.html">NMsim()</a></code> automatically adds to count subproblems when <code>subproblem</code> is used. This was not added when simulating PREDPP (<code>$PRED</code>) models and when not providing a simulaiton data set (VPC style).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-improvements-0-2-4">Other improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-4"></a></h3>
