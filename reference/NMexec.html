@@ -20,7 +20,7 @@ still be reproduced if the input data files should be updated."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.919</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.931</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@ still be reproduced if the input data files should be updated.</p>
 <span>  update.only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">fun.post</span>,</span>
 <span>  <span class="va">method.execute</span>,</span>
+<span>  <span class="va">nmfe.options</span>,</span>
 <span>  <span class="va">dir.psn</span>,</span>
 <span>  <span class="va">args.psn.execute</span>,</span>
 <span>  <span class="va">files.needed</span>,</span>
@@ -176,6 +177,13 @@ is the simplest method and is the least convenient in most
 cases. It does not offer parallel runs and leaves all the Nonmem
 output files next to the control streams.</p></li>
 </ul><p>See `sge` as well.</p></dd>
+
+
+<dt id="arg-nmfe-options">nmfe.options<a class="anchor" aria-label="anchor" href="#arg-nmfe-options"></a></dt>
+<dd><p>additional options that will be passed to
+nmfe. It is only used when path.nonmem is available (directly
+or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+`args.psn.execute`.</p></dd>
 
 
 <dt id="arg-dir-psn">dir.psn<a class="anchor" aria-label="anchor" href="#arg-dir-psn"></a></dt>
