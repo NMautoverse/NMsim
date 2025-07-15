@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.934</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.936</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,8 +55,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-4">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-4"></a></h3>
-<ul><li>
-<code>NMREP</code> is a data column that <code><a href="../reference/NMsim.html">NMsim()</a></code> automatically adds to count subproblems when <code>subproblem</code> is used. This was not added when simulating PREDPP (<code>$PRED</code>) models and when not providing a simulaiton data set (VPC style). Thanks to Ahmed Abulfathi for reporting.</li>
+<ul><li><p><code>NMREP</code> is a data column that <code><a href="../reference/NMsim.html">NMsim()</a></code> automatically adds to count subproblems when <code>subproblem</code> is used. This was not added when simulating PREDPP (<code>$PRED</code>) models and when not providing a simulaiton data set (VPC style). Thanks to Ahmed Abulfathi for reporting.</p></li>
+<li><p>In some cases <code>NMsim_NMWPRI()</code> in combination with <code>typical=TRUE</code> would create wrong <code>$PRIOR</code> dimensions. Fixed.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-improvements-0-2-4">Other improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-4"></a></h3>
