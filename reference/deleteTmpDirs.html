@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.917</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.918</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,13 @@
 <dd><p>The directory in which to look for contents to clean</p></dd>
 
 
+<dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
+<dd><p>The sources to delete temporary content from. This
+is a character vector, and the defailt is
+`c("nmsim","psn","psnfit","backup")`. Each of these correspond
+to a preconfigured pattern.</p></dd>
+
+
 <dt id="arg-recursive">recursive<a class="anchor" aria-label="anchor" href="#arg-recursive"></a></dt>
 <dd><p>Look recursively in folder? Notice, matches will
 be deleted recursively (they are often
@@ -72,13 +79,6 @@ for recursively.</p></dd>
 <dt id="arg-delete">delete<a class="anchor" aria-label="anchor" href="#arg-delete"></a></dt>
 <dd><p>Delete the found matches? If not, the matches are
 just reported, but nothing deleted.</p></dd>
-
-
-<dt id="arg-types">types<a class="anchor" aria-label="anchor" href="#arg-types"></a></dt>
-<dd><p>The sources to delete temporary content from. This is
-a character vector, and the defailt is
-`c("nmsim","psn","psnfit","backup")`. Each of these correspond
-to a preconfigured pattern.</p></dd>
 
 </dl></div>
 

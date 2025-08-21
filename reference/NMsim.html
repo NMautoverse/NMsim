@@ -26,7 +26,7 @@ get the most out of this."><meta property="og:image" content="https://nmautovers
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.917</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.918</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -278,18 +278,17 @@ matrix. Default is `FALSE`.</p></dd>
 has not been estimated but parameter values have been manually put
 into the respective sections in the control stream.</p></li>
 </ul><p>See also `file.ext` which can now be handled by `inits` too. This
-change collects the update of the "initial"
-parameter values into one interface rather than multiple
-arguments.</p></dd>
+change collects the update of the "initial" parameter values into
+one interface rather than multiple arguments.</p></dd>
 
 
 <dt id="arg-modify">modify<a class="anchor" aria-label="anchor" href="#arg-modify"></a></dt>
-<dd><p>Named list of additional control stream
-section edits. Note, these can be functions that define how to
-edit sections. This is an advanced feature which is not needed
-to run most simulations. It is however powerful for some types
-of analyses, like modifying parameter values. See vignettes
-for further information.</p></dd>
+<dd><p>Named list of additional control stream section
+edits. Note, these can be functions that define how to edit
+sections. This is an advanced feature which is not needed to
+run most simulations. It is however powerful for some types of
+analyses, like modifying parameter values. See vignettes for
+further information.</p></dd>
 
 
 <dt id="arg-filters">filters<a class="anchor" aria-label="anchor" href="#arg-filters"></a></dt>
@@ -408,7 +407,8 @@ specific installation of PSN on your system.</p></dd>
 arguments PSN's `execute`. The default is
 "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
 in addition to the "-clean" based on the `clean`
-argument. Notice, if `path.nonmem` is provided, the default is not to use PSN.</p></dd>
+argument. Notice, if `path.nonmem` is provided, the default is
+not to use PSN.</p></dd>
 
 
 <dt id="arg-args-nmscandata">args.NMscanData<a class="anchor" aria-label="anchor" href="#arg-args-nmscandata"></a></dt>
@@ -469,6 +469,15 @@ multiple rds files. Specifying a path ensures that one rds
 file containing information about all simulated models will be
 created. Notice if <code>file.res</code> is supplied, <code>dir.res</code>
 is not used.</p></dd>
+
+
+<dt id="arg-dir-sim-sub">dir.sim.sub<a class="anchor" aria-label="anchor" href="#arg-dir-sim-sub"></a></dt>
+<dd><p>If `TRUE` (default) a dedicated subdirectory
+will be created for eac model run. This is normally the
+cleanest way to run simulations. However, when `NMsim()` is
+used for estimation, it may be better to provide model results
+in the same folder as the input control stream (like PSN would
+do). Use `dir.sim.sub=FALSE` to get this behavior.</p></dd>
 
 
 <dt id="arg-wait">wait<a class="anchor" aria-label="anchor" href="#arg-wait"></a></dt>
