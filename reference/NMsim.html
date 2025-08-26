@@ -243,7 +243,13 @@ methods.</p></dd>
 <dt id="arg-typical">typical<a class="anchor" aria-label="anchor" href="#arg-typical"></a></dt>
 <dd><p>Run with all ETAs fixed to zero? Technically all
 ETAs=0 is obtained by replacing <code>$OMEGA</code> by a zero
-matrix. Default is `FALSE`.</p></dd>
+matrix. Default is `FALSE`. Instead of a logical `TRUE/FALSE`,
+a character vector can be used to specify what parameter types
+to set to zero and fix. Examples:
+`typical=c("OMEGA","SIGMA")`,
+`typical=c("THETAPV","OMEGA","OMEGAP","OMEGAPD")`. In fact, if
+`typical=TRUE`, both `$OMEGA` itself and - if found - their
+priors will be fixed at zero.</p></dd>
 
 
 <dt id="arg-inits">inits<a class="anchor" aria-label="anchor" href="#arg-inits"></a></dt>
