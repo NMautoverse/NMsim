@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.922</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.924</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,8 +72,8 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">August 27, 2025 using NMsim
-0.2.4.922</h4>
+            <h4 data-toc-skip class="date">August 28, 2025 using NMsim
+0.2.4.924</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-intro.Rmd" class="external-link"><code>vignettes/NMsim-intro.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-intro.Rmd</code></div>
@@ -234,7 +234,7 @@ final results (<code>dir.res</code>).</p>
 <a href="https://NMautoverse.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a>.</p>
 </div>
 <div class="section level2">
-<h2 id="a-first-simulation-with-nmsim">A first simulation with <code>NMsim()</code><a class="anchor" aria-label="anchor" href="#a-first-simulation-with-nmsim"></a>
+<h2 id="a-first-simulation-with-nmsim">A First Simulation with <code>NMsim()</code><a class="anchor" aria-label="anchor" href="#a-first-simulation-with-nmsim"></a>
 </h2>
 <p>When providing a simulation data set, the default
 <code><a href="../reference/NMsim.html">NMsim()</a></code> behavior is to sample a new subject (ETA’s).</p>
@@ -268,21 +268,23 @@ final results (<code>dir.res</code>).</p>
 control stream) are easily obtained with NMsim.
 </p>
 </div>
-<p>Notice that no information about the model is needed except for the
-control stream file path. The simulation is based on evaluation of
-<code>PRED</code>, <code>IPRED</code>, and optionally <code>Y</code>.
-Options exist for building more advanced simulation models. The models
-shown here are based on data available in the <a href="https://cran.r-project.org/package=xgxr" class="external-link"><code>xgxr</code></a>.</p>
+<p>Notice that for running a model simulation, no information about the
+model is needed except for the control stream file path. The simulation
+is based on evaluation of <code>PRED</code>, <code>IPRED</code>, and
+optionally <code>Y</code>. Options exist for building more advanced
+simulation models. The models shown here are based on data available in
+the <a href="https://cran.r-project.org/package=xgxr" class="external-link"><code>xgxr</code></a>.</p>
 </div>
 <div class="section level2">
-<h2 id="simulation-data-sets">Simulation data sets<a class="anchor" aria-label="anchor" href="#simulation-data-sets"></a>
+<h2 id="simulation-data-sets">Simulation Data Sets<a class="anchor" aria-label="anchor" href="#simulation-data-sets"></a>
 </h2>
-<p>The input data is a data.frame that</p>
+<p>The input data is just a <code>data.frame</code>. NMsim will save the
+data set and create</p>
 <ul>
-<li>Must contain at least the variables NONMEM will need to run the
+<li>It must contain at least the variables NONMEM will need to run the
 model (typically <code>ID</code>, <code>CMT</code>, <code>AMT</code>,
 etc. plus covariates)</li>
-<li>Can contain character variables (automatically carried to
+<li>It can contain character variables (automatically carried to
 results)</li>
 <li>Column order does not matter</li>
 </ul>
@@ -294,991 +296,45 @@ dosing events, and <code><a href="../reference/NMaddSamples.html">NMaddSamples()
 By default, doses are indicated using <code>EVID=1</code> and samples by
 <code>EVID=2</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,</span>
-<span>                       addl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>Notice, <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> has many flexible and convenient
-features. See <code><a href="../reference/NMcreateDoses.html">?NMcreateDoses</a></code> and the vignette ond creating
-simulation data sets for more.</p>
-<details><summary>
-Additional <code>NMcreateDoses()</code> examples
-</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## arguments are expanded - makes loading easy</span></span>
-<span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span>,<span class="fl">36</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-EVID
-</th>
-<th style="text-align:right;">
-CMT
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-MDV
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Different doses by covariate</span></span>
-<span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>,DOSE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-EVID
-</th>
-<th style="text-align:right;">
-CMT
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-MDV
-</th>
-<th style="text-align:right;">
-DOSE
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</details><div class="section level4">
-<h4 id="adding-sampling-times">Adding sampling times<a class="anchor" aria-label="anchor" href="#adding-sampling-times"></a>
-</h4>
+<code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,by<span class="op">=</span><span class="fl">24</span>,length.out<span class="op">=</span><span class="fl">7</span><span class="op">)</span>,</span>
+<span>                        AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> offers arguments matching the
+NONMEM-specific variables such as <code>CMT</code>, <code>EVID</code>,
+<code>ADDL</code>, <code>II</code>, <code>SS</code> and more. This
+example uses <code>ADDL</code> and <code>II</code> to repeat the
+maintenance dose. It is designed to offer convenient syntax for most
+common dosing regimens.</p>
+<div class="section level3">
+<h3 id="adding-sampling-times">Adding Sampling Times<a class="anchor" aria-label="anchor" href="#adding-sampling-times"></a>
+</h3>
 <p>For adding sampling times to a set of doses and/or samples,
 <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> provides a similarly flexible interface. It
 accepts data.frames with covariates allowing for different sampling
 schemes for different subject groups (say different dosing regimens),
 and dosing times can be supplied relative to previous dosing times.</p>
-<details><summary>
-Additional <code>NMaddSamples()</code> examples
-</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## a dosing data set with two doses</span></span>
-<span><span class="va">dt.dos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## sampling based on time since previous dose</span></span>
-<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-EVID
-</th>
-<th style="text-align:right;">
-CMT
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-MDV
-</th>
-<th style="text-align:right;">
-TAPD
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> has many useful features, including a
+<code>TAPD</code> argument for adding samples relative to previous
+dosing time, adding sampling for multiple endpoints, and different
+sampling times for different subgroups of subjects. See <a href="NMsim-DataCreate.html"><strong>Data Set Creation with
+NMsim</strong></a> for more details on creation of data sets, including
+use of <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> and <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> and
+how to also add time after previous dose and more.</p>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## TIME and TAPD can be combined - adding a follow-up</span></span>
-<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,TIME<span class="op">=</span><span class="fl">96</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-EVID
-</th>
-<th style="text-align:right;">
-CMT
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-MDV
-</th>
-<th style="text-align:right;">
-TAPD
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-96
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## sampling two compartments - naming them</span></span>
-<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-EVID
-</th>
-<th style="text-align:right;">
-CMT
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-MDV
-</th>
-<th style="text-align:right;">
-TAPD
-</th>
-<th style="text-align:left;">
-DVID
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Parent
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Metabolite
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-Parent
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-Metabolite
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Parent
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Metabolite
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-Parent
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-Metabolite
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</details>
-</div>
-<div class="section level4">
-<h4 id="time-since-previous-dose">Time since previous dose<a class="anchor" aria-label="anchor" href="#time-since-previous-dose"></a>
-</h4>
-<p>While not used in these examples, it’s worth mentioning
-<code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> for adding time since previous dose and
-other variables related to previous dose - previous dosing time,
-previous dose amount, cumulative number of doses, cumulative number of
-doses, and culative dose amount. These are often useful to add to a
-simulation dataset:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="check-the-simulation-dataset">Check the simulation dataset<a class="anchor" aria-label="anchor" href="#check-the-simulation-dataset"></a>
-</h4>
+<div class="section level3">
+<h3 id="check-the-simulation-dataset">Check The Simulation Dataset<a class="anchor" aria-label="anchor" href="#check-the-simulation-dataset"></a>
+</h3>
 <p>A quick way to check for a lot of common issues in a NONMEM data set
 is running <code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData()</a></code>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span></code></pre></div>
 <p>It is also advised to plot the simulation data set. See <a href="NMsim-DataCreate.html">Creation of Simulation Data Sets</a> for
 more details.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="typical-subject-simulation">Typical subject simulation<a class="anchor" aria-label="anchor" href="#typical-subject-simulation"></a>
+<h2 id="typical-subject-simulation">Typical Subject Simulation<a class="anchor" aria-label="anchor" href="#typical-subject-simulation"></a>
 </h2>
 <ul>
 <li>A typical subject is a subject with all ETAs = 0</li>
@@ -1288,14 +344,14 @@ set</li>
 <code>typical=TRUE</code>: replace all <code>$OMEGA</code> values
 with zeros</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.typ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,data<span class="op">=</span><span class="va">data.sim</span>,</span>
 <span>                    typical<span class="op">=</span><span class="cn">TRUE</span>,  <span class="co">## FIX all OMEGA's to zero</span></span>
 <span>                    name.sim<span class="op">=</span><span class="st">"typical"</span>, <span class="co">## simulation name - included in output</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="simulate-multiple-models">Simulate multiple models<a class="anchor" aria-label="anchor" href="#simulate-multiple-models"></a>
+<h2 id="simulate-multiple-models">Simulate Multiple Models<a class="anchor" aria-label="anchor" href="#simulate-multiple-models"></a>
 </h2>
 <p>Multiple models can be simulated using the same data set in one
 function call by supplying more than one model in the
@@ -1303,7 +359,7 @@ function call by supplying more than one model in the
 data sets by submitting a list of data.frames in the <code>data</code>
 argument. NMsim will return one data.frame with all the results for easy
 post-processing.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file2.mod</span> <span class="op">&lt;-</span> <span class="st">"models/xgxr114.mod"</span></span>
 <span><span class="va">simres.typ2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2 compartments"</span><span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                                <span class="st">"1 compartment"</span><span class="op">=</span><span class="va">file2.mod</span><span class="op">)</span>,</span>
@@ -1349,7 +405,7 @@ may need from NONMEM. Notice <code>NMsim</code> knows how to combine
 output table data with the simulation input data, so you do not need
 variables like <code>ID</code> or <code>TIME</code> in
 <code>table.vars</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## this example uses the same sim data for all subjects</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
@@ -1361,14 +417,14 @@ variables like <code>ID</code> or <code>TIME</code> in
 <span>                    table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CL"</span>,<span class="st">"V2"</span>,<span class="st">"IPRED"</span>,<span class="st">"PRED"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="NMsim-intro_files/figure-html/unnamed-chunk-6-1.png" alt="Individual parameters are confirmed to be identical in estimation results and simulation results" width="100%"><p class="caption">
+<img src="NMsim-intro_files/figure-html/unnamed-chunk-5-1.png" alt="Individual parameters are confirmed to be identical in estimation results and simulation results" width="100%"><p class="caption">
 Individual parameters are confirmed to be identical in estimation
 results and simulation results
 </p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="prediction-intervals">Prediction intervals<a class="anchor" aria-label="anchor" href="#prediction-intervals"></a>
+<h2 id="prediction-intervals">Prediction Intervals<a class="anchor" aria-label="anchor" href="#prediction-intervals"></a>
 </h2>
 <p>New subjects can be simulated in multiple ways with NMsim.</p>
 <ul>
@@ -1397,7 +453,7 @@ files.</p>
 <p>Notice the following reuses the input data set 1000 times, and a
 column called <code>NMREP</code> will count the subproblem number in the
 output.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tablevars</span><span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">PRED</span>,<span class="va">IPRED</span>,<span class="va">Y</span><span class="op">)</span></span>
 <span><span class="va">simres.subprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                        data<span class="op">=</span><span class="va">data.sim</span>,</span>
@@ -1412,7 +468,7 @@ want to distinguish the subjects, you can update the <code>ID</code>
 column to reflect unique combinations of <code>ID</code> and
 <code>NMREP</code>. With <code>data.table</code>, this can be done this
 way:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## data.table:</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.subprob</span><span class="op">)</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">NMREP</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">## dplyr:</span></span>
@@ -1429,7 +485,7 @@ way:</p>
 <li>Simulate 1000 new subjects with covariate sampling</li>
 </ul>
 <div class="fold s">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Replicating input data set allows for manual resampling of covariates.</span></span>
 <span></span>
 <span><span class="co">## NMdata::findCovs() extracts unique values of column that do not vary within `by`. Since `by` is here the subject ID, that means we are finding subject level and globally equal variables only.</span></span>
@@ -1464,7 +520,7 @@ way:</p>
 <ul>
 <li>Derive and plot 90% prediction intervals</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Collect and stack simulation results </span></span>
 <span><span class="va">simres.newpops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.subprob</span><span class="op">)</span>,</span>
 <span>                        <span class="va">simres.datarep</span>,fill<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
@@ -1492,7 +548,7 @@ with NMsim. A simulated population can be reused across simulations.
 </div>
 </div>
 <div class="section level2">
-<h2 id="read-previously-generated-simulations">Read previously generated simulations<a class="anchor" aria-label="anchor" href="#read-previously-generated-simulations"></a>
+<h2 id="read-previously-generated-simulations">Read Previously Generated Simulations<a class="anchor" aria-label="anchor" href="#read-previously-generated-simulations"></a>
 </h2>
 <p>There is no need to save simulation results because they are already
 saved by <code>NMsim</code>. Instead, use arguments
@@ -1500,7 +556,7 @@ saved by <code>NMsim</code>. Instead, use arguments
 make sure to get a meaningful structure for the generated files. Then
 read the results with <code><a href="../reference/NMreadSim.html">NMreadSim()</a></code>. To re-read the first
 simulation we did in this article, we can do this:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-intro/xgxr021_noname_MetaData.rds"</span><span class="op">)</span></span></code></pre></div>
 <p>The folder and file names were constructed based on
 <code>dir.res="simres-intro"</code> and because <code>name.sim</code>

@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.922</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.924</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,8 +72,8 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">August 27, 2025 using NMsim
-0.2.4.922</h4>
+            <h4 data-toc-skip class="date">August 28, 2025 using NMsim
+0.2.4.924</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-DataCreate.Rmd" class="external-link"><code>vignettes/NMsim-DataCreate.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-DataCreate.Rmd</code></div>
@@ -109,21 +109,105 @@ simplify identification of data set issues. This vignette uses
 types and other properties of data sets. Like <code>NMsim</code>,
 <code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> does not depend on how the data set was
 created.</p>
-<div class="section level3">
-<h3 id="basic-simulation-data-sets">Basic Simulation Data Sets<a class="anchor" aria-label="anchor" href="#basic-simulation-data-sets"></a>
-</h3>
-<p>As an example we create a regimen with a loading dose of 300 mg
-followed by 150 QD for 6 days. We dose into compartment 1, and we want
-to simulate samples in the second compartment. These numbers depend on
-the model which the data set is intended to be used with.</p>
+</div>
+<div class="section level2">
+<h2 id="create-dosing-events">Create Dosing Events<a class="anchor" aria-label="anchor" href="#create-dosing-events"></a>
+</h2>
 <p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> is a flexible function that creates
-dosing records based on a concise syntax. We add a label to the regimen
-right away.</p>
+dosing records based on a concise syntax. As an example we create a
+regimen with a loading dose of 300 mg followed by 150 QD for 6 days (7
+doses in total). We dose into compartment 1, and we want to simulate
+samples in the second compartment. These numbers depend on the model
+which the data set is intended to be used with.</p>
+<!-- We add a label to the regimen right away. -->
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,by<span class="op">=</span><span class="fl">24</span>,length.out<span class="op">=</span><span class="fl">7</span><span class="op">)</span>,</span>
+<span>                       AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">doses</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">48</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">72</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">96</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">120</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">144</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Since the most common dosing regimens consists of a potential loading
+dose or a series of loading doses, followed by a maintenance regimen,
+<code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> is designed to expand variables to match
+the the lenght of <code>TIME</code>, by <em>repeating the last
+value</em>. Notice above, how <code>AMT=300</code> is not repeated -
+only <code>AMT=150</code> is. This is a <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code>
+feature and is different from how say <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame()</a></code> would
+cycle variables to match the lengths.</p>
+<p>We can also use <code>ADDL/II</code> to get an equivalent result.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### multiple dose regimens with loading are easily created with NMcreateDoses too</span></span>
 <span><span class="co">## We use ADDL+II (either method easy)</span></span>
-<span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">doses</span><span class="op">$</span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="st">"300 mg then 150 mg QD"</span></span>
+<span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fl">5</span>,II<span class="op">=</span><span class="fl">24</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">## doses$trt &lt;- "300 mg then 150 mg QD"</span></span>
 <span><span class="co">## Notice, the ID and MDV columns are included</span></span>
 <span><span class="va">doses</span></span></code></pre></div>
 <div class="kable-table">
@@ -137,7 +221,6 @@ right away.</p>
 <th align="right">II</th>
 <th align="right">ADDL</th>
 <th align="right">MDV</th>
-<th align="left">trt</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -146,10 +229,9 @@ right away.</p>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">300</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -160,34 +242,762 @@ right away.</p>
 <td align="right">24</td>
 <td align="right">5</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Notice how <code>ADDL</code> and <code>II</code> are by default only
+applied to the last dosing event (this behavior is controlled by the
+<code>addl.lastonly</code> argument).</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">doses2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,by<span class="op">=</span><span class="fl">24</span>,length.out<span class="op">=</span><span class="fl">7</span><span class="op">)</span>,</span>
+<span>                        AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">## doses2$trt &lt;- "300 mg then 150 mg QD"</span></span>
+<span><span class="va">doses2</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">48</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">72</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">96</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">120</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">144</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The difference between <code>doses</code> and <code>doses2</code> is
+that <code>doses2</code> is “expanded” with separate dosing event rows
+for each dose. In some cases, the expanded format is more convenient.
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses()</a></code> expands the <code>ADDL</code> and
+<code>II</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">doses</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">II</th>
+<th align="right">ADDL</th>
+<th align="right">MDV</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">48</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">72</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">96</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">120</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">144</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details><summary>
+Additional <code>NMcreateDoses()</code> examples
+</summary><p>Arguments are expanded to match length of <code>TIME</code> - makes
+loading easy.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span>,<span class="fl">36</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">36</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Covariates can be provided by making variables a
+<code>data.frame</code> with the variable and a covariate. Here,
+<code>AMT</code> is different for two subjects with <code>DOSE=1</code>
+and <code>DOSE=2</code>, respectively. This means for each of the
+subjects, <code>AMT</code> is of length two, hence they are expanded to
+match the length (3) of <code>TIME</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>,DOSE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+<th align="right">DOSE</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+</div>
+<div class="section level2">
+<h2 id="add-sampling-events">Add Sampling Events<a class="anchor" aria-label="anchor" href="#add-sampling-events"></a>
+</h2>
 <p>Now we add the sample records using <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Add simulation records - longer for QD regimens</span></span>
 <span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<details><summary>
+Additional <code>NMaddSamples()</code> examples
+</summary><p>These examples serve to show the behavior of
+<code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code>, specifically. Hence, a simple dosing data
+set with just two doses is used.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dt.dos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Sampling based on time since previous dose:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+<th align="right">TAPD</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code>TIME</code> and <code>TAPD</code> can be combined - adding a
+follow-up</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,TIME<span class="op">=</span><span class="fl">96</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+<th align="right">TAPD</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">96</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## sampling two compartments - naming them</span></span>
+<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos</span>,TAPD<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+<th align="right">TAPD</th>
+<th align="left">DVID</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Metabolite</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Metabolite</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Metabolite</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Parent</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Metabolite</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Use the <code>by</code> argument to specify separate sampling times
+for different subsets of subjects.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dt.dos2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">12</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>,DOSE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">dt.dos2</span>,TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,DOSE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span>,by<span class="op">=</span><span class="st">"DOSE"</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="right">ID</th>
+<th align="right">TIME</th>
+<th align="right">EVID</th>
+<th align="right">CMT</th>
+<th align="right">AMT</th>
+<th align="right">MDV</th>
+<th align="right">DOSE</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details><div class="section level3">
+<h3 id="adding-time-since-previous-dose">Adding Time Since Previous Dose<a class="anchor" aria-label="anchor" href="#adding-time-since-previous-dose"></a>
+</h3>
+<p>While not necessary for <code><a href="../reference/NMsim.html">NMsim()</a></code> to run, it’s worth
+mentioning <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> for adding time since previous
+dose and other variables related to previous dose - previous dosing
+time, previous dose amount, cumulative number of doses, cumulative
+number of doses, and culative dose amount. These are often useful to add
+to a simulation dataset:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="finalizing-and-checking-the-simulation-data">Finalizing and Checking the Simulation Data<a class="anchor" aria-label="anchor" href="#finalizing-and-checking-the-simulation-data"></a>
+</h2>
 <p><code>dat.sim</code> is now a valid simulation data set with one
 subject. However, even though <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> does try to
 order the data in a meaningful way, it is recommended to always manually
 order the data set. We use <code>data.table</code>’s
-<code><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder()</a></code>. <code>dplyr::arrange</code> can just as well be
-used. A row identifier (counter) can make post-processing easier, so we
-add that too.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder()</a></code>. <code><a href="https://rdrr.io/r/base/order.html" class="external-link">base::order</a></code> or
+<code>dplyr::arrange</code> can just as well be used. A row identifier
+(counter) is not needed for NMsim but it can make post-processing
+easier, so we add that too.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## sort data set </span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
-<span><span class="co">## Adding a row identifier (generally not necessary but recommended)</span></span>
-<span><span class="co">## dat.sim$ROW &lt;- 1:nrow(dat.sim)</span></span></code></pre></div>
+<span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ROW</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
 <p><code>NMsim</code> does not include plotting functionality, but here
 is a simple way to show dosing amounts and sample times.
 <code><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses()</a></code> is used to <em>expand</em> the
 doses coded with <code>ADDL</code>/<code>II</code> in order to get a
 data row to plot for each dose. We also take the sum of the amounts by
 time point in case doses are simultaneous.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">dtplot</span> <span class="op">&lt;-</span> <span class="va">dtplot</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">AMT</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">CMT</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
@@ -197,19 +1007,18 @@ time point in case doses are simultaneous.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Time (hours)"</span>,y<span class="op">=</span><span class="st">"Compartment"</span>,shape<span class="op">=</span><span class="st">"EVID"</span>,colour<span class="op">=</span><span class="st">"EVID"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="NMsim-DataCreate_files/figure-html/unnamed-chunk-4-1.png" alt="After using `NMexpandDoses()` the simulation data set is plotted." width="672"><p class="caption">
+<img src="NMsim-DataCreate_files/figure-html/unnamed-chunk-5-1.png" alt="After using `NMexpandDoses()` the simulation data set is plotted." width="672"><p class="caption">
 After using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses()</a></code> the simulation data set is
 plotted.
 </p>
 </div>
 <p>A brief overview of the number of events broken down by event type
 <code>EVID</code> and dose amount <code>AMT</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>Nrows<span class="op">=</span><span class="va">.N</span><span class="op">)</span>,keyby<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">trt</span>,<span class="va">CMT</span>,<span class="va">EVID</span>,<span class="va">AMT</span><span class="op">)</span><span class="op">]</span> </span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>Nrows<span class="op">=</span><span class="va">.N</span><span class="op">)</span>,keyby<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">CMT</span>,<span class="va">EVID</span>,<span class="va">AMT</span><span class="op">)</span><span class="op">]</span> </span></code></pre></div>
 <div class="kable-table">
 <table class="table">
 <thead><tr class="header">
-<th align="left">trt</th>
 <th align="right">CMT</th>
 <th align="right">EVID</th>
 <th align="right">AMT</th>
@@ -217,21 +1026,18 @@ plotted.
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">300 mg then 150 mg QD</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">150</td>
 <td align="right">6</td>
 </tr>
 <tr class="even">
-<td align="left">300 mg then 150 mg QD</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">300</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">300 mg then 150 mg QD</td>
 <td align="right">2</td>
 <td align="right">2</td>
 <td align="right">NA</td>
@@ -249,6 +1055,22 @@ columns to the right</li>
 </ul>
 <div class="kable-table">
 <table class="table">
+<colgroup>
+<col width="4%">
+<col width="6%">
+<col width="6%">
+<col width="5%">
+<col width="5%">
+<col width="4%">
+<col width="6%">
+<col width="5%">
+<col width="11%">
+<col width="8%">
+<col width="6%">
+<col width="11%">
+<col width="11%">
+<col width="5%">
+</colgroup>
 <thead><tr class="header">
 <th align="right">ID</th>
 <th align="right">TIME</th>
@@ -258,7 +1080,12 @@ columns to the right</li>
 <th align="right">II</th>
 <th align="right">ADDL</th>
 <th align="right">MDV</th>
-<th align="left">trt</th>
+<th align="right">DOSCUMN</th>
+<th align="right">TPDOS</th>
+<th align="right">TAPD</th>
+<th align="right">PDOSAMT</th>
+<th align="right">DOSCUMA</th>
+<th align="right">ROW</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -267,10 +1094,15 @@ columns to the right</li>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">300</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">300</td>
+<td align="right">300</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -281,7 +1113,12 @@ columns to the right</li>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -292,7 +1129,12 @@ columns to the right</li>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">300</td>
+<td align="right">300</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -303,7 +1145,12 @@ columns to the right</li>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">300</td>
+<td align="right">300</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -314,7 +1161,12 @@ columns to the right</li>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">300</td>
+<td align="right">300</td>
+<td align="right">5</td>
 </tr>
 </tbody>
 </table>
@@ -322,23 +1174,25 @@ columns to the right</li>
 <p>Finally, We check the simulation data set for various potential
 issues in Nonmem data sets using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMdata::NMcheckData</a></code> and
 summarize the number of doses and observations:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No findings. Great!</span></span></code></pre></div>
-<p>Be aware that <code><a href="../reference/NMsim.html">NMsim()</a></code> does <em>not</em> reorder rows
-before simulation. The user is responsible for ordering the simulation
-data.</p>
+<p>As already mentioned, <em>column</em> order does not matter to NMsim.
+But Be aware that <code><a href="../reference/NMsim.html">NMsim()</a></code> <em>does not reorder rows</em>
+before simulation. The user is responsible for ordering the rows of the
+simulation data.</p>
 </div>
-<div class="section level3">
-<h3 id="add-time-after-previous-dose-and-related-information">Add Time After Previous Dose and Related Information<a class="anchor" aria-label="anchor" href="#add-time-after-previous-dose-and-related-information"></a>
-</h3>
+<div class="section level2">
+<h2 id="add-time-after-previous-dose-and-related-information">Add Time After Previous Dose and Related Information<a class="anchor" aria-label="anchor" href="#add-time-after-previous-dose-and-related-information"></a>
+</h2>
 <p>Just like for preparation of data set with observed data, time after
 previous dose may be the relevant time to analyze the simulation results
 against. We use <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> to add this
 automatically.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Columns will be overwritten: DOSCUMN, TPDOS, TAPD, PDOSAMT, DOSCUMA</span></span></code></pre>
 <table class="table table" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:right;">
@@ -365,8 +1219,330 @@ ADDL
 <th style="text-align:right;">
 MDV
 </th>
-<th style="text-align:left;">
-trt
+<th style="text-align:right;">
+DOSCUMN
+</th>
+<th style="text-align:right;">
+TPDOS
+</th>
+<th style="text-align:right;">
+TAPD
+</th>
+<th style="text-align:right;">
+PDOSAMT
+</th>
+<th style="text-align:right;">
+DOSCUMA
+</th>
+<th style="text-align:right;">
+ROW
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+</tbody>
+</table>
+<p>Notice <code>TAPD</code> for the sample at <code>TIME==0</code>.
+<code>addTAPD</code> does not use the order of the data set to determine
+the time-order or the records. The default behavior of
+<code>addTAPD</code> is to treat a sample taken at the exact same time
+as a dose as a pre-dose. If instead we want them to be considered
+post-dose, we have to specify how to order <code>EVID</code>
+numbers.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## order.evid=c(1,2) means doses are ordered before EVID=2 records</span></span>
+<span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## now the TIME=0 sample has TAPD=0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Columns will be overwritten: DOSCUMN, TPDOS, TAPD, PDOSAMT, DOSCUMA</span></span></code></pre>
+<table class="table table" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+TIME
+</th>
+<th style="text-align:right;">
+EVID
+</th>
+<th style="text-align:right;">
+CMT
+</th>
+<th style="text-align:right;">
+AMT
+</th>
+<th style="text-align:right;">
+II
+</th>
+<th style="text-align:right;">
+ADDL
+</th>
+<th style="text-align:right;">
+MDV
 </th>
 <th style="text-align:right;">
 DOSCUMN
@@ -383,6 +1559,9 @@ PDOSAMT
 <th style="text-align:right;">
 DOSCUMA
 </th>
+<th style="text-align:right;">
+ROW
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -402,16 +1581,13 @@ DOSCUMA
 300
 </td>
 <td style="text-align:right;">
-0
+NA
 </td>
 <td style="text-align:right;">
-0
+NA
 </td>
 <td style="text-align:right;">
 1
-</td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
 </td>
 <td style="text-align:right;">
 1
@@ -427,6 +1603,9 @@ DOSCUMA
 </td>
 <td style="text-align:right;">
 300
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -454,23 +1633,23 @@ NA
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
 0
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+2
 </td>
 </tr>
 <tr>
@@ -498,9 +1677,6 @@ NA
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
-</td>
 <td style="text-align:right;">
 1
 </td>
@@ -515,6 +1691,9 @@ NA
 </td>
 <td style="text-align:right;">
 300
+</td>
+<td style="text-align:right;">
+3
 </td>
 </tr>
 <tr>
@@ -542,9 +1721,6 @@ NA
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
-</td>
 <td style="text-align:right;">
 1
 </td>
@@ -559,6 +1735,9 @@ NA
 </td>
 <td style="text-align:right;">
 300
+</td>
+<td style="text-align:right;">
+4
 </td>
 </tr>
 <tr>
@@ -586,9 +1765,6 @@ NA
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
-</td>
 <td style="text-align:right;">
 1
 </td>
@@ -603,6 +1779,9 @@ NA
 </td>
 <td style="text-align:right;">
 300
+</td>
+<td style="text-align:right;">
+5
 </td>
 </tr>
 <tr>
@@ -630,9 +1809,6 @@ NA
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:left;">
-300 mg then 150 mg QD
-</td>
 <td style="text-align:right;">
 1
 </td>
@@ -648,181 +1824,26 @@ NA
 <td style="text-align:right;">
 300
 </td>
+<td style="text-align:right;">
+6
+</td>
 </tr>
 </tbody>
 </table>
-<p>Notice <code>TAPD</code> for the sample at <code>TIME==0</code>.
-<code>addTAPD</code> does not use the order of the data set to determine
-the time-order or the records. The default behavior of
-<code>addTAPD</code> is to treat a sample taken at the exact same time
-as a dose as a pre-dose. If instead we want them to be considered
-post-dose, we have to specify how to order <code>EVID</code>
-numbers.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## order.evid=c(1,2) means doses are ordered before EVID=2 records</span></span>
-<span><span class="va">dat.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span>,order.evid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## now the TIME=0 sample has TAPD=0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.sim2</span><span class="op">)</span></span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<colgroup>
-<col width="3%">
-<col width="5%">
-<col width="5%">
-<col width="4%">
-<col width="4%">
-<col width="3%">
-<col width="5%">
-<col width="4%">
-<col width="24%">
-<col width="8%">
-<col width="6%">
-<col width="5%">
-<col width="8%">
-<col width="8%">
-</colgroup>
-<thead><tr class="header">
-<th align="right">ID</th>
-<th align="right">TIME</th>
-<th align="right">EVID</th>
-<th align="right">CMT</th>
-<th align="right">AMT</th>
-<th align="right">II</th>
-<th align="right">ADDL</th>
-<th align="right">MDV</th>
-<th align="left">trt</th>
-<th align="right">DOSCUMN</th>
-<th align="right">TPDOS</th>
-<th align="right">TAPD</th>
-<th align="right">PDOSAMT</th>
-<th align="right">DOSCUMA</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">300</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">300</td>
-<td align="right">300</td>
-</tr>
-</tbody>
-</table>
-</div>
 <p><code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD()</a></code> uses <code><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMdata::NMexpandDoses()</a></code> to
 make sure all dosing times are considered. See
 <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">?NMdata::addTAPD</a></code> for what the other created columns mean
 and for many useful features.</p>
 </div>
-<div class="section level3">
-<h3 id="multiple-endpoints-e-g--parent-and-metabolite">Multiple Endpoints (e.g. parent and metabolite)<a class="anchor" aria-label="anchor" href="#multiple-endpoints-e-g--parent-and-metabolite"></a>
-</h3>
+<div class="section level2">
+<h2 id="multiple-endpoints-e-g--parent-and-metabolite">Multiple Endpoints (e.g. parent and metabolite)<a class="anchor" aria-label="anchor" href="#multiple-endpoints-e-g--parent-and-metabolite"></a>
+</h2>
 <p>Pass a data.frame to <code>NMaddSamples</code>’s CMT argument to
 include multiple endpoints.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,DVID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Parent"</span>,<span class="st">"Metabolite"</span><span class="op">)</span><span class="op">)</span>,TIME<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="kable-table">
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="4%">
-<col width="7%">
-<col width="7%">
-<col width="6%">
-<col width="6%">
-<col width="4%">
-<col width="7%">
-<col width="6%">
-<col width="33%">
-<col width="16%">
-</colgroup>
+<table class="table">
 <thead><tr class="header">
 <th align="right">ID</th>
 <th align="right">TIME</th>
@@ -832,7 +1853,6 @@ include multiple endpoints.</p>
 <th align="right">II</th>
 <th align="right">ADDL</th>
 <th align="right">MDV</th>
-<th align="left">trt</th>
 <th align="left">DVID</th>
 </tr></thead>
 <tbody>
@@ -842,10 +1862,9 @@ include multiple endpoints.</p>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">300</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">NA</td>
 </tr>
 <tr class="even">
@@ -857,7 +1876,6 @@ include multiple endpoints.</p>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">Parent</td>
 </tr>
 <tr class="odd">
@@ -869,7 +1887,6 @@ include multiple endpoints.</p>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">Metabolite</td>
 </tr>
 <tr class="even">
@@ -881,7 +1898,6 @@ include multiple endpoints.</p>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">Parent</td>
 </tr>
 <tr class="odd">
@@ -893,7 +1909,6 @@ include multiple endpoints.</p>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">Metabolite</td>
 </tr>
 <tr class="even">
@@ -905,16 +1920,15 @@ include multiple endpoints.</p>
 <td align="right">24</td>
 <td align="right">5</td>
 <td align="right">1</td>
-<td align="left">300 mg then 150 mg QD</td>
 <td align="left">NA</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="section level3">
-<h3 id="cohort-dependent-or-individual-sampling-schemes">Cohort-Dependent or Individual Sampling Schemes<a class="anchor" aria-label="anchor" href="#cohort-dependent-or-individual-sampling-schemes"></a>
-</h3>
+<div class="section level2">
+<h2 id="cohort-dependent-or-individual-sampling-schemes">Cohort-Dependent or Individual Sampling Schemes<a class="anchor" aria-label="anchor" href="#cohort-dependent-or-individual-sampling-schemes"></a>
+</h2>
 <p>Same way as for the <code>CMT</code> argument, <code>TIME</code> can
 also be a <code>data.frame</code>. If it contains a covariate found in
 the doses data, the added simulation times will be merged on
@@ -922,14 +1936,13 @@ accordingly. You can use say a cohort identifier, or it could be
 <code>ID</code> which allows you to reuse (all or parts of) the observed
 sample times.</p>
 </div>
-<div class="section level3">
-<h3 id="other-features">Other features<a class="anchor" aria-label="anchor" href="#other-features"></a>
-</h3>
+<div class="section level2">
+<h2 id="other-features">Other features<a class="anchor" aria-label="anchor" href="#other-features"></a>
+</h2>
 <p>The default behavior of <code><a href="../reference/NMaddSamples.html">NMaddSamples()</a></code> is to use
 <code>EVID=2</code> (which means they are neither doses, samples, nor
 resetting events) for the added records. Should you want to change that
 (maybe to <code>EVID=0</code>), use the <code>EVID</code> argument.</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
