@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">August 28, 2025 using NMsim
+            <h4 data-toc-skip class="date">August 29, 2025 using NMsim
 0.2.4.924</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-intro.Rmd" class="external-link"><code>vignettes/NMsim-intro.Rmd</code></a></small>
@@ -243,7 +243,7 @@ final results (<code>dir.res</code>).</p>
 <span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
 <span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
 <span><span class="co">## Easily create a muliple-dose simulation data set with a loading dose</span></span>
-<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">|&gt;</span></span>
+<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fl">5</span>,II<span class="op">=</span><span class="fl">24</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">## Simulate</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,data<span class="op">=</span><span class="va">data.sim</span>,table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span>,<span class="st">"IPRED"</span>,<span class="st">"Y"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -485,24 +485,31 @@ way:</p>
 <li>Simulate 1000 new subjects with covariate sampling</li>
 </ul>
 <div class="fold s">
+<p>The NMsim package provides a convenient funtion to sample covariates
+from an existing data set. We have a simulation data set with only one
+subject. We want to replicate that data set to create 1000 subjects with
+covariates sampled with replacement from the analysis data set.
+<code><a href="../reference/sampleCovs.html">sampleCovs()</a></code> does exactly that. Notice two important
+features of <code><a href="../reference/sampleCovs.html">sampleCovs()</a></code>:</p>
+<ul>
+<li><p>It automatically makes sure to sample with equal probability from
+all subjects, independently of how many data points they have in the
+analysis set.</p></li>
+<li><p>For a simulated subject, all covariates are sampled from the same
+subject in the analysis set. This ensures preservaion of the correlation
+of the covariates from the analysis set to the simulation.</p></li>
+</ul>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Replicating input data set allows for manual resampling of covariates.</span></span>
-<span></span>
-<span><span class="co">## NMdata::findCovs() extracts unique values of column that do not vary within `by`. Since `by` is here the subject ID, that means we are finding subject level and globally equal variables only.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2372</span><span class="op">)</span></span>
-<span><span class="va">Nsubjs</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
-<span><span class="va">dt.ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>ID<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="va">Nsubjs</span><span class="op">)</span></span>
-<span><span class="va">dt.covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">T</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/findCovs.html" class="external-link">findCovs</a></span><span class="op">(</span>by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">dt.ids</span><span class="op">[</span>,<span class="va">IDEST</span><span class="op">:=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">dt.covs</span><span class="op">[</span>,<span class="va">ID</span><span class="op">]</span>,size<span class="op">=</span><span class="va">.N</span>,replace<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">dt.ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="va">dt.ids</span>,<span class="va">dt.covs</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>IDEST<span class="op">=</span><span class="va">ID</span>,<span class="va">WEIGHTB</span>,trt<span class="op">=</span><span class="va">trtact</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"IDEST"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## This is data.table-style repeating `data.sim` without `ID` for each</span></span>
-<span><span class="co">## row in dt.ids. This is an outer join, or a cartesian product. I</span></span>
-<span><span class="co">## think in dplyr, one can use `crossing` to get this.</span></span>
-<span><span class="va">data.sim.nsubjs</span> <span class="op">&lt;-</span> <span class="va">dt.ids</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">data.sim</span>,select<span class="op">=</span><span class="op">-</span><span class="va">ID</span><span class="op">)</span>,by<span class="op">=</span><span class="va">dt.ids</span><span class="op">]</span></span>
-<span><span class="co">## see, we repeated one data set using the other</span></span>
-<span><span class="co">## dims(data.sim,dt.ids,data.sim.nsubjs)</span></span>
+<code class="sourceCode R"><span><span class="co">## read the analysis data set from the model we are simulating from</span></span>
+<span><span class="va">dt.covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMscanData</a></span><span class="op">(</span><span class="va">file.mod</span>,quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co">## replicate the simulation data set (one subject) to create 1000</span></span>
+<span><span class="co">## subjects with covariates "WEIGHTB" and "trtact" sampled from the</span></span>
+<span><span class="co">## analysis set.</span></span>
+<span><span class="va">data.sim.nsubjs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sampleCovs.html">sampleCovs</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data.sim</span>,data.covs<span class="op">=</span><span class="va">dt.covs</span>,</span>
+<span>                              covs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WEIGHTB"</span>,<span class="st">"trtact"</span><span class="op">)</span>,</span>
+<span>                              Nsubjs<span class="op">=</span><span class="fl">1000</span>,seed.R<span class="op">=</span><span class="fl">2372</span><span class="op">)</span></span>
+<span><span class="co">## renaming trtact to shorter trt in this example</span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">data.sim.nsubjs</span>,<span class="st">"trtact"</span>,<span class="st">"trt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## generate the population first, by simulating etas to use in the sim</span></span>
 <span><span class="fu"><a href="../reference/simPopEtas.html">simPopEtas</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,N<span class="op">=</span><span class="fl">1000</span>,seed<span class="op">=</span><span class="fl">1231</span>,</span>
