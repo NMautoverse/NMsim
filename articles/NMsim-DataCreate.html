@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">August 29, 2025 using NMsim
+            <h4 data-toc-skip class="date">August 31, 2025 using NMsim
 0.2.4.924</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-DataCreate.Rmd" class="external-link"><code>vignettes/NMsim-DataCreate.Rmd</code></a></small>
@@ -963,9 +963,16 @@ for different subsets of subjects.</p>
 </tbody>
 </table>
 </div>
-</details><div class="section level3">
-<h3 id="adding-time-since-previous-dose">Adding Time Since Previous Dose<a class="anchor" aria-label="anchor" href="#adding-time-since-previous-dose"></a>
-</h3>
+<p>The doses can be replicated to multiple ID’s using the <code>N</code>
+argument. Default is <code>N=1</code>. If <code>N=1</code> results in
+two distinct subjects, <code>N=100</code> will result i 200 distinct
+subjects. The ID column will automatically be recoded to contain
+distinct ID’s.</p>
+</details>
+</div>
+<div class="section level2">
+<h2 id="adding-time-since-previous-dose">Adding Time Since Previous Dose<a class="anchor" aria-label="anchor" href="#adding-time-since-previous-dose"></a>
+</h2>
 <p>While not necessary for <code><a href="../reference/NMsim.html">NMsim()</a></code> to run, it’s worth
 mentioning <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code> for adding time since previous
 dose and other variables related to previous dose - previous dosing
@@ -974,7 +981,6 @@ number of doses, and culative dose amount. These are often useful to add
 to a simulation dataset:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="finalizing-and-checking-the-simulation-data">Finalizing and Checking the Simulation Data<a class="anchor" aria-label="anchor" href="#finalizing-and-checking-the-simulation-data"></a>

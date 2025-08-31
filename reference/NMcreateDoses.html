@@ -70,6 +70,7 @@ columns where the regimens differ.</p>
 <span>  RATE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  SS <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">N</span>,</span>
 <span>  addl.lastonly <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  col.id <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>  <span class="va">as.fun</span></span>
@@ -123,9 +124,16 @@ dose. This may be prefered if II and ADDL depend on covariates
 - see examples. Optional.</p></dd>
 
 
+<dt id="arg-n">N<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dd><p>Number of replications. Default is 1. If `N=1` results in
+two distinct subjects, `N=100` will result i 200 distinct
+subjects. The ID column will automatically be recoded to
+contain distinct ID's.</p></dd>
+
+
 <dt id="arg-addl-lastonly">addl.lastonly<a class="anchor" aria-label="anchor" href="#arg-addl-lastonly"></a></dt>
-<dd><p>If ADDL and II are of length 1, apply only
-to last event of a regimen? The default is `TRUE`.</p></dd>
+<dd><p>If ADDL and II are of length 1, apply only to
+last event of a regimen? The default is `TRUE`.</p></dd>
 
 
 <dt id="arg-col-id">col.id<a class="anchor" aria-label="anchor" href="#arg-col-id"></a></dt>
