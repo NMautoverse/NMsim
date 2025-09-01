@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.924</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.925</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,14 +66,14 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simulation with Modifications to Parameters and Model Code</h1>
                         <h4 data-toc-skip class="author">Simone Cassani,
 Philip Delff</h4>
                         
+            <h4 data-toc-skip class="date">September 01, 2025 using
+NMsim 0.2.4.925</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-modify-model.Rmd" class="external-link"><code>vignettes/NMsim-modify-model.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-modify-model.Rmd</code></div>
@@ -81,97 +81,8 @@ Philip Delff</h4>
 
     
     
-<style type="text/css">
-
-body{
-    font-size: 12pt;
-}
-
-h1.title {
-    font-size: 24px;
-    color: DarkRed;
-    margin-top: 2em;
-    margin-bottom: 1em;
-}
-h1 { /* Header 1 */
-    font-size: 20px;
-    color: DarkBlue;
-}
-h2 { /* Header 2 */
-    margin-top: 1em;
-    font-size: 20px;
-    color: DarkBlue;
-}
-h3 { /* Header 3 */
-    font-size: 18px;
-    font-family: "Times New Roman", Times, serif;
-    color: DarkBlue;
-}
-h4 { /* Header 4 */
-    font-size: 16px;
-    font-family: "Times New Roman", Times, serif;
-    color: DarkBlue;
-}
-table.Rtable1 {
-    font-size: 12px;
-}
-
-.superbigimage{
-    overflow-x:scroll;
-    white-space: nowrap;
-}
-
-.superbigimage img{
-    max-width: none;
-}
-
-h4.author {
-    font-weight:bold;
-    font-style:italic;
-    margin-top: 0em;
-    margin-bottom: 1em;
-}
-h4.date {
-    font-weight:bold;
-    margin-top: 0em;
-    margin-bottom: 5em;
-}
-
-
-/* -----------div tips------------- */
-
-div.summary {
-    padding: 1em;
-    margin: 1em;
-    padding-left: 50px;
-    background-size: 30px;
-    background-repeat: no-repeat;
-    background-position: 10px 10px;
-    min-height: 40px;
-    font-size: 16px;
-    color: #000000;
-    background-color: #bed3ec;
-    border: solid 5px #dfedff;
-    /* background-image: url("Summary_ffffff.png"); */
-}
-
-div.data {
-    padding: 1em;
-    margin: 1em;
-    padding-left: 50px;
-    background-size: 30px;
-    background-repeat: no-repeat;
-    background-position: 10px 10px;
-    min-height: 40px;
-    font-size: 16px;
-    color: #000000;
-    background-color: #FAD07D;
-    border: solid 5px #FFDE9C;
-    /* background-image: url("Stats graph_ffffff.png"); */
-}
-
-</style>
-<!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> --><div class="section level2">
+<!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> -->
+<div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>The introduction examples and the other examples show how to perform
@@ -242,51 +153,122 @@ in this document are unnecessary for those.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr021.mod"</span>,</span>
 <span>                        package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
-<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,II<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">## data.sim &lt;- NMreadCsv(system.file("examples/derived/dat_sim1.csv",</span></span>
-<span><span class="co">##                                   package="NMsim"))</span></span></code></pre></div>
+<span><span class="va">data.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fl">5</span>,II<span class="op">=</span><span class="fl">24</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="edit-model-parameters-inits">Edit Model Parameters (<code>inits</code>)<a class="anchor" aria-label="anchor" href="#edit-model-parameters-inits"></a>
 </h3>
-<p>First, we collect an overview of the parameters in the model, their
-initial values as specified in the control stream, and the estimated
-values, as read from the <code>.ext</code> file. We are using functions
-from NMdata to get these. If you are interested in learning more about
-these functions, <a href="">This NMdata vignette</a> is a good place to
-start.</p>
+<p>The <code>inits</code> argument is used to control the initial
+values, or more accurately all the information in parameter sections of
+the simulation control stream, such as <code>$THETA</code>,
+<code>OMEGA</code>, <code>SIGMA</code>, and even priors if those are
+used.</p>
+<p>Before doing a simulation, we collect an overview of the parameters
+in the estimated model, their initial values as specified in the control
+stream, and the estimated values, as read from the <code>.ext</code>
+file. We are using functions from NMdata to get these. If you are
+interested in learning more about these functions, <a href="">This
+NMdata vignette</a> is a good place to start.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">partab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadParsText.html" class="external-link">NMreadParsText</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span>,format<span class="op">=</span><span class="st">"%init;%symbol"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span>,by<span class="op">=</span><span class="st">"parameter"</span>,all.x<span class="op">=</span><span class="cn">TRUE</span>,common.cols<span class="op">=</span><span class="st">"drop.y"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co">## |&gt;</span></span>
-<span><span class="co">## mergeCheck(NMreadInits(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE)</span></span>
-<span><span class="co">## partab[,.(par.name,symbol,init,lower,upper,FIX,est)]</span></span>
+<span>    <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span>,by<span class="op">=</span><span class="st">"parameter"</span>,all.x<span class="op">=</span><span class="cn">TRUE</span>,common.cols<span class="op">=</span><span class="st">"drop.y"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">partab</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">symbol</span>,<span class="va">init</span>,<span class="va">est</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##       par.name   symbol    init         est</span></span>
-<span><span class="co">##         &lt;fctr&gt;   &lt;char&gt;  &lt;char&gt;       &lt;num&gt;</span></span>
-<span><span class="co">##  1:   THETA(1)    POPKA   (0,1)   2.1665600</span></span>
-<span><span class="co">##  2:   THETA(2)    POPV2 (0,100)  75.7289000</span></span>
-<span><span class="co">##  3:   THETA(3)    POPCL   (0,3)  13.9777000</span></span>
-<span><span class="co">##  4:   THETA(4)    POPV3  (0,50) 150.0600000</span></span>
-<span><span class="co">##  5:   THETA(5)      TVQ  (0,.5)   8.4865100</span></span>
-<span><span class="co">##  6: OMEGA(1,1)   BSV KA   0 FIX   0.0000000</span></span>
-<span><span class="co">##  7: OMEGA(2,2)   BSV V2     0.1   0.1786660</span></span>
-<span><span class="co">##  8: OMEGA(3,3)   BSV CL     0.1   0.2497790</span></span>
-<span><span class="co">##  9: OMEGA(4,4)   BSV V3   0 FIX   0.0000000</span></span>
-<span><span class="co">## 10: OMEGA(5,5)    BSV Q   0 FIX   0.0000000</span></span>
-<span><span class="co">## 11: SIGMA(1,1) Prop Err     0.1   0.0822435</span></span>
-<span><span class="co">## 12: SIGMA(2,2)  Add Err   0 FIX   0.0000000</span></span></code></pre>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">par.name</th>
+<th align="left">symbol</th>
+<th align="left">init</th>
+<th align="right">est</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">THETA(1)</td>
+<td align="left">POPKA</td>
+<td align="left">(0,1)</td>
+<td align="right">2.1665600</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(2)</td>
+<td align="left">POPV2</td>
+<td align="left">(0,100)</td>
+<td align="right">75.7289000</td>
+</tr>
+<tr class="odd">
+<td align="left">THETA(3)</td>
+<td align="left">POPCL</td>
+<td align="left">(0,3)</td>
+<td align="right">13.9777000</td>
+</tr>
+<tr class="even">
+<td align="left">THETA(4)</td>
+<td align="left">POPV3</td>
+<td align="left">(0,50)</td>
+<td align="right">150.0600000</td>
+</tr>
+<tr class="odd">
+<td align="left">THETA(5)</td>
+<td align="left">TVQ</td>
+<td align="left">(0,.5)</td>
+<td align="right">8.4865100</td>
+</tr>
+<tr class="even">
+<td align="left">OMEGA(1,1)</td>
+<td align="left">BSV KA</td>
+<td align="left">0 FIX</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">OMEGA(2,2)</td>
+<td align="left">BSV V2</td>
+<td align="left">0.1</td>
+<td align="right">0.1786660</td>
+</tr>
+<tr class="even">
+<td align="left">OMEGA(3,3)</td>
+<td align="left">BSV CL</td>
+<td align="left">0.1</td>
+<td align="right">0.2497790</td>
+</tr>
+<tr class="odd">
+<td align="left">OMEGA(4,4)</td>
+<td align="left">BSV V3</td>
+<td align="left">0 FIX</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">OMEGA(5,5)</td>
+<td align="left">BSV Q</td>
+<td align="left">0 FIX</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">SIGMA(1,1)</td>
+<td align="left">Prop Err</td>
+<td align="left">0.1</td>
+<td align="right">0.0822435</td>
+</tr>
+<tr class="even">
+<td align="left">SIGMA(2,2)</td>
+<td align="left">Add Err</td>
+<td align="left">0 FIX</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Let’s run a simple simulation without specifying
 <code>inits</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                data<span class="op">=</span><span class="va">data.sim</span>,</span>
 <span>                name.sim<span class="op">=</span><span class="st">"basic-sim"</span><span class="op">)</span></span></code></pre></div>
 <p>The following compares the <code>$THETA</code>, <code>$OMEGA</code>,
 and <code>$SIGMA</code> sections of the estimated and the simulated
 control streams side-by-side. The values have been updated in the
-simulation control stream based on the <code>.ext</code> file (compare
-to “init” and “est” columns in table above).</p>
+simulation control stream (to the right) based on the <code>.ext</code>
+file (compare to “init” and “est” columns in table above).</p>
 <pre><code><span><span class="co">##     file.mod$THETA                        | simulation$THETA                 </span></span>
 <span><span class="co">## [1] <span style="color: #00BB00;">"$THETA  (0,1)             ; POPKA"</span>   - <span style="color: #00BB00;">"$THETA (0,2.16656)  ; POPKA"</span> [1]</span></span>
 <span><span class="co">## [2] <span style="color: #00BB00;">"$THETA  (0,100)             ; POPV2"</span> - <span style="color: #00BB00;">"$THETA (0,75.7289)  ; POPV2"</span> [2]</span></span>
@@ -310,7 +292,7 @@ now do rerun the simulation adding some custom values for
 <code>THETA(1)</code> and <code>OMEGA(3,3)</code>. Since we are not
 using <code>inits=list(method="none")</code> all other parameter values
 are updated with final estimates.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.inits1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                       data<span class="op">=</span><span class="va">data.sim</span>,</span>
 <span>                       inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"theta(1)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.54</span><span class="op">)</span></span>
@@ -339,11 +321,11 @@ purposes like estimation or optimal sampling, properties such as “FIX”,
 lower and upper limits may also need to be modified. <code>inits</code>
 supports modification of any subset of these values. This would remove
 “FIX” and include bounds like <code>(0,0.54,10)</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.inits1b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
-<span>                       data<span class="op">=</span><span class="va">data.sim</span>,</span>
-<span>                       inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"theta(1)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.54</span>,lower<span class="op">=</span><span class="fl">0</span>,upper<span class="op">=</span><span class="fl">10</span>,FIX<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                       name.sim<span class="op">=</span><span class="st">"inits1b"</span><span class="op">)</span></span></code></pre></div>
+<span>                        data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                        inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"theta(1)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">0.54</span>,lower<span class="op">=</span><span class="fl">0</span>,upper<span class="op">=</span><span class="fl">10</span>,FIX<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                        name.sim<span class="op">=</span><span class="st">"inits1b"</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>inits</code> argument provides multiple interfaces to
 specification of parameter values. The one used above is simple and easy
 for a few parameter specifications. You can also maintain a
@@ -351,20 +333,20 @@ for a few parameter specifications. You can also maintain a
 named <code>init</code>, <code>FIX</code>, <code>lower</code>,
 <code>upper</code>. This may be more convenient for programming. Pass
 this as</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">inits</span><span class="op">=</span><span class="fu">lists</span><span class="op">(</span>inits.tab<span class="op">=</span><span class="va">my.df</span><span class="op">)</span></span></code></pre></div>
 <p>Also, you can use a specific format table used to represent parameter
 values, as obtained by <code><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMdata::NMreadExt()</a></code>. Read the
 parameters, modify, apply (here, adding 30% to
 <code>THETA(1)</code>):</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">myext</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span><span class="op">)</span></span>
 <span><span class="va">myext</span><span class="op">[</span><span class="va">myext</span><span class="op">$</span><span class="va">parameter</span><span class="op">==</span><span class="st">"THETA(1)"</span>,value<span class="op">=</span><span class="va">value</span><span class="op">*</span><span class="fl">1.3</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">simres.inits1c</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
-<span>                       data<span class="op">=</span><span class="va">data.sim</span>,</span>
-<span>                       inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ext<span class="op">=</span><span class="va">myext</span><span class="op">)</span>,</span>
-<span>                       name.sim<span class="op">=</span><span class="st">"inits1c"</span><span class="op">)</span></span></code></pre></div>
+<span>                        data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                        inits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ext<span class="op">=</span><span class="va">myext</span><span class="op">)</span>,</span>
+<span>                        name.sim<span class="op">=</span><span class="st">"inits1c"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -375,24 +357,97 @@ parameter properties), <code>modify</code> edits the control stream text
 directly. This is a powerful alternative because it can allow for
 modifications independent of parameter numbering, and the model can be
 modified very freely.</p>
+<!-- ## Modify Parameter Values by Editing the `$PK` Section -->
 <div class="section level3">
 <h3 id="example-modify-change-in-formulation">Example (<code>modify</code>): Change in formulation<a class="anchor" aria-label="anchor" href="#example-modify-change-in-formulation"></a>
 </h3>
+<p>This example edits the <code>$PK</code> section of an estimated
+Nonmem model to adjust the model variable <code>KA</code>. Imagine we
+are considering a new formulation, and we want to simulate how a
+four-fold faster absorption would impact exposure. A simple way to do
+that is to add a line <code>KA=KA/4</code> to the <code>$PK</code>
+section. Easy:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.ka4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                    data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                    name.sim<span class="op">=</span><span class="st">"sim-ka4"</span>,</span>
+<span>                    modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu">NMsim</span><span class="fu">::</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"KA=KA/4"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                    <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.ka4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="st">"simres-modify/xgxr021_simka4_MetaData.rds"</span><span class="op">)</span></span></code></pre></div>
+<p>Notice how the difference from the original simulation is that the
+control stream has a new line in <code>$PK</code> reading exactly
+<code>KA=KA/4</code>. This method works on the PK section alone and is
+independent of what <code>THETA</code> and <code>OMEGA</code> parameters
+are related to <code>KA</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">my.file.diff</span><span class="op">(</span><span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span>,</span>
+<span>             <span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres.ka4</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span>,sections<span class="op">=</span><span class="st">"PK"</span>,</span>
+<span>             x_arg<span class="op">=</span><span class="st">"basic-sim"</span>,y_arg<span class="op">=</span><span class="st">"sim-ka4"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      basic-sim$PK          | sim-ka4$PK                </span></span>
+<span><span class="co">## [10] <span style="color: #555555;">"V3=TVV3*EXP(ETA(4))"</span> | <span style="color: #555555;">"V3=TVV3*EXP(ETA(4))"</span> [10]</span></span>
+<span><span class="co">## [11] <span style="color: #555555;">"Q=TVQ*EXP(ETA(5))"</span>   | <span style="color: #555555;">"Q=TVQ*EXP(ETA(5))"</span>   [11]</span></span>
+<span><span class="co">## [12] <span style="color: #555555;">"S2=V2"</span>               | <span style="color: #555555;">"S2=V2"</span>               [12]</span></span>
+<span><span class="co">##                            - <span style="color: #0000BB;">"KA=KA/4"</span>             [13]</span></span></code></pre>
+<p>The <code>modify</code> argument takes a list, where each element is
+named as the control stream section to be modified, in this case
+<code>$PK</code>. It can be - A character vector: the entire secion is
+overwritten - A function: The function is applied to the section
+text</p>
+<p>In this case we used a function provided by NMsim called
+<code><a href="../reference/add.html">add()</a></code>. This function actually returns a function which is a
+little complicated but serves the purpose of this example. The function
+it returns appends <code>KA=KA/4</code> to whatever character vector it
+receives. It would be equivalent to do</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.ka4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                    data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                    name.sim<span class="op">=</span><span class="st">"sim-ka4"</span>,</span>
+<span>                    <span class="co">## equivalent to</span></span>
+<span>                    <span class="co">## modify=list(PK=NMsim::add("KA=KA/4"))</span></span>
+<span>                    modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">...</span>,<span class="st">"KA=KA/4"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>                    <span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/add.html">NMsim::add()</a></code> may be a little easier to write and read.
+It can also prepend text, see the <code>pos</code> argument. There is
+also a function called <code><a href="../reference/overwrite.html">NMsim::overwrite()</a></code> which can replace
+text strings. Once you try this one or two times, you will hopefully
+appreciate how easily you can tweak control streams to do what you need,
+still benifiting from <code><a href="../reference/NMsim.html">NMsim()</a></code>’s handling of data, automated
+control stream generation etc.</p>
+<p>Let’s compare the two simulation results. The absorption was slowed
+as expected.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres</span>,<span class="va">simres.ka4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">PRED</span>,colour<span class="op">=</span><span class="va">name.sim</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NMsim-modify-model_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;"></p>
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 
 The section title can be improved to match the learning objective. I agree its good to "flavor" with interpretation and communicate potential uses of these features. But I'd suggest to move that into the text.
 Suggest: "Modify parameter values by editing the $PK section"-->
+</div>
+<div class="section level3">
+<h3 id="controlling-variables-using-the-simulation-data-set">Controlling Variables Using The Simulation Data Set<a class="anchor" aria-label="anchor" href="#controlling-variables-using-the-simulation-data-set"></a>
+</h3>
+<p>In the previous example <code>KA</code> was scaled by 4 by
+specicification in the <code><a href="../reference/NMsim.html">NMsim()</a></code> call. The following example
+uses a column in the simulation data set to scale the <code>KA</code>
+value. This allows for a more flexible exploration of the effect of
+different values of <code>KA</code>.</p>
 <p>The effect on the concentration-time profile of a change in
 formulation that reduces absorption rate <code>KA</code> is explored
-with the use of a scaling factor <code>KASCALE=c(1,4,10)</code> included
-to the NONMEM control stream via the <code>modify</code> argument. The
-absorption rate reduction is provided through the <code>NMsim</code>
-simulation data <code>dat.sim.varka</code> containing dosing events,
-simulation time steps and the value of <code>KASCALE</code> for each
-simulated patient.</p>
+with the use of a scaling factor <code>KASCALE</code> included to the
+NONMEM control stream via the <code>modify</code> argument. The values
+of <code>KASCALE</code> are provided through the <code>NMsim</code>
+simulation data <code>dat.sim.varka</code> containing dosing events. We
+simulate three distinct subjects, each with their own
+<code>KASCALE</code> value. <code>KASCALE</code> values 1, 4, and 10 are
+used, corresponding to an unchanged KA, a 4-fold, and a 10-fold larger
+KA. We will be looking at <code>PRED</code> (of concentrations) so this
+is effectively a typical subject analysis.</p>
 <p>First <code>KASCALE</code> is added to the simulation data</p>
 <!-- Philip comment: remove unused code -->
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add KASCALE and copy patient info for each value of KASCALE</span></span>
 <span><span class="va">dat.sim.varka</span> <span class="op">&lt;-</span> <span class="va">data.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>KASCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">data.sim</span><span class="op">]</span> </span>
 <span><span class="va">dat.sim.varka</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">KASCALE</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span> <span class="co"># update patient IDs</span></span>
@@ -406,20 +461,24 @@ model with different absorption rates, scaled by the parameter
 the end of the <code>PK</code> section in the NONMEM control
 stream.</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span> <span class="co"># NONMEM control stream</span></span>
 <span>                     ,data<span class="op">=</span><span class="va">dat.sim.varka</span> <span class="co"># simulation data file</span></span>
-<span>                     ,name.sim<span class="op">=</span><span class="st">"varka"</span></span>
+<span>                     <span class="co">## ,name.sim="varka"</span></span>
+<span>                     ,name.sim<span class="op">=</span><span class="st">"a. add()"</span></span>
 <span>                     ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"KA=KA/KASCALE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>the specific line that defines <code>TVKA</code> is modified to
-include the effect of the scaling factor <code>KASCALE</code>
-</li>
+include the effect of the scaling factor <code>KASCALE</code>. This is
+done for illustration of <code>overwrite</code>, see the
+<code>inits</code> argument for how to edit parameter values
+directly.</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.varka2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
 <span>                      ,data<span class="op">=</span><span class="va">dat.sim.varka</span></span>
-<span>                      ,name.sim<span class="op">=</span><span class="st">"varka2"</span></span>
+<span>                       <span class="co">##,name.sim="varka2"</span></span>
+<span>                      ,name.sim<span class="op">=</span><span class="st">"b. custom/sub()"</span></span>
 <span>                      ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/overwrite.html">overwrite</a></span><span class="op">(</span><span class="st">"THETA(1)"</span>,<span class="st">"THETA(1)/KASCALE"</span><span class="op">)</span><span class="op">)</span></span>
 <span>                       <span class="op">)</span></span></code></pre></div>
 <p>The code below returns the plot</p>
@@ -428,18 +487,15 @@ This is really nice.
 I suggest
 - comment on the strengths and weaknesses of add and overwrite. I think typically, most users should use "add" because it's simpler. "add" is really simple but it can only patch after the rest of PK has already been processed. If something in PK is derived from the variables being modified, it will not work. "overwrite" is the CAS9 approach which can be very powerful and suffers from off-target risk. And also, the code needed may be more specific to a model. In this example, overwrite refers to THETA(1) which is model specific. add referring to KA only may be more generic. 
 It would be very good to include some diffr() snippets to show what happened to the PK sections. If the PK section is simple, NMreadSection(sim.mod,section="PK") may be sufficient. sim.mod should be the generated simulation control streams. You may be able to run it on all of the control streams (the estimated, and the two simulated) at once, put it into a data.table, and show the control stream lines side by side as a table. -->
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">simres.varka</span><span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.varka</span><span class="op">)</span></span>
-<span><span class="va">simres.varka2</span><span class="op">=</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">simres.varka2</span><span class="op">)</span></span>
-<span><span class="va">simres.both</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres.varka</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"a. add()"</span><span class="op">]</span>,</span>
-<span>                     <span class="va">simres.varka2</span><span class="op">[</span>,<span class="va">method</span><span class="op">:=</span><span class="st">"b. custom/sub()"</span><span class="op">]</span></span>
-<span>                     <span class="op">)</span></span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres.both</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">simres.varka</span>,</span>
+<span>                     <span class="va">simres.varka2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">simres.both</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">PRED</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">KASCALE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"Fold absorption prolongation, KASCALE"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">168</span>,by<span class="op">=</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">method</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name.sim</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="NMsim-modify-model_files/figure-html/varka-sim-plot-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified models **a** (left) and **b** (right). The equivalence and robustness of the two modified models is supported by the matching results, corresponding to reduced `PRED` values for higher values of `KASCALE` (lower absorption rate)." width="100%"><p class="caption">
@@ -451,82 +507,44 @@ reduced <code>PRED</code> values for higher values of
 <code>KASCALE</code> (lower absorption rate).
 </p>
 </div>
-<p>NOTE: the NMsim <code>overwrite</code> function prior to version
-0.1.6 has a bug that was fixed in the0.1.5.902 github release; it can be
-installed with</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"NMautoverse/NMsim"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="drug-drug-interaction-ddi">Drug-Drug Interaction (DDI)<a class="anchor" aria-label="anchor" href="#drug-drug-interaction-ddi"></a>
 </h2>
-The effect of DDI on clearance (<code>CL</code>) and bioavailability
-(<code>F1</code>) is simulated for the following scenarios
+<p>The effect of DDI on clearance (<code>CL</code>) and bioavailability
+(<code>F1</code>) is simulated for the following scenarios</p>
 <table class="table">
-<thead><tr>
-<th style="text-align:left;">
-scenario
-</th>
-<th style="text-align:left;">
-CLSCALE
-</th>
-<th style="text-align:left;">
-FSCALE
-</th>
-<th style="text-align:left;">
-CLSCALE/FSCALE
-</th>
+<thead><tr class="header">
+<th align="left">scenario</th>
+<th align="left">CLSCALE</th>
+<th align="left">FSCALE</th>
+<th align="left">CLSCALE/FSCALE</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-noDDI
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-1
-</td>
+<tr class="odd">
+<td align="left">noDDI</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-DDI.1
-</td>
-<td style="text-align:left;">
-0.5
-</td>
-<td style="text-align:left;">
-1.2
-</td>
-<td style="text-align:left;">
-0.42
-</td>
+<tr class="even">
+<td align="left">DDI.1</td>
+<td align="left">0.5</td>
+<td align="left">1.2</td>
+<td align="left">0.42</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-DDI.2
-</td>
-<td style="text-align:left;">
-0.33
-</td>
-<td style="text-align:left;">
-1.1
-</td>
-<td style="text-align:left;">
-0.3
-</td>
+<tr class="odd">
+<td align="left">DDI.2</td>
+<td align="left">0.33</td>
+<td align="left">1.1</td>
+<td align="left">0.3</td>
 </tr>
 </tbody>
 </table>
 <p>First the <code>CL</code> and <code>F1</code> data is added to the
 patient data</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 'Outer join'</span></span>
 <span><span class="va">dat.sim.DDI</span><span class="op">=</span><span class="va">data.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>CLSCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
 <span>                                ,FSCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1.2</span>,<span class="fl">1.1</span><span class="op">)</span></span>
@@ -537,7 +555,7 @@ patient data</p>
 <p>Then, the DDI driven change in parameters is added at the end of the
 PK section of the NONMEM control stream via the <code>modify</code>
 argument in the <code><a href="../reference/NMsim.html">NMsim()</a></code> function.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.DDI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
 <span>                   ,data<span class="op">=</span><span class="va">dat.sim.DDI</span></span>
 <span>                   ,name.sim<span class="op">=</span><span class="st">"DDI"</span></span>
@@ -546,7 +564,7 @@ argument in the <code><a href="../reference/NMsim.html">NMsim()</a></code> funct
 <p>The effect on the concentration-time profile is shown in the figure
 below</p>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-22-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified model for different DDIs. The modified model correctly simulates (i) a higher value of `Cmax` on day 1 for higher biovalability; (ii) a higher `PRED` value  at steady state for lower apparent clearance effect `CLSCALE/FSCALE` values." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-21-1.png" alt="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified model for different DDIs. The modified model correctly simulates (i) a higher value of `Cmax` on day 1 for higher biovalability; (ii) a higher `PRED` value  at steady state for lower apparent clearance effect `CLSCALE/FSCALE` values." width="100%"><p class="caption">
 Concentration (<code>PRED</code>) profile as a function of time computed
 by <code>NMsim</code> modified model for different DDIs. The modified
 model correctly simulates (i) a higher value of <code>Cmax</code> on day
@@ -557,7 +575,7 @@ steady state for lower apparent clearance effect
 </div>
 </div>
 <div class="section level2">
-<h2 id="dose-delay">Dose delay<a class="anchor" aria-label="anchor" href="#dose-delay"></a>
+<h2 id="dose-delay">Dose Delay<a class="anchor" aria-label="anchor" href="#dose-delay"></a>
 </h2>
 <!-- Philip comment: A little more intro would be useful. What are you simulating, and how are you doing that? The current wording aims at the ladder, but it is very technical - even I have to read it slowly to follow. -->
 <!-- Philip comment: we should explain that we could set up different simulation data sets to obtain this. I mean by delaying the dose in the data set. But we are showing this to illustrate the flexibility of these features. In practice, many users might - with good reason - prefer to edit the time column in the sim data sets. -->
@@ -566,7 +584,7 @@ including three parameters in the dataset: the dose number
 <code>DOSCUMN</code>, obtained with <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code>, the
 specific number of the delayed dose <code>DELAYDOS</code> and the time
 delay <code>ALAG</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim.alag</span> <span class="op">=</span> <span class="va">data.sim</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMexpandDoses.html" class="external-link">NMexpandDoses</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">addTAPD</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># expand doses and add dose number</span></span>
 <span><span class="va">dat.sim.alag</span><span class="op">[</span>,<span class="va">ROW</span><span class="op">:=</span><span class="va">.I</span><span class="op">]</span> <span class="co"># restore ROW with correct value</span></span>
 <span>                                        <span class="co"># add delayed dose</span></span>
@@ -582,142 +600,62 @@ delay <code>ALAG</code>.</p>
 <p>The following patient has a 6 hours delay to the administration of
 dose 2.</p>
 <table class="table">
-<thead><tr>
-<th style="text-align:right;">
-TIME
-</th>
-<th style="text-align:right;">
-AMT
-</th>
-<th style="text-align:right;">
-DOSCUMN
-</th>
-<th style="text-align:right;">
-DELAYDOS
-</th>
-<th style="text-align:right;">
-ALAG
-</th>
+<thead><tr class="header">
+<th align="right">TIME</th>
+<th align="right">AMT</th>
+<th align="right">DOSCUMN</th>
+<th align="right">DELAYDOS</th>
+<th align="right">ALAG</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-300
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">300</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="even">
+<td align="right">24</td>
+<td align="right">150</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-48
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="right">48</td>
+<td align="right">150</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-72
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="even">
+<td align="right">72</td>
+<td align="right">150</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-96
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="right">96</td>
+<td align="right">150</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-120
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="even">
+<td align="right">120</td>
+<td align="right">150</td>
+<td align="right">6</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-144
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="right">144</td>
+<td align="right">150</td>
+<td align="right">7</td>
+<td align="right">2</td>
+<td align="right">6</td>
 </tr>
 </tbody>
 </table>
@@ -727,7 +665,7 @@ where the dose delay on compartment 1 <code>ALAG1</code> is modified for
 the dose with dose number <code>DOSCUMN</code> equal to the target
 delayed dose number <code>DELAYDOS</code></p>
 <!-- Philip comment: This explanation is easier to follow than the first one -->
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.alag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
 <span>                    ,data<span class="op">=</span><span class="va">dat.sim.alag.final</span></span>
 <span>                    ,name.sim<span class="op">=</span><span class="st">"alag"</span></span>
@@ -736,7 +674,7 @@ delayed dose number <code>DELAYDOS</code></p>
 <p>The effect on concentration-time profiles and daily AUC are shown in
 the two images below.</p>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-27-1.png" alt="Effect of time delay (0, 12 and 24 hours on dose 2) on concentration (`PRED`) profile as a function of time computed by `NMsim` modified model. The implementation of the modified model simply consists of the addition of the variables `DOSCUMN`, `DELAYDOS`, and `ALAG` to the original data set, and the addition of one line of code to the PK section of the control stream via `modify`." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-26-1.png" alt="Effect of time delay (0, 12 and 24 hours on dose 2) on concentration (`PRED`) profile as a function of time computed by `NMsim` modified model. The implementation of the modified model simply consists of the addition of the variables `DOSCUMN`, `DELAYDOS`, and `ALAG` to the original data set, and the addition of one line of code to the PK section of the control stream via `modify`." width="100%"><p class="caption">
 Effect of time delay (0, 12 and 24 hours on dose 2) on concentration
 (<code>PRED</code>) profile as a function of time computed by
 <code>NMsim</code> modified model. The implementation of the modified
@@ -749,7 +687,7 @@ section of the control stream via <code>modify</code>.
 <!-- Philip comment: The AUC vs dose delay needs a little explanation. I think the intro to the dose delay example should explain we want to study the effect of delaying doses on predicted exposure. And then also just a sentence or two before this plot. -->
 <!-- Philip comment would be good to include AUC/cmax derivation as folded code. -->
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-28-1.png" alt="Daily exposure on day 3 as a function of time delay for dose 2 (left) and dose 3 (right). The simulation results predict an increased risk for possible safety concerns (left panel, over-exposure) and loss of efficacy (right panel, under-exposure) as dose time delay gets larger." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-27-1.png" alt="Daily exposure on day 3 as a function of time delay for dose 2 (left) and dose 3 (right). The simulation results predict an increased risk for possible safety concerns (left panel, over-exposure) and loss of efficacy (right panel, under-exposure) as dose time delay gets larger." width="100%"><p class="caption">
 Daily exposure on day 3 as a function of time delay for dose 2 (left)
 and dose 3 (right). The simulation results predict an increased risk for
 possible safety concerns (left panel, over-exposure) and loss of
@@ -770,7 +708,7 @@ spaced time steps of <code>0.25</code>, <code>1</code>, and
 trapez</strong>
 </li>
 </ul>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file.mod.auc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr046.mod"</span>,</span>
 <span>                            package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
 <span><span class="va">data.sim.auc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadCsv.html" class="external-link">NMreadCsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/derived/dat_sim1.csv"</span>,</span>
@@ -823,7 +761,7 @@ grid with evenly spaced time steps of <code>24</code> hours, labelled
 <strong>AUC $DES</strong>. Of note, this task requires additions to the
 control stream in multiple sections.</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># AUC with NMsim -  time step 24hr</span></span>
 <span><span class="va">data.sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/addEVID2.html">addEVID2</a></span><span class="op">(</span><span class="va">data.sim.auc</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>,CMT<span class="op">=</span><span class="fl">2</span>,time.sim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,by<span class="op">=</span><span class="fl">24</span>,length.out<span class="op">=</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -845,7 +783,7 @@ control stream in multiple sections.</li>
 <span><span class="va">sres.auc.des</span><span class="op">=</span><span class="va">sres.des</span><span class="op">[</span><span class="va">AUCNMSIM</span><span class="op">!=</span><span class="fl">0</span>,<span class="fu">.</span><span class="op">(</span><span class="va">TIME</span>,<span class="va">DAY</span>,<span class="va">PRED</span>,<span class="va">AUC.NMsim</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>The plot comparing the <code>DES</code> and <code>trapez</code> AUC
 is obtained with the code below</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sres.final</span><span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="va">sim.auc.trapez</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">DAY</span>,<span class="va">AUC</span>,<span class="va">time.step</span><span class="op">)</span><span class="op">]</span></span>
 <span>                     ,<span class="va">sres.auc.des</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">DAY</span>,<span class="va">AUC.NMsim</span><span class="op">)</span><span class="op">]</span></span>
 <span>                     ,by<span class="op">=</span><span class="st">"DAY"</span><span class="op">)</span></span>
@@ -860,7 +798,7 @@ is obtained with the code below</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"AUC 0-24h by integration through $DES, on coarse grid"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-31-1.png" alt="Daily exposures computed at run time ($DES, coarse grid, x-axis) and post-processing time (`trapez`, fine grids, y-axis). AUC (trapez) converges to the value computed with $DES method as the time step is reduced. Includes identity line." width="100%"><p class="caption">
+<img src="NMsim-modify-model_files/figure-html/unnamed-chunk-30-1.png" alt="Daily exposures computed at run time ($DES, coarse grid, x-axis) and post-processing time (`trapez`, fine grids, y-axis). AUC (trapez) converges to the value computed with $DES method as the time step is reduced. Includes identity line." width="100%"><p class="caption">
 Daily exposures computed at run time ($DES, coarse grid, x-axis) and
 post-processing time (<code>trapez</code>, fine grids, y-axis). AUC
 (trapez) converges to the value computed with $DES method as the time
