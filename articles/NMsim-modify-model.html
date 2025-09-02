@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Simone Cassani,
 Philip Delff</h4>
                         
-            <h4 data-toc-skip class="date">September 01, 2025 using
+            <h4 data-toc-skip class="date">September 02, 2025 using
 NMsim 0.2.4.925</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-modify-model.Rmd" class="external-link"><code>vignettes/NMsim-modify-model.Rmd</code></a></small>
@@ -445,15 +445,19 @@ simulate three distinct subjects, each with their own
 used, corresponding to an unchanged KA, a 4-fold, and a 10-fold larger
 KA. We will be looking at <code>PRED</code> (of concentrations) so this
 is effectively a typical subject analysis.</p>
-<p>First <code>KASCALE</code> is added to the simulation data</p>
+<p>First <code>KASCALE</code> is added to the simulation data by
+repeating the data set three for each value of <code>KASCALE</code>, and
+redefining <code>ID</code> to be distinct for each value of
+<code>KASCALE</code>. The code below uses <code>data.table</code> but
+any data manipulation tool (such as base R or dplyr) could be used.</p>
 <!-- Philip comment: remove unused code -->
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add KASCALE and copy patient info for each value of KASCALE</span></span>
 <span><span class="va">dat.sim.varka</span> <span class="op">&lt;-</span> <span class="va">data.sim</span><span class="op">[</span>,<span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>KASCALE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">data.sim</span><span class="op">]</span> </span>
 <span><span class="va">dat.sim.varka</span><span class="op">[</span>,<span class="va">ID</span><span class="op">:=</span><span class="va">.GRP</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">KASCALE</span>,<span class="va">ID</span><span class="op">)</span><span class="op">]</span> <span class="co"># update patient IDs</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.varka</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span> <span class="co"># order rows</span></span></code></pre></div>
-<p>Then the <code>NMsim</code> function is used to run the simulation in
-which the <code>modify</code> argument is used to simulate a modified
+<p>Then the <code><a href="../reference/NMsim.html">NMsim()</a></code> function is used to run the simulation
+in which the <code>modify</code> argument is used to simulate a modified
 model with different absorption rates, scaled by the parameter
 <code>KASCALE</code>. Two different approaches are demonstrated:</p>
 <ol style="list-style-type: lower-alpha">
@@ -465,7 +469,7 @@ stream.</li>
 <code class="sourceCode R"><span><span class="va">simres.varka</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span> <span class="co"># NONMEM control stream</span></span>
 <span>                     ,data<span class="op">=</span><span class="va">dat.sim.varka</span> <span class="co"># simulation data file</span></span>
 <span>                     <span class="co">## ,name.sim="varka"</span></span>
-<span>                     ,name.sim<span class="op">=</span><span class="st">"a. add()"</span></span>
+<span>                     ,name.sim<span class="op">=</span><span class="st">"add(): Append KA/KASCALE"</span></span>
 <span>                     ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/add.html">add</a></span><span class="op">(</span><span class="st">"KA=KA/KASCALE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>the specific line that defines <code>TVKA</code> is modified to
@@ -478,7 +482,7 @@ directly.</li>
 <code class="sourceCode R"><span><span class="va">simres.varka2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span></span>
 <span>                      ,data<span class="op">=</span><span class="va">dat.sim.varka</span></span>
 <span>                       <span class="co">##,name.sim="varka2"</span></span>
-<span>                      ,name.sim<span class="op">=</span><span class="st">"b. custom/sub()"</span></span>
+<span>                      ,name.sim<span class="op">=</span><span class="st">"overwrite(): Replace THETA(1) by THETA(1)/KASCALE"</span></span>
 <span>                      ,modify<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PK<span class="op">=</span><span class="fu"><a href="../reference/overwrite.html">overwrite</a></span><span class="op">(</span><span class="st">"THETA(1)"</span>,<span class="st">"THETA(1)/KASCALE"</span><span class="op">)</span><span class="op">)</span></span>
 <span>                       <span class="op">)</span></span></code></pre></div>
 <p>The code below returns the plot</p>
@@ -510,9 +514,10 @@ reduced <code>PRED</code> values for higher values of
 </div>
 </div>
 <div class="section level2">
-<h2 id="drug-drug-interaction-ddi">Drug-Drug Interaction (DDI)<a class="anchor" aria-label="anchor" href="#drug-drug-interaction-ddi"></a>
+<h2 id="additional-modify-examples">Additional <code>modify</code> Examples<a class="anchor" aria-label="anchor" href="#additional-modify-examples"></a>
 </h2>
-<p>The effect of DDI on clearance (<code>CL</code>) and bioavailability
+<details><summary><code>modify</code> example: Drug-Drug Interaction (DDI)
+</summary><p>The effect of DDI on clearance (<code>CL</code>) and bioavailability
 (<code>F1</code>) is simulated for the following scenarios</p>
 <table class="table">
 <thead><tr class="header">
@@ -573,13 +578,8 @@ steady state for lower apparent clearance effect
 <code>CLSCALE/FSCALE</code> values.
 </p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="dose-delay">Dose Delay<a class="anchor" aria-label="anchor" href="#dose-delay"></a>
-</h2>
-<!-- Philip comment: A little more intro would be useful. What are you simulating, and how are you doing that? The current wording aims at the ladder, but it is very technical - even I have to read it slowly to follow. -->
-<!-- Philip comment: we should explain that we could set up different simulation data sets to obtain this. I mean by delaying the dose in the data set. But we are showing this to illustrate the flexibility of these features. In practice, many users might - with good reason - prefer to edit the time column in the sim data sets. -->
-<p>Deviations in the administration schedule of a drug are simulated
+<details><summary><code>modify</code> example: Conditional Dose Delay
+</summary><!-- Philip comment: A little more intro would be useful. What are you simulating, and how are you doing that? The current wording aims at the ladder, but it is very technical - even I have to read it slowly to follow. --><!-- Philip comment: we should explain that we could set up different simulation data sets to obtain this. I mean by delaying the dose in the data set. But we are showing this to illustrate the flexibility of these features. In practice, many users might - with good reason - prefer to edit the time column in the sim data sets. --><p>Deviations in the administration schedule of a drug are simulated
 including three parameters in the dataset: the dose number
 <code>DOSCUMN</code>, obtained with <code><a href="https://nmautoverse.github.io/NMdata/reference/addTAPD.html" class="external-link">NMdata::addTAPD()</a></code>, the
 specific number of the delayed dose <code>DELAYDOS</code> and the time
@@ -694,12 +694,8 @@ possible safety concerns (left panel, over-exposure) and loss of
 efficacy (right panel, under-exposure) as dose time delay gets larger.
 </p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="auc">AUC<a class="anchor" aria-label="anchor" href="#auc"></a>
-</h2>
-<!-- Philip comment: A little more intro would be helpful. This is a more advanced example that modifies multiple sections. -->
-<p>The following example computes daily exposure:</p>
+<details><summary><code>modify</code> example: Calculation of AUC
+</summary><!-- Philip comment: A little more intro would be helpful. This is a more advanced example that modifies multiple sections. --><p>The following example computes daily exposure:</p>
 <ul>
 <li>at post-processing, using trapezoidal method, after the unmodified
 NONMEM model is simulated on three different fine grids with evenly
@@ -805,6 +801,53 @@ post-processing time (<code>trapez</code>, fine grids, y-axis). AUC
 step is reduced. Includes identity line.
 </p>
 </div>
+</details></details></details>
+</div>
+<div class="section level2">
+<h2 id="modify-sizes-using-sizes">Modify <code>$SIZES</code> using <code>sizes</code><a class="anchor" aria-label="anchor" href="#modify-sizes-using-sizes"></a>
+</h2>
+<p>For some NONMEM runs (simulations) it may be necessary to modify
+<code>$SIZES</code>. Remember that the simulation control stream is
+derived based on the estimation control stream, and so if
+<code>$SIZES</code> settings are found in the estimation control stream,
+those will by default also be in the simulation control stream generated
+by <code><a href="../reference/NMsim.html">NMsim()</a></code>. The <code>sizes</code> argument is hence only
+needed if the simulation <code>$SIZES</code> variables need to be
+different from those used during estimation. This will typically be the
+case due to properties of the simulation data. <code><a href="../reference/NMsim.html">NMsim()</a></code> by
+default calls NONMEM with options that should help guessing some of
+these options automatically, but here is how to do it if that fails.</p>
+<p><code>sizes</code> is very simple to use. As an example, this
+<code><a href="../reference/NMsim.html">NMsim()</a></code> call sets <code>$SIZES PD=100 LTV=70</code></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                sizes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PD<span class="op">=</span><span class="fl">100</span>,LTV<span class="op">=</span><span class="fl">70</span><span class="op">)</span>,</span>
+<span>                name.sim<span class="op">=</span><span class="st">"sim-sizes"</span><span class="op">)</span></span></code></pre></div>
+<p><code>sizes</code> by default only overwrites matching
+<code>$SIZES</code> variables. If <code>$SIZES</code> already contained
+other variables than in this case <code>PD</code> and <code>LTV</code>,
+those would be left untouched. If you want to write the
+<code>$SIZES</code> section from scratch, add
+<code>wipe=TRUE</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
+<span>                data<span class="op">=</span><span class="va">data.sim</span>,</span>
+<span>                sizes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PD<span class="op">=</span><span class="fl">100</span>,LTV<span class="op">=</span><span class="fl">70</span>,wipe<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                name.sim<span class="op">=</span><span class="st">"sim-sizes"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="modify-acceptignore-using-filters">Modify <code>ACCEPT</code>/<code>IGNORE</code> Using
+<code>filters</code><a class="anchor" aria-label="anchor" href="#modify-acceptignore-using-filters"></a>
+</h2>
+<p>The <code>filters</code> argument is an interface to control the
+<code>ACCEPT</code> and <code>IGNORE</code> (inclusion/exclusion)
+statements in NONMEM. This can be but is rarely used for simulation
+because the simulation data set is normally filtered for the simulation
+purpose. The common exception is for simlation of VPC. To avoid
+duplication of examples, please refer to</p>
+<p><a href="NMsim-VPC.html#change-the-acceptignore-statements">VPC
+Simulations</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
