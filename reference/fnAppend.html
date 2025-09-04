@@ -20,7 +20,7 @@ it's a number, we can pad some zeros if wanted. The separator
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.926</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4.927</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,15 @@ it's a number, we can pad some zeros if wanted. The separator
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fnAppend</span><span class="op">(</span><span class="va">fn</span>, <span class="va">x</span>, pad0 <span class="op">=</span> <span class="fl">0</span>, sep <span class="op">=</span> <span class="st">"_"</span>, collapse <span class="op">=</span> <span class="va">sep</span>, allow.noext <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fnAppend</span><span class="op">(</span></span>
+<span>  <span class="va">fn</span>,</span>
+<span>  <span class="va">x</span>,</span>
+<span>  pad0 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"_"</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="va">sep</span>,</span>
+<span>  position <span class="op">=</span> <span class="st">"append"</span>,</span>
+<span>  allow.noext <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,7 +77,9 @@ it's a number, we can pad some zeros if wanted. The separator
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A character string or a numeric to add to the file name</p></dd>
+<dd><p>A character string or a numeric to add to the file
+name. If a vector, the vector is collapsed to a single string,
+using `sep` as separator in the collapsed string.</p></dd>
 
 
 <dt id="arg-pad-">pad0<a class="anchor" aria-label="anchor" href="#arg-pad-"></a></dt>
@@ -91,6 +101,10 @@ separator. See the `collapse` argument to `?paste`. If you
 want to treat them as separate strings, use `collapse=NULL`
 which will lead to generation of separate file names. However,
 currently `fn` or `x` must be of length 1.</p></dd>
+
+
+<dt id="arg-position">position<a class="anchor" aria-label="anchor" href="#arg-position"></a></dt>
+<dd><p>"append" (default) or "prepend".</p></dd>
 
 
 <dt id="arg-allow-noext">allow.noext<a class="anchor" aria-label="anchor" href="#arg-allow-noext"></a></dt>
