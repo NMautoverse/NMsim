@@ -302,18 +302,21 @@ misconceptions. As you start to explore NMsim, remember: 1. NMsim
 automates simulation of Nonmem models. You never have to edit the Nonmem
 control stream manually. The path to a control stream (typically of an
 estimated model) is passed to NMsim, and NMsim will then internally
-create a simulation control stream, execute it, and return the results.
+create a simulation control stream, execute it, and return the
+results.<br>
 2. You should never save the simulation data set in a text file (like
 csv or similar). Just pass the data.frame in the <code>data</code>
 argument in <code><a href="../reference/NMsim.html">NMsim()</a></code>, and NMsim will handle and save the
 data internally, including needed modifications to the simulation
-control stream to use the provided data. 3. Re-read 1. This also means
-you never have to modify the control stream to match your simulation
-data set. NMsim fully automates this. 4. You do not have to manually
-read simulation output tables. NMsim() reads those and returns them in a
-data.frame by default. When you do
+control stream to use the provided data.<br>
+3. Re-read 1. This also means you never have to modify the control
+stream to match your simulation data set. NMsim fully automates
+this.<br>
+4. You do not have to manually read simulation output tables. NMsim()
+reads those and returns them in a data.frame by default. When you do
 <code>simres &lt;- NMsim(file.mod=my_file_path,data=my_df)</code>,
-<code>simres</code> contains (the combination of) the output table(s).
+<code>simres</code> contains (the combination of) the output
+table(s).<br>
 5. Re-read 1. You do not have to update the control stream with final
 parameter estimates. Those are by default inserted for simulation by
 <code><a href="../reference/NMsim.html">NMsim()</a></code>. <code><a href="../reference/NMsim.html">NMsim()</a></code> obtains them from the
