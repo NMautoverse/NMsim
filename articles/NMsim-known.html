@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">September 07, 2025 using
+            <h4 data-toc-skip class="date">September 08, 2025 using
 NMsim 0.2.5</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
@@ -128,12 +128,9 @@ the <code>.phi</code> file, and the user must have stored the ETAs in
 output table files for the method to work. It does not matter where in
 the table files they are, they just all need to be there. You can write
 all of them like it is done in the example model provided with
-<code>NMsim</code> called <code>xgxr032.mod</code>.</p>
-<p>If using EM algorithms such as SAEM or IMP, remember to explicitly
-write ETAs to an output table in the Nonmem control stream:</p>
+<code>NMsim</code> called <code>xgxr032.mod</code>:</p>
 <pre><code>$TABLE ETAS(1:LAST) NOAPPEND NOPRINT FILE=xgxr032_etas.txt</code></pre>
-<p>So a “subject” essentially means a set of ETAs. Covariates must still
-be provided in the input data set and can be modified if wanted. Notice,
+<p>So a “subject” essentially means a set of ETAs. Notice,
 <code>NMsim_EBE</code> does nothing to restore covariates - you must
 define covariates in input data as needed.</p>
 </div>
