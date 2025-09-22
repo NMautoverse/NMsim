@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">September 19, 2025 using
+            <h4 data-toc-skip class="date">September 22, 2025 using
 NMsim 0.2.5.902</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
@@ -153,6 +153,14 @@ curves we use hourly sampling.</p>
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fl">5</span>,II<span class="op">=</span><span class="fl">24</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">## Now we add the sample records using `NMaddSamples()`. </span></span>
 <span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p>All the subjects to be simulated must be in the data set. In this
+case we simulate all the subjects in the estimation data set. We read
+the estimated output tables and merge with input data using
+<code><a href="https://nmautoverse.github.io/NMdata/reference/NMscanData.html" class="external-link">NMdata::NMscanData()</a></code> to get those <code>ID's</code>. If you
+prefer to get the <code>ID's</code> and their covariates in a different
+way, that is fine. Just remeber, the <code>ID</code>’s must be the same
+as in the estimation for NMsim to be able to find the eta’s for
+simulation.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## read model results just to extract the observed ID's. Notice, if</span></span>
 <span><span class="co">## your model uses covariates, those should be retrieved too.</span></span>
@@ -164,9 +172,14 @@ curves we use hourly sampling.</p>
 <span><span class="co">## we will merge with all the observed subjects in stead of the single</span></span>
 <span><span class="co">## ID in the original data set.</span></span>
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="co">## the data.table way, repeating the data set for all the subjects</span></span>
+<span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="va">ids</span>,by<span class="op">=</span><span class="va">dat.sim</span><span class="op">]</span></span>
+<span><span class="co">## or, an outer join using NMdata::egdt</span></span>
 <span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/egdt.html" class="external-link">egdt</a></span><span class="op">(</span><span class="va">ids</span>,</span>
 <span>                      <span class="va">dat.sim</span></span>
 <span>                      <span class="op">)</span></span>
+<span><span class="co">## or an outer join using dplyr (code missing)</span></span>
+<span><span class="co">## order data set</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## check data</span></span>
 <span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
