@@ -22,7 +22,7 @@ studied population."><meta property="og:image" content="https://nmautoverse.gith
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.905</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.906</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,8 @@ greater than the number of subjects in data.covs.</p></dd>
 
 
 <dt id="arg-col-id">col.id<a class="anchor" aria-label="anchor" href="#arg-col-id"></a></dt>
-<dd><p>Name of the subject ID column in `data` (default is "ID").</p></dd>
+<dd><p>Name of the subject ID column in `data` (default is
+"ID").</p></dd>
 
 
 <dt id="arg-col-id-covs">col.id.covs<a class="anchor" aria-label="anchor" href="#arg-col-id-covs"></a></dt>
@@ -94,11 +95,13 @@ greater than the number of subjects in data.covs.</p></dd>
 
 
 <dt id="arg-data-covs">data.covs<a class="anchor" aria-label="anchor" href="#arg-data-covs"></a></dt>
-<dd><p>The data set containing the subjects to sample covariates from.</p></dd>
+<dd><p>The data set containing the subjects to sample
+covariates from.</p></dd>
 
 
 <dt id="arg-covs">covs<a class="anchor" aria-label="anchor" href="#arg-covs"></a></dt>
-<dd><p>The name of the covariates (columns) to sample from `data.covs`.</p></dd>
+<dd><p>The name of the covariates (columns) to sample from
+`data.covs`.</p></dd>
 
 
 <dt id="arg-seed-r">seed.R<a class="anchor" aria-label="anchor" href="#arg-seed-r"></a></dt>
@@ -115,7 +118,9 @@ NMdataConf.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame</p>
+    <p>A data.frame. Includes sampled covariates. The subject
+    ID's the covariates are sampled from will be included in a
+    column called `IDCOVS`.</p>
     </div>
 
     <div class="section level2">
