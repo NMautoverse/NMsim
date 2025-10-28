@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.907</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.908</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,10 +46,16 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.6" id="nmsim-026">NMsim 0.2.6<a class="anchor" aria-label="anchor" href="#nmsim-026"></a></h2>
 <div class="section level3">
+<h3 id="new-features-0-2-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-6"></a></h3>
+<ul><li>
+<code>NMsim_NWPRI</code> gains an argument, <code>add.diag</code>, to add a value to variance-covariance diagonal. This can be used in case the variance-covariance matrix has (typically numerically very small) negative values.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bugfixes-0-2-6">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-6"></a></h3>
-<ul><li><p><code>name.sim=string..</code> accepted</p></li>
+<ul><li><p><code>NMsim_EBE</code> now works when no data set is supplied. This can be used to get individual <code>PRED</code> and <code>IPRED</code>, especially if these are evaluated differently in the estimation control stream (e.g. using M3, <code>PRED</code> gets a different interpretation at censoring).</p></li>
+<li><p><code>name.sim</code> argument to <code><a href="../reference/NMsim.html">NMsim()</a></code> now supports strings ending in periods, e.g. <code>name.sim=string..</code> now works.</p></li>
 <li><p><code>dir.sims</code> and <code>dir.res</code> relative paths starting with <code>../</code> now work. Example: <code>dir.sims="../simtmp"</code> would fail. Fixed.</p></li>
-<li><p><code>sampleCovs</code> would fail if input data set did not include an <code>EVID</code> column. Fixed.</p></li>
+<li><p><code><a href="../reference/sampleCovs.html">sampleCovs()</a></code> would fail if input data set did not include an <code>EVID</code> column. Fixed.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
