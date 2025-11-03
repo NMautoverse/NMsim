@@ -45,7 +45,6 @@
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMreadSimModTabOne.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMreadSimRes.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMreadSimResOne.html</loc></url>
-<url><loc>https://nmautoverse.github.io/NMsim/reference/NMreadSizes.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMreplaceInits.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMrunLin.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMseed.html</loc></url>
@@ -68,7 +67,6 @@
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NMwriteSizes.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/NWPRI_df.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/add.html</loc></url>
-<url><loc>https://nmautoverse.github.io/NMsim/reference/addBlocks.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/addClass.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/addEVID2.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/addParType.html</loc></url>
@@ -80,7 +78,6 @@
 <url><loc>https://nmautoverse.github.io/NMsim/reference/cleanStrings.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/completeCov.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/count_ij.html</loc></url>
-<url><loc>https://nmautoverse.github.io/NMsim/reference/dcastSe.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/deleteTmpDirs.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/expandCovs.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/figures/NMsim_intro_PAGE2025.html</loc></url>
@@ -94,7 +91,6 @@
 <url><loc>https://nmautoverse.github.io/NMsim/reference/inputArchiveDefault.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/itriag.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/jtriag.html</loc></url>
-<url><loc>https://nmautoverse.github.io/NMsim/reference/message_dt.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/modTab.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/modifyModel.html</loc></url>
 <url><loc>https://nmautoverse.github.io/NMsim/reference/nameMultipleFiles.html</loc></url>
