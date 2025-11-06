@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5.911</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.6" id="nmsim-026">NMsim 0.2.6<a class="anchor" aria-label="anchor" href="#nmsim-026"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.6" id="nmsim-026">NMsim 0.2.6<a class="anchor" aria-label="anchor" href="#nmsim-026"></a></h2><p class="text-muted">CRAN release: 2025-11-03</p>
 <div class="section level3">
 <h3 id="new-features-0-2-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-6"></a></h3>
 <ul><li>
@@ -52,10 +52,16 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-6">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-6"></a></h3>
-<ul><li><p><code>NMsim_EBE</code> now works when no data set is supplied. This can be used to get individual <code>PRED</code> and <code>IPRED</code>, especially if these are evaluated differently in the estimation control stream (e.g. using M3, <code>PRED</code> gets a different interpretation at censoring).</p></li>
+<ul><li><p><code>NMsim_NWPRI</code> would fail on models with <code>$OMEGA BLOCK(N) SAME</code> structures. This is often used for between-occasion variability. This has been fixed, even though only single omega parameters can be used with <code>SAME</code> at this point. Also, each SAME block must be written out, as the <code>SAME(N)</code> notation for repeating <code>SAME</code> blocks is still not supported by NMsim. Thanks to Brian Reilly for working on this.</p></li>
+<li><p><code>NMsim_EBE</code> now works when no data set is supplied. This can be used to get individual <code>PRED</code> and <code>IPRED</code>, especially if these are evaluated differently in the estimation control stream (e.g. using M3, <code>PRED</code> gets a different interpretation at censoring).</p></li>
 <li><p><code>name.sim</code> argument to <code><a href="../reference/NMsim.html">NMsim()</a></code> now supports strings ending in periods, e.g. <code>name.sim=string..</code> now works.</p></li>
 <li><p><code>dir.sims</code> and <code>dir.res</code> relative paths starting with <code>../</code> now work. Example: <code>dir.sims="../simtmp"</code> would fail. Fixed.</p></li>
 <li><p><code><a href="../reference/sampleCovs.html">sampleCovs()</a></code> would fail if input data set did not include an <code>EVID</code> column. Fixed.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-improvements-0-2-6">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-6"></a></h3>
+<ul><li>
+<code>NMsim_VarCov</code> has become faster, reducing the time spent setting up simulations by around 1/3, depending on the simulation problem.</li>
 </ul></div>
 </div>
     <div class="section level2">
