@@ -8,12 +8,6 @@ samplePars_simpar <- function(file.mod,nsims,format="ext",seed.R,as.fun){
     parameter <- NULL
     FIX <- NULL
     blocksize <- NULL
-    
-    
-    if(packageVersion("NMdata")<"0.1.7.905"){
-        stop("sampleParsSimpar requires NMdata 0.1.8 or later.")
-    }
-
     DF2 <- NULL 
     iblock  <- NULL
     par.type <- NULL

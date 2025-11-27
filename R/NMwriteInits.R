@@ -275,7 +275,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     ## until NMdata 0.2.1
     pars.l <- addParameter(pars.l)
 
-### this sould be supported with a model object
+### this should be supported with a model object
     if(!is.null(file.mod)){
         pars.l[,model:=fnExtension(basename(file.mod),"")]
     } else {
