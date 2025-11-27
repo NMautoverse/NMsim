@@ -524,7 +524,6 @@ test_that("SAEM - known",{
 
 
 test_that("VPC",{
-
     
     file.mod <- "testData/nonmem/xgxr032.mod"
     nsims <- 10
@@ -1756,3 +1755,49 @@ if(FALSE){
 
     modTab(sres)
 }
+
+
+test_that("model name incl .",{
+
+    fileRef <- "testReference/NMsim_23.rds"
+
+    file.mod.orig <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
+    file.mod <- "testData/nonmem/xgxr021.dot.mod"
+    ## file.copy(file.mod.orig, file.mod)
+    # file.copy(fnExtension(file.mod,"ext"),
+    #           fnExtension("testData/nonmem/xgxr021.dot.mod","ext")
+    #           )
+    
+    set.seed(43)
+    
+    ## file.mod2 <- c(file.mod,  "testData/nonmem/xgxr032.mod")
+    
+    simres2 <- NMsim(file.mod,
+                     data=dt.sim,
+                     table.vars="PRED IPRED" ,
+                     dir.sims="testOutput",
+                     typical=TRUE,
+                     inits=list(update=FALSE),
+                     name.sim="typ.subj"
+                     )
+    simres2
+
+    expect_equal(nrow(simres2),4)
+    expect_true(simres2[,all(IPRED==PRED)])
+
+    
+
+    if(F){
+
+        fix.time(simres2)
+        expect_equal_to_reference(simres2,fileRef)
+
+
+        ref <- readRDS(fileRef)
+        compareCols(simres2,ref)
+
+        compareCols(attributes(simres2)$NMsimModTab,
+                    attributes(ref)$NMsimModTab,keep.names=FALSE)
+    }
+
+})
