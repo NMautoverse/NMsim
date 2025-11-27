@@ -1,0 +1,113 @@
+# Writes a parameter values to a control stream
+
+Edit parameter values, fix/unfix them, or edit lower/upper bounds.
+
+## Usage
+
+``` r
+NMwriteInits(
+  file.mod,
+  lines,
+  update = TRUE,
+  file.ext = NULL,
+  ext,
+  inits.tab,
+  values,
+  newfile,
+  ...
+)
+```
+
+## Arguments
+
+- file.mod:
+
+  Path to control stream.
+
+- lines:
+
+  Control stream as character vector. Use either \`file.mod\` or
+  \`lines\`, not both.
+
+- update:
+
+  If \`TRUE\` (default), the parameter values are updated based on the
+  \`.ext\` file. The path to the \`.ext\` file can be specified with
+  \`file.ext\` but that is normally not necessary.
+
+- file.ext:
+
+  Optionally provide the path to an \`.ext\` file. If not provided, the
+  default is to replace the file name extention on \`file.mod\` with
+  \`.ext\`. This is only used if \`update=TRUE\`.
+
+- ext:
+
+  An long-format parameter table as returned by \`NMreadExt()\`. Can
+  contain multiple models if \`file.mod\` does not.
+
+- inits.tab:
+
+  A wide-format parameter table, well suited for customizing initial
+  values, limits, and for fixing parameters. For multiple custom
+  parameter specifications, this may be the most suitable argument.
+
+- values:
+
+  A list of lists. Each list specifies a parameter with named elements.
+  Must be named by the parameter name. \`lower\`, \`upper\` and \`fix\`
+  can be supplied to modify the parameter. See examples. Notice, you can
+  use \`...\` instead. \`values\` may be easier for programming but
+  other than that, most users will find \`...\` more intuitive.
+
+- newfile:
+
+  If provided, the results are written to this file as a new input
+  control stream.
+
+- ...:
+
+  Parameter specifications. See examples,
+
+## Value
+
+a control stream as lines in a character vector.
+
+## Details
+
+Limitations:
+
+- \`NMwriteInits()\` can only update specifications of existing
+  parameters. It cannot insert new parameters.
+
+- lower, init, upper, and FIX must be on same line in control stream.
+
+- If using something like CL=(.1,4,15) in control stream, two of those
+  cannot be on the same line.
+
+In Nonmem an entire block is either fixed or not. \`NMwriteInits()\`
+fixes/unfixes the entire block based on the top-left element in the
+block. This means, if OMEGA(2,2)-OMEGA(3,3) is a block, the \`FIX\`
+status of OMEGA(2,2) determines whether the block is fixed. \`FIX\` of
+all other elements in the block has no effect.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+file.mod <- system.file("examples/nonmem/xgxr021.mod",package="NMdata")
+## specify parameters using ...
+NMwriteInits(file.mod,
+  "theta(2)"=list(init=1.4),
+  "THETA(3)"=list(FIX=1),
+  "omega(2,2)"=list(init=0.1)
+)
+## or put them in a list in the values argument
+NMwriteInits(file.mod,
+values=list( "theta(2)"=list(init=1.4),
+             "THETA(3)"=list(FIX=1),
+             "omega(2,2)"=list(init=0.1))
+)
+
+} # }
+```

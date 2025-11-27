@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2019-2022
+    COPYRIGHT HOLDER: Philip Delff

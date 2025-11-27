@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   NMsim-basics: NMsim-basics.html
@@ -18,7 +18,7 @@ articles:
   NMsim-TypSubj: NMsim-TypSubj.html
   NMsim-varyPars: NMsim-varyPars.html
   NMsim-VPC: NMsim-VPC.html
-last_built: 2025-11-06T16:19Z
+last_built: 2025-11-27T11:49Z
 urls:
   reference: https://nmautoverse.github.io/NMsim/reference
   article: https://nmautoverse.github.io/NMsim/articles

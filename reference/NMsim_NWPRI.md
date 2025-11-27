@@ -1,0 +1,80 @@
+# Simulate with parameter variability using the NONMEM NWPRI subroutine
+
+Modify control stream for simulation with uncertainty using
+inverse-Wishart distribution for OMEGA and SIGMA parameters
+
+This function does not run any simulations. To simulate, using this
+method, see \`NMsim()\`. See examples.
+
+## Usage
+
+``` r
+NMsim_NWPRI(file.sim, file.mod, data.sim, PLEV = 0.999, add.diag, ...)
+```
+
+## Arguments
+
+- file.sim:
+
+  The path to the control stream to be edited. This function overwrites
+  the contents of the file pointed to by file.sim.
+
+- file.mod:
+
+  Path to the path to the original input control stream provided as
+  \`file.mod\` to \`NMsim()\`.
+
+- data.sim:
+
+  Included for compatibility with \`NMsim()\`. Not used.
+
+- PLEV:
+
+  Used in `$PRIOR NWPRI PLEV=0.999`. This is a NONMEM argument to the
+  NWPRI subroutine. When PLEV \< 1, a value of THETA will actually be
+  obtained using a truncated multivariate normal distribution, i.e. from
+  an ellipsoidal region R1 over which only a fraction of mass of the
+  normal occurs. This fraction is given by PLEV.
+
+- add.diag:
+
+  A umeric value to add to the diagonal of the covariance matrix. This
+  can be used in case of negative eigenvaluen in variance-covariance
+  matrix.
+
+- ...:
+
+  Additional arguments passed to \`NMsim_default()\`.
+
+## Value
+
+Path to simulation control stream
+
+## Details
+
+Simulate with parameter uncertainty. THETA parameters are sampled from a
+multivariate normal distribution while OMEGA and SIGMA are simulated
+from the inverse-Wishart distribution. Correlations of OMEGA and SIGMA
+parameters will only be applied within modeled "blocks".
+
+## References
+
+[inverse-Wishart degrees of freedom calculation for OMEGA and SIGMA:
+NONMEM tutorial part II, supplement 1, part
+C.](https://ascpt.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2Fpsp4.12422&file=psp412422-sup-0001-Supinfo1.pdf)
+
+## See also
+
+NMsim_VarCov
+
+## Author
+
+Brian Reilly, Philip Delff
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+simres <- NMsim(file.path,method.sim=NMsim_WPRI,typical=TRUE,subproblems=500)
+} # }
+```

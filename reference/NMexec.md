@@ -1,0 +1,211 @@
+# Execute Nonmem and archive input data with model files
+
+Execute Nonmem from within R - optionally but by default in parallel.
+Archiving the input data ensures that postprocessing can still be
+reproduced if the input data files should be updated.
+
+## Usage
+
+``` r
+NMexec(
+  files,
+  file.pattern,
+  dir,
+  sge = TRUE,
+  input.archive,
+  nc,
+  dir.data = NULL,
+  wait = FALSE,
+  path.nonmem,
+  update.only = FALSE,
+  fun.post,
+  method.execute,
+  nmfe.options,
+  dir.psn,
+  args.psn.execute,
+  files.needed,
+  clean = 1,
+  backup = TRUE,
+  quiet = FALSE,
+  nmquiet = FALSE,
+  system.type
+)
+```
+
+## Arguments
+
+- files:
+
+  File paths to the models (control streams) to run nonmem on. See
+  file.pattern too.
+
+- file.pattern:
+
+  Alternatively to files, you can supply a regular expression which will
+  be passed to list.files as the pattern argument. If this is used, use
+  dir argument as well. Also see data.file to only process models that
+  use a specific data file.
+
+- dir:
+
+  If file.pattern is used, dir is the directory to search for control
+  streams in.
+
+- sge:
+
+  Use the sge queing system. Default is TRUE. Disable for quick models
+  not to wait for the queue to run the job.
+
+- input.archive:
+
+  A function of the model file path to generate the path in which to
+  archive the input data as RDS. Set to FALSE not to archive the data.
+
+- nc:
+
+  Number of cores to use if sending to the cluster. This will only be
+  used if `method.execute="psn"`, and `sge=TRUE`. Default is 64.
+
+- dir.data:
+
+  The directory in which the data file is stored. This is normally not
+  needed as data will be found using the path in the control stream.
+  This argument may be removed in the future since it should not be
+  needed.
+
+- wait:
+
+  Wait for process to finish before making R console available again?
+  This is useful if calling NMexec from a function that needs to wait
+  for the output of the Nonmem run to be available for further
+  processing.
+
+- path.nonmem:
+
+  The path to the nonmem executable. Only used if
+  `method.execute="direct"` or `method.execute="nmsim"` (which is not
+  default). If this argument is not supplied, NMexec will try to run
+  nmfe75, i.e. this has to be available in the path of the underlying
+  shell. The default value can be modified using
+  [`NMdata::NMdataConf`](https://nmautoverse.github.io/NMdata/reference/NMdataConf.html),
+  like `NMdataConf(path.nonmem="/path/to/nonmem")`
+
+- update.only:
+
+  Only run model(s) if control stream or data updated since last run?
+
+- fun.post:
+
+  A function of the path to the control stream (\`file.mod\`) that
+  generates bash code to be evaluated once Nonmem is done. This can be
+  used to automatically run a goodness-of-fit script or a simulation
+  script after model estimation.
+
+- method.execute:
+
+  How to run Nonmem. Must be one of 'psn', 'nmsim', or 'direct'.
+
+  - psn PSN's execute is used. This supports parallel Nonmem runs. Use
+    the `nc` argument to control how many cores to use for each job. For
+    estimation runs, this is most likely the better choice, if you have
+    PSN installed. See `dir.psn` argument too.
+
+  - nmsim Creates a temporary directory and runs Nonmem inside that
+    directory before copying relevant results files back to the folder
+    where the input control stream was. If `sge=TRUE`, the job will be
+    submitted to a cluster, but parallel execution of the job itself is
+    not supported. See `path.nonmem` argument too.
+
+  - direct Nonmem is called directly on the control stream. This is the
+    simplest method and is the least convenient in most cases. It does
+    not offer parallel runs and leaves all the Nonmem output files next
+    to the control streams.
+
+  See \`sge\` as well.
+
+- nmfe.options:
+
+  additional options that will be passed to nmfe. It is only used when
+  path.nonmem is available (directly or using \`NMdataConf()\`). Default
+  is "-maxlim=2" For PSN, see \`args.psn.execute\`.
+
+- dir.psn:
+
+  The directory in which to find PSN executables. This is only needed if
+  these are not searchable in the system path, or if the user should
+  want to be explicit about where to find them (i.e. want to use a
+  specific installed version of PSN).
+
+- args.psn.execute:
+
+  A character string with arguments passed to execute. Default is
+  "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml".
+
+- files.needed:
+
+  In case method.execute="nmsim", this argument specifies files to be
+  copied into the temporary directory before Nonmem is run. Input
+  control stream and simulation input data does not need to be
+  specified.
+
+- clean:
+
+  The degree of cleaning (file removal) to do after Nonmem execution. If
+  \`method.execute=="psn"\`, this is passed to PSN's \`execute\`. If
+  \`method.execute=="nmsim"\` a similar behavior is applied, even though
+  not as granular. NMsim's internal method only distinguishes between 0
+  (no cleaning), any integer 1-4 (default, quite a bit of cleaning) and
+  5 (remove temporary dir completely).
+
+- backup:
+
+  Before running, should existing results files be backed up in a sub
+  directory? If not, the files will be deleted before running.
+
+- quiet:
+
+  Suppress messages on what NMexec is doing? Default is FALSE.
+
+- nmquiet:
+
+  Suppress terminal output from \`Nonmem\`. This is likely to only work
+  on linux/unix systems.
+
+- system.type:
+
+  A charachter string, either \\windows\\ or \\linux\\ - case
+  insensitive. Windows is only experimentally supported. Default is to
+  use `Sys.info()[["sysname"]]`.
+
+## Value
+
+NULL (invisibly)
+
+## Details
+
+Use this to read the archived input data when retrieving the nonmem
+results: `NMdataConf(file.data=inputArchiveDefault)`
+
+Since \`NMexec\` will typically not be used for simulations directly
+(\`NMsim\` is the natural interface for that purpose), the default
+method for \`NMexec\` is currently to use \`method.execute="psn"\` which
+is at this point the only of the methods that allow for multi-core
+execution of a single Nonmem job (NB: \`method.execute="NMsim"\` can run
+multiple jobs in parallel which is normally sufficient for simulations).
+
+## Examples
+
+``` r
+file.mod <- "run001.mod"
+if (FALSE) { # \dontrun{
+## run locally - not on cluster
+NMexec(file.mod,sge=FALSE)
+## run on cluster with 16 cores. 64 cores is default
+NMexec(file.mod,nc=16)
+## submit multiple models to cluster
+multiple.models <- c("run001.mod","run002.mod")
+NMexec(multiple.models,nc=16)
+## run all models called run001.mod - run099.mod if updated. 64 cores to each.
+NMexec(file.pattern="run0..\\.mod",dir="models",nc=16,update.only=TRUE)
+} # }
+```

@@ -71,10 +71,10 @@
                         <h4 data-toc-skip class="author">Philip Delff,
 Boris Grinshpun</h4>
                         
-            <h4 data-toc-skip class="date">November 06, 2025 using NMsim
+            <h4 data-toc-skip class="date">November 27, 2025 using NMsim
 0.2.6</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/v0.2.6/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-forest.Rmd" class="external-link"><code>vignettes/NMsim-forest.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-forest.Rmd</code></div>
     </div>
 
@@ -559,6 +559,12 @@ Plots of Typical-Subject Simulations
 <span></span>
 <span></span>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">all.plots</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">## (`geom_line()`).</span></span>
+<span><span class="co">## Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">## (`geom_line()`).</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: Removed 2 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">## (`geom_line()`).</span></span></code></pre>
 <p><img src="NMsim-forest_files/figure-html/plot-singlesubjs-1.png" width="672"></p>
 </details>
 </div>
@@ -588,7 +594,7 @@ excels in being fast to execute because it simulates all the parameter
 sets sequentially in one Nonmem run. It is important to run this with
 <code>typical=TRUE</code>. If between-subject variability is desired,
 please refer to <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html"><code>NMsim-ParamUncertain.html</code></a>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
 <span>                            ,data<span class="op">=</span><span class="va">dt.sim.covs</span>, <span class="co"># simulation dataset</span></span>
 <span>                            ,name.sim<span class="op">=</span><span class="st">"nwpri_forest"</span> <span class="co"># output name suffix</span></span>
@@ -612,7 +618,7 @@ Show example
 </summary><p>A quick way to look for this is by combining parameter estimates
 (from the <code>.ext</code> file) and the automatic labeling of the
 parameters using <code><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMdata::NMrelate()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span><span class="va">par.type</span><span class="op">==</span><span class="st">"THETA"</span>,<span class="fu">.</span><span class="op">(</span>RSE<span class="op">=</span><span class="va">se</span><span class="op">/</span><span class="va">value</span><span class="op">)</span>,by<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">FIX</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/mergeCheck.html" class="external-link">mergeCheck</a></span><span class="op">(</span><span class="fu">NMdata</span><span class="fu">::</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMrelate.html" class="external-link">NMrelate</a></span><span class="op">(</span><span class="va">file.mod</span>,par.type<span class="op">=</span><span class="st">"THETA"</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span><span class="va">par.name</span>,<span class="va">code</span><span class="op">)</span><span class="op">]</span>,by<span class="op">=</span><span class="st">"par.name"</span>,quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
 <div class="kable-table">
@@ -699,7 +705,7 @@ with <code>typical=TRUE</code> so <code>PRED</code> and
 <code>IPRED</code> should be the same. However, with depending on the
 Nonmem version, <code>NWPRI</code> works a little differently, and
 <code>IPRED</code> has to be used prior to Nonmem 7.6.0.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Define exposure metrics</span></span>
 <span><span class="va">funs.exposure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Cmax"</span><span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">IPRED</span><span class="op">)</span></span>
@@ -712,7 +718,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span></span>
 <span>                                 <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">covlabel</span><span class="op">==</span><span class="st">"Bodyweigt (kg)"</span>,<span class="va">covlabel</span><span class="op">:=</span><span class="st">"Bodyweight (kg)"</span><span class="op">]</span></span></code></pre></div>
 </div>
@@ -723,7 +729,7 @@ Nonmem version, <code>NWPRI</code> works a little differently, and
 <code><a href="https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html" class="external-link">coveffectsplot::forest_plot()</a></code> requires certain column names
 so we adjust those first. An acceptance region such as the 80%-125% bio
 equivalence is included.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">sum.uncertain</span>,</span>
 <span>         <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">covvalf</span>,<span class="va">predmm</span>,<span class="va">predml</span>,<span class="va">predmu</span>,<span class="va">metric.var</span><span class="op">)</span>,</span>
@@ -770,7 +776,7 @@ equivalence is included.</p>
 <span></span>
 <span><span class="va">forest.day1</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Day 1"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-1.png" width="960"></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest.ss</span> <span class="op">&lt;-</span> <span class="fu">fun.plot</span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="NMsim-forest_files/figure-html/plot1-2.png" width="960"></p>
 <details><summary>
@@ -779,7 +785,7 @@ Simulation using multivariate normal distribution
 normal distribution (<code>mvrnorm</code>). This method is selected
 because it is adequate for sampling <code>THETA</code>’s, it does not
 require additional software installed, other than Nonmem.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"mvrnorm"</span>,seed.R<span class="op">=</span><span class="fl">6789</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
@@ -795,7 +801,7 @@ require additional software installed, other than Nonmem.</p>
 <span>                               <span class="op">)</span></span></code></pre></div>
 </details><details><summary>
 Simulation using simpar for parameter sampling
-</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samplePars.html">samplePars</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,nsim<span class="op">=</span><span class="fl">1000</span>,method<span class="op">=</span><span class="st">"simpar"</span>,seed.R<span class="op">=</span><span class="fl">789</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span> <span class="co"># path to NONMEM model</span></span>
@@ -811,7 +817,7 @@ Simulation using simpar for parameter sampling
 <span>                              <span class="op">)</span></span></code></pre></div>
 </details><details><summary>
 Simulation using bootstrap for parameter sampling
-</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dir.bs</span> <span class="op">&lt;-</span> <span class="st">"NMsim-forest-models/xgxr134_bs_N1000/m1"</span></span>
 <span><span class="va">exts.bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">dir.bs</span>,pattern<span class="op">=</span><span class="st">".+\\.ext$"</span>,recursive<span class="op">=</span><span class="cn">T</span>,full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">ext.boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadExt.html" class="external-link">NMreadExt</a></span><span class="op">(</span><span class="va">exts.bs</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -840,7 +846,7 @@ similarities in the results based on the parametric models and bootstrap
 cannot be generalized based on this.</p>
 <details><summary>
 Collecting, Summarizing, and Plotting all Results
-</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.forest.nwpri</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_nwpri_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.mvrnorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"</span><span class="op">)</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">simres.forest.simpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMreadSim.html">NMreadSim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simres-forest/xgxr134_simpar_forest_MetaData.rds"</span><span class="op">)</span>,wait<span class="op">=</span><span class="cn">TRUE</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
@@ -882,14 +888,14 @@ Collecting, Summarizing, and Plotting all Results
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sum.uncertain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forestSummarize.html">forestSummarize</a></span><span class="op">(</span><span class="va">simres.forest.all</span>,</span>
 <span>                                 funs.exposure <span class="op">=</span> <span class="va">funs.exposure</span>,</span>
 <span>                                 by<span class="op">=</span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/cc.html" class="external-link">cc</a></span><span class="op">(</span><span class="va">method</span>,<span class="va">period</span><span class="op">)</span>,</span>
 <span>                                 cover.ci<span class="op">=</span><span class="fl">.95</span>,</span>
 <span>                                 as.fun<span class="op">=</span><span class="st">"data.table"</span></span>
 <span>                                 <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot.compare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sum.uncertain</span><span class="op">[</span><span class="va">period</span><span class="op">==</span><span class="st">"Steady-State"</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">predmm</span>,<span class="va">covvalf</span>,colour<span class="op">=</span><span class="va">method</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="fl">.8</span>,xmax<span class="op">=</span><span class="fl">1.2</span>,ymin<span class="op">=</span><span class="op">-</span><span class="cn">Inf</span>,ymax<span class="op">=</span><span class="cn">Inf</span>,colour<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>,fill<span class="op">=</span><span class="st">"grey85"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin<span class="op">=</span><span class="va">predml</span>,xmax<span class="op">=</span><span class="va">predmu</span>,ymin<span class="op">=</span><span class="va">covvalf</span>,ymax<span class="op">=</span><span class="va">covvalf</span><span class="op">)</span>,</span>
@@ -920,7 +926,7 @@ show)
 </summary><p>Notice, the code below consists of snippets from the
 <code><a href="../reference/forestSummarize.html">NMsim::forestSummarize()</a></code> function. The code is not intended
 to be used on its own.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### use only simulated samples</span></span>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span></span>
 <span></span>
@@ -964,7 +970,7 @@ to be used on its own.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
