@@ -35,7 +35,7 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
     par.name <- NULL
     parameter <- NULL
 
-    allpars <- c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")
+    allpars <- c("THETA","OMEGA","SIGMA","THETAP","THETAPV","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")
     allpars.mat <- setdiff(allpars,"THETA")
 
     
@@ -131,7 +131,7 @@ addParameter <- function(pars,overwrite=FALSE){
     i <- NULL
     j <- NULL
 
-    allpars <- c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")
+    allpars <- c("THETA","OMEGA","SIGMA","THETAP","THETAPV","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")
     allpars.mat <- setdiff(allpars,"THETA")
     col.parameter <- "parameter"
     col.par.type <- "par.type"
@@ -160,5 +160,5 @@ addParameter <- function(pars,overwrite=FALSE){
     pars[is.na(par.name)&get(col.par.type)=="THETA",par.name:=sprintf("THETA(%s)",i)]
     pars[is.na(par.name),par.name:=get(col.parameter)]
 
-    pars
+    pars[]
 }

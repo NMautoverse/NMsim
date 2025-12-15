@@ -175,12 +175,12 @@ count_ij <- function(res){
         
         this.bsize <- 1
 
-        if(res[parnum==parcount,unique(inblock)==TRUE]){
+        if(res[parnum==parcount,unique(inblock)==TRUE&all(blocksize>1)]){
             ## assign i and j to all
             this.parblock <- res[parnum==parcount,unique(parblock)]
             this.res <- res[ parblock==this.parblock  & type.elem%in%c("init","lower","upper")]
             this.bsize <- this.res[,unique(blocksize)]
-
+            
             this.dt.ij <- data.table(parnum=parcount+seq(0,triagSize(this.bsize)-1),
                                      i=itriag(this.bsize,istart=icount),
                                      j=jtriag(this.bsize,istart=icount))
@@ -241,6 +241,7 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     elem <- NULL
     elemnum <- NULL
     inblock <- NULL
+    isame <- NULL
     j <- NULL
     lastblockmax <- NULL
     linenum <- NULL
@@ -349,8 +350,6 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
         dt.match
     }
 
-
-    
     dt.matches <- dt.lines[,getMatches(.SD),by=.(par.type)]
     
     res <- dt.matches[,classify_matches(string,patterns),by=.(par.type,linenum,elemnum)]
@@ -377,26 +376,42 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
             }
         }
         
-
         res[type.elem=="BLOCK",parblock:=as.integer(parnum)]
         res[type.elem=="BLOCK",blocksize:=as.integer(value.elem)]
         res[type.elem=="BLOCK",lastblockmax:=triagSize(blocksize)+parnum-1]
         res[,lastblockmax:=nafill(lastblockmax,type="locf")]
-
 
         res[,inblock:=FALSE]
         res[parnum<=lastblockmax,inblock:=TRUE]
         res[inblock==TRUE,blocksize:=nafill(blocksize,type="locf")]
         res[inblock==FALSE,blocksize:=1]
         res[inblock==TRUE,parblock:=nafill(parblock,type="locf")]
-
+        
+### If SAME and blocksize>1, element must be repeated for all block elements
+        res.sameblocks <- lapply(
+            split(res[value.elem=="SAME"&blocksize>1],by="elemnum")
+           ,
+            function(x){
+                newelems <- egdt(x,data.table(isame=1:triagSize(x$blocksize)),quiet=T)
+                newelems[,parnum:=parnum+isame-1]
+                newelems[,isame:=NULL]
+                newelems
+            }
+        )
+        res <- rbind(
+            res[!(value.elem=="SAME"&blocksize>1)]
+           ,
+            rbindlist(res.sameblocks)
+        )
+        setorder(res,elemnum)
+        
         res <- count_ij(res)
         res[,parblock:=NULL]
         ##res[,par.type:=section]
         res[par.type=="THETA",j:=NA]
         res
     })
-
+    
     res <- rbindlist(res.list)
     res <- addParameter(res)
     setcolorder(res,c("parameter","par.name","par.type","i","j"))
@@ -433,7 +448,9 @@ initsToExt <- function(elements){
     FIX <- NULL
     iblock <- NULL
     init <- NULL
+    init.char <- NULL
     init.num <- NULL
+    init.num.tmp <- NULL
     i <- NULL
     j <- NULL
     lower <- NULL
@@ -441,6 +458,7 @@ initsToExt <- function(elements){
     par.type <- NULL
     parameter <- NULL
     par.name <- NULL
+    SAME <- NULL
     type.elem <- NULL
     
 ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
@@ -466,10 +484,11 @@ initsToExt <- function(elements){
     pars[,FIX:=as.integer(FIX)]
     pars[is.na(FIX),FIX:=0L]
 
-    if(!"lower"%in% colnames(pars)) pars[,lower:=NA_real_]
-    if(!"upper"%in% colnames(pars)) pars[,upper:=NA_real_]
-
-    cols <- c("parameter","par.name","par.type","i","j","iblock","blocksize","init","lower","upper","FIX","SAME")
+    if(!"lower"%in% colnames(pars)) pars[,lower:=NA_character_]
+    if(!"upper"%in% colnames(pars)) pars[,upper:=NA_character_]
+    
+    pars <- addSameBlocks(pars)
+    cols <- c("parameter","par.name","par.type","i","j","iblock","blocksize","init","lower","upper","FIX","SAME","sameblock","Nsameblock")
     cols <- intersect(cols,colnames(pars))
     pars <- pars[,cols,with=FALSE]
 
@@ -478,4 +497,73 @@ initsToExt <- function(elements){
                     c("THETA","OMEGA","SIGMA","THETAP","THETAPV","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")) ,i,j)]
     
     pars[]
+}
+
+
+##' Create a variable in inital value table to keep track of SAME
+##' blocks i.e. parameters that are part of a single distribution
+##'
+##' @param inits Table of initial values as created by NMreadInits().
+##'
+##' @details
+##' sameblock:
+##'
+##' if not part of a distribution repeated using SAME: 0
+##'
+##' if part of a distribution repeated using SAME: counter (1,2,...)
+##' of the unique distribution blocks that are being reused.
+##'
+##' Nsameblock: The number of SAME calls used for a distribution
+##' block. If SAME(N) notation is used, Nsameblock=N.
+##' @author Brian Reilly
+##' @keywords internal
+
+addSameBlocks <- function(inits) {
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    startSameBlock <- NULL
+    SAME <- NULL
+    endSameBlock <- NULL
+    Nsameblock <- NULL
+    sameblock <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    inits = copy(as.data.table(inits))
+    inits[,startSameBlock := ifelse(SAME==0 & data.table::shift(SAME,type="lead") == 1, 1, 0)]
+    inits[,endSameBlock := ifelse(SAME==1 & data.table::shift(SAME,type="lead") == 0, 1, 0)]
+    df = inits
+    start <- as.integer(replace(df$startSameBlock, is.na(df$startSameBlock), 0))
+    end   <- as.integer(replace(df$endSameBlock,   is.na(df$endSameBlock),   0))
+    
+    ## allocate result and walk rows
+    df$sameblock <- 0L
+    block <- 0L
+    in_block <- FALSE
+    
+    for (i in seq_len(nrow(df))) {
+        if (start[i] == 1L) {
+            block <- block + 1L    # new block begins
+            in_block <- TRUE
+        }
+        
+        if (in_block) {
+            df$sameblock[i] <- block
+        } else {
+            df$sameblock[i] <- 0L  # or NA if you prefer
+        }
+        
+        if (end[i] == 1L) {
+                                        # end the current block after assigning this row
+            in_block <- FALSE
+        }
+    }
+    
+                                        # add N of same group
+    df[, Nsameblock := ifelse(any(sameblock!=0), .N-1, 0), by=sameblock]
+
+    df <- df[,setdiff(colnames(df),c("startSameBlock","endSameBlock")),with=FALSE]
+    
+    return(df[])
 }

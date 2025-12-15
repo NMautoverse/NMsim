@@ -165,7 +165,7 @@ NMextractText <- function(file, lines, text, section, char.section,
                ,
                 lines,
                 ignore.case=TRUE
-                ,perl=FALSE
+               ,perl=FALSE
             )
     }
     idx.ends <- grep(paste0("^ *",char.end),lines)

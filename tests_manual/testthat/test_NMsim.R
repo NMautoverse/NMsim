@@ -110,7 +110,7 @@ fix.time <- function(x,extra=NULL){
 
 context("NMsim")
 test_that("basic - default",{
-    
+
     fileRef <- "testReference/NMsim_01.rds"
     fileRef.noMeta <- fnAppend(fileRef,"noMeta")
 
@@ -128,6 +128,7 @@ test_that("basic - default",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                     )
+
     
     ##modTab(simres)
     simres.nometa <- copy(simres)
@@ -523,7 +524,6 @@ test_that("SAEM - known",{
 
 
 test_that("VPC",{
-
     
     file.mod <- "testData/nonmem/xgxr032.mod"
     nsims <- 10
@@ -1725,33 +1725,79 @@ test_that("basic - default - nmfe74",{
 
 if(FALSE){
 ### absolute paths, no dir.sims
-library(NMdata)
-library(NMsim)
-library(data.table)
+    library(NMdata)
+    library(NMsim)
+    library(data.table)
 
-NMdataConf(reset=TRUE)
-NMdataConf(as.fun="data.table")
+    NMdataConf(reset=TRUE)
+    NMdataConf(as.fun="data.table")
 
-path.candidates <- c(## metworx
-    "/opt/NONMEM/nm75/run/nmfe75"
-    ## custom linux
-   ,"/opt/nonmem/nm751/run/nmfe75"
-    ## a win path
-   ,"c:/nm75g64/run/nmfe75.bat"
-)
+    path.candidates <- c(## metworx
+        "/opt/NONMEM/nm75/run/nmfe75"
+        ## custom linux
+       ,"/opt/nonmem/nm751/run/nmfe75"
+        ## a win path
+       ,"c:/nm75g64/run/nmfe75.bat"
+    )
 
-(path.nonmem <- NMsim:::prioritizePaths(path.candidates))
-
-
-## file.mod <- "/home/philip/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
-file.mod <- "~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
-dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
-dt.sim[,BBW:=40][,ROW:=.I]
+    (path.nonmem <- NMsim:::prioritizePaths(path.candidates))
 
 
-sres <- NMsim(file.mod,data=dt.sim,name.sim="nodirs",
-              path.nonmem=path.nonmem)
+    ## file.mod <- "/home/philip/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
+    file.mod <- "~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
+    dt.dos <- NMcreateDoses(AMT=300,TIME=0)
+    dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
+    dt.sim[,BBW:=40][,ROW:=.I]
 
-modTab(sres)
+
+    sres <- NMsim(file.mod,data=dt.sim,name.sim="nodirs",
+                  path.nonmem=path.nonmem)
+
+    modTab(sres)
 }
+
+
+test_that("model name incl .",{
+
+    fileRef <- "testReference/NMsim_23.rds"
+
+    file.mod.orig <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
+    file.mod <- "testData/nonmem/xgxr021.dot.mod"
+    ## file.copy(file.mod.orig, file.mod)
+    # file.copy(fnExtension(file.mod,"ext"),
+    #           fnExtension("testData/nonmem/xgxr021.dot.mod","ext")
+    #           )
+    
+    set.seed(43)
+    
+    ## file.mod2 <- c(file.mod,  "testData/nonmem/xgxr032.mod")
+    
+    simres2 <- NMsim(file.mod,
+                     data=dt.sim,
+                     table.vars="PRED IPRED" ,
+                     dir.sims="testOutput",
+                     typical=TRUE,
+                     inits=list(update=FALSE),
+                     name.sim="typ.subj"
+                     )
+    simres2
+
+    expect_equal(nrow(simres2),4)
+    expect_true(simres2[,all(IPRED==PRED)])
+
+    
+
+    if(F){
+
+        fix.time(simres2)
+        expect_equal_to_reference(simres2,fileRef)
+
+
+        ref <- readRDS(fileRef)
+        compareCols(simres2,ref)
+
+        compareCols(attributes(simres2)$NMsimModTab,
+                    attributes(ref)$NMsimModTab,keep.names=FALSE)
+    }
+
+})

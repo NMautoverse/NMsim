@@ -1,10 +1,38 @@
 # NMsim 0.2.6
 
+## New Features
+
+* `NMsim_NWPRI` gains an argument, `add.diag`, to add a value to
+  variance-covariance diagonal. This can be used in case the
+  variance-covariance matrix has (typically numerically very small)
+  negative values.
+
 ## Bugfixes
-* `name.sim=string..` accepted
+* `NMsim_NWPRI` would fail on models with `$OMEGA BLOCK(N) SAME`
+  structures. This is often used for between-occasion
+  variability. This has been fixed, even though only single omega
+  parameters can be used with `SAME` at this point. Also, each SAME
+  block must be written out, as the `SAME(N)` notation for repeating
+  `SAME` blocks is still not supported by NMsim. Thanks to Brian
+  Reilly for working on this.
+
+* `NMsim_EBE` now works when no data set is supplied. This can be used
+  to get individual `PRED` and `IPRED`, especially if these are
+  evaluated differently in the estimation control stream (e.g. using
+  M3, `PRED` gets a different interpretation at censoring).
+
+* `name.sim` argument to `NMsim()` now supports strings ending in
+  periods, e.g. `name.sim=string..` now works.
 
 * `dir.sims` and `dir.res` relative paths starting with `../` now
   work. Example: `dir.sims="../simtmp"` would fail. Fixed.
+  
+* `sampleCovs()` would fail if input data set did not include an `EVID`
+  column. Fixed.
+
+## Other Improvements
+* `NMsim_VarCov` has become faster, reducing the time spent setting up
+  simulations by around 1/3, depending on the simulation problem.
 
 # NMsim 0.2.5
 

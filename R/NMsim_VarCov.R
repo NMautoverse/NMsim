@@ -27,9 +27,6 @@
 ##'     `mvrnorm` or `simpar`. Only used when `ext` is not provided.
 ##' @param write.ext If supplied, a path to an rds file where the
 ##'     parameter values used for simulation will be saved.
-##' @param fast Temporary. Use `fast=TRUE` to use an experimental,
-##'     faster implementation. Argument will go away when the faster
-##'     approach has been sufficiently tested and made default.
 ##' @param ... Additional arguments passed to `NMsim_default()`.
 ##' @import NMdata
 ##' @import data.table
@@ -38,7 +35,7 @@
 ##' @export
 
 NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm",ext,write.ext=NULL,
-                         fast=FALSE,...){
+                         ...){
 
 #### Section start: Dummy variables, only not to get NOTE's in package checks ####
 
@@ -133,7 +130,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
 
 
     if(!all(c("iblock","blocksize")%in%newpars)){
-        newpars <- addBlocks(newpars,col.model="submodel")
+        newpars <- NMdata:::addBlocks(newpars,col.model="submodel")
     }
 
     
@@ -144,6 +141,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
     
 ### create control streams one by one
 
+    fast <- TRUE
     if(!fast){
         ## message("NMsim_VarCov: Inits")
         res <- newpars[,
@@ -168,7 +166,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
     }
     
     if(fast){
-        warning("fast=TRUE is experimental.")
+        message("fast=TRUE is experimental.")
         message("NMsim_VarCov: Inits and output tables")
         ## writing files once instead of twice
 ### create control streams one by one

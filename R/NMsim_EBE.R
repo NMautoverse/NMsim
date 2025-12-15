@@ -72,61 +72,66 @@ NMsim_EBE <- function(file.sim,file.mod,data.sim,file.phi,return.text=FALSE){
 
     ## phi file required
 ### read estimation phi file and select subjects to be simulated
-    
+
+    path.phi.sim <- fnAppend(fnExtension(file.sim,".phi"),"input")
+
+    if(is.null(data.sim)) {
+        file.copy(file.phi,path.phi.sim)
+    }
+    if(!is.null(data.sim)){
 ### generate new phi file
-    data.sim[,rowtmp:=.I]
-    dt.id.order <- data.sim[,.SD[1],keyby=.(ID=as.character(ID)),.SDcols=cc(rowtmp)]
+        data.sim[,rowtmp:=.I]
+        dt.id.order <- data.sim[,.SD[1],keyby=.(ID=as.character(ID)),.SDcols=cc(rowtmp)]
 
 #### try to read phi file to see if it reads and has ETAs
-    etasFromTabs <- FALSE
-    res.phi <- try(NMreadPhi(file.phi,as.fun="data.table"))
-    
-    if(inherits(res.phi,"try-error")) {
-        etasFromTabs <- TRUE
-    } else {
-        if(res.phi[par.type=="ETA",.N]==0){
+        etasFromTabs <- FALSE
+        res.phi <- try(NMreadPhi(file.phi,as.fun="data.table"))
+        
+        if(inherits(res.phi,"try-error")) {
             etasFromTabs <- TRUE
+        } else {
+            if(res.phi[par.type=="ETA",.N]==0){
+                etasFromTabs <- TRUE
+            }
         }
-    }
-    if(etasFromTabs){
-        ## Could we just read tables and assume we can find an ID? Or how can NMscanData be informed with col.row etc?
-        dt.res <- NMscanData(file.mod,quiet=TRUE)
-        file.phi <- tempfile()
-        genPhiFile(data=dt.res,file=file.phi)
-    }
+        if(etasFromTabs){
+            ## Could we just read tables and assume we can find an ID? Or how can NMscanData be informed with col.row etc?
+            dt.res <- NMscanData(file.mod,quiet=TRUE)
+            file.phi <- tempfile()
+            genPhiFile(data=dt.res,file=file.phi)
+        }
 
 #### NMreadPhi converts to long format R-friendly format. We prefer to manipulate the raw text lines for now. The alternative would be to read using NMreadPhi, then use genPhiFile(). However, that adds steps that may change format. For now, it is considered safer to just use the phi lines.
 ###### using the last table found in .phi to generate lines for a new .phi file. 
-    phi.lines <- data.table(text=readLines(file.phi))
-    phi.lines[,n:=.I]
-    ## Accepting E and R which can be in numbers (R?)
-    phi.lines[,is.data:=!grepl("[abcdfghijklmnopqrstuvwxyzABCDFGHIJKLMNOPQSTUVWXYZ]",x=text)]
-    phi.lines[is.data==TRUE,textmod:=gsub(" +"," ",text)]
-    phi.lines[is.data==TRUE,textmod:=gsub("^ +","",textmod)]
-    phi.lines[is.data==TRUE,ID:=strsplit(textmod,split=" ")[[1]][2],by=.(n)]
-    ## phi.lines
-    ## picking last table - for SAEM+IMP that means we use IMP phi's
-    phi.lines[,tableStart:=FALSE]
-    phi.lines[grepl("^ *TABLE NO\\..*",text),tableStart:=TRUE]
-    phi.lines[,TABLE.NO:=cumsum(tableStart)]
-    phi.lines <- phi.lines[TABLE.NO==max(TABLE.NO)]
+        phi.lines <- data.table(text=readLines(file.phi))
+        phi.lines[,n:=.I]
+        ## Accepting E and R which can be in numbers (R?)
+        phi.lines[,is.data:=!grepl("[abcdfghijklmnopqrstuvwxyzABCDFGHIJKLMNOPQSTUVWXYZ]",x=text)]
+        phi.lines[is.data==TRUE,textmod:=gsub(" +"," ",text)]
+        phi.lines[is.data==TRUE,textmod:=gsub("^ +","",textmod)]
+        phi.lines[is.data==TRUE,ID:=strsplit(textmod,split=" ")[[1]][2],by=.(n)]
+        ## phi.lines
+        ## picking last table - for SAEM+IMP that means we use IMP phi's
+        phi.lines[,tableStart:=FALSE]
+        phi.lines[grepl("^ *TABLE NO\\..*",text),tableStart:=TRUE]
+        phi.lines[,TABLE.NO:=cumsum(tableStart)]
+        phi.lines <- phi.lines[TABLE.NO==max(TABLE.NO)]
 
-    
-    
-    phi.use <- mergeCheck(dt.id.order[,.(ID)],phi.lines[,.(ID,text)],by=cc(ID),all.x=TRUE,quiet=TRUE)
-    
+        phi.use <- mergeCheck(dt.id.order[,.(ID)],phi.lines[,.(ID,text)],by=cc(ID),all.x=TRUE,quiet=TRUE)
+        
 
 ### Error if subjects in data are not found in phi
-    if(phi.use[,any(is.na(text))]){
-        message("IDs not found in nonmem results (phi file): ", paste(phi.use[is.na(text),ID],collapse=", "))
-        phi.use <- phi.use[!is.na(text)]
+        if(phi.use[,any(is.na(text))]){
+            message("IDs not found in nonmem results (phi file): ", paste(phi.use[is.na(text),ID],collapse=", "))
+            phi.use <- phi.use[!is.na(text)]
+        }
+        phi.use <- rbind(phi.lines[is.data==FALSE,.(text)],phi.use,fill=TRUE)
+
+        lines.phi <- phi.use[,text]
+        writeTextFile(lines.phi,path.phi.sim)
     }
-    phi.use <- rbind(phi.lines[is.data==FALSE,.(text)],phi.use,fill=TRUE)
 
-    lines.phi <- phi.use[,text]
-    path.phi.sim <- fnAppend(fnExtension(file.sim,".phi"),"input")
-
-
+    
 ### udpate simulation control stream
     lines.new <- sprintf("$ETAS FILE=%s FORMAT=s1pE15.8 TBLN=1
 $ESTIMATION  MAXEVAL=0 NOABORT METHOD=1 INTERACTION FNLETA=2",basename(path.phi.sim))
@@ -138,13 +143,15 @@ $ESTIMATION  MAXEVAL=0 NOABORT METHOD=1 INTERACTION FNLETA=2",basename(path.phi.
 
     
     if(return.text){
+        if(is.null(lines.phi)){
+            lines.phi <- readLines(path.phi.sim)
+        }
         return(list(mod=lines.sim,
                     phi=lines.phi))
     }
     
     writeTextFile(lines=lines.sim,file=file.sim)
     
-    writeTextFile(lines.phi,path.phi.sim)
 
     
     

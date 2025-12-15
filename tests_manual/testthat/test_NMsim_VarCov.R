@@ -16,7 +16,7 @@ fix.time <- function(x){
 ## library(devtools)
 ## load_all("~/wdirs/NMdata")
 
-NMdataConf(dir.sims="testOutput")
+NMdataConf(dir.sims="testOutput",as.fun="data.table")
 
 context("NMsim_VarCov")
 test_that("VarCov simpar",{
@@ -31,7 +31,8 @@ test_that("VarCov simpar",{
                             package="NMsim")
 
     ## determine parameter space with simpar (see Appendix)
-    ext.simpar <- sampleParsSimpar(file.mod=file.mod,nsim=10,seed.R = 1)
+    ## ext.simpar <- sampleParsSimpar(file.mod=file.mod,nsim=10,seed.R = 1)
+    ext.simpar <- samplePars(file.mod=file.mod,nsim=10,seed.R = 1,method="simpar")
 
     ## run NMsim (separate call for each dataset)
     simpar.sim <- 
@@ -42,12 +43,37 @@ test_that("VarCov simpar",{
              ,method.sim=NMsim_VarCov
              ,table.vars="PRED IPRED Y KA V2 V3 CL Q"
               ##,sge=TRUE
-             ,seed.R=2
+             ,seed.R=2,
+              fast=FALSE
               )
 
     simpar.res <- NMreadSim(simpar.sim,wait=T)
-
+    fix.time(simpar.res)
+    
     expect_equal_to_reference(simpar.res,fileRef)
+
+    simpar.sim.fast <- 
+        NMsim(file.mod=file.mod
+             ,data=full.dt.sim
+             ,ext=ext.simpar
+             ,name.sim="ACOP2024_simpar"
+             ,method.sim=NMsim_VarCov
+             ,table.vars="PRED IPRED Y KA V2 V3 CL Q"
+              ##,sge=TRUE
+             ,seed.R=2,
+              fast=TRUE
+              )
+
+    simpar.res.fast <- NMreadSim(simpar.sim.fast,wait=TRUE)
+    fix.time(simpar.res.fast)
+    
+    expect_equal_to_reference(simpar.res.fast,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)
+        ref
+        simpar.res
+    }
 })
 
 

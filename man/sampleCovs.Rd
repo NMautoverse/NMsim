@@ -21,14 +21,17 @@ sampleCovs(
 \item{Nsubjs}{The number of subjects to be sampled. This can be
 greater than the number of subjects in data.covs.}
 
-\item{col.id}{Name of the subject ID column in `data` (default is "ID").}
+\item{col.id}{Name of the subject ID column in `data` (default is
+"ID").}
 
 \item{col.id.covs}{Name of the subject ID column in `data.covs`
 (default is "ID").}
 
-\item{data.covs}{The data set containing the subjects to sample covariates from.}
+\item{data.covs}{The data set containing the subjects to sample
+covariates from.}
 
-\item{covs}{The name of the covariates (columns) to sample from `data.covs`.}
+\item{covs}{The name of the covariates (columns) to sample from
+`data.covs`.}
 
 \item{seed.R}{If provided, passed to `set.seed()`.}
 
@@ -39,7 +42,9 @@ as.fun="data.table". The default can be configured using
 NMdataConf.}
 }
 \value{
-A data.frame
+A data.frame. Includes sampled covariates. The subject
+    ID's the covariates are sampled from will be included in a
+    column called `IDCOVS`.
 }
 \description{
 Repeats a data set with just one subject by sampling covariates

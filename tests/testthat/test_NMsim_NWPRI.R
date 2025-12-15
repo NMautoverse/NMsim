@@ -70,7 +70,6 @@ test_that("NMsim_NWPRI",{
                   method.update.inits="nmsim")
 
     mod <- NMreadSection("testOutput/xgxr032_sd1_NWPRI/xgxr032_sd1_NWPRI.mod")
-    
 
     ## ref <- readRDS(fileRef)
     if(packageVersion("NMdata")>="0.2.1"){

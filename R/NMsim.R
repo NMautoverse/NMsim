@@ -870,7 +870,11 @@ NMsim <- function(file.mod,data,
     dt.models[,fn.mod:=basename(file.mod)]
 ### prepending NMsim to model names
     ## dt.models[,fn.sim:=fnExtension(name.mod,".mod")]
-    dt.models[,fn.sim:=fnExtension(model,".mod")]
+### This cannot be done with fnExtension() because that would strip
+    ### part of the model name after a ".". Instead, ".mod" is simply
+    ### appended.
+    ## dt.models[,fn.sim:=fnExtension(model,".mod")]
+    dt.models[,fn.sim:=paste0(model,".mod")]
     dt.models[,fn.sim:=cleanStrings(fn.sim)]
 
     ## fn.sim should be unique
@@ -940,7 +944,7 @@ NMsim <- function(file.mod,data,
     ## dt.models[,fn.sim:=gsub(" ","_",fn.sim)]
     dt.models[,fn.sim:=cleanStrings(fn.sim)]
     ## run.sim should be deprecated. model.sim is what is used in results data. No model is used in results data. But model.sim is the necesary clean name
-
+    
     ## dt.models[,run.sim:=modelname(fn.sim)]
     dt.models[,model.sim:=modelname(fn.sim)]
     ## dt.models[,model.sim:=modelname(fn.sim.predata)]
@@ -1390,6 +1394,7 @@ NMsim <- function(file.mod,data,
     ## read by NMscanData. This must be derived after method.sim may
     ## have spawned more runs.
     dt.models[,path.sim.lst:=fnExtension(path.sim,".lst")]
+#### model.sim has been defined already. I don't understand why it's redefined here.
     dt.models[,model.sim:=modelname(path.sim)]
     
     ## dt.models[,ROWMODEL2:=.I]

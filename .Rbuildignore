@@ -72,4 +72,4 @@ simtmp.*
 ^tests/testthat/testOutput/*
 ^tests/testthat/testOutput/.*fst
 ^tests/testthat/testData/nonmem/NMsim/xgxr032_tabopts5
-
+^tests/testthat/testData/nonmem/NMsim/.+.dir[0-9]+

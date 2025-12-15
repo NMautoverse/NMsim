@@ -66,16 +66,8 @@ forestSummarize <- function(data,funs.exposure,cover.ci=0.95,by,as.fun){
 
     if(missing(as.fun)) as.fun <- NULL
     as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
-
-    ##if(missing(cols.value)) cols.value <- NULL
-    
-    ## A standard evaluation interface to data.table::dcast
-    dcastSe <- function(data,l,r,...){
-        lhs <- paste(l,collapse="+")
-        formula.char <- paste(lhs,r,sep="~")
-        dcast(data,formula=as.formula(formula.char),...)
-    }
-    
+    dcastSe <- NMdata:::dcastSe   
+        
 ### this is using model and model.sim as introduced in NMsim 0.1.4
     ## will not work with earlier versions!
     
@@ -92,18 +84,6 @@ forestSummarize <- function(data,funs.exposure,cover.ci=0.95,by,as.fun){
 
     
     simres <- as.data.table(data)[EVID==2]
-
-    ## if(is.null(cols.value)){
-    ##     databy <- setdiff(databy,"pred.type")
-    ## } else {
-### The var.conc argument applied
-    ## long format so calculations can be done by "prediction type".
-    ## simres <- melt(simres,
-    ##                measure.vars=cols.value,
-    ##                variable.name="pred.type",
-    ##                value.name="value")
-    ## }
-
     
     ## allby expands "by" to contain data columns that calculations
     ## will always be done by.

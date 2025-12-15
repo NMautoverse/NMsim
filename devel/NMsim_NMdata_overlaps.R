@@ -69,21 +69,21 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 
 
 ## Maybe NMwriteSection belongs better in NMsim?
-
+## NMctl. Belongs in NMdata. NMdata 0.2.2 required.
+## NMextractText. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMreadFilters. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMreadInits. Belongs in NMdata. NMdata 0.2.2 required.
+## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2.
+## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.2. (collapse arg)
+## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required.
+## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. 
+
 ## NMwriteFilters. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInitsOne. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
-## addBlocks. Belongs in NMdata (internal). Requires NMdata 0.2.1.
-## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2.
-## dcastSe. Belongs in NMdata (internal). Requires NMdata 0.2.1.
-## message_dt. Belongs in NMdata (internal). Requires NMdata 0.2.1.
-## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.2. (collapse arg)
-## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required.
-## NMextractText. Belongs in NMdata. NMdata 0.2.2 required.
-## NMreadSizes. Belongs in NMdata. NMdata 0.2.1 required. NMreadSizes uses NMreadSection.
-## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. 
+
+## addBlocks. Belongs in NMdata (internal). Requires NMdata 0.2.1. Dropped in NMsim 0.2.6
+
 ## dtapply and lapplydt belong in NMdata
 
 length(res.list)

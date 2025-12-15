@@ -63,7 +63,7 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
     res.list <- lapply(x,unwrapRDS)
     modtab <- rbindlist(res.list,fill=TRUE)
     
-    ## add in usable path to sim results
+    ## add in usable path to sim results. This has to be dir.sims followed by the path to the resulting lst, relative to dir.sims. dir.sims is an argument to this function.
     modtab[,ROWTMP:=.I]
     modtab[,path.lst.read:={
         
@@ -77,20 +77,25 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
         simplePath(
             file.path(dirSims,
 #### issue: path.sim.lst contains the simtmp dir name first. dirSims also ends in that name. This fix goes one level up between the two, but this may fail if file.path(dirSims,"..") does not exist.
+
 ###this does not work when dirSims is not a direct subfolder to getwd()
                       ## relative_path(path.sim.lst,dirSims)
                       
-                      relative_path(
-                          simplePath(file.path(dirSims,"..",path.sim.lst))
-                         ,
-                          dir=simplePath(dirSims)
-                      )
+                      relative_path(path.sim.lst,dirSims)
+
+                      ## relative_path(
+                      ##     simplePath(file.path(dirSims,"..",path.sim.lst))
+                      ##    ,
+                      ##     dir=simplePath(dirSims)
+                      ## )
                       )
         )
     },
     ## by=.(ROWMODEL2)
     by=.(ROWTMP)
     ]
+    
+    
     modtab[,ROWTMP:=NULL]
     
 ### rather than reading one rds at a time, we should read all the

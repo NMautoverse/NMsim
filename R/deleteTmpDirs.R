@@ -40,7 +40,7 @@ deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
                              pattern=c(".*\\_dir[0-9]+$",
                                        "_*\\.dir[0-9]+$",
                                        ".*modelfit_dir\\d+",
-                                       "backup_\\d+")
+                                       "backup_.+")
                              )
     if(missing(methods)||is.null(methods)) methods <- dt.methods[,method]
     ## if(missing(methods)) methods <- c("psn","nmsim")

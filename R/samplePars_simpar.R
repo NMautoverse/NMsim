@@ -8,8 +8,6 @@ samplePars_simpar <- function(file.mod,nsims,format="ext",seed.R,as.fun){
     parameter <- NULL
     FIX <- NULL
     blocksize <- NULL
-    
-    
     DF2 <- NULL 
     iblock  <- NULL
     par.type <- NULL

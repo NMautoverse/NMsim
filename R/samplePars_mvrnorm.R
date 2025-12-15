@@ -59,7 +59,7 @@ samplePars_mvrnorm <- function(file.mod,nsims,format,as.fun){
     if(nrow(newpars.invalid )){
         sum.invalid <- newpars.invalid[,.("No of truncations"=.N),keyby=.(parameter)]
         message("Variance parameters have been truncated at 0 from their negative sampled values.")
-        message_dt(sum.invalid)
+        NMdata:::message_dt(sum.invalid)
         
         warning("Variance parameters have been truncated.")
     }

@@ -136,13 +136,13 @@ print.summary_NMsimRes <- function(x,...){
     if( !is.null(x$id )){
         message("Summary of number of ID's")
         x$id[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
-        message_dt(x$id[,.("No of ID's."=N.ID,"Rows per ID (min; max)"= sum.rep)])
+        NMdata:::message_dt(x$id[,.("No of ID's."=N.ID,"Rows per ID (min; max)"= sum.rep)])
     }
 
     if( !is.null(x$id.evid )){
         message("Number of ID's on each event type:")
         x$id.evid[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
-        message_dt(x$id.evid[,.(EVID,"No of ID's."=N.ID,"Rows per ID (min; max)"=sum.rep)])
+        NMdata:::message_dt(x$id.evid[,.(EVID,"No of ID's."=N.ID,"Rows per ID (min; max)"=sum.rep)])
     }
 
 
@@ -150,7 +150,7 @@ print.summary_NMsimRes <- function(x,...){
         message("Not all ID's have all event types.")
         message("Number of other events for those who do not:")
         ##x$evid.miss[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
-        message_dt(x$evid.miss[,setdiff(colnames(x$evid.miss),"grp0"),with=FALSE])
+        NMdata:::message_dt(x$evid.miss[,setdiff(colnames(x$evid.miss),"grp0"),with=FALSE])
     }
 
     return(invisible(NULL))

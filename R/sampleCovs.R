@@ -8,18 +8,23 @@
 ##' @param data A simulation data set with only one subject
 ##' @param Nsubjs The number of subjects to be sampled. This can be
 ##'     greater than the number of subjects in data.covs.
-##' @param col.id Name of the subject ID column in `data` (default is "ID").
+##' @param col.id Name of the subject ID column in `data` (default is
+##'     "ID").
 ##' @param col.id.covs Name of the subject ID column in `data.covs`
 ##'     (default is "ID").
-##' @param data.covs The data set containing the subjects to sample covariates from.
-##' @param covs The name of the covariates (columns) to sample from `data.covs`.
+##' @param data.covs The data set containing the subjects to sample
+##'     covariates from.
+##' @param covs The name of the covariates (columns) to sample from
+##'     `data.covs`.
 ##' @param seed.R If provided, passed to `set.seed()`.
 ##' @param as.fun The default is to return data as a data.frame. Pass
 ##'     a function (say `tibble::as_tibble`) in as.fun to convert to
 ##'     something else. If data.tables are wanted, use
 ##'     as.fun="data.table". The default can be configured using
 ##'     NMdataConf.
-##' @return A data.frame 
+##' @return A data.frame. Includes sampled covariates. The subject
+##'     ID's the covariates are sampled from will be included in a
+##'     column called `IDCOVS`.
 ##' @examples
 ##' library(NMdata)
 ##' data.covs <- NMscanData(system.file("examples/nonmem/xgxr134.mod",package="NMsim"))
@@ -97,7 +102,7 @@ sampleCovs <- function(data,
     dt.sim.covs <- dt.ids[,
                           data[,setdiff(colnames(data),c(col.id,covs)),with=FALSE]
                          ,by=dt.ids]
-    setorder(dt.sim.covs,ID,TIME,EVID)
+    setorderv(dt.sim.covs,cols=intersect(c("ID","TIME","EVID"),colnames(dt.sim.covs)))
 
     ## return dt.sim.covs
     as.fun(dt.sim.covs)
