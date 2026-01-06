@@ -17,7 +17,7 @@
 ##' @export
 
 
-deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
+deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE,as.fun){
 
     . <- NULL
     method <- NULL
@@ -56,12 +56,17 @@ deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
     )
    ,by=.(row,method,pattern)]
 
+    dt.sum.finds <- dt.finds[,.N,by=.(method,pattern)]
+
     if(delete){
         dt.finds[,unlink(find,recursive=TRUE)]
+        message("Deleted file types:")
+    } else {
+        message("Found file types:")
     }
 
-    dt.sum.finds <- dt.finds[,.N,by=.(method,pattern)]
-    
-    dt.sum.finds
+    NMdata:::message_dt(dt.sum.finds)
+
+    invisible(dt.finds)
     
 }
