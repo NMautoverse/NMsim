@@ -1,3 +1,13 @@
+# NMsim 0.2.7
+
+## New Features
+
+* `prioritizePaths()`
+
+## Bugfixes
+
+* Prints of 1E-30
+
 # NMsim 0.2.6
 
 ## New Features

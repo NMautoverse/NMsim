@@ -117,7 +117,14 @@ NMsim_EBE <- function(file.sim,file.mod,data.sim,file.phi,return.text=FALSE){
         phi.lines[,TABLE.NO:=cumsum(tableStart)]
         phi.lines <- phi.lines[TABLE.NO==max(TABLE.NO)]
 
-        phi.use <- mergeCheck(dt.id.order[,.(ID)],phi.lines[,.(ID,text)],by=cc(ID),all.x=TRUE,quiet=TRUE)
+        
+
+        phi.use <-
+            mergeCheck(
+                dt.id.order[,.(ID)]
+               ,
+                phi.lines[,.(ID,text)]
+               ,by=cc(ID),all.x=TRUE,quiet=TRUE)
         
 
 ### Error if subjects in data are not found in phi

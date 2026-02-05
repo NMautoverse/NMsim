@@ -4,7 +4,7 @@
 \alias{deleteTmpDirs}
 \title{clean up temporary directories left by PSN and NMsim.}
 \usage{
-deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE)
+deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE, as.fun)
 }
 \arguments{
 \item{dir}{The directory in which to look for contents to clean}
@@ -21,6 +21,11 @@ for recursively.}
 
 \item{delete}{Delete the found matches? If not, the matches are
 just reported, but nothing deleted.}
+
+\item{as.fun}{Pass a function (say tibble::as_tibble) in as.fun to convert
+to something else. If data.tables are wanted, use
+as.fun="data.table". The default is to return data as a
+data.frame. Modify the defaul using `NMdataConf()`.}
 }
 \value{
 data.table with identified items for deletion

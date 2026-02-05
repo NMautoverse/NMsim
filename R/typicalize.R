@@ -33,10 +33,10 @@ typicalize <- function(file.mod,lines,section,newfile){
     section <- toupper(section)
 
     inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
+    inits[,init:=as.character(init)]
+    valc.0 <- "1E-30"
 
-    valc.0 <- 1e-30
-    
-    inits[par.type%in%section,init:=0]
+    inits[par.type%in%section,init:="0"]
     inits[par.type%in%section,FIX:=1]
     if("blocksize"%in%colnames(inits)){
         inits[par.type%in%section&blocksize>1,init:=valc.0]

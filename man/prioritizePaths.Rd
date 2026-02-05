@@ -18,4 +18,3 @@ When using scripts on different systems, the Nonmem path may
 change from run to run. With this function you can specify a few
 paths, and it will return the one that works on the system in use.
 }
-\keyword{internal}

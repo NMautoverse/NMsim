@@ -11,6 +11,10 @@
 ##'     for recursively.
 ##' @param delete Delete the found matches? If not, the matches are
 ##'     just reported, but nothing deleted.
+##' @param as.fun Pass a function (say tibble::as_tibble) in as.fun to convert
+##'     to something else. If data.tables are wanted, use
+##'     as.fun="data.table". The default is to return data as a
+##'     data.frame. Modify the defaul using `NMdataConf()`.
 ##' @return data.table with identified items for deletion
 ##' @import data.table
 ##' @import NMdata

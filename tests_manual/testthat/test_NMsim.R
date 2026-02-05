@@ -4,6 +4,7 @@ library(NMdata)
 
 packageVersion("NMdata")
 library(NMsim)
+library(testthat)
 if(F){
     library(devtools)
     load_all(export_all=FALSE)
