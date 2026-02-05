@@ -354,7 +354,7 @@ even though
 [`NMaddSamples()`](https://nmautoverse.github.io/NMsim/reference/NMaddSamples.md)
 does try to order the data in a meaningful way, it is recommended to
 always manually order the data set. We use `data.table`’s
-[`setorder()`](https://rdatatable.gitlab.io/data.table/reference/setorder.html).
+[`setorder()`](https://rdrr.io/pkg/data.table/man/setorder.html).
 [`base::order`](https://rdrr.io/r/base/order.html) or
 [`dplyr::arrange`](https://dplyr.tidyverse.org/reference/arrange.html)
 can just as well be used. A row identifier (counter) is not needed for

@@ -153,7 +153,7 @@ Other Nonmem:
 
 ``` r
 library(NMdata)
-#> NMdata 0.2.2. Browse NMdata documentation at
+#> NMdata 0.2.3. Browse NMdata documentation at
 #> https://NMautoverse.github.io/NMdata/
 NMreadSection(system.file("examples/nonmem/xgxr001.lst", package = "NMdata"),section="DATA")
 #> [1] "$DATA      xgxr1.csv IGNORE=@ IGNORE=(FLAG.NE.0)"

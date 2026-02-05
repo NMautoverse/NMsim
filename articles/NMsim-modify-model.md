@@ -240,12 +240,6 @@ control stream has a new line in `$PK` reading exactly `KA=KA/4`. This
 method works on the PK section alone and is independent of what `THETA`
 and `OMEGA` parameters are related to `KA`.
 
-``` r
-my.file.diff(modTab(simres)$path.sim,
-             modTab(simres.ka4)$path.sim,sections="PK",
-             x_arg="basic-sim",y_arg="sim-ka4")
-```
-
     ##      basic-sim$PK          | sim-ka4$PK                
     ## [10] "V3=TVV3*EXP(ETA(4))" | "V3=TVV3*EXP(ETA(4))" [10]
     ## [11] "Q=TVQ*EXP(ETA(5))"   | "Q=TVQ*EXP(ETA(5))"   [11]

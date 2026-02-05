@@ -1,5 +1,15 @@
 # Changelog
 
+## NMsim 0.2.7
+
+### New Features
+
+- [`prioritizePaths()`](https://nmautoverse.github.io/NMsim/reference/prioritizePaths.md)
+
+### Bugfixes
+
+- Prints of 1E-30
+
 ## NMsim 0.2.6
 
 CRAN release: 2025-11-03
@@ -982,7 +992,7 @@ CRAN release: 2024-02-07
   would throw and error. Spaces in data set names are now replaced with
   under scores (“\_“) to avoid that. It will often happen when data sets
   are split into lists using
-  [`data.table::split.data.table()`](https://rdatatable.gitlab.io/data.table/reference/split.html) -
+  [`data.table::split.data.table()`](https://rdrr.io/pkg/data.table/man/split.html) -
   which is an excellent way to do this, by the way.
 
 - Function

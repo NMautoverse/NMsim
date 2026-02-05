@@ -5,7 +5,7 @@ clean up temporary directories left by PSN and NMsim.
 ## Usage
 
 ``` r
-deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE)
+deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE, as.fun)
 ```
 
 ## Arguments
@@ -30,6 +30,13 @@ deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE)
 
   Delete the found matches? If not, the matches are just reported, but
   nothing deleted.
+
+- as.fun:
+
+  Pass a function (say tibble::as_tibble) in as.fun to convert to
+  something else. If data.tables are wanted, use as.fun="data.table".
+  The default is to return data as a data.frame. Modify the defaul using
+  \`NMdataConf()\`.
 
 ## Value
 

@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6.902</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,8 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">December 15, 2025 using NMsim
-0.2.6</h4>
+            <h4 data-toc-skip class="date">February 05, 2026 using NMsim
+0.2.6.902</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-known.Rmd</code></div>
@@ -173,14 +173,14 @@ simulation.</p>
 <span><span class="co">## ID in the original data set.</span></span>
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="co">## the data.table way, repeating the data set for all the subjects</span></span>
-<span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="va">ids</span>,by<span class="op">=</span><span class="va">dat.sim</span><span class="op">]</span></span>
+<span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="va">ids</span>,by<span class="op">=</span><span class="va">dat.sim</span><span class="op">]</span></span>
 <span><span class="co">## or, an outer join using NMdata::egdt</span></span>
 <span><span class="va">dat.sim.known</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/egdt.html" class="external-link">egdt</a></span><span class="op">(</span><span class="va">ids</span>,</span>
 <span>                      <span class="va">dat.sim</span></span>
 <span>                      <span class="op">)</span></span>
 <span><span class="co">## or an outer join using dplyr (code missing)</span></span>
 <span><span class="co">## order data set</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span>
 <span><span class="co">## check data</span></span>
 <span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMcheckData.html" class="external-link">NMcheckData</a></span><span class="op">(</span><span class="va">dat.sim.known</span>,type.data<span class="op">=</span><span class="st">"sim"</span><span class="op">)</span></span>
 <span></span>
@@ -195,7 +195,7 @@ simulation.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">simres.known</span>,<span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">IPRED</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-known_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="NMsim-known_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672"></p>
 <!-- Show a plot of the individual parameters in estimate and in sim -->
 </div>
 <div class="section level2">
@@ -236,7 +236,7 @@ individual dosing history.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/data/xgxr_pd.rds"</span>,package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## some code below makes use of data.table features so we make it a data.table</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span></code></pre></div>
 <p>For a PK model without time-varying covariates, suggested steps to
 generate the data for the simulation are:</p>
 <ul>
@@ -274,7 +274,7 @@ records to simulation records (<code>EVID=2</code> instead of
 <span><span class="va">pdsim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA</span><span class="op">]</span></span>
 <span><span class="co">## only include subjects that were included in the PK model</span></span>
 <span><span class="va">pdsim</span> <span class="op">&lt;-</span> <span class="va">pdsim</span><span class="op">[</span><span class="va">ID</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">pkres</span><span class="op">$</span><span class="va">ID</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">pdsim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">pdsim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>
 <p>Then run <code>NMsim</code> like this. We are renaming the prediction
 columns using Nonmem <code>$TABLE</code> statement not to confuse PK
 predictions and PD predictions.</p>
@@ -289,7 +289,7 @@ predictions and PD predictions.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">simres.pksim</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LIDV</span><span class="op">)</span><span class="op">&amp;</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PKIPRED</span><span class="op">)</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PKIPRED</span>,<span class="va">LIDV</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Individual PK prediction"</span>,y<span class="op">=</span><span class="st">"Observed PD value"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-known_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<p><img src="NMsim-known_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

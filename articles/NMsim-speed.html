@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6.902</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,8 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">December 15, 2025 using NMsim
-0.2.6</h4>
+            <h4 data-toc-skip class="date">February 05, 2026 using NMsim
+0.2.6.902</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-speed.Rmd" class="external-link"><code>vignettes/NMsim-speed.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-speed.Rmd</code></div>
@@ -218,7 +218,7 @@ the <code><a href="../reference/NMsim.html">NMsim()</a></code> <code>data</code>
 <span><span class="co">## sets with 100 subjects in each.</span></span>
 <span><span class="va">dat.sim</span><span class="op">$</span><span class="va">IDGRP</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">dat.sim</span><span class="op">$</span><span class="va">ID</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span><span class="fl">100</span><span class="op">+</span><span class="fl">1</span></span>
 <span><span class="co">## Now IDGRP is the grouping of the ID's</span></span>
-<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>minID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span>,maxID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">IDGRP</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">)</span><span class="op">[</span>,<span class="fu">.</span><span class="op">(</span>minID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span>,maxID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span>,by<span class="op">=</span><span class="va">IDGRP</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co">### with data.table, we easily split the data in a list of data.tables based on that grouping variable</span></span>
 <span><span class="va">data.multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">dt.sim</span>,by<span class="op">=</span><span class="st">"IDGRP"</span><span class="op">)</span></span>

@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6.902</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">deleteTmpDirs</span><span class="op">(</span><span class="va">dir</span>, <span class="va">methods</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span>, delete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">deleteTmpDirs</span><span class="op">(</span><span class="va">dir</span>, <span class="va">methods</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span>, delete <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">as.fun</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,6 +78,13 @@ for recursively.</p></dd>
 <dt id="arg-delete">delete<a class="anchor" aria-label="anchor" href="#arg-delete"></a></dt>
 <dd><p>Delete the found matches? If not, the matches are
 just reported, but nothing deleted.</p></dd>
+
+
+<dt id="arg-as-fun">as.fun<a class="anchor" aria-label="anchor" href="#arg-as-fun"></a></dt>
+<dd><p>Pass a function (say tibble::as_tibble) in as.fun to convert
+to something else. If data.tables are wanted, use
+as.fun="data.table". The default is to return data as a
+data.frame. Modify the defaul using `NMdataConf()`.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -351,6 +351,8 @@ install_github("NMautoverse/NMsim")
   creating such functions. Make sure to see examples.
 - [`print(`*`<summary_NMsimRes>`*`)`](https://nmautoverse.github.io/NMsim/reference/print.summary_NMsimRes.md)
   : print method for NMsimRes summaries
+- [`prioritizePaths()`](https://nmautoverse.github.io/NMsim/reference/prioritizePaths.md)
+  : first path that works
 - [`readParsWide()`](https://nmautoverse.github.io/NMsim/reference/readParsWide.md)
   : Parameter data from csv
 - [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
