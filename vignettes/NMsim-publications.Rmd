@@ -15,6 +15,15 @@ header-includes:
 ---
 
 
+## ACoP 2025
+
+[**Optimal Sampling Workflows with NMsim and NONMEM**](../reference/figures/NMsim_sampling_design_ACOP2025.pdf)  
+Authors: **Ahmed Abulfathi, Brian Reilly, Sergio Iadevaia, Stephen Duffull, Philip Delff**  
+
+[**Automated Simulation with Parameter Uncertainty from R with NONMEM and NMsim_NWPRI**](../reference/figures/NMsimNWPRI_ACOP2025.pdf)  
+Authors: **Brian Reilly, Robert Bauer, Philip Delff**  
+
+
 
 ## PAGE 2025
 

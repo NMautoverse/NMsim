@@ -30,4 +30,3 @@ A `data.frame` with parameter values. If `return="all"`, a
 \description{
 Tabulate information from parameter sections in control streams
 }
-\keyword{internal}

@@ -65,9 +65,7 @@ NMsimDataPrepare <- function(data,auto.dv,order.columns){
     ## data <- lapply(data,function(d)d[,(col.row):=(1:.N)/1000])
     data <- lapply(data,function(d)d[,(col.row):=(1:.N)])
     if(order.columns) data <- lapply(data,NMorderColumns,col.row=col.row)
-
-    
-    
+     
 
     
     list(data=data,col.row=col.row,dt.data=dt.data)

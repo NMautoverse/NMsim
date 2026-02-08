@@ -4,17 +4,16 @@ template:
   params:
     google_site_verification: 1z2VLiQgr7hTGMX0G9VbQ3MzwU_Q9WWRLpdXynhsg30
   includes:
+    in_header: "pkgdown/in-header.html"
     after_body: |-
       <script data-goatcounter="https://nmsim.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
   assets: |
-    assets/NMsim_general_html.Rmd
-    assets/NMsim_general_web.pdf
     assets/ACOP_logo_transp.png
 mode: release
 navbar:
   structure:
-    left: [home, examples, reference, news, pub, github]
+    left: [home, examples, reference, news, pub]
   components:
    home:
     title: Simulation of Nonmem models from R

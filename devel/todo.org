@@ -1,14 +1,16 @@
 #+PROPERTY: LOGGING nil
 * NMsim todo
 ** general
-
+*** nmfe.options
+just NULL in NMsim, NMexec
+NMrunLin
+NMrunWin
 *** model object structure
 
 #+begin_src R
   ### mod
 ### ext
 #+end_src
-
 
 
 *** CANCELED Warn against method.execute="nmsim" for NMexec directly
@@ -109,7 +111,10 @@ else if(!is.null(transform)){
 for(name in names(transform)){
 simres.n[,(name):=transform[[name]](get(name))]
 }
-#+end_source
+#+end_src
+
+*** TODO [#A] testData/nonmem/xgxr032.ext missing in tests_manual.
+
 *** DONE Support changing paths after running NMsim
 reading is built on relative paths to wd when NMsim was run. They will
 have to be based on dir.res?
@@ -206,7 +211,8 @@ If $SIMULATION spans more than one line, this is currently pasted repeatedly
 In NMsim(), it happens here:
 #+begin_src R
 dt.models[,fn.sim:=fnExtension(paste0("NMsim_",name.mod),".mod")]
-#+end_source
+#+end_src
+
 *** CANCELED Include name.model argument
 Often one will want to give a vector of model names to easily label the models in the output
 
@@ -393,6 +399,7 @@ This bug was fixed by including unique before egdt here:
     unique(combs[,setdiff(names(combs),names(elem)),with=FALSE])
    ,quiet=T)
 #+end_src
+
 this is supposed to return 4 doses, not 8
 #+begin_src R
   dt.amt.13 <- data.table(DOSE1=c(100))[,AMT:=DOSE1*1000]
@@ -400,6 +407,7 @@ this is supposed to return 4 doses, not 8
   dt.dos.13 <- NMcreateDoses(TIME=dt.time.13,AMT=dt.amt.13)
   dt.dos.13[,ID:=NULL]
 #+end_src
+
 *** DONE No CMT by default?
 Not all models use CMT so it shouldnt be required
 

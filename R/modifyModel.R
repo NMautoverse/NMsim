@@ -2,7 +2,9 @@
 ##' @param modify A list
 ##' @param dt.models a data.table
 ##' @param list.ctl List of coontrol streams as lines
-##' @return dt.models (data.table) or result list.ctl (list)
+##' @return dt.models (data.table) or result list.ctl (list) depending
+##'     on whether the `dt.models` or the `list.ctl` argument was
+##'     provided.
 ##' @import data.table
 ##' @keywords internal
 

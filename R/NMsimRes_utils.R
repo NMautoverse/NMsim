@@ -68,7 +68,8 @@ rbind.NMsimRes <- function(x,...){
     ModTab <- rbindlist(list.ModTab,fill=TRUE)
 
 ### solution 1
-    unNMsimRes(x)
+    ## unNMsimRes(x)
+    x <- as.data.table(x)
     ## lapply(c(x,list(...)),unNMsimRes)
     res <- rbind(x,...)
     

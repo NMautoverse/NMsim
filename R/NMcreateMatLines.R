@@ -35,6 +35,8 @@ NMcreateMatLines <- function(omegas,as.one.block=FALSE,fix=FALSE,type){
     offNonZero <- NULL
     text <- NULL
     value <- NULL
+    value.c <- NULL
+
     
     
     if(fix){
@@ -73,11 +75,13 @@ NMcreateMatLines <- function(omegas,as.one.block=FALSE,fix=FALSE,type){
         
         if(this.blocksize>1){
             ## derive fix
-            values.this[value==0,value:=1e-30]
+            values.this[,value.c := as.character(value)]
+            values.this[value==0,value.c := "1E-30"]
+            ##values.this[value==0,value:=1e-30]
             res <- pasteBegin(
                 add=paste0("BLOCK(",this.blocksize,")",fun.string.fix(values.this[i==i.this&j==i.this,FIX]))
                ,
-                x=values.this[,.(text=paste(value,collapse=" ")),keyby=.(i)]$text
+                x=values.this[,.(text=paste(value.c,collapse=" ")),keyby=.(i)]$text
             )
             
         } else {

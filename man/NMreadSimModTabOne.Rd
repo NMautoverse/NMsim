@@ -45,6 +45,10 @@ generated.  Default is not to wait.}
 \item{quiet}{Turn off some messages about what is going on?
 Default is to report the messages.}
 
+\item{skip.missing}{Skip models where results are not available?
+Default is `FALSE` meaning an error will be thrown if one or
+more models do not have completed results.}
+
 \item{progress}{Track progress? Default is `TRUE` if `quiet` is
 FALSE and more than one model is being read. The progress
 tracking is based on the number of models completed/read, not

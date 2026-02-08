@@ -8,18 +8,23 @@
 ##' @param data A simulation data set with only one subject
 ##' @param Nsubjs The number of subjects to be sampled. This can be
 ##'     greater than the number of subjects in data.covs.
-##' @param col.id Name of the subject ID column in `data` (default is "ID").
+##' @param col.id Name of the subject ID column in `data` (default is
+##'     "ID").
 ##' @param col.id.covs Name of the subject ID column in `data.covs`
 ##'     (default is "ID").
-##' @param data.covs The data set containing the subjects to sample covariates from.
-##' @param covs The name of the covariates (columns) to sample from `data.covs`.
+##' @param data.covs The data set containing the subjects to sample
+##'     covariates from.
+##' @param covs The name of the covariates (columns) to sample from
+##'     `data.covs`.
 ##' @param seed.R If provided, passed to `set.seed()`.
 ##' @param as.fun The default is to return data as a data.frame. Pass
 ##'     a function (say `tibble::as_tibble`) in as.fun to convert to
 ##'     something else. If data.tables are wanted, use
 ##'     as.fun="data.table". The default can be configured using
 ##'     NMdataConf.
-##' @return A data.frame 
+##' @return A data.frame. Includes sampled covariates. The subject
+##'     ID's the covariates are sampled from will be included in a
+##'     column called `IDCOVS`.
 ##' @examples
 ##' library(NMdata)
 ##' data.covs <- NMscanData(system.file("examples/nonmem/xgxr134.mod",package="NMsim"))
@@ -34,8 +39,8 @@ sampleCovs <- function(data,
                        Nsubjs,
                        col.id= "ID",
                        col.id.covs = "ID",
-                       data.covs ,
-                       covs ,
+                       data.covs,
+                       covs,
                        seed.R,
                        as.fun
                        ){
@@ -77,10 +82,10 @@ sampleCovs <- function(data,
         stop("One or more of covs are already in `data`. These columns must be deleted before running `sampleCovs()`.")
     }
 
-    ## chekc if ther is only one subject in data.sim.1subj
+    ## check if ther is only one subject in data.sim.1subj
     if(!col.id%in%colnames(data)){
         stop("`col.id` must be the name of an exisiting column in `data`.")
-        }
+    }
     if(data[,uniqueN(get(col.id))!=1]){
         stop("There must be exactly one subject in `data`.")
     }
@@ -92,12 +97,12 @@ sampleCovs <- function(data,
     dt.ids <- data.table(ID=1:Nsubjs)
     setnames(dt.ids,"ID",col.id)
     dt.ids[,IDCOVS:=sample(dt.covs[,IDCOVS],size=.N,replace=TRUE)]
-    dt.ids <- mergeCheck(dt.ids,dt.covs,by="IDCOVS",as.fun="data.table")
+    dt.ids <- mergeCheck(dt.ids,dt.covs,by="IDCOVS",as.fun="data.table",quiet=TRUE)
 
     dt.sim.covs <- dt.ids[,
                           data[,setdiff(colnames(data),c(col.id,covs)),with=FALSE]
                          ,by=dt.ids]
-    setorder(dt.sim.covs,ID,TIME,EVID)
+    setorderv(dt.sim.covs,cols=intersect(c("ID","TIME","EVID"),colnames(dt.sim.covs)))
 
     ## return dt.sim.covs
     as.fun(dt.sim.covs)

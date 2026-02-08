@@ -4,12 +4,22 @@
 \alias{fnAppend}
 \title{paste something before file name extension.}
 \usage{
-fnAppend(fn, x, pad0 = 0, sep = "_", collapse = sep, allow.noext = FALSE)
+fnAppend(
+  fn,
+  x,
+  pad0 = 0,
+  sep = "_",
+  collapse = sep,
+  position = "append",
+  allow.noext = FALSE
+)
 }
 \arguments{
 \item{fn}{The file name or file names to modify.}
 
-\item{x}{A character string or a numeric to add to the file name}
+\item{x}{A character string or a numeric to add to the file
+name. If a vector, the vector is collapsed to a single string,
+using `sep` as separator in the collapsed string.}
 
 \item{pad0}{In case x is numeric, a number of zeros to pad before
 the appended number. This is useful if you are generating say
@@ -25,6 +35,8 @@ separator. See the `collapse` argument to `?paste`. If you
 want to treat them as separate strings, use `collapse=NULL`
 which will lead to generation of separate file names. However,
 currently `fn` or `x` must be of length 1.}
+
+\item{position}{"append" (default) or "prepend".}
 
 \item{allow.noext}{Allow `fn` to be string(s) without extensions?
 Default is `FALSE` in which case an error will be thrown if

@@ -9,14 +9,16 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     before <- NULL
     mad.dl <- NULL
 
-    
-    
+    filePathSimple <- NMdata:::filePathSimple
+    messageWrap <- NMdata:::messageWrap
+
     location <- match.arg(location)
 
+    
     if(missing(file0)) file0 <- NULL
     
     if(!is.null(file0)){
-        file0 <- NMdata:::filePathSimple(file0)
+        file0 <- filePathSimple(file0)
         stopifnot(file.exists(file0))
         ## see below why we need to read the lines for now
         lines <- readLines(file0,warn=FALSE)
@@ -26,7 +28,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
 
     if(missing(newfile)) newfile <- NULL
     if(!is.null(newfile)){
-        newfile <- NMdata:::filePathSimple(newfile)
+        newfile <- filePathSimple(newfile)
     }
 
 
@@ -37,15 +39,15 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     } else {
         
         if(length(list.sections)>1 && location!="replace"){
-            NMdata:::messageWrap("Only location=replace is supported in combination with list.sections.",fun.msg=stop)
+            messageWrap("Only location=replace is supported in combination with list.sections.",fun.msg=stop)
         }
     }
     
     ## put this part in a function to be sequentially applied for all elements in list.
     replaceOnePart <- function(lines,section,newlines,quiet=FALSE){
         
-        if(!quiet && write) message(paste("Writing",newfile))
-        
+        if(!quiet && write && !is.null(newfile) ) message(paste("Writing",newfile))
+
         ## make sure section is capital and does not start with $.
         section <- gsub(" ","",section)
         section <- sub("^\\$","",section)
@@ -96,9 +98,11 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
             } else if(max.dl==nlines){
                 all.lines <- c(lines[1:(min.dl-1)],newlines)
             } else {
-                all.lines <- c(lines[1:(min.dl-1)],
-                               newlines,
-                               lines[(max.dl+1):nlines])
+                all.lines <- c(
+                    lines[1:(min.dl-1)],
+                    newlines,
+                    lines[(max.dl+1):nlines]
+                )
             }
         }
         if(location=="before"){
@@ -146,7 +150,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     if(write && !is.null(file0) && file0==newfile && backup ) {
         dir.backup <- file.path(dirname(file0),"NMdata_backup")
         ## make sure backup dir exists
-        if(file.exists(dir.backup)&&!dir.exists(dir.backup)) NMdata:::messageWrap("Something called NMdata_backup is found and it is not a directory. Please remove or use backup=FALSE.",fun.msg=stop)
+        if(file.exists(dir.backup)&&!dir.exists(dir.backup)) messageWrap("Something called NMdata_backup is found and it is not a directory. Please remove or use backup=FALSE.",fun.msg=stop)
         if(!dir.exists(dir.backup)) dir.create(dir.backup)
         file.copy(file0,dir.backup,overwrite=T)
     }

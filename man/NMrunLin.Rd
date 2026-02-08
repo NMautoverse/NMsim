@@ -14,6 +14,7 @@ NMrunLin(
   sge,
   nc,
   pnm,
+  nmfe.options,
   fun.post = NULL
 )
 }

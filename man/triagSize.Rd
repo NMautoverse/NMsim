@@ -17,4 +17,6 @@ An integer
 calculate number of elements in the diagonal and lower triangle of
 a squared matrix, based on the length of the diagonal.
 }
-\keyword{internal}
+\examples{
+NMsim:::triagSize(1:5)
+}

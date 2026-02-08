@@ -29,7 +29,8 @@
 ##'     of `1`. An example where this is useful is when generating
 ##'     datasets for `$DESIGN` where `DV=0` is often used.
 ##' @param col.id The name of the column in `data` that holds the
-##'     unique subject identifier.
+##'     unique subject identifier. Currently, this is needed to be
+##'     non-`NULL`.
 ##' @param args.NMexpandDoses Only relevant - and likely not needed -
 ##'     if data contains ADDL and II columns. If those columns are
 ##'     included, `NMaddSamples()` will use `NMdata::NMexpanDoses()`

@@ -14,6 +14,7 @@ NMcreateDoses(
   RATE = NULL,
   SS = NULL,
   addl = NULL,
+  N,
   addl.lastonly = TRUE,
   col.id = "ID",
   as.fun
@@ -45,8 +46,13 @@ combination with and consistent with II. Notice if of length
 dose. This may be prefered if II and ADDL depend on covariates
 - see examples. Optional.}
 
-\item{addl.lastonly}{If ADDL and II are of length 1, apply only
-to last event of a regimen? The default is `TRUE`.}
+\item{N}{Number of replications. Default is 1. If `N=1` results in
+two distinct subjects, `N=100` will result i 200 distinct
+subjects. The ID column will automatically be recoded to
+contain distinct ID's.}
+
+\item{addl.lastonly}{If ADDL and II are of length 1, apply only to
+last event of a regimen? The default is `TRUE`.}
 
 \item{col.id}{Default is to denote the dosing regimens by an ID
 column. The name of the column can be modified using this

@@ -1,10 +1,8 @@
-Sun Oct 27 13:37:12 EDT 2024
+Mon Jul 14 07:23:55 EDT 2025
 $PROBLEM    021 with CL:V2 corr
 $INPUT      ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY BLQ CYCLE
             DOSE PART PROFDAY PROFTIME WEIGHTB eff0
-$DATA       xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0)
-$DATA             IGNORE(DOSE.LT.30)
-
+$DATA      xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)
 $SUBROUTINE ADVAN4 TRANS4
 $PK
 TVKA=THETA(1)
@@ -40,7 +38,9 @@ $THETA  (0,13.9777) ; POPCL
 $THETA  (0,150.059) ; POPV3
 $THETA  (0,8.4865) ; TVQ
 $OMEGA  0  FIX
-$OMEGA BLOCK(2)  0.178666 .1  0.249778
+$OMEGA  BLOCK(2)
+ 0.178666
+ .1 0.249778
 $OMEGA  0  FIX
 $OMEGA  0  FIX
 $SIGMA  0.0822435
@@ -66,10 +66,12 @@ NM-TRAN MESSAGES
  * THE MAXIMUM NUMBER OF WARNINGS OF ONE OR MORE TYPES WAS REACHED.
  IT IS POSSIBLE THAT SOME WARNING MESSAGES WERE SUPPRESSED.
 
+ LIM VALUES MAXLIM ASSESSED BY NMTRAN: 1,2,3,4,5,6,7,8,10,11,13,15,16        
+
 License Registered to: Vertex Pharmaceuticals Inc
-Expiration Date:    14 JAN 2025
-Current Date:       27 OCT 2024
-Days until program expires :  82
+Expiration Date:    14 JAN 2026
+Current Date:       14 JUL 2025
+Days until program expires : 185
 1NONLINEAR MIXED EFFECTS MODEL PROGRAM (NONMEM) VERSION 7.5.0
  ORIGINALLY DEVELOPED BY STUART BEAL, LEWIS SHEINER, AND ALISON BOECKMANN
  CURRENT DEVELOPERS ARE ROBERT BAUER, ICON DEVELOPMENT SOLUTIONS,
@@ -246,7 +248,7 @@ Days until program expires :  82
  EXCLUDE NON-INFLUENTIAL (NON-INFL.) ETAS
        IN SHRINKAGE (ETASTYPE):             NO
  NON-INFL. ETA CORRECTION (NONINFETA):      0
- RAW OUTPUT FILE (FILE): xgxr022.ext
+ RAW OUTPUT FILE (FILE): psn.ext
  EXCLUDE TITLE (NOTITLE):                   NO
  EXCLUDE COLUMN LABELS (NOLABEL):           NO
  FORMAT FOR ADDITIONAL FILES (FORMAT):      S1PE12.5
@@ -320,8 +322,8 @@ Days until program expires :  82
  TOTAL EFFECTIVE ETAS (NIND*NETA):                           180
   
  #TERE:
- Elapsed estimation  time in seconds:     1.30
- Elapsed covariance  time in seconds:     1.89
+ Elapsed estimation  time in seconds:     1.45
+ Elapsed covariance  time in seconds:     2.14
  Elapsed postprocess time in seconds:     0.03
 1
  
@@ -824,7 +826,7 @@ Days until program expires :  82
 +       ......... ......... ......... ......... ......... ......... ......... ......... ......... ......... ......... .........
          ......... ......... ......... ......... ......... ......... ......... ......... ......... ......... .........
  
- Elapsed finaloutput time in seconds:     0.05
- #CPUT: Total CPU Time in Seconds,        3.381
+ Elapsed finaloutput time in seconds:     0.04
+ #CPUT: Total CPU Time in Seconds,        3.776
 Stop Time:
-Sun Oct 27 13:37:22 EDT 2024
+Mon Jul 14 07:24:04 EDT 2025

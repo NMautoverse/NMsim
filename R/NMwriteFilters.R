@@ -39,7 +39,15 @@ NMwriteFilters <- function(file=NULL,lines=NULL,filters,write){
                 ]
     } else if (is.character(filters)){
         filters <- list(text=paste(filters,collapse = " "))
-    }
+    }  else if (is.function(filters)){
+        stop("filters is a function. This is not (yet) supported.")
+        ## read filter text
+
+        ## modify filter text
+        ##filters$text <- filters()
+        ## combine to new filter text
+
+    } 
     
     ##newdata <- sprintf("%s\n%s\n",text.no.filters,paste(filters$text,collapse="\n"))
     newdata <- c(text.no.filters,filters$text)
@@ -55,13 +63,3 @@ NMwriteFilters <- function(file=NULL,lines=NULL,filters,write){
 
 }
 
-if(F){
-    file.mod <- "/data/prod_vx548_lsr_phase2_analysis/trunk/analysis/PK_review/models/12746.mod"
-
-    filters <- NMreadFilters(file=file.mod)
-    filters[cond=="EXCLF.NE.0",cond:="EXCLF.GT.10"]
-
-    newlines <- NMwriteFilters(file=file.mod,filters=filters,write=FALSE)
-    newlines
-
-}

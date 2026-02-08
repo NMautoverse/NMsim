@@ -2,7 +2,7 @@
 % Please edit documentation in R/NMsim.R
 \name{NMsim}
 \alias{NMsim}
-\title{Simulate from an estimated Nonmem model}
+\title{Simulate from a Nonmem model}
 \usage{
 NMsim(
   file.mod,
@@ -30,10 +30,9 @@ NMsim(
   transform = NULL,
   order.columns = TRUE,
   method.execute,
+  nmfe.options,
   nmrep,
   col.flagn = FALSE,
-  sim.dir.from.scratch = TRUE,
-  create.dirs = TRUE,
   dir.psn,
   args.psn.execute,
   args.NMscanData,
@@ -42,10 +41,13 @@ NMsim(
   dir.sims,
   dir.res,
   file.res,
+  dir.sim.sub = TRUE,
   wait,
   text.sim = "",
   auto.dv = TRUE,
   clean,
+  sim.dir.from.scratch = TRUE,
+  create.dirs = TRUE,
   quiet = FALSE,
   nmquiet,
   progress,
@@ -153,40 +155,56 @@ methods.}
 
 \item{typical}{Run with all ETAs fixed to zero? Technically all
 ETAs=0 is obtained by replacing \code{$OMEGA} by a zero
-matrix. Default is `FALSE`.}
+matrix. Default is `FALSE`. Instead of a logical `TRUE/FALSE`,
+a character vector can be used to specify what parameter types
+to set to zero and fix. Examples:
+`typical=c("OMEGA","SIGMA")`,
+`typical=c("THETAPV","OMEGA","OMEGAP","OMEGAPD")`. In fact, if
+`typical=TRUE`, both `$OMEGA` itself and - if found - their
+priors will be fixed at zero.}
 
-\item{inits}{Control the parameter values. `inits` is a list. The
-    `method` element controls which method is used to do this, and
-    this corresponds to the old `method.update.inits` argument. If
-    using the new `method=nmsim` you can specify parameter
-    values, fix/unfix them, and edit lower and upper limits for
-    estimation.
-\itemize{
+\item{inits}{Control the parameter values. `inits` is a list and
+    contains (any of) the `method` used to edit the parameters,
+    and what modifications to do.
 
-\item{`method="nmsim"`}, all other
-    arguments are passed to `NMwriteInits`. This is a flexible
-    method that allows for modification of the parameter values
-    and is expected to be the default method in the
-    future. Example which will update the parameter values based
-    on the available estimate, but with `THETA(2)=1.3`:
-    `inits=list(method="nmsim","THETA(2)"=list(init=1.3))`. See
-    `?NMwriteInits` too.
+Using the defaul `method`, all other list elements are passed as
+arguments to `NMwriteInits()`. Please see `?NMwriteInits` and the
+examples on the NMsim website for how to edit the parameter
+values:
+\url{https://nmautoverse.github.io/NMsim/articles/NMsim-modify-model.html}
+
+The `method` element controls which method is used to do this, and
+    this corresponds to the old `method.update.initxfgs`
+    argument. Normally, the user should not need to deal with this
+    as the default `nmsim` method is very flexible and
+    powerful. If using the new `method=nmsim` you can specify
+    parameter values, fix/unfix them, and edit lower and upper
+    limits for estimation.  \itemize{
+
+\item{`method="nmsim"`} (default) A highly flexible internal
+     method, allows for modification of the parameter values. All
+     other elements in `inits` are passed to
+     `NMwriteInits()`. Example where `THETA(2)` is customized:
+     `inits=list("THETA(2)"=list(init=1.3))`. See `?NMwriteInits`
+     too.
 
 \item{`method="psn"`}
-    uses PSN's "update_inits". Requires a functioning PSN
+    Uses PSN's "update_inits". Requires a functioning PSN
     installation and possibly that \code{dir.psn} is correctly
     set. The advantages of this method are that it keeps comments
     in the control stream and that it is a method known to many.
 
-\item{`method="nmsim"`}
- Uses a simple internal method to update the parameter values
-based on the ext file.  The advantages of "nmsim" are it does not
-require PSN, and that it does not rely on code-interpretation for generation of simulation control streams. "nmsim" fixes the whole
-OMEGA and SIGMA matrices as single blocks making the $OMEGA and
-$SIGMA sections of the control streams less easy to read. On the
-other hand, this method is robust because it avoids any
-interpretation of BLOCK structure or other code in the control
-streams.
+\item{`method="simple"`} Uses a simple internal method to
+ update the parameter values based on the ext file.  The
+ advantages are it does not require PSN, and that it does not rely
+ on code-interpretation for generation of simulation control
+ streams. "simple" fixes the whole OMEGA and SIGMA matrices
+ as single blocks which is robust because it avoids any
+ interpretation of BLOCK structure or other code in the control
+ streams. The downside is it strips all comments, and generally
+ makes the $OMEGA and $SIGMA sections of the simulation control
+ streams less easy to read. "simple" can be used as a
+ fallback in case of any issues with `method="nmsim"`.
 
 \item{`method="none"`} Do nothing. This is useful if the model to simulate
 has not been estimated but parameter values have been manually put
@@ -194,16 +212,15 @@ into the respective sections in the control stream.
 }
 
 See also `file.ext` which can now be handled by `inits` too. This
-change collects the update of the "initial"
-parameter values into one interface rather than multiple
-arguments.}
+change collects the update of the "initial" parameter values into
+one interface rather than multiple arguments.}
 
-\item{modify}{Named list of additional control stream
-section edits. Note, these can be functions that define how to
-edit sections. This is an advanced feature which is not needed
-to run most simulations. It is however powerful for some types
-of analyses, like modifying parameter values. See vignettes
-for further information.}
+\item{modify}{Named list of additional control stream section
+edits. Note, these can be functions that define how to edit
+sections. This is an advanced feature which is not needed to
+run most simulations. It is however powerful for some types of
+analyses, like modifying parameter values. See vignettes for
+further information.}
 
 \item{filters}{Edit data filters (`IGNORE`/`ACCEPT` statements)
 before running model. This should normally only be used if no
@@ -264,6 +281,11 @@ in the system search path. So as long as you know where your
 Nonmem executable is, "nmsim" is recommended. The default is
 "nmsim" if path.nonmem is specified, and "psn" if not.}
 
+\item{nmfe.options}{additional options that will be passed to
+nmfe. It is only used when path.nonmem is available (directly
+or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+`args.psn.execute`.}
+
 \item{nmrep}{Include `NMREP` as counter of subproblems? The
 default is to do so if `subproblems>0`. This will insert a
 counter called `NMREP` in the `$ERROR` section and include
@@ -276,24 +298,6 @@ NMsim will then do is to require that column to equal `0`
 (zero) for the rows to be simulated. It is often better to
 subset the data before simulation. See `filters` too.}
 
-\item{sim.dir.from.scratch}{If TRUE (default) this will wipe the
-simulation directory before running new simulations. The
-directory that will be emptied is _not_ dir.sims where you may
-keep many or all your simulations. It is the subdirectory
-named based on the run name and \code{name.sim}. The reason it
-is advised to wipe this directory is that if you in a previous
-simulation created simulation runs that are now obsolete, you
-could end up reading those too when collecting the
-results. NMsim will delete previously generated simulation
-control streams with the same name, but this option goes
-further. An example where it is important is if you first ran
-1000 replications, fixed something and now rand 500. If you
-choose FALSE here, you can end up with the results of 500 new
-and 500 old simulations.}
-
-\item{create.dirs}{If the directories specified in dir.sims and
-dir.res do not exists, should it be created? Default is TRUE.}
-
 \item{dir.psn}{The directory in which to find PSN's executables
 ('execute' and 'update_inits'). The default is to rely on the
 system's search path. So if you can run 'execute' and
@@ -302,8 +306,11 @@ need to specify this unless you want to explicitly use a
 specific installation of PSN on your system.}
 
 \item{args.psn.execute}{A charachter string that will be passed as
-arguments PSN's `execute`. Notice, if `path.nonmem` is
-provided, the default is not to use PSN.}
+arguments PSN's `execute`. The default is
+"-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
+in addition to the "-clean" based on the `clean`
+argument. Notice, if `path.nonmem` is provided, the default is
+not to use PSN.}
 
 \item{args.NMscanData}{If \code{execute=TRUE&sge=FALSE}, NMsim
 will normally read the results using \code{NMreadSim}. Use
@@ -320,8 +327,8 @@ something else. If data.tables are wanted, use
 as.fun="data.table". The default can be configured using
 NMdataConf.}
 
-\item{system.type}{A charachter string, either \"windows\" or
-\"linux\" - case insensitive. Windows is only experimentally
+\item{system.type}{A charachter string, either "windows" or
+"linux" - case insensitive. Windows is only experimentally
 supported. Default is to use \code{Sys.info()[["sysname"]]}.}
 
 \item{dir.sims}{The directory in which NMsim will store all
@@ -353,6 +360,13 @@ file containing information about all simulated models will be
 created. Notice if \code{file.res} is supplied, \code{dir.res}
 is not used.}
 
+\item{dir.sim.sub}{If `TRUE` (default) a dedicated subdirectory
+will be created for eac model run. This is normally the
+cleanest way to run simulations. However, when `NMsim()` is
+used for estimation, it may be better to provide model results
+in the same folder as the input control stream (like PSN would
+do). Use `dir.sim.sub=FALSE` to get this behavior.}
+
 \item{wait}{Wait for simulations to finish? Default is to do so if
 simulations are run locally but not to if they are sent to the
 cluster. Waiting for them means that the results will be read
@@ -364,8 +378,8 @@ background, and then read the results, still waiting for
 Nonmem to finish.}
 
 \item{text.sim}{A character string to be pasted into
-$SIMULATION. This must not contain seed or SUBPROBLEM which
-is handled separately. Default is to include "ONLYSIM". You
+$SIMULATION. This must not contain seed or SUBPROBLEM which is
+handled separately. Default is to include "ONLYSIM". You
 cannot avoid that using `text.sim`. If needed, you can use
 `onlysim=FALSE` which will be passed to `NMsim_default()`.}
 
@@ -385,6 +399,24 @@ behavior is applied, even though not as granular. NMsim's
 internal method only distinguishes between 0 (no cleaning),
 any integer 1-4 (default, quite a bit of cleaning) and 5
 (remove temporary dir completely).}
+
+\item{sim.dir.from.scratch}{If TRUE (default) this will wipe the
+simulation directory before running new simulations. The
+directory that will be emptied is _not_ dir.sims where you may
+keep many or all your simulations. It is the subdirectory
+named based on the run name and \code{name.sim}. The reason it
+is advised to wipe this directory is that if you in a previous
+simulation created simulation runs that are now obsolete, you
+could end up reading those too when collecting the
+results. NMsim will delete previously generated simulation
+control streams with the same name, but this option goes
+further. An example where it is important is if you first ran
+1000 replications, fixed something and now rand 500. If you
+choose FALSE here, you can end up with the results of 500 new
+and 500 old simulations.}
+
+\item{create.dirs}{If the directories specified in dir.sims and
+dir.res do not exists, should it be created? Default is TRUE.}
 
 \item{quiet}{If TRUE, messages from what is going on will be
 suppressed.}

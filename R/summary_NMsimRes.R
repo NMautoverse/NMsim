@@ -37,7 +37,6 @@ summary.NMsimRes <- function(object,...){
     cl.obj <- setdiff(cl.obj,"NMsimRes")
     if(length(cl.obj)>1) cl.obj <- setdiff(cl.obj,"data.frame")
 
-    message(sprintf("NMsim results in a %s",cl.obj))
     
     ## drop class without editing by ref
     res <- copy(object)
@@ -52,7 +51,11 @@ summary.NMsimRes <- function(object,...){
         return(0)
     }
 
-    res.main <- res[,.(N.rows=nrow(.SD),N.cols=ncol(.SD),"uniqueN(model)"=uniqueN(model),"uniqueN(model.sim)"=uniqueN(model.sim),"uniqueN(NMREP)"=fun.print.NMREP(.SD))] 
+
+    res.main <- res[,.(class.obj=cl.obj,
+                       N.rows=nrow(.SD),
+                       N.cols=ncol(.SD),
+                       "uniqueN(model)"=uniqueN(model),"uniqueN(model.sim)"=uniqueN(model.sim),"uniqueN(NMREP)"=fun.print.NMREP(.SD))] 
 
     
     ## IDs - number
@@ -62,9 +65,9 @@ summary.NMsimRes <- function(object,...){
     res.id <- res[,.(RepID=.N),by=ID][,.(N.ID=uniqueN(ID),median.Rep=median(RepID),min.Rep=min(RepID),max.Rep=max(RepID))]
     if( dots$evid && "EVID"%in%colnames(res)){
         res.id2 <- res[,.(RepID=.N),by=c("ID","EVID")]
-
+        
         res.id.evid <- res.id2[
-           ,.(N.ID=uniqueN(ID),median.Rep=median(RepID),min.Rep=min(RepID),max.Rep=max(RepID)),
+           ,.(N.ID=uniqueN(ID),median.Rep=round(median(RepID),1),min.Rep=min(RepID),max.Rep=max(RepID)),
             keyby=c("EVID")]
 
         res.id2[,evid:=reorder(paste0("EVID=",EVID),EVID)]
@@ -73,11 +76,13 @@ summary.NMsimRes <- function(object,...){
         ##
         
         if(nrow(id.nEVID.miss)){
+            
             cols.not.id <- setdiff(colnames(id.nEVID.miss),"ID")
-            id.nEVID.miss[,grp0:=apply(.SD==0,1,function(z)paste(which(z)+1,  collapse="_")),.SDcols=cols.not.id  ]
-            res.evid.miss <- id.nEVID.miss[,lapply(.SD,function(x){
+            ## grp0 is the column number where zero is found. Just an internal ref. The rest of the columns are how many of the other event types they do have.
+            id.nEVID.miss[,grp0:=apply(.SD==0,1,function(z)paste(which(as.logical(z))+1,  collapse="_")),.SDcols=cols.not.id  ]
+            res.evid.miss <- id.nEVID.miss[,c(list("N IDs"=.N),lapply(.SD,function(x){
                 fifelse(all(unique(x))==0,"0",sprintf("%-s - %s",min(x),max(x)))
-            }),
+            })),
             .SDcols=cols.not.id,
             by=grp0]
         }
@@ -104,19 +109,49 @@ summary.NMsimRes <- function(object,...){
 ##' @import data.table
 ##' @export
 print.summary_NMsimRes <- function(x,...){
+
+    . <- NULL
+    median.Rep <- NULL
+    min.Rep <- NULL
+    max.Rep <- NULL
+    sum.rep <- NULL
+    N.ID <- NULL
+    EVID <- NULL
+
     
     dots <- list(...)
-    message("Number of rows, columns, source models (file.mod), NMsim model runs, and subproblems")
-    message_dt(x$main)
-    message("Number of distinct ID's, with median, min and max of rows with each ID.")
-    message_dt(x$id)
+    message(with(x$main,sprintf("NMsim results as %s (%d rows, %d columns)",class.obj,N.rows,N.cols)))
+    ## message("Number of source models (file.mod), NMsim model runs, and subproblems")
+    ## main.sub <- x$main[,!(c("class.obj","N.rows","N.cols"))]
+    ## main.l <- melt(
+    ##     main.sub,
+    ##     measure.vars=colnames(main.sub),value.name="N")
+    ## message_dt(main.l)
+    message(sprintf("Number of source models (file.mod): %d", x$main$`uniqueN(model)`))
+    message(sprintf("Number of NMsim model runs: %d", x$main$`uniqueN(model.sim)`))
+    message(sprintf("Number of subproblems: %d", x$main$`uniqueN(NMREP)`))
+    ## message("Number of distinct ID's, with median, min and max of rows with each ID.")
+    message()
+
+    if( !is.null(x$id )){
+        message("Summary of number of ID's")
+        x$id[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
+        NMdata:::message_dt(x$id[,.("No of ID's."=N.ID,"Rows per ID (min; max)"= sum.rep)])
+    }
 
     if( !is.null(x$id.evid )){
-        message_dt(x$id.evid)
+        message("Number of ID's on each event type:")
+        x$id.evid[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
+        NMdata:::message_dt(x$id.evid[,.(EVID,"No of ID's."=N.ID,"Rows per ID (min; max)"=sum.rep)])
     }
+
+
     if( !is.null(x$evid.miss )){
-        message_dt(x$evid.miss)
+        message("Not all ID's have all event types.")
+        message("Number of other events for those who do not:")
+        ##x$evid.miss[,sum.rep:=sprintf("%d (%d; %d)",median.Rep,min.Rep,max.Rep)]
+        NMdata:::message_dt(x$evid.miss[,setdiff(colnames(x$evid.miss),"grp0"),with=FALSE])
     }
-    
+
     return(invisible(NULL))
 }

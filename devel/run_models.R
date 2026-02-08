@@ -2,7 +2,11 @@ library(devtools)
 load_all()
 getwd()
 setwd("~/wdirs/NMsim")
-NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
+
+path.nonmem <- NMsim:::prioritizePaths(
+                           "/opt/nonmem/nm751/run/nmfe75",
+                           "/opt/NONMEM/nm75/run/nmfe75")
+NMdataConf(path.nonmem=path.nonmem)
 NMdataConf(dir.psn="/opt/psn")
 
 NMexec("inst/examples/nonmem/xgxr014.mod",sge=FALSE)
@@ -41,6 +45,8 @@ NMexec("xgxr022.mod",sge=FALSE)
 ###### manual testing models
 NMexec("~/wdirs/NMsim/tests/testthat/testData/nonmem/xgxr021.mod",sge=FALSE)
 NMexec("~/wdirs/NMsim/tests/testthat/testData/nonmem/xgxr025.mod",sge=FALSE)
+NMexec("~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod",sge=FALSE)
 NMexec("~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr032.mod",sge=FALSE)
+NMexec("~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr059.mod",sge=FALSE)
 
     

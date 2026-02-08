@@ -14,7 +14,6 @@ output:
       editor_options:
         chunk_output_type: inline
         code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 ---

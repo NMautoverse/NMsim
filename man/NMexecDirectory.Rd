@@ -14,6 +14,7 @@ NMexecDirectory(
   sge = nc > 1,
   nc = 1,
   pnm,
+  nmfe.options,
   fun.post = NULL
 )
 }

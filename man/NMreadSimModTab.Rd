@@ -47,6 +47,10 @@ generate an `lst` file. But if `NMTRAN` fails (checks of
 control stream prior to running Nonmem), the `lst` file is not
 generated.  Default is not to wait.}
 
+\item{skip.missing}{Skip models where results are not available?
+Default is `FALSE` meaning an error will be thrown if one or
+more models do not have completed results.}
+
 \item{quiet}{Turn off some messages about what is going on?
 Default is to report the messages.}
 

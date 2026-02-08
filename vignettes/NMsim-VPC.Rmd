@@ -14,7 +14,6 @@ output:
       editor_options:
         chunk_output_type: inline
       code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 
@@ -54,28 +53,35 @@ This vignette shows how to generate simulations for generation of VPC
 plots. While `NMsim` does not include any functionality for summarizing quantiles or plotting, it provides a powerful and simple interface to obtain the simulations. We shall see how the `tidyvpc` package easily creates VPC plots based on the simulation results.
 
 
-## Default option: reuse estimation data for simulation
+## Default Option: Reuse Estimation Data for Simulation
 Normally, the two main arguments to `NMsim()` are the path to the input
 control stream (`file.mod`) and the simulation input data set
 (`data`). But if we leave out the the `data` argument, NMsim will
 re-use the estimation data for the simulation. That is the simulation
 we need for a VPC. We will use an example model included with NMsim:
 
-```{r,eval=TRUE}
+```{r,include=TRUE,eval=TRUE}
 file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
-path.nonmem <- NMsim:::prioritizePaths(c("/opt/NONMEM/nm75/run/nmfe75","/opt/nonmem/nm751/run/nmfe75"))
-NMdataConf(path.nonmem=path.nonmem)
+NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
 NMdataConf(dir.sims="simtmp-VPC",
            dir.res="simres-VPC"
            )
 ```
 
+```{r,include=FALSE,eval=TRUE}
+### a few options for finding Nonmem
+file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
+path.nonmem <- NMsim:::prioritizePaths(c("/opt/NONMEM/nm75/run/nmfe75","/opt/nonmem/nm751/run/nmfe75"))
+NMdataConf(path.nonmem=path.nonmem)
+```
+
+
 ```{r,eval=FALSE}
-set.seed(43)
 ## notice the data argument is not used.
 simres.vpc <- NMsim(file.mod,
                     table.vars=c("PRED","IPRED", "Y"),
                     name.sim="vpc_01",
+                    seed.R=43,
                     subproblems=500
                     )
 ```
@@ -141,7 +147,7 @@ This is easy, and you still get the benefit of not reading the data, with risk o
 - Read the input data set from the estimation model and subset manually  
 The manually subsetted data set is then passed to `NMsim()` in the `data` argument.
 
-### Change the ACCEPT/IGNORE statements
+### Change the ACCEPT/IGNORE Statements
 
 NMsim provides a simple interface to modify the data filters (`ACCEPT`/`IGNORE`). First we read them into a data.frame.
 ```{r,eval=FALSE}
@@ -192,7 +198,7 @@ plot(vpc1)
 ```
 
 
-### Manually subset data
+### Manually Subset Data
 All we have to do is to
 read the data you want and provide it in `NMsim`'s `data` argument.
 

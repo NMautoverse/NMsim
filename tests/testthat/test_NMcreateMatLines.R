@@ -1,5 +1,10 @@
 context("NMcreateMatLines")
 
+## unloadNamespace("NMsim")
+## unloadNamespace("NMdata")
+## load_all("~/wdirs/NMdata",export_all = FALSE)
+## load_all("~/wdirs/NMsim",export_all = FALSE)
+
 NMdataConf(as.fun="data.table")
 
 test_that("basic",{
@@ -55,14 +60,14 @@ test_that("Full covariance matrix",{
     cov1 <- NMreadCov(file.mod)
     
     cov.l <- NMdata::mat2dt(cov1,as.fun="data.table")
-    cov.l <- addParType(cov.l,suffix="i")
-    cov.l <- addParType(cov.l,suffix="j")
+    cov.l <- NMsim:::addParType(cov.l,suffix="i")
+    cov.l <- NMsim:::addParType(cov.l,suffix="j")
 
     res <- cov.l[par.type.i=="THETA" & par.type.j=="THETA" ] 
-    res <- NMcreateMatLines(res,as.one.block=TRUE,fix=TRUE)
+    res <- NMsim:::NMcreateMatLines(res,as.one.block=TRUE,fix=TRUE)
 
 
-    if(packageVersion("NMdata")>"0.1.8.904"){
+    if(packageVersion("NMdata")>="0.2.1"){
         expect_equal_to_reference(res,fileRef)
     }
     

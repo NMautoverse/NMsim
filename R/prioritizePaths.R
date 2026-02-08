@@ -8,7 +8,7 @@
 ##'     executables.
 ##' @param must.work If TRUE, an error is thrown if no paths are
 ##'     valid.
-##' @keywords internal
+##' @export
 ##' 
 prioritizePaths <- function(paths,must.work=FALSE){
     paths <- paths[sapply(paths,file.exists)]

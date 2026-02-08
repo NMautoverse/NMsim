@@ -15,7 +15,6 @@ output:
       editor_options:
         chunk_output_type: inline
       code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 ---
@@ -165,10 +164,20 @@ library(kableExtra)
 library(NMdata)
 library(NMsim)
 
-NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75"
+## Get the setup ready for NMsim
+path.candidates <- c(## metworx
+    "/opt/NONMEM/nm75/run/nmfe75"
+    ## custom linux
+   ,"/opt/nonmem/nm751/run/nmfe75"
+    ## Ahmed
+   ,"c:/nm75g64/run/nmfe75.bat"
+)
+NMdataConf(path.nonmem = NMsim:::prioritizePaths(path.candidates)) ## path to whichever NONM
+
+NMdataConf(##path.nonmem = "/opt/NONMEM/nm75/run/nmfe75"
            ## path.nonmem = "/opt/nonmem/nm751/run/nmfe75"
           ## ,dir.sims="~/NMsim_vignette/simtmp/simtmp-intro"
-          ,dir.sims="simtmp-intro"
+          dir.sims="simtmp-intro"
           ,dir.res="simres-intro"
            )
 
@@ -182,10 +191,6 @@ options(ggplot2.discrete.fill=c("orange","blue","darkgreen"))
 set.seed(11112024)
 
 reuse.results <- TRUE
-```
-
-```{r, bibs,include=FALSE,eval=FALSE}
-knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-packages.bib')
 ```
 
 
@@ -220,14 +225,14 @@ NMdataConf(dir.sims="simtmp-intro", ## location of sim tmp files
 
 For more information on this and how to test the configuration, see [`NMsim-config.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-config.html).
 
-# A first simulation with `NMsim()`
+# A First Simulation with `NMsim()`
 
 ```{r,eval=TRUE,include=FALSE}
 ## Point to the model to estimate
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
 ## Easily create a basic simulation data set
-data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=c(0,5),II=c(0,24),CMT=1)|>
+data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)|>
     NMaddSamples(TIME=0:(24*7),CMT=2)
 ```
 
@@ -238,7 +243,7 @@ When providing a simulation data set, the default `NMsim()` behavior is to sampl
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
 ## Easily create a muliple-dose simulation data set with a loading dose
-data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=c(0,5),II=c(0,24),CMT=1)|>
+data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)|>
     NMaddSamples(TIME=0:(24*7),CMT=2)
 ## Simulate
 simres <- NMsim(file.mod=file.mod,data=data.sim,table.vars=c("PRED","IPRED","Y"))
@@ -268,54 +273,112 @@ plot1 <- ggplot(datl,aes(TIME,value,colour=variable))+
 ```
 </div>
 
-```{r,simple-sim-showplot,echo=FALSE,fig.cap='`PRED`, `IPRED`, and `Y` (if defined in control stream) are easily obtained with NMsim.'}
+```{r simple-sim-showplot,echo=FALSE,fig.cap='`PRED`, `IPRED`, and `Y` (if defined in control stream) are easily obtained with NMsim.'}
 plot1
 ```
 
-Notice that no information about the model is needed except for the
-control stream file path. The simulation is based on evaluation of
-`PRED`, `IPRED`, and optionally `Y`. Options exist for building more
-advanced simulation models. The models shown here are based on data
-available in the [`xgxr`](https://cran.r-project.org/package=xgxr).
+Notice that for running a model simulation, no information about the
+model is needed except for the control stream file path. The
+simulation is based on evaluation of `PRED`, `IPRED`, and optionally
+`Y`. Options exist for building more advanced simulation models. The
+models shown here are based on data available in the
+[`xgxr`](https://cran.r-project.org/package=xgxr) package.
 
+Here is a conceptual diagram of the NMsim() workflow. 
 
-# Simulation data sets
+```text
+   file.mod: Existing file.mod (unmodified NONMEM control stream)
+   data: A data.frame with simulation data
+      │
+      ▼
+NMsim()
+  │
+  ├─► Creates simulation control stream in dir.sims/
+  │        (Typical automatic modifications:
+  │         adds $SIMULATION, comments out $ESTIMATION,
+  │         modifies data sections)
+  │
+  ├─► Runs NONMEM in dir.sims/
+  │        (raw NONMEM outputs: lst, tab, phi, etc.)
+  │
+  ├─► Copies/organizes results into dir.res/
+  │        ..._MetaData.rds: Main results file for re-rereading results
+  │        ..._ResultsData.fst: Compressed archive
+  │
+  └─► Reads results → returns to R
 
-The input data is a data.frame that
+ Diagram of the NMsim() process. The user calls NMsim() on an existing control stream, typically developed for estimation and a simulation data set as a data.frame (NMsim will store as file for NONMEM). Simulatio results are returned to R.
+```
 
-* Must contain at least the variables NONMEM will need to run the model (typically `ID`, `CMT`, `AMT`, etc. plus covariates)
-* Can contain character variables (automatically carried to results)
+Before getting into details on how to create datasets and other features, let's nail down some properties of NMsim to avoid common misconceptions. As you start to explore NMsim, remember:  
+
+1. NMsim automates simulation of Nonmem models. You never have to edit the Nonmem control stream manually. The path to a control stream (typically of an estimated model) is passed to NMsim, and NMsim will then internally create a simulation control stream, execute it, and return the results.  
+2. You should never save the simulation data set in a text file (like csv or similar). Just pass the data.frame in the `data` argument in `NMsim()`, and NMsim will handle and save the data internally, including needed modifications to the simulation control stream to use the provided data.  
+3. Re-read 1. This also means you never have to modify the control stream to match your simulation data set. NMsim fully automates this.  
+4. You do not have to manually read simulation output tables. NMsim() reads those and returns them in a data.frame by default. When you do `simres <- NMsim(file.mod=my_file_path,data=my_df)`, `simres` contains (the combination of) the output table(s).  
+5. Re-read 1. You do not have to update the control stream with final parameter estimates. Those are by default inserted for simulation by `NMsim()`. `NMsim()` obtains them from the `.ext` file associated with the provided control stream.
+
+<details>
+<summary>List of NMsim Modifications to Control Stream</summary>
+
+To illustrate what NMsim did to the provided control stream, the following uses `waldo::compare()` to compare the provided `file.mod` and the generated simulation control stream. Notice that `$DATA` and `$INPUT` have been updated to match the provided simulation input data, parameter sections (in this case `THETA` and `OMEGA`) updated with final parameter estimates. Estimation and covariance steps have been replaced by a simulation step, and `$TABLE` modified to generate a new output table.
+
+```{r,echo=FALSE}
+my.file.diff <- function(file1,file2,sections=NULL,...){
+    if(is.null(sections)){
+        res.file1 <- readLines(file1)
+        res.file2 <- readLines(file2)
+    } else {
+        sections <- toupper(sections)
+        res.file1 <- setNames(lapply(sections,function(sec)NMreadSection(file=file1,section=sec)),sections)
+        res.file2 <- setNames(lapply(sections,function(sec)NMreadSection(file=file2,section=sec)),sections)
+    }
+    
+    res <- waldo::compare(res.file1,res.file2,ignore_attr=FALSE,...)
+    ##res <- grep("^[+-]", res, value = TRUE)
+    res
+}
+```
+
+```{r diff1, echo=FALSE}
+simres <- NMreadSim("simres-intro/xgxr021_noname_MetaData.rds")
+modtab <- modTab(simres)
+
+my.file.diff(file.mod <- system.file("examples/nonmem/xgxr021.mod",
+                        package="NMsim"),
+             modtab$path.sim,
+             max_diffs=50,
+             sections=c("INPUT","DATA","THETA","OMEGA","TABLE","ESTIMATION","SIMULATION"),
+            x_arg="file.mod",y_arg="simulation")
+```
+
+</details>
+
+# Simulation Data Sets
+
+The input data is just a `data.frame`. NMsim will save the data set and create
+
+* It must contain at least the variables NONMEM will need to run the model (typically `ID`, `CMT`, `AMT`, etc. plus covariates)
+* It can contain character variables (automatically carried to results)
 * Column order does not matter 
 
 As long as those requirements are met, there are no requirements to how the data sets are created. So if you already have a prefered way to do this, that's fine. NMsim provides convenient helper functions that can optionally be used. `NMcreateDoses()` creates just the dosing events, and `NMaddSamples()`
 adds the sampling events. By default, doses are indicated using
-`EVID=1` and samples by `EVID=2`.
+`EVID=1` and samples by `EVID=2`. 
 
 
-```{r,gen-data,echo=TRUE}
-doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),
-                       addl=list(ADDL=c(0,5),II=c(0,24)),CMT=1)
-dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
+```{r gen-data,echo=TRUE}
+doses <- NMcreateDoses(TIME=seq(0,by=24,length.out=7),
+                        AMT=c(300,150),CMT=1)
 ```
 
-Notice, `NMcreateDoses()` has many flexible and convenient features. See
-`?NMcreateDoses` and the vignette ond creating simulation data sets
-for more.
 
-<details>
-<summary>Additional `NMcreateDoses()` examples</summary>
+`NMcreateDoses()` offers arguments matching the NONMEM-specific variables such as `CMT`, `EVID`, `ADDL`, `II`, `SS` and more. This example uses `ADDL` and `II` to repeat the maintenance dose. It is designed to offer convenient syntax for most common dosing regimens. 
 
-```{r,gen-data-extra,echo=TRUE,eval=TRUE}
-## arguments are expanded - makes loading easy
-NMcreateDoses(TIME=c(0,12,24,36),AMT=c(2,1))
-```
-```{r,gen-data-extra2,eval=TRUE}
-## Different doses by covariate
-NMcreateDoses(TIME=c(0,12,24),AMT=data.table(AMT=c(2,1,4,2),DOSE=c(1,1,2,2))) 
-```
-</details>
 
-### Adding sampling times
+
+
+## Adding Sampling Times
 
 For adding sampling times to a set of doses and/or samples,
 `NMaddSamples()` provides a similarly flexible interface. It accepts
@@ -323,40 +386,17 @@ data.frames with covariates allowing for different sampling schemes
 for different subject groups (say different dosing regimens), and
 dosing times can be supplied relative to previous dosing times.
 
-<details>
-<summary>Additional `NMaddSamples()` examples</summary>
-```{r,NMaddSamples-extra1,eval=TRUE}
-## a dosing data set with two doses
-dt.dos <- NMcreateDoses(TIME=c(0,12),AMT=c(1))
-```
-```{r,NMaddSamples-extra2}
-## sampling based on time since previous dose
-NMaddSamples(dt.dos,TAPD=1:2,CMT=2)
-```
-```{r,NMaddSamples-extra3}
-## TIME and TAPD can be combined - adding a follow-up
-NMaddSamples(dt.dos,TAPD=1:2,TIME=96,CMT=2)
-```
-```{r,NMaddSamples-extra4}
-## sampling two compartments - naming them
-NMaddSamples(dt.dos,TAPD=1:2,CMT=data.frame(CMT=2:3,DVID=c("Parent","Metabolite")))
-```
-</details>
 
-### Time since previous dose
-
-While not used in these examples, it's worth mentioning
-`NMdata::addTAPD()` for adding time since previous dose and other
-variables related to previous dose - previous dosing time, previous
-dose amount, cumulative number of doses, cumulative number of doses,
-and culative dose amount. These are often useful to add to a
-simulation dataset:
-
-```{r}
-dat.sim <- addTAPD(dat.sim)
+```{r addsamples}
+dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
 ```
 
-### Check the simulation dataset
+`NMaddSamples()` has many useful features, including a `TAPD` argument for adding samples relative to previous dosing time, adding sampling for multiple endpoints, and different sampling times for different subgroups of subjects.
+See [**Data Set Creation with NMsim**](NMsim-DataCreate.html) for more details on creation of data sets, including use of `NMcreateDoses()` and `NMaddSamples()` and how to also add time after previous dose and more.
+
+
+
+## Check The Simulation Dataset
 A quick way to check for a lot of common issues in a NONMEM data set is running `NMcheckData()`:
 ```{r,eval=TRUE}
 NMcheckData(dat.sim,type.data="sim")
@@ -366,7 +406,7 @@ It is also advised to plot the simulation data set. See [Creation of Simulation 
 
 
 
-# Typical subject simulation
+# Typical Subject Simulation
 * A typical subject is a subject with all ETAs = 0
 * Covariates values are supplied using the simulation input data set
 * `typical=TRUE`: replace all `$OMEGA` values with zeros
@@ -392,7 +432,7 @@ simres.typ <- NMsim(
 ```
 
 
-# Simulate multiple models
+# Simulate Multiple Models
 Multiple models can be simulated using the same data set in one
 function call by supplying more than one model in the `file.mod`
 argument. The models can be simulated on multiple data sets by
@@ -504,7 +544,7 @@ theme(legend.position="none")
 ```
 
 
-# Prediction intervals
+# Prediction Intervals
 New subjects can be simulated in multiple ways with NMsim.
 
  - If the input data set contains multiple subjects, these subjects will get separate random effects due to NONMEM `$SIMULATION`
@@ -549,25 +589,34 @@ By the way, if you would like `NMsim()` to return `data.table` objects, just run
 
 - Simulate 1000 new subjects with covariate sampling
 
-<div class="fold s">
+<div class="fold s"> 
+The NMsim package provides a convenient funtion
+to sample covariates from an existing data set. We have a simulation
+data set with only one subject. We want to replicate that data set to
+create 1000 subjects with covariates sampled with replacement from the
+analysis data set. `sampleCovs()` does exactly that. Notice two
+important features of `sampleCovs()`:
+
+- It automatically makes sure to sample with equal probability from
+  all subjects, independently of how many data points they have in the
+  analysis set.
+
+- For a simulated subject, all covariates are sampled from the same
+  subject in the analysis set. This ensures preservaion of the
+  correlation of the covariates from the analysis set to the
+  simulation.
+
 ```{r,datarep,include=TRUE,echo=TRUE}
-## Replicating input data set allows for manual resampling of covariates.
-
-## NMdata::findCovs() extracts unique values of column that do not vary within `by`. Since `by` is here the subject ID, that means we are finding subject level and globally equal variables only.
-set.seed(2372)
-Nsubjs <- 1000
-dt.ids <- data.table(ID=1:Nsubjs)
-dt.covs <- NMscanData(file.mod,quiet=T,as.fun="data.table") |>
-    findCovs(by=c("ID"))
-dt.ids[,IDEST:=sample(dt.covs[,ID],size=.N,replace=T)]
-dt.ids <- mergeCheck(dt.ids,dt.covs[,.(IDEST=ID,WEIGHTB,trt=trtact)],by="IDEST")
-
-## This is data.table-style repeating `data.sim` without `ID` for each
-## row in dt.ids. This is an outer join, or a cartesian product. I
-## think in dplyr, one can use `crossing` to get this.
-data.sim.nsubjs <- dt.ids[,subset(data.sim,select=-ID),by=dt.ids]
-## see, we repeated one data set using the other
-## dims(data.sim,dt.ids,data.sim.nsubjs)
+## read the analysis data set from the model we are simulating from
+dt.covs <- NMscanData(file.mod,quiet=T)
+## replicate the simulation data set (one subject) to create 1000
+## subjects with covariates "WEIGHTB" and "trtact" sampled from the
+## analysis set.
+data.sim.nsubjs <- sampleCovs(data=data.sim,data.covs=dt.covs,
+                              covs=c("WEIGHTB","trtact"),
+                              Nsubjs=1000,seed.R=2372)
+## renaming trtact to shorter trt in this example
+setnames(data.sim.nsubjs,"trtact","trt")
 
 ## generate the population first, by simulating etas to use in the sim
 simPopEtas(file.mod=file.mod,N=1000,seed=1231,
@@ -614,7 +663,7 @@ p.pi
 ```
 
 
-# Read previously generated simulations
+# Read Previously Generated Simulations
 There is no need to save simulation results because they are already saved by `NMsim`. Instead, use arguments `dir.sims`, `dir.res` and `name.sim` to make sure to get a meaningful structure for the generated files. Then read the results with `NMreadSim()`. To re-read the first simulation we did in this article, we can do this:
 
 

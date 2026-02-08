@@ -76,20 +76,20 @@ NMreadSection <- function(file=NULL, lines=NULL, text=NULL, section, return="tex
 
     lines <- getLines(file=file,lines=lines)
     
+    keepName.arg <- keep.name
     if(missing(section)||is.null(section)){
         section="."
         as.one=FALSE
         simplify=FALSE
         keepName.arg <- keep.name
         keep.name=TRUE
-        
     } else {
         section <- toupper(section)
     }
     
     match.exactly <- FALSE
-    if(section!="."){
-        string.start <- substring(sub("^\\$","",cleanSpaces(section)),1,3)
+    if(length(section)>1 || section!="."){
+        string.start <- substr(sub("^\\$","",cleanSpaces(section)),1,3)
         match.exactly <- !string.start%in%c("COV","EST","SIM","SUB")
     }
     
@@ -132,7 +132,7 @@ NMreadSection <- function(file=NULL, lines=NULL, text=NULL, section, return="tex
             lapply(res.text,function(x) {
                 xthis <- strsplit(x[1]," ")[[1]][1]
                 name.this <- regmatches(xthis,gregexpr("\\$[^ ]*$",xthis))
-                                        #      if(name.this=="character(0)") name.this <- "HEADER"
+                ##      if(name.this=="character(0)") name.this <- "HEADER"
                 name.this <- sub("^ *\\$","",name.this)
                 name.this
             }

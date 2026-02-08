@@ -17,9 +17,14 @@ NMreadTabFast <- function(file,file.mod,carry.out,col.row=NULL,...){
     if(missing(carry.out) || is.null(carry.out)){
         carry.out <- TRUE
     }
-    
-    meta.output <- NMscanTables(file=file,quiet=TRUE,as.fun="data.table",skip.absent=TRUE,
-                                modelname=file.mod,col.model="model",meta.only=TRUE)
+
+    ## if(packageVersion("NMdata")>="0.2.1"){
+        meta.output <- NMscanTables(file=file,quiet=TRUE,as.fun="data.table",skip.absent=TRUE,
+                                    modelname=file.mod,col.model="model",meta.only=TRUE)
+    ## } else {
+    ## meta.output <- NMscanTables(file=file,quiet=TRUE,as.fun="data.table",skip.absent=TRUE,
+    ##                             meta.only=TRUE)
+    ## }
 
     alltabs <- lapply(meta.output$file,fread,...)
 
@@ -39,7 +44,7 @@ NMreadTabFast <- function(file,file.mod,carry.out,col.row=NULL,...){
         } else {
             miss.carry.out <- setdiff(carry.out,colnames(inp))
             if(length(miss.carry.out)) {
-                ### NMsim() says this too. We don't want it repeated for all models.
+### NMsim() says this too. We don't want it repeated for all models.
                 ## message("variables in `carry.out` not found in input data ignored:\n",paste(miss.carry.out,collapse=", "))
                 carry.out <- setdiff(carry.out,miss.carry.out)
             }

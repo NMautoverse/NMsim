@@ -67,7 +67,7 @@ test_that("Basic",{
 
     if(F){
         ref <- readRDS(fileRef)
-                compareCols(res1,ref)
+        compareCols(res1,ref)
 
         head(ref)
         head(res1)
@@ -115,7 +115,7 @@ test_that("Reading fst directly",{
 
 ## if(F){
 test_that("From different wd",{
-##    setwd("..")
+    ##    setwd("..")
     fileRef <- "testReference/NMreadSim_03.rds"
     ## ref <- readRDS(fileRef)
     res1 <- NMreadSim("testData/simres/xgxr021_sd1_NMreadSim_MetaData.rds")
@@ -147,3 +147,41 @@ test_that("From different wd",{
 ## }
 
 
+
+if(F){
+####### sim with dir.sims and dir.res being in ../
+
+    file.mod <- "testData/nonmem/xgxr021.mod"
+
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="../testOutput2/simtmp",
+                  dir.res="../testOutput2/simres",
+                  name.sim = "NMreadSim_path..",
+                  seed.nm=2342
+                  ## ,reuse.results=TRUE
+                 ,nmquiet=F)
+
+
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="../testOutput2/simtmp",
+                  dir.res="testOutput/simres",
+                  name.sim = "NMreadSim_path..2",
+                  seed.nm=2342
+                  ## ,reuse.results=TRUE
+                 ,nmquiet=F)
+
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="testOutput/simtmp",
+                  dir.res="../testOutput2/simres",
+                  name.sim = "NMreadSim_path..3",
+                  seed.nm=2342
+                  ## ,reuse.results=TRUE
+                 ,nmquiet=F)
+
+
+
+    ## unlink("testOutput/xgxr021_sd1_NMreadSim",recursive=T)
+}

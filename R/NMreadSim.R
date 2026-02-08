@@ -29,6 +29,9 @@
 ##'     FALSE and more than one model is being read. The progress
 ##'     tracking is based on the number of models completed/read, not
 ##'     the status of the individual models.
+##' @param skip.missing Skip models where results are not available?
+##'     Default is `FALSE` meaning an error will be thrown if one or
+##'     more models do not have completed results.
 ##' @param rm.tmp If results are read successfully, remove temporary
 ##'     simulation results files? This can be useful after a script is
 ##'     developed and intermediate debugging information is not
@@ -47,7 +50,7 @@
 
 
 
-NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,rm.tmp=FALSE,as.fun){
+NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,skip.missing=FALSE,rm.tmp=FALSE,as.fun){
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
     
@@ -119,7 +122,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
         stop("Not all objects in `x` recognized by NMreadSim. They should be either (normally) paths to `rds` files or (mostly for programming) tables of simulation model information.")
 
     }
-
+    
     
 ###### Reading results
     res.all <- NULL
@@ -134,12 +137,13 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
             res.all <- rbind(res.all,res.simRes)  
         }
     }
-
+    
     if(sum(dt.x$is.ModTab)){
         res.modTab <- NMreadSimModTab(x[dt.x$is.ModTab],check.time=check.time,
                                       dir.sims=dir.sims,wait=wait,quiet=quiet,
                                       progress=progress,
                                       ## fast.tables=fast.tables,carry.out=carry.out
+                                      skip.missing=skip.missing
                                       )
         if(is.null(res.all)){
             res.all <- res.modTab
@@ -167,9 +171,13 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
         }   
     }
 
-
+    
+    res.modtab <- modTab(res.all)
     res.all <- as.fun(res.all)
     addClass(res.all,"NMsimRes")
+    if(!is.null(res.modtab)){
+        setattr(res.all,"NMsimModTab",res.modtab)
+    }
     return(res.all)
 }
 

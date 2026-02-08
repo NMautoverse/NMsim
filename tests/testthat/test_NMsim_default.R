@@ -33,7 +33,7 @@ if(F){
     sim1
 
 
-    load_all("~/wdirs/NMsim")
+    ## load_all("~/wdirs/NMsim")
     sim.n10 <- NMsim(path.mod=file.mod,data=dat.sim,
                      dir.sim="testOutput",suffix.sim = "sd1",
                      nsims=10,

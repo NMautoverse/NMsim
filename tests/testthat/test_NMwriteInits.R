@@ -151,6 +151,7 @@ test_that("comments on parameters",{
     file.mod <- "testData/nonmem/xgxr053.mod"
     
     ## NMreadSection(file.mod,section="THETA")
+    ## options(warn=2)
     res1 <- NMwriteInits(file.mod,"THETA(1)"=list(init=3),"OMEGA(3,2)"=list(init=-4),"OMEGA(3,3)"=list(init=6),update=FALSE)
 
 
@@ -213,21 +214,27 @@ test_that("An ext object",{
 
     fileRef <- "testReference/NMwriteInits_07.rds"
     file.mod <- "testData/nonmem/xgxr033.mod"
+
     ## readLines(file.mod)
     ext <- NMreadExt(file.mod,as.fun="data.table")
-    ext <- rbind(ext,
+    ext <- rbind(
+        ext
+       ,
                  transform(ext,model="mod2",value=value*1.3,est=est*1.3)
                  )
     ## NMreadSection(file.mod,section="THETA")
-    res1 <- ##expect_warning(
+    res0 <- ##expect_warning(
         NMwriteInits(file.mod,ext=ext,update=FALSE)
     ## )
     
     ## The number of empty spaces seems to be inconsistent across platforms
-    res1 <- lapply(res1,function(r){
+    res1 <- lapply(res0,function(r){
         r <- gsub(" +"," ",r)
-        r <- r[grepl("\\$THETA",r)|grepl("\\$OMEGA",r)|grepl("\\$SIGMA",r)]
-        r
+        r <- r[!grepl("^ *;.*",r)]
+        ## r <- r[grepl("\\$THETA",r)|grepl("\\$OMEGA",r)|grepl("\\$SIGMA",r)]
+        ## r <- NMreadSection(lines=r,section=cc(OMEGA))
+        r <- lapply(cc(THETA,OMEGA,SIGMA),function(sec)NMreadSection(lines=r,section=sec))
+        do.call(c,r)
     })
     ext[,.(model,parameter,value)]
     res1

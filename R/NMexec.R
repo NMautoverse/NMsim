@@ -37,6 +37,10 @@
 ##' @param input.archive A function of the model file path to generate
 ##'     the path in which to archive the input data as RDS. Set to
 ##'     FALSE not to archive the data.
+##' @param nmfe.options additional options that will be passed to
+##'     nmfe. It is only used when path.nonmem is available (directly
+##'     or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+##'     `args.psn.execute`.
 ##' @param args.psn.execute A character string with arguments passed
 ##'     to execute. Default is
 ##'     "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml".
@@ -70,6 +74,7 @@
 ##' }
 ##'
 ##' See `sge` as well.
+##' 
 ##' @param clean The degree of cleaning (file removal) to do after
 ##'     Nonmem execution. If `method.execute=="psn"`, this is passed
 ##'     to PSN's `execute`. If `method.execute=="nmsim"` a similar
@@ -135,7 +140,9 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                    nc,dir.data=NULL,wait=FALSE, path.nonmem,
                    update.only=FALSE,
                    fun.post,
-                   method.execute,dir.psn,args.psn.execute,
+                   method.execute,
+                   nmfe.options,
+                   dir.psn,args.psn.execute,
                    files.needed,clean=1,backup=TRUE,quiet=FALSE
                   ,nmquiet=FALSE
                   ,system.type){
@@ -182,13 +189,20 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
 
     if(missing(fun.post)) fun.post <- NULL
 
-
+    ## nmfe.options
+    if(missing(nmfe.options)) nmfe.options <- NULL
+    nmfe.options <- simpleCharArg("nmfe.options"
+                                     ,nmfe.options
+                                     ,default="-maxlim=2"
+                                     ,accepted=NULL
+                                     ,clean=FALSE
+                                     ,lower=FALSE)
     
     ## args.psn.execute
     if(missing(args.psn.execute)) args.psn.execute <- NULL
     args.psn.execute <- simpleCharArg("args.psn.execute"
                                      ,args.psn.execute
-                                     ,default=sprintf("-clean=%s -model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml",clean)
+                                     ,default=sprintf("-clean=%s -model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\"",clean)
                                      ,accepted=NULL
                                      ,clean=FALSE
                                      ,lower=FALSE)
@@ -216,7 +230,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                                  ,lower=FALSE)
 
 
-    if(is.null(files) && is.null(file.pattern)) file.pattern <- ".+\\.mod"
+    if(is.null(files) && is.null(file.pattern)) file.pattern <- ".+\\.mod$"
     files.all <- NMdata:::getFilePaths(files=files,file.pattern=file.pattern,dir=dir,quiet=TRUE)
     
     files.exec <- files.all
@@ -227,143 +241,149 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
             message(length(files.exec)," model(s) to be executed:\n",paste(files.exec,collapse=",\n"),"\n")
         }
     }
-
-
+    if(length(files.exec)<1){
+        message("No models to run. Exiting.")
+        return(invisible())
+    }
+    
     list.obj.exec <- 
-    lapply(1:length(files.exec),function(I){
-        file.mod <- NMdata:::filePathSimple(files.exec[I])
-        if(!quiet) message(paste0("Executing ",file.mod))
-        if(!file.exists(file.mod)){
-            stop(paste("Could not find file:",file.mod))
-        }
+        lapply(1:length(files.exec),function(I){
+            file.mod <- NMdata:::filePathSimple(files.exec[I])
+            if(!quiet) message(paste0("Executing ",file.mod))
+            if(!file.exists(file.mod)){
+                stop(paste("Could not find file:",file.mod))
+            }
 
-        
-        ## replace extension of fn.input based on path.input - prefer rds
-        rundir <- dirname(file.mod)
+            
+            ## replace extension of fn.input based on path.input - prefer rds
+            rundir <- dirname(file.mod)
 
-        exts <- c("\\.cov","\\.cor","\\.coi","\\.ext","\\.lst",".*msf","\\.msfi","\\.msfo","\\.phi","_input\\.rds","\\.res","\\.shk","\\.xml")
-        exts.string <- paste0("(",paste(exts,collapse="|"),")")
+            exts <- c("\\.cov","\\.cor","\\.coi","\\.ext","\\.lst",".*msf","\\.msfi","\\.msfo","\\.phi","_input\\.rds","\\.res","\\.shk","\\.xml")
+            exts.string <- paste0("(",paste(exts,collapse="|"),")")
 
 ### backup previous results if any:
-        
-        files.found <- c(
-            list.files(rundir,pattern=sprintf("%s%s",fnExtension(basename(file.mod),""),exts.string)),
-            list.files(rundir,pattern=paste0("^(",paste(
-                                                     NMscanTables(file.mod,meta.only=TRUE,as.fun="data.table")[,name]
-                                                    ,collapse="|"),")$"))
-        )
-        ## make sure files.found does not contain input control stream or input data
-        if(length(files.found)){
-            if(backup){
-                dir.backup <- file.path(rundir,paste0("backup_",fnExtension(basename(file.mod),"")))
-                if(dir.exists(dir.backup)){
-                    unlink(dir.backup,recursive=TRUE)
+            
+            files.found <- c(
+                list.files(rundir,pattern=sprintf("%s%s",fnExtension(basename(file.mod),""),exts.string)),
+                list.files(rundir,pattern=paste0("^(",paste(
+                                                          NMscanTables(file.mod,meta.only=TRUE,as.fun="data.table")[,name]
+                                                         ,collapse="|"),")$"))
+            )
+            ## make sure files.found does not contain input control stream or input data
+            if(length(files.found)){
+                if(backup){
+                    dir.backup <- file.path(rundir,paste0("backup_",fnExtension(basename(file.mod),"")))
+                    if(dir.exists(dir.backup)){
+                        unlink(dir.backup,recursive=TRUE)
+                    }
+                    dir.create(dir.backup)
+                    lapply(c(files.found),function(f) file.rename(
+                                                          from=file.path(rundir,f),
+                                                          to=file.path(dir.backup,f)
+                                                      ))
+                    file.copy(file.mod,dir.backup)
+                } else {
+                    lapply(file.path(rundir,files.found),unlink)
                 }
-                dir.create(dir.backup)
-                lapply(c(files.found),function(f) file.rename(
-                                                      from=file.path(rundir,f),
-                                                      to=file.path(dir.backup,f)
-                                                  ))
-                file.copy(file.mod,dir.backup)
-            } else {
-                lapply(file.path(rundir,files.found),unlink)
             }
-        }
-        
-        if(!isFALSE(input.archive(file.mod))){
-            fn.input <- input.archive(file.mod)
+            
+            if(!isFALSE(input.archive(file.mod))){
+                fn.input <- input.archive(file.mod)
 
-            ## copy input data
-            dat.inp <- NMscanInput(file=file.mod,file.mod=file.mod,translate=FALSE,apply.filters = FALSE,file.data="extract",quiet=TRUE)
-            saveRDS(dat.inp,file=file.path(rundir,basename(fn.input)))
-        }
-
-
-        ##if((sge && nc > 1)||(sge && NMsimConf$method.execute=="psn")){
-        if( sge ){
-            if(nc>1){
-                file.pnm <- file.path(rundir,fnExtension(basename(file.mod),"pnm"))
-                pnm <- NMgenPNM(nc=nc,file=file.pnm)
-                files.needed <- unique(c(files.needed,pnm) )
-            } else {
-                ## for nc=1, the pnm file setup does not seem to work.
-                ## if(!quiet) message("sge is disabled because nc=1")
-                ## sge <- FALSE
-                pnm <- NULL
+                ## copy input data
+                dat.inp <- NMscanInput(file=file.mod,file.mod=file.mod,translate=FALSE,apply.filters = FALSE,file.data="extract",quiet=TRUE)
+                saveRDS(dat.inp,file=file.path(rundir,basename(fn.input)))
             }
-        }
-               
-        if(NMsimConf$method.execute=="psn"){
-            obj.exec <- list()
-            obj.exec$dir.exec <- NA_character_
-            obj.exec$mod.exec <- NA_character_
-            obj.exec$path.script <- NA_character_
-            obj.exec$cmd <- sprintf('cd "%s"; "%s" %s',rundir,cmd.execute ,args.psn.execute)
-            ##}
-            ## if(system.type=="windows"){
-            ##     pas
-            ## }
-            if(sge){
-                obj.exec$cmd <- paste0(obj.exec$cmd," -run_on_sge")
+
+
+            ##if((sge && nc > 1)||(sge && NMsimConf$method.execute=="psn")){
+            if( sge ){
                 if(nc>1){
-                    obj.exec$cmd <- paste0(obj.exec$cmd," -sge_prepend_flags=\"-pe orte ",nc," -V\" -parafile=",basename(pnm)," -nodes=",nc)
+                    file.pnm <- file.path(rundir,fnExtension(basename(file.mod),"pnm"))
+                    pnm <- NMgenPNM(nc=nc,file=file.pnm)
+                    files.needed <- unique(c(files.needed,pnm) )
+                } else {
+                    ## for nc=1, the pnm file setup does not seem to work.
+                    ## if(!quiet) message("sge is disabled because nc=1")
+                    ## sge <- FALSE
+                    pnm <- NULL
                 }
             }
-            obj.exec$cmd <- paste(obj.exec$cmd,basename(file.mod))
-        }
-
-        
-        if(NMsimConf$method.execute=="nmsim"){
             
-            obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge,nc,pnm=pnm,fun.post=fun.post)
-            ##obj.exec$dir <- dirname(obj.exec$cmd)
-
-            if(NMsimConf$system.type=="linux"){
-                obj.exec$cmd <- sprintf("cd \"%s\"; \"./%s\"",obj.exec$dir.exec,basename(obj.exec$path.script))
-            }
-            if(NMsimConf$system.type=="windows"){
-                obj.exec$cmd <- sprintf("@echo off;@CD \"%s\" >nul;cmd /c \"%s\"",obj.exec$dir.exec,basename(obj.exec$path.script))
-            }
-        }
-        
-        if(NMsimConf$system.type=="windows"){
-            
-            ## contents.bat <- gsub(";","\n",string.cmd)
-            ## cat(contents.bat,file=path.script)
-            path.script <- file.path(dirname(file.mod),"NMsim_exec.bat")
-
-            contents.bat <-
-                strsplit(obj.exec$cmd,split=";")[[1]]
-            writeTextFile(contents.bat,file=path.script)
-
-            ## Maybe better to use system(,ignore.stdout=TRUE)
-            ## shell(shQuote(paste("call", path.script),type="cmd"),invisible=TRUE )
-            
-            path.script.win <- normalizePath(path.script, winslash = "\\", mustWork = TRUE)
-            sysres <- system(paste("cmd /c", shQuote(path.script.win)),ignore.stdout=FALSE,intern=FALSE)
-            ## sysres <- system2(paste("cmd /c", shQuote(path.script.win)))## ,ignore.stdout=FALSE,intern=FALSE)
-            shell("echo. > CON",invisible=TRUE)
-        }
-        if(NMsimConf$system.type=="linux"){
-            
-            if(nmquiet) obj.exec$cmd <- paste(obj.exec$cmd, ">/dev/null 2>&1")
-            if(!wait) obj.exec$cmd <- paste(obj.exec$cmd,"&")
-            if(exists("dir.tmp") && !is.null(dir.tmp)) {          
-                writeTextFile(string.cmd,file.path(dir.tmp,"NMexec_command.txt"))
-            }
-            
-            procres <- system(obj.exec$cmd,ignore.stdout=nmquiet)
-            if(procres!=0) {##stop("Nonmem failed. Exiting.")
-                ##message("Nonmem failed. Exiting.")
+            if(NMsimConf$method.execute=="psn"){
+                obj.exec <- list()
+                obj.exec$dir.exec <- "(PSN)"
+                obj.exec$mod.exec <- "(PSN)"
+                obj.exec$path.script <- "(PSN)"
+                obj.exec$cmd <- sprintf('cd "%s"; "%s" %s',rundir,cmd.execute ,args.psn.execute)
+                ##}
+                ## if(system.type=="windows"){
+                ##     pas
+                ## }
                 if(sge){
-                    reportFailedRun(file.path(dir.tmp,basename(fnExtension(file.mod,"lst"))))
+                    obj.exec$cmd <- paste0(obj.exec$cmd," -run_on_sge")
+                    if(nc>1){
+                        obj.exec$cmd <- paste0(obj.exec$cmd," -sge_prepend_flags=\"-pe orte ",nc," -V\" -parafile=",basename(pnm)," -nodes=",nc)
+                    }
                 }
-                stop("Nonmem failed. Exiting.")
+                obj.exec$cmd <- paste(obj.exec$cmd,basename(file.mod))
             }
-        }
-        
-        as.data.table(obj.exec)
-    })
+
+            
+            if(NMsimConf$method.execute=="nmsim"){
+                
+                obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge,nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
+                ##obj.exec$dir <- dirname(obj.exec$cmd)
+
+                if(NMsimConf$system.type=="linux"){
+                    ## a patch. ~ does not get expanded by system(). But maybe this should be handled earlier, not sure.
+                    obj.exec$dir.exec <- gsub("~", path.expand("~"), obj.exec$dir.exec, fixed = TRUE)
+                    obj.exec$cmd <- sprintf("cd \"%s\"; \"./%s\"",obj.exec$dir.exec,basename(obj.exec$path.script))
+                }
+                if(NMsimConf$system.type=="windows"){
+                    obj.exec$cmd <- sprintf("@echo off;@CD \"%s\" >nul;cmd /c \"%s\"",obj.exec$dir.exec,basename(obj.exec$path.script))
+                }
+            }
+            
+            if(NMsimConf$system.type=="windows"){
+                
+                ## contents.bat <- gsub(";","\n",string.cmd)
+                ## cat(contents.bat,file=path.script)
+                path.script <- file.path(dirname(file.mod),"NMsim_exec.bat")
+
+                contents.bat <-
+                    strsplit(obj.exec$cmd,split=";")[[1]]
+                writeTextFile(contents.bat,file=path.script)
+
+                ## Maybe better to use system(,ignore.stdout=TRUE)
+                ## shell(shQuote(paste("call", path.script),type="cmd"),invisible=TRUE )
+                
+                path.script.win <- normalizePath(path.script, winslash = "\\", mustWork = TRUE)
+                sysres <- system(paste("cmd /c", shQuote(path.script.win)),ignore.stdout=FALSE,intern=FALSE)
+                ## sysres <- system2(paste("cmd /c", shQuote(path.script.win)))## ,ignore.stdout=FALSE,intern=FALSE)
+                shell("echo. > CON",invisible=TRUE)
+            }
+            if(NMsimConf$system.type=="linux"){
+                
+                if(nmquiet) obj.exec$cmd <- paste(obj.exec$cmd, ">/dev/null 2>&1")
+                if(!wait) obj.exec$cmd <- paste(obj.exec$cmd,"&")
+                ## if(exists("dir.tmp") && !is.null(dir.tmp)) {          
+                ##     writeTextFile(string.cmd,file.path(dir.tmp,"NMexec_command.txt"))
+                ## }
+                
+                procres <- system(obj.exec$cmd,ignore.stdout=nmquiet)
+                if(procres!=0) {##stop("Nonmem failed. Exiting.")
+                    ##message("Nonmem failed. Exiting.")
+                    if(sge){
+                        reportFailedRun(file.path(dir.tmp,basename(fnExtension(file.mod,"lst"))))
+                    }
+                    stop("Nonmem failed. Exiting.")
+                }
+            }
+            
+            as.data.table(obj.exec)
+        })
+    
     dt.obj.exec <- rbindlist(list.obj.exec)
 
     return(invisible(dt.obj.exec))

@@ -1,3 +1,4 @@
+##' @importFrom stats runif
 ##' @keywords internal
 
 seedFunDefault <- function(n,val.max=2147483647){

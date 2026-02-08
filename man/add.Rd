@@ -9,17 +9,25 @@ add(..., .pos = "bottom")
 \arguments{
 \item{...}{Elements to add.}
 
-\item{.pos}{Either \"top\" or \"bottom\". Decides if new text is prepended or appended to existing text.}
+\item{.pos}{Either "top" or "bottom". Decides if new text is
+prepended or appended to existing text.}
 }
 \value{
-A function that adds the specified text to character vectors
+A function that adds the specified text to character
+    vectors
 }
 \description{
-Create function that adds text elements to vector
+Namely used to feed functions to modify control streams using
+`NMsim()` arguments such as `modify`. Those functions are often
+onveniently passed a function. `add` and `overwrite` are simple
+shortcuts to creating such functions. Make sure to see examples.
 }
 \examples{
 myfun <- add("b","d")
 myfun("a")
-myfun2 <- add("b","d",.pos="top")
+## If more convenient, you can add a vector instead.
+myfun2 <- add(c("b","d"))
 myfun2("a")
+myfun3 <- add("b","d",.pos="top")
+myfun3("a")
 }

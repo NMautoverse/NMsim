@@ -40,6 +40,7 @@ input.shk
 INTER
 LINK.LNK
 simtmp.*
+^man/figures/.*\.html
 ^man/figures/.*\.pdf
 ^inst/examples/data/xgxt021_bs.+
 ^inst/examples/nonmem/NMdata_backup/
@@ -64,7 +65,11 @@ simtmp.*
 ^reference$
 .*_dir.*
 ^tests_manual
+^tests/testthat/simulate-results/
 ^tests/testthat/simulations
+^tests/testthat/testData/nonmem/.*\.xml
+^tests/testthat/testData/nonmem/.*\.msf
 ^tests/testthat/testOutput/*
 ^tests/testthat/testOutput/.*fst
 ^tests/testthat/testData/nonmem/NMsim/xgxr032_tabopts5
+^tests/testthat/testData/nonmem/NMsim/.+.dir[0-9]+

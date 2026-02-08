@@ -3,6 +3,8 @@
 ##' Edit parameter values, fix/unfix them, or edit lower/upper bounds.
 ##' 
 ##' @param file.mod Path to control stream.
+##' @param lines Control stream as character vector. Use either
+##'     `file.mod` or `lines`, not both.
 ##' @param update If `TRUE` (default), the parameter values are
 ##'     updated based on the `.ext` file. The path to the `.ext` file
 ##'     can be specified with `file.ext` but that is normally not
@@ -34,45 +36,58 @@
 ##' \item `NMwriteInits()` can only update specifications of existing
 ##' parameters. It cannot insert new parameters.
 ##' 
-##' \item lower, init, and upper must be on same line
+##' \item lower, init, upper, and FIX must be on same line in control stream.
 ##'
-##' \item If using something like CL=(.1,4,15), two of those cannot be
-##' on the same line
+##' \item If using something like CL=(.1,4,15) in control stream, two
+##' of those cannot be on the same line.
 ##' }
+##'
+##' In Nonmem an entire block is either fixed or not.
+##' `NMwriteInits()` fixes/unfixes the entire block based on the
+##' top-left element in the block. This means, if
+##' OMEGA(2,2)-OMEGA(3,3) is a block, the `FIX` status of OMEGA(2,2)
+##' determines whether the block is fixed. `FIX` of all other elements
+##' in the block has no effect.
+##' 
 ##' @return a control stream as lines in a character vector.
 ##' @examples
 ##' \dontrun{
-##' file.mod <- system.file("examples/nonmem/xgxr021.mod",package="NMdata") 
-##' NMwriteInits(file.mod,
-##' values=list( "theta(2)"=list(init=1.4),
-##'              "THETA(3)"=list(FIX=1),
-##'              "omega(2,2)"=list(init=0.1))
-##' )
+##' file.mod <- system.file("examples/nonmem/xgxr021.mod",package="NMdata")
+##' ## specify parameters using ...
 ##' NMwriteInits(file.mod,
 ##'   "theta(2)"=list(init=1.4),
 ##'   "THETA(3)"=list(FIX=1),
 ##'   "omega(2,2)"=list(init=0.1)
 ##' )
+##' ## or put them in a list in the values argument
+##' NMwriteInits(file.mod,
+##' values=list( "theta(2)"=list(init=1.4),
+##'              "THETA(3)"=list(FIX=1),
+##'              "omega(2,2)"=list(init=0.1))
+##' )
+##' 
 ##' }
 ##' @import data.table
 ##' @export
 
 
-NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values,newfile,...){
-    
+NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,values,newfile,...){
     . <- NULL
     blocksize <- NULL
     elemnum <- NULL
     elems.found <- NULL
     i <- NULL
     iblock <- NULL
+    iblock.unique <- NULL
     j <- NULL
     linenum <- NULL
+    linenum.min <- NULL
     model <- NULL
     modified <- NULL
     parameter <- NULL
     parnum <- NULL
     par.type <- NULL
+    row.within.block <- NULL
     type.elem <- NULL
     value.elem_init <- NULL
     value.elem_init_update <- NULL
@@ -86,19 +101,26 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     V1 <- NULL
 
     cleanSpaces <- NMdata:::cleanSpaces
+    dcastSe <- NMdata:::dcastSe
 
+    if(missing(file.mod)) file.mod <- NULL
+    if(missing(lines)) lines <- NULL
+    
     fun.merge.tabs <- function(pars.l,tab.new,name.step){
-
+        
         parameter <- NULL
         value.new <- NULL
         
         tab.new <- copy(tab.new)
         setDT(tab.new)
 
+        
+        tab.new <- addParameter(tab.new)
         ## we allow THETA(1) but the real parameter name is THETA1
-        tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter)]
+        ##tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter)]
         tab.new <- addParType(tab.new)
         ## don´t use lower,upper,fix. Missing lower or upper will result in NA in table. Missing should mean don´t edit, not remove. But also, not sure we would use the tab.new interface to edit those. For now, those have to be edit trough the values interface
+
         
 ### todo check tab.new object
         ## tab.new must include a model variable
@@ -137,13 +159,14 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         setnames(tab.new,toConvert,function(x)cleanSpaces(tolower(x)))
         setnames(tab.new,"fix","FIX",skip_absent = TRUE)
         toConvert[toConvert=="fix"] <- "FIX"
+
         
-        if("parameter"%in%colnames(tab.new)){
-            tab.new[,parameter:=toupper(parameter)]
-            tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
-            tab.new <- addParType(tab.new)
-            tab.new[,par.type:=toupper(par.type)]
-        }
+        ## if("parameter"%in%colnames(tab.new)){
+        ##     tab.new[,parameter:=toupper(parameter)]
+        ##     tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
+        ##     tab.new <- addParType(tab.new)
+        ## }
+        
         
         inits.l <- melt(tab.new,measure.vars=intersect(pars.init,toConvert),variable.name="type.elem",value.name="value.new")
 
@@ -195,14 +218,31 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         pars.l
     }
     
-    
-### maybe more than one model could be allowed. If not, NMsim will break all the time?    
-    if(length(file.mod)>1) stop("`file.mod` points to more than one model. `NMwriteInits()` can only one model in `file.mod`.")
 
+### maybe more than one model could be allowed. If not, NMsim will break all the time?
+    
+### call getLines(,simplify=FALSE). Then test if length>1. Then simplify.
+    lines <- NMdata:::getLines(file=file.mod,lines=lines,simplify=FALSE)
+    if(length(lines)>1) stop("`file.mod` and `lines` point to more than one model. `NMwriteInits()` can currently only one model at a time.")
+    lines <- lines[[1]]
+    lines.old <- lines
+    
+    ## if(length(file.mod)>1) stop("`file.mod` points to more than one model. `NMwriteInits()` can only one model in `file.mod`.")
+
+    ## if(missing(lines)){
+    ##     lines.old <- readLines(file.mod,warn=FALSE)
+    ##     lines <- lines.old
+    ## } else {
+    ##     lines.old <- lines
+    ## }
+
+    
+    
     if(missing(values)) values <- NULL
     dots <- list(...)
     values <- append(values,dots)
 
+    
 
     if(any(!tolower(unlist(sapply(values,names)))%in%c("init","lower","upper","fix"))){
         stop("`values` must be a list of named lists.
@@ -224,14 +264,23 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     ## }
 
     if(is.null(file.ext)) file.ext <- file.mod
-    lines.old <- readLines(file.mod,warn=FALSE)
+
+
+### pars.l is the resulting parameter sets that will be sequentially
+### updated based on different methods.
     
-    inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table")
+    ## inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table",section="all")
+    inits.orig <- NMreadInits(lines=lines,return="all",as.fun="data.table",section="all")
     pars.l <- inits.orig$elements
     ## until NMdata 0.2.1
     pars.l <- addParameter(pars.l)
-    
-    pars.l[,model:=fnExtension(basename(file.mod),"")]
+
+### this should be supported with a model object
+    if(!is.null(file.mod)){
+        pars.l[,model:=fnExtension(basename(file.mod),"")]
+    } else {
+        pars.l[,model:="model1"]
+    }
     
     pars.l[type.elem=="FIX"&value.elem=="1",value.elem:=" FIX"]
     pars.l[type.elem=="FIX"&value.elem=="0",value.elem:=""]
@@ -248,15 +297,18 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
 
 ############ update paramters using .ext file
-### update from ext. This methods drops all current values. Hence, it cannot be used for updating selected values.
+### update from ext. This methods drops all current values. Hence, it
+### cannot be used for updating selected values.
     if(update){
         
         ext.new <- NMreadExt(file.ext,as.fun="data.table")
 
-        pars.l <- mergeCheck(pars.l,
-                             ext.new[,.(model,par.type,i,j,type.elem="init",
-                                        value.update=as.character(value))]
-                            ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
+        pars.l <- mergeCheck(
+            pars.l
+           ,
+            ext.new[,.(model,par.type,i,j,type.elem="init",
+                       value.update=as.character(value))]
+           ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
         
         pars.l[!is.na(value.update)&value.elem!="SAME",
                value.elem:=value.update
@@ -295,6 +347,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     }
 
     if(!is.null(inits.tab)){
+### inits.tab <- addParType(inits.tab)
         pars.l <- fun.merge.tabs(pars.l,inits.tab,name.step="initstab")
     }
     
@@ -305,12 +358,17 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         values <- values[!names(values)%in%c("method")]
         names.values <- names(values)
         valuestab.list <- lapply(names.values,function(name){
+            
             tab <- do.call(data.table,values[[name]])
-            tab[,parameter:=name]
+            ## prioritizing parameter in list over name of list
+            if(!"parameter"%in%colnames(tab)){
+                tab[,parameter:=name]
+            }
             tab
         })
+        
         valuestab <- rbindlist(valuestab.list,fill=TRUE)
-
+        
         pars.l <- fun.merge.tabs(pars.l,valuestab,name.step="values")
 
     }
@@ -324,23 +382,37 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     
 ### this is identifying positions of elements that were not in existing model. I don't know that we can handle that at the moment.
 ######### Limitation: lower, init, and upper must be on same line
-    ## pars.l[,i2:=fifelse(is.na(linenum),max(i[!is.na(linenum)]),i),by=.(par.type,j)]
-    ## pars.l[,j2:=fifelse(is.na(j),max(j[!is.na(j)]),j),by=.(par.type,i)]
-    ## pars.l[,linenum:=uniquePresent(linenum),by=.(par.type,i2,j)]
     
-    pars.l[type.elem%in%c("init","lower","upper","FIX"),
-           linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
+### if linenum is missing (new values not from control stream), put
+### them on same line as first elem related to that par (will break if
+### (lower, init,upper) spans multiple lines.
+### parameter is THETA(6), should be THETA6.
+### par.type, i, and j are missing. Those seem OK for OMEGA(1,1)
+### looks like parameter should be trimmed first, 
+
+    
+    
+    pars.l[type.elem%in%c("init","lower","upper","FIX"),linenum.min:=min(linenum,na.rm=TRUE),by=.(par.type,i,j)]
+    pars.l[type.elem%in%c("init","lower","upper","FIX")&is.na(linenum),linenum:=linenum.min]
+    pars.l[type.elem%in%c("init","lower","upper"),
+           linenum:=uniquePresent(linenum,req.n1=T),by=.(par.type,i,j)]
+    pars.l[type.elem%in%c("FIX"),
+           linenum:=uniquePresent(linenum,req.n1=T),by=.(par.type,i,j)]
+
     
     pars.l[,parnum:=uniquePresent(parnum),by=.(par.type,i,j)]
 ### redefining parnumline to be within line
     ## pars.l[,parnumline:=1:.N,by=.(par.type,i,j)]
     pars.l[,iblock:=uniquePresent(iblock),by=.(par.type,i,j)]
     pars.l[,blocksize:=uniquePresent(blocksize),by=.(par.type,i,j)]
+
+    
     
     inits.w <- dcastSe(pars.l,
                        l=intersect(c("model","par.type","linenum","parnum","i","j","iblock","blocksize"),colnames(pars.l)),
                        r="type.elem",
-                       value.var=c("elemnum","value.elem"),funs.aggregate=min)
+                       value.var=c("elemnum","value.elem"),funs.aggregate=function(x)min(as.numeric(x),na.rm=TRUE))
+
 
 ### the rest of the code is dependent on all of init, lower, upper, and FIX being available.
     cols.miss <- setdiff(outer(c("value.elem","elemnum"),c("init","lower","upper","FIX"),FUN=paste,sep="_"),colnames(inits.w))
@@ -349,10 +421,65 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     }
     inits.w[is.na(value.elem_FIX),value.elem_FIX:=""]
 
+
+#### adjusting FIX for NMwriteInitsOne(). FIX must be on the first and
+#### only the first value element in each block. If any fix is found
+#### in the block, the whole block will be fixed.
+
+### the code gets simpler if a model column can be assumed - see
+### if/else below. Only enable after checking that output isn't
+### affected. Or drop the column before returning if added here?
+    ## if(!"model"%in%colnames(inits.w)){
+    ##     inits.w[,model:="model1"]
+    ## }
+
+### not assuming model column.
+    bymodel <- NULL
+    if("model"%in%colnames(inits.w)){
+        bymodel <- "model"
+    }
+    ## iblock.unique is unique across model and parameter type (iblock is not)
+    inits.w[,iblock.unique:=.GRP,by=c(bymodel,"par.type","iblock")]
+
+
+### adding an element counter within blocks to know where to FIX
+### (first element). is.na(value.elem_init) makes sure we insert FIX
+### after the first value element. Example where needed: a line is
+### only $OMEGA and values start in next line.
+
     
+
+    if("model"%in%colnames(inits.w)){
+        inits.w <- rbindlist(lapply(split(inits.w,bymodel),FUN=function(ini){
+            if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)
+            ini[blocksize>1&!is.na(value.elem_init),
+                row.within.block:=1:.N,
+                by=c(bymodel,"iblock.unique")]
+            ini}),fill=TRUE)
+    } else {
+        if(inits.w[blocksize>1&!is.na(value.elem_init),.N]>0) 
+            inits.w[blocksize>1&!is.na(value.elem_init),
+                    row.within.block:=1:.N,
+                    by=c(bymodel,"iblock.unique")]
+    }
+
+    
+### fixing everything if any element in block is fixed
+    ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
+### fixing all if first value element has fix
+    inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX)&i==min(i)&j==min(j))," FIX",""),by=c(bymodel,"iblock.unique")]
+
+    
+### if not first element, drop FIX
+    if(!"row.within.block"%in%colnames(inits.w)) inits.w[,row.within.block:=1]
+    inits.w[blocksize>1&is.na(row.within.block)|row.within.block!=1,
+            value.elem_FIX:=""]
+
+### call NMwriteInitsOne()
     if("model"%in%colnames(inits.w)){
         all.models <- inits.w[,unique(model)]
         lines.new <- lapply(all.models,function(this.mod){
+            
             ## lines.new <- lapply(split(inits.w,by="model"),function(dat){
             lines.res <- NMwriteInitsOne(lines=lines.old,
                                          inits.w=inits.w[model==this.mod],
@@ -360,8 +487,9 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
                                          pars.l=pars.l[model==this.mod])
             lines.res
         })
+        
         names(lines.new) <- all.models
-        lines.new
+
     } else {
         lines.new <- NMwriteInitsOne(lines=lines.old,
                                      inits.w=inits.w,

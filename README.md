@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# NMsim - Simulate Nonmem Models from R <a href='https://NMautoverse.github.io/NMsim/'><img src='man/figures/NMsimlogo240.png' align="right" height="120" /></a>
+# NMsim - Simulate Nonmem Models from R <a href='https://nmautoverse.github.io/NMsim/'><img src='man/figures/NMsimlogo240.png' align="right" height="120" /></a>
 
 <!-- badges: start -->
 
@@ -17,11 +17,11 @@ coverage](https://codecov.io/gh/NMautoverse/NMsim/branch/main/graph/badge.svg)](
 <!-- badges: end -->
 
 Please make sure to read this at
-[`The NMsim website`](https://NMautoverse.github.io/NMsim/) where you
+[`The NMsim website`](https://nmautoverse.github.io/NMsim/) where you
 can browse several vignettes with examples on specific topics.
 
 `NMsim` is an R package that can simulate Nonmem models (using the
-`NMsim` function) based on just a simulation data set and a path to an
+`NMsim()` function) based on just a simulation data set and a path to an
 estimation control stream. It will retrive and combine output tables
 with input data once Nonmem has finished and return the results to R.
 
@@ -68,7 +68,9 @@ This example was a simulation of a multiple dose regimen with a loading
 dose using a model estimated on single dose data. It is from the first
 vignette
 [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html).
-Go there next to get started with `NMsim`.
+Go there next to get started with `NMsim`. The
+[`Examples`](https://NMautoverse.github.io/NMsim/articles/NMsim-examples.html)
+provides an overview of various tasks NMsim can help automating.
 
 ## Motivation
 
@@ -84,7 +86,7 @@ of a simple user-interface to obtain the simulations.
 interface as an R package, allowing the modeler to simulate models as
 soon as an estimate is available.
 
-The goal for NMsim is to automate the NONMEM simulation workflow and
+The goal for `NMsim` is to automate the NONMEM simulation workflow and
 provide a simple, flexible, and powerful R interface. This allows for
 automation of most simulation-based analyses.
 
@@ -115,7 +117,7 @@ simulation control stream
 
 To learn how to run these simulations on your Nonmem models, get started
 with
-[`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html).
+[`NMsim-intro.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html).
 It is really easy.
 
 In addition, `NMsim` can simulate multiple models at a time. E.g., if a
@@ -184,7 +186,7 @@ interpretation may depend on other values.
 The input data set must contain whatever variables are needed by the
 Nonmem model. A common issue is if the Nonmem model uses a covariate
 that is not in the simulation input data set. `NMdata`’s
-[NMcheckData](https://NMautoverse.github.io/NMdata/reference/NMcheckData.html)
+[NMcheckData](https://nmautoverse.github.io/NMdata/reference/NMcheckData.html)
 is a good help identifying input data issues before running Nonmem - and
 when Nonmem acts unexpectedly.
 

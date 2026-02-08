@@ -16,4 +16,9 @@ test_that("basic",{
 
     expect_equal_to_reference(res,fileRef)
 
+    if(F){
+        readRDS(fileRef)
+        res
+        }
+
 })

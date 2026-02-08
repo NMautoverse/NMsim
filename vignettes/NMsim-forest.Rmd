@@ -14,7 +14,6 @@ output:
       editor_options:
         chunk_output_type: inline
         code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 ---
@@ -131,7 +130,7 @@ file.mod <- system.file("examples/nonmem/xgxr134.mod",package="NMsim")
 ```
 
 
-# Generation of simulation input data
+# Generation of Simulation Input Data
 
 
 ## Dosing and sampling
@@ -188,7 +187,7 @@ example, that would be `analyte`.
 
 </details>
 
-## Define covariates to analyze
+## Define Covariates to Analyze
 `NMsim::forestDefineCovs()` can be used to construct a set of covariate value combinations needed to derive a forest plot. It varies one covariate at a time, keeping all other covariates at their reference value. It can derive references and quantiles from a data set.
 
 For reference values we use median in the observed population for continuous covariates and manually select "Female" as the reference for sex. Here is a short example:
@@ -496,7 +495,7 @@ exts.bs <- list.files(dir.bs,pattern=".+\\.ext$",recursive=T,full.names = TRUE)
 ext.boot <- NMreadExt(exts.bs,as.fun="data.table")
 
 simres.forest.boot <- NMsim(file.mod # path to NONMEM model
-                           ,data=dt.sim.covs, # simulation dataset
+                           ,data=dt.sim.covs # simulation dataset
                            ,name.sim="boot_forest" # output name suffix
                            ,method.sim=NMsim_VarCov # sampling with mvrnorm
                            ,ext=ext.boot
@@ -511,7 +510,7 @@ simres.forest.boot <- NMsim(file.mod # path to NONMEM model
 
 </details>
 
-## Comparison of different simulation methods
+## Comparison of Different Simulation Methods
 The forest were simulated with all the methods mentioned above. As
 expected, the forest plots are very similar for NWPRI, mvrnorm, and
 simpar. This is expected because they all sample THETAs from the
@@ -570,7 +569,7 @@ plot.compare <- ggplot(sum.uncertain[period=="Steady-State"],aes(predmm,covvalf,
 plot.compare
 ```
 
-# Post-processing step-by-step
+# Post-processing Step-By-Step
 We are including the code from the main steps in the post processing function, `NMsim::forestSummarize()`. It is important that the scientist understands that what the forest plots derived in this document represent is the relative effect of the covariate on the exposure metric. This is derived by `NMsim::forestSummarize()` as quantiles of the exposure relative to the reference subject. The confidence interval hence expresses the uncertainty on the covariate effect for a subject with other covariates at reference values.
 
 <details>

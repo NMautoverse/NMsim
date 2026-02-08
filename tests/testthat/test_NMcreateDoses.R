@@ -278,3 +278,12 @@ test_that("length(TIME)=3 and length(ADDL)=1",{
     expect_equal_to_reference(res,fileRef)
 
 })
+
+
+test_that("Basic with N>1",{
+    fileRef <- "testReference/NMcreateDoses_17.rds"
+    ## simple - ok
+    ## NMcreateDoses(TIME=0,AMT=10)
+    res <- NMcreateDoses(TIME=0,AMT=10,N=3)
+    expect_equal_to_reference(res,fileRef)
+})

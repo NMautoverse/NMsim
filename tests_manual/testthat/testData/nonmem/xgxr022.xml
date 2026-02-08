@@ -5,14 +5,12 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address output.xsd"
 xmlns:nm="http://namespaces.oreilly.com/xmlnut/address"
 >
-<nm:start_datetime>2024-10-27T13:37:18.595</nm:start_datetime>
+<nm:start_datetime>2025-07-14T07:24:00.540</nm:start_datetime>
 <nm:control_stream><![CDATA[
 $PROBLEM    021 with CL:V2 corr
 $INPUT      ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY BLQ CYCLE
             DOSE PART PROFDAY PROFTIME WEIGHTB eff0
-$DATA       xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0)
-$DATA             IGNORE(DOSE.LT.30)
-
+$DATA      xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)
 $SUBROUTINE ADVAN4 TRANS4
 $PK
 TVKA=THETA(1)
@@ -48,7 +46,9 @@ $THETA  (0,13.9777) ; POPCL
 $THETA  (0,150.059) ; POPV3
 $THETA  (0,8.4865) ; TVQ
 $OMEGA  0  FIX
-$OMEGA BLOCK(2)  0.178666 .1  0.249778
+$OMEGA  BLOCK(2)
+ 0.178666
+ .1 0.249778
 $OMEGA  0  FIX
 $OMEGA  0  FIX
 $SIGMA  0.0822435
@@ -73,13 +73,15 @@ $TABLE      ROW TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT
 
  * THE MAXIMUM NUMBER OF WARNINGS OF ONE OR MORE TYPES WAS REACHED.
  IT IS POSSIBLE THAT SOME WARNING MESSAGES WERE SUPPRESSED.
+
+ LIM VALUES MAXLIM ASSESSED BY NMTRAN: 1,2,3,4,5,6,7,8,10,11,13,15,16
 ]]></nm:nmtran>
 <nm:nonmem nm:version='7.5.0'>
 <nm:license_information><![CDATA[
 License Registered to: Vertex Pharmaceuticals Inc
-Expiration Date:    14 JAN 2025
-Current Date:       27 OCT 2024
-Days until program expires :  82
+Expiration Date:    14 JAN 2026
+Current Date:       14 JUL 2025
+Days until program expires : 185
 ]]></nm:license_information>
 <nm:program_information><![CDATA[
 1NONLINEAR MIXED EFFECTS MODEL PROGRAM (NONMEM) VERSION 7.5.0
@@ -297,7 +299,7 @@ Days until program expires :  82
  EXCLUDE NON-INFLUENTIAL (NON-INFL.) ETAS
        IN SHRINKAGE (ETASTYPE):             NO
  NON-INFL. ETA CORRECTION (NONINFETA):      0
- RAW OUTPUT FILE (FILE): xgxr022.ext
+ RAW OUTPUT FILE (FILE): psn.ext
  EXCLUDE TITLE (NOTITLE):                   NO
  EXCLUDE COLUMN LABELS (NOLABEL):           NO
  FORMAT FOR ADDITIONAL FILES (FORMAT):      S1PE12.5
@@ -315,8 +317,8 @@ Days until program expires :  82
  nm:cond_estim='yes' nm:centered_eta='no' nm:epseta_interaction='yes' nm:laplace='no' nm:predflag='0' nm:maxfn='9999'
  nm:nsig='2' nm:msfo='no' nm:abort='no' nm:objsort='no' nm:numder='0' nm:optmap='0' nm:etader='0' nm:mceta='0' nm:siglo='9'
  nm:sigl='9' nm:noprior='0' nm:nocov='0' nm:dercont='0' nm:atol='0' nm:fnleta='1' nm:etastype='0' nm:noninfeta='0'
- nm:file='xgxr022.ext' nm:notitle='0' nm:nolabel='0' nm:format='s1pe12.5' nm:order='tsol' nm:knuthsumoff='0'
- nm:lntwopi='0' nm:priorc='0' nm:olntwopi='0' nm:ctype='0'
+ nm:file='psn.ext' nm:notitle='0' nm:nolabel='0' nm:format='s1pe12.5' nm:order='tsol' nm:knuthsumoff='0' nm:lntwopi='0'
+ nm:priorc='0' nm:olntwopi='0' nm:ctype='0'
 />
 <nm:monitor>
 <nm:obj nm:iteration='0'>-1682.0022338295578</nm:obj>
@@ -427,11 +429,11 @@ Days until program expires :  82
 <nm:col nm:cname='EPS2'>100.00000000000000</nm:col>
 </nm:row>
 </nm:epsshrinkvr>
-<nm:estimation_elapsed_time>1.30</nm:estimation_elapsed_time>
+<nm:estimation_elapsed_time>1.45</nm:estimation_elapsed_time>
 <nm:covariance_information><![CDATA[
 ]]></nm:covariance_information>
 <nm:covariance_status nm:error='0' nm:numnegeigenvalues='-1' nm:mineigenvalue='0.0000000000000000' nm:maxeigenvalue='0.0000000000000000' nm:rms='0.0000000000000000'/>
-<nm:covariance_elapsed_time>1.89</nm:covariance_elapsed_time>
+<nm:covariance_elapsed_time>2.14</nm:covariance_elapsed_time>
 <nm:final_objective_function_text>MINIMUM VALUE OF OBJECTIVE FUNCTION</nm:final_objective_function_text>
 <nm:final_objective_function>-1710.3735054308333</nm:final_objective_function>
 <nm:theta>
@@ -1567,10 +1569,10 @@ Days until program expires :  82
 </nm:estimation>
 <nm:post_process_times>
 <nm:post_elapsed_time>0.03</nm:post_elapsed_time>
-<nm:finaloutput_elapsed_time>0.05</nm:finaloutput_elapsed_time>
+<nm:finaloutput_elapsed_time>0.04</nm:finaloutput_elapsed_time>
 </nm:post_process_times>
 </nm:problem>
 </nm:nonmem>
-<nm:stop_datetime>2024-10-27T13:37:22.259</nm:stop_datetime>
-<nm:total_cputime>3.381</nm:total_cputime>
+<nm:stop_datetime>2025-07-14T07:24:04.316</nm:stop_datetime>
+<nm:total_cputime>3.776</nm:total_cputime>
 </nm:output>

@@ -55,19 +55,28 @@ test_that("Basic",{
                   execute=FALSE,
                   method.update.inits="nmsim")
 
-    mod <- NMreadSection("testOutput/xgxr032_VarCov_1/xgxr032_VarCov_1_2.mod")
+    file.mod.gen <- "testOutput/xgxr032_VarCov_1/xgxr032_VarCov_1_2.mod"
+    mod <- NMreadSection(file.mod.gen)
     ## gsub("(\\d)","round()",mod$THETA)
     ## stringr::gsub("\\d+\\.\\d+",function(x)round(as.numeric(x)),mod$THETA)
     ## 
-    theta <- stringr::str_replace_all(mod$THETA,"\\d+\\.\\d+",function(x)round(as.numeric(x),digits=3))
+    theta <- stringr::str_replace_all(mod$THETA,"\\d+\\.\\d+",function(x) as.character(round(as.numeric(x),digits=3)))
+    inits <- NMreadInits(file.mod.gen)
     ## omega <- stringr::str_replace_all(mod$OMEGA,"\\d+(\\.\\d+)*",function(x)round(as.numeric(x),digits=3))
 
     ##as.numeric(mod$THETA)
 
-    mod <- mod[!names(mod)%in%c("THETA","OMEGA")]
-    expect_equal_to_reference(mod,fileRef_a)
-    
-    expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
+    mod <- mod[!names(mod)%in%c("THETA","OMEGA","SIGMA")]
+
+    if(packageVersion("NMdata")>="0.2.1"){
+        expect_equal_to_reference(mod,fileRef_a)
+        
+        ## expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
+        expect_equal_to_reference(
+            as.data.table(inits)[par.type=="THETA",is.na(init)]
+           ,
+            fileRef_b)
+    }
     ## expect_equal_to_reference(omega,fileRef_c)
 
     if(F){
@@ -83,6 +92,14 @@ test_that("Basic",{
         mod$SIMULATION
 
         compareCols(ref,mod)
+
+        ref_b <- readRDS(fileRef_b)
+        ref_b
+
+        ref_c <- readRDS(fileRef_c)
+        ref_c
+
+
 
     }
 

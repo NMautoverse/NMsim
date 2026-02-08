@@ -1,12 +1,125 @@
+# NMsim 0.2.7
+
+## New Features
+
+* `prioritizePaths()`
+
+## Bugfixes
+
+* Prints of 1E-30
+
+# NMsim 0.2.6
+
+## New Features
+
+* `NMsim_NWPRI` gains an argument, `add.diag`, to add a value to
+  variance-covariance diagonal. This can be used in case the
+  variance-covariance matrix has (typically numerically very small)
+  negative values.
+
+## Bugfixes
+* `NMsim_NWPRI` would fail on models with `$OMEGA BLOCK(N) SAME`
+  structures. This is often used for between-occasion
+  variability. This has been fixed, even though only single omega
+  parameters can be used with `SAME` at this point. Also, each SAME
+  block must be written out, as the `SAME(N)` notation for repeating
+  `SAME` blocks is still not supported by NMsim. Thanks to Brian
+  Reilly for working on this.
+
+* `NMsim_EBE` now works when no data set is supplied. This can be used
+  to get individual `PRED` and `IPRED`, especially if these are
+  evaluated differently in the estimation control stream (e.g. using
+  M3, `PRED` gets a different interpretation at censoring).
+
+* `name.sim` argument to `NMsim()` now supports strings ending in
+  periods, e.g. `name.sim=string..` now works.
+
+* `dir.sims` and `dir.res` relative paths starting with `../` now
+  work. Example: `dir.sims="../simtmp"` would fail. Fixed.
+  
+* `sampleCovs()` would fail if input data set did not include an `EVID`
+  column. Fixed.
+
+## Other Improvements
+* `NMsim_VarCov` has become faster, reducing the time spent setting up
+  simulations by around 1/3, depending on the simulation problem.
+
+# NMsim 0.2.5
+
+## New features
+* Method to run "typical subject" simulations has been improved and the
+code has been simplified. This is controlled using the `typical`
+argument in `NMsim()`. The basic use of this argument is
+`typical=FALSE` (default, not a typical subject simulation) or
+`typical=TRUE`. If `typical=TRUE`, `$OMEGA` parameters are fixed at
+zero. If the model has `OMEGA` prior parameters `$OMEGAP ` and
+`$OMEGAPD`, those are fixed to zero too. Instead of a logical
+(`TRUE/FALSE`), a character vector can now be supplied to specify what
+oarameter types to fix at zero. E.g. to also drop residual
+variability, use `typical=c("omega","sigma")` (remember to add the
+prior parameter types if needed).
+
+* A new `NMsim()` argument `dir.sim.sub` controls whether a subdirectory
+is created in `dir.sims` for Nonmem execution. When using `NMsim()`
+for estimation, it may be more convenient to use `dir.sim.sub=FALSE`
+to get all model executions in the same directory.
+
+* `NMcreateDoses()` has a new argument, `N`, allowing for creation of
+  multiple subjects.
+
+## Bugfixes
+`NMsim_NWPRI()` in combination with `typical=TRUE` would fail in some
+cases. This has been fixed with the new implementation of the
+`typical` argument.
+
+## Other improvements
+`NMsim()` argument `name.sim` supports stings with parenthesis.
+
 # NMsim 0.2.4
 
-* `NMwriteInits()` supports `ext` and `inits.tab` arguments. These
-  interfaces to specifying parameter values greatly improves
-  flexibility for programming, and for specifying multiple new
-  parameter sets.
+## New features
 
-* `NMaddSamples` only inserts `MDV` column if `MDV` is already present
+* `NMsim()`'s support for handling and control of initial values (the
+  `inits` argument) has been greatly improved. In recent versions a
+  new method for reading, updating, and writing the parameter
+  definitions in control streams has been implemented. This allows for
+  modification of this information and for fixing/unfixing
+  parameters. The downside is it comes with some limitations to
+  control stream syntax. With 0.2.4 those limitations are getting
+  rare. The original much simpler method is still available and
+  provides a robust alternative for many simulation purposes and is
+  kept as a fallback workaround.
+
+* `NMsim()`'s `init` argument supports `ext` and `inits.tab`
+  formats. These interfaces to specifying parameter values greatly
+  improves flexibility for programming, and for specifying multiple
+  new parameter sets for series of model runs.
+
+* `NMreadSim()` gains the `skip.missing` argument. In case some model
+  runs fail or haven't finished, this allows `NMreadSim()` to read
+  whatever it can and skip the ones missing.
+
+* Summary function included on NMsim simulation results. There is
+  still room for improvement - try it out with `summary()` on results
+  from `NMsim()` and `NMreadSim()`.
+
+## Bugfixes
+* `NMREP` is a data column that `NMsim()` automatically adds to count
+  subproblems when `subproblem` is used. This was not added when
+  simulating PREDPP (`$PRED`) models and when not providing a
+  simulaiton data set (VPC style). Thanks to Ahmed Abulfathi for
+  reporting.
+
+* In some cases `NMsim_NMWPRI()` in combination with `typical=TRUE`
+  would create wrong `$PRIOR` dimensions. Fixed.
+
+## Other improvements
+* `NMaddSamples()` only inserts `MDV` column if `MDV` is already present
   in `data`.
+
+* `NMexec()` uses the `-maxlim=2` option when executing Nonmem. This
+  is implemented on both the internal execution method and when PSN's
+  execute is used. 
 
 
 # NMsim 0.2.3

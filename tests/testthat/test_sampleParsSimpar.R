@@ -17,7 +17,7 @@ test_that("basic",{
         expect_equal_to_reference(pars,fileRef)
 
         pars.simpar.w <- samplePars(file.mod=file.mod,nsims=10,method="simpar",format="wide",as.fun="data.table",seed.R=23)
-
+        
         expect_equal(pars,pars.simpar.w)
     }
 })

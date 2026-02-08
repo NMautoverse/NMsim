@@ -1,64 +1,56 @@
+##' Set variability parameters to zero
+##' @param file.mod path to control stream to edit
+##' @param lines control stream as lines. Use either file.sim or
+##'     lines.sim.
+##' @param section The sections (parameter types) to edit. Default is
+##'     `c("OMEGA", "OMEGAP", "OMEGAPD")`.
+##' @param newfile path and filename to new run. If missing or NULL,
+##'     output is returned as a character vector rather than written.
+##' @import data.table
+##' @import NMdata
 ##' @keywords internal
 
-typicalize <- function(file.sim,lines.sim,file.mod,return.text=FALSE,file.ext,Netas){
+typicalize <- function(file.mod,lines,section,newfile){
     
-#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
-    
+    blocksize <- NULL
+    file.sim <- NULL
+    FIX <- NULL
+    init <- NULL
     par.type <- NULL
-    i <- NULL
-
-### Section end: Dummy variables, only not to get NOTE's in pacakge checks
     
 
-    ## files.needed.def <- NMsim_default(file.sim=file.sim,file.mod,data.sim)
-    if(!is.null(file.sim)){
-        lines.sim <- readLines(file.sim,warn=FALSE)
-        sections.sim <- NMreadSection(lines=lines.sim)
-    }
+    if(missing(file.mod)) file.mod <- NULL
+    if(missing(lines)) lines <- NULL
+    if(missing(section)) section <- NULL
+    if(missing(newfile)) newfile <- NULL
     
-    if(missing(Netas)) Netas <- NULL
-    if(missing(file.ext)) file.ext <- NULL
-
-    if(is.null(Netas)){
-        
-        if(is.null(file.ext)){
-            file.ext <- fnExtension(file.mod,"ext")
-        }
-        if(!file.exists(file.ext)){
-            stop("ext file not found and number of Etas not provided. See arguments file.ext and Netas.")
-        } else {
-            extres <- NMreadExt(file.ext,return="pars",as.fun="data.table")
-            Netas <- extres[par.type=="OMEGA",max(i)]
-        }
-    }
+    lines <- NMdata:::getLines(file=file.mod,lines=lines,simplify=TRUE)
     
-    lines.omega <- paste(c("$OMEGA",rep("0 FIX",Netas),""),collapse="\n")
-    lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim,section="omega",newlines=lines.omega,backup=FALSE,quiet=TRUE)
+    if(is.null(section)){
+        section <- c("OMEGA","OMEGAP","OMEGAPD")
+    }
+    section <- NMdata:::cleanSpaces(section)
+    section <- toupper(section)
 
-    ## OMEGAP and OMEGAPD for NWPRI
-    if("OMEGAP"%in%names(sections.sim)) {
-        if(packageVersion("NMdata")<"0.1.6.932"){
-            message("NMdata version 0.1.7 or newer needed for typical=TRUE to handle OMEGAP sections. Not handling $OMEGAP.")
-        } else {
-            lines.omegap <- paste(c("$OMEGAP",rep("1E-30 FIX",Netas),""),collapse="\n")
-            lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim,section="omegap",newlines=lines.omegap,backup=FALSE,quiet=TRUE)
-        }
+    inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
+    inits[,init:=as.character(init)]
+    valc.0 <- "1E-30"
+
+    inits[par.type%in%section,init:="0"]
+    inits[par.type%in%section,FIX:=1]
+    if("blocksize"%in%colnames(inits)){
+        inits[par.type%in%section&blocksize>1,init:=valc.0]
     }
 
-    if("OMEGAPD"%in%names(sections.sim)) {
-        if(packageVersion("NMdata")<"0.1.6.932"){
-            message("NMdata version 0.1.7 or newer needed for typical=TRUE to handle OMEGAPD sections. Not handling $OMEGAPD.")
-        } else {
-            lines.omegapd <- paste(c("$OMEGAPD",rep("1 FIX",Netas),""),collapse="\n")
-            lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim,section="omegapd",newlines=lines.omegapd,backup=FALSE,quiet=TRUE)
-        }
-    }
-    
-    if(return.text){
-        return(lines.sim)            
+    mod.new <- NMwriteInits(lines=lines,inits.tab=inits,update=FALSE)
+
+    ## write to file if requested
+    if(is.null(newfile)){
+        return(mod.new)            
     }
 
-    writeTextFile(lines=lines.sim,file=file.sim)
+    writeTextFile(lines=mod.new,file=newfile)
 
-    return(file.sim)
+    return(file.sim)    
+
 }

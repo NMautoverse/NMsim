@@ -14,7 +14,6 @@ output:
       editor_options:
         chunk_output_type: inline
         code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 ---
@@ -130,17 +129,14 @@ For EM-based estimation methods such as SAEM or IMP, NMsim cannot use the `.phi`
 table files for the method to work. It does not matter where in the
 table files they are, they just all need to be there. You can write
 all of them like it is done in the example model provided with `NMsim`
-called `xgxr032.mod`.
-
-If using EM algorithms such as SAEM or IMP, remember to explicitly write ETAs to an output table in the Nonmem control stream:
+called `xgxr032.mod`:
 ```
 $TABLE ETAS(1:LAST) NOAPPEND NOPRINT FILE=xgxr032_etas.txt
 ```
 
-So a "subject" essentially means a set of ETAs. Covariates must still
-be provided in the input data set and can be modified if
-wanted. Notice, `NMsim_EBE` does nothing to restore covariates - you
-must define covariates in input data as needed.
+So a "subject" essentially means a set of ETAs. Notice, `NMsim_EBE`
+does nothing to restore covariates - you must define covariates in
+input data as needed.
 
 
 ## Simulate known subjects on a new dosing regimen and new sample schedule
@@ -161,6 +157,8 @@ doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)
 dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
 ```
 
+All the subjects to be simulated must be in the data set. In this case we simulate all the subjects in the estimation data set. We read the estimated output tables and merge with input data using `NMdata::NMscanData()` to get those `ID's`. If you prefer to get the `ID's` and their covariates in a different way, that is fine. Just remeber, the `ID`'s must be the same as in the estimation for NMsim to be able to find the eta's for simulation.
+
 ```{r,eval=FALSE}
 ## read model results just to extract the observed ID's. Notice, if
 ## your model uses covariates, those should be retrieved too.
@@ -172,9 +170,14 @@ ids <- unique(res.mod[,c("ID","WEIGHTB","AGE","MALEN")])
 ## we will merge with all the observed subjects in stead of the single
 ## ID in the original data set.
 dat.sim$ID <- NULL
+## the data.table way, repeating the data set for all the subjects
+dat.sim.known <- as.data.table(dat.sim)[,ids,by=dat.sim]
+## or, an outer join using NMdata::egdt
 dat.sim.known <- egdt(ids,
                       dat.sim
                       )
+## or an outer join using dplyr (code missing)
+## order data set
 setorder(dat.sim.known,ID,TIME,EVID)
 ## check data
 NMcheckData(dat.sim.known,type.data="sim")

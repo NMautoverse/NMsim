@@ -1,8 +1,12 @@
 ##' Internal function to run Nonmem on linux
 ##' @param fn.mod Just the file name, not including path
 ##' @keywords internal
-NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sge,nc,pnm,fun.post=NULL){
+NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sge,nc,pnm,nmfe.options,fun.post=NULL){
 
+    ## nmfe.options
+    if(missing(nmfe.options)) nmfe.options <- NULL
+
+    
     rm.if.pres <- function(regex){
         sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex)     
     }
@@ -10,7 +14,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 
     name <- NULL
     fn.lst <- fnExtension( fn.mod,".lst")
-    line.run <- sprintf("%s %s %s",path.nonmem,fn.mod,fn.lst)
+    line.run <- sprintf("%s %s %s %s",path.nonmem,fn.mod,fn.lst,nmfe.options)
 
     if(sge){
         ## executing from model execution dir.
@@ -20,7 +24,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
         if(grepl("^[0-9]",jobname)) {
             jobname <- paste0("NM",jobname)
         }
-        line.run <- sprintf('qsub -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background -maxlim=2'
+        line.run <- sprintf('qsub -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background'
                            ,ifelse(nc>1,paste("-pe orte",nc),"")
                            ,"NMexec.err"
                            ,"NMexec.out"
@@ -48,6 +52,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
         "#!/bin/bash"
        ,""
        ,line.run
+        ##,"echo \"job submitted\" > "        
        ,lines.wait
 ### copy output tables back
 ### this would be simpler. Needs testing.

@@ -17,6 +17,7 @@ NMexec(
   update.only = FALSE,
   fun.post,
   method.execute,
+  nmfe.options,
   dir.psn,
   args.psn.execute,
   files.needed,
@@ -105,6 +106,11 @@ output files next to the control streams.
 }
 
 See `sge` as well.}
+
+\item{nmfe.options}{additional options that will be passed to
+nmfe. It is only used when path.nonmem is available (directly
+or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+`args.psn.execute`.}
 
 \item{dir.psn}{The directory in which to find PSN
 executables. This is only needed if these are not searchable

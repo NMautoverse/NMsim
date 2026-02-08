@@ -2,113 +2,22 @@
 title: "Simulation with Modifications to Parameters and Model Code"
 author: 
   - name: "Simone Cassani, Philip Delff"
-    date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
-    toctitle: "Contents"
-    output:
-      html_document:
-        toc: true
-        toc_depth: 4
-        toc_float: true
-        number_sections: false
-        df_print: kable
-        editor_options:
-          chunk_output_type: inline
-          code_folding: show
-          bibliography: [packages.bib]
-          pkgdown:
-            as_is: true
+date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
+toctitle: "Contents"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: false
+    df_print: kable
+    editor_options:
+      chunk_output_type: inline
+      code_folding: show
+    css: styles.css
+pkgdown:
+  as_is: true
 ---
-
-```{css echo=FALSE}
-
-body{
-	font-size: 12pt;
-}
-
-h1.title {
-	font-size: 24px;
-	color: DarkRed;
-	margin-top: 2em;
-	margin-bottom: 1em;
-}
-h1 { /* Header 1 */
-	font-size: 20px;
-	color: DarkBlue;
-}
-h2 { /* Header 2 */
-	margin-top: 1em;
-	font-size: 20px;
-	color: DarkBlue;
-}
-h3 { /* Header 3 */
-	font-size: 18px;
-	font-family: "Times New Roman", Times, serif;
-	color: DarkBlue;
-}
-h4 { /* Header 4 */
-	font-size: 16px;
-	font-family: "Times New Roman", Times, serif;
-	color: DarkBlue;
-}
-table.Rtable1 {
-    font-size: 12px;
-}
-
-.superbigimage{
-    overflow-x:scroll;
-    white-space: nowrap;
-}
-
-.superbigimage img{
-    max-width: none;
-}
-
-h4.author {
-	font-weight:bold;
-	font-style:italic;
-	margin-top: 0em;
-	margin-bottom: 1em;
-}
-h4.date {
-	font-weight:bold;
-	margin-top: 0em;
-	margin-bottom: 5em;
-}
-
-
-/* -----------div tips------------- */
-
-div.summary {
-	padding: 1em;
-	margin: 1em;
-	padding-left: 50px;
-	background-size: 30px;
-	background-repeat: no-repeat;
-	background-position: 10px 10px;
-	min-height: 40px;
-	font-size: 16px;
-	color: #000000;
-	background-color: #bed3ec;
-	border: solid 5px #dfedff;
-	/* background-image: url("Summary_ffffff.png"); */
-}
-
-div.data {
-	padding: 1em;
-	margin: 1em;
-	padding-left: 50px;
-	background-size: 30px;
-	background-repeat: no-repeat;
-	background-position: 10px 10px;
-	min-height: 40px;
-	font-size: 16px;
-	color: #000000;
-	background-color: #FAD07D;
-	border: solid 5px #FFDE9C;
-	/* background-image: url("Stats graph_ffffff.png"); */
-}
-
-``` 
 
 
 
@@ -121,11 +30,11 @@ knitr::opts_chunk$set(echo = TRUE,
                       out.width = "100%"
                      ,fig.height=3.7
                       )
-options(knitr.table.format = "html") 
+## options(knitr.table.format = "html") 
 
 ## From github
-                                        #library(remotes)
-                                        #install_github("NMautoverse/NMsim")
+##library(remotes)
+##install_github("NMautoverse/NMsim")
 library(data.table)
 library(knitr)
 library(kableExtra)
@@ -141,9 +50,17 @@ if(F){
 library(NMcalc)
 library(ggplot2)
 
-NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75"
-           ## path.nonmem = "/opt/nonmem/nm751/run/nmfe75"
-          ,dir.sims="simtmp-modify"
+## Get the setup ready for NMsim
+path.candidates <- c(## metworx
+    "/opt/NONMEM/nm75/run/nmfe75"
+    ## custom linux
+   ,"/opt/nonmem/nm751/run/nmfe75"
+    ## Ahmed
+   ,"c:/nm75g64/run/nmfe75.bat"
+)
+NMdataConf(path.nonmem = NMsim:::prioritizePaths(path.candidates)) ## path to whichever NONMEM executable that is available
+
+NMdataConf(dir.sims="simtmp-modify"
           ,dir.res="simres-modify"
           ,as.fun="data.table"
            )
@@ -160,9 +77,6 @@ set.seed(11112024)
 reuse.results <- TRUE
 ```
 
-```{r, bibs,include=FALSE,eval=FALSE}
-knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-packages.bib')
-```
 
 <!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> -->
 
@@ -246,23 +160,21 @@ To reproduce the examples, you will need to have NMsim configured to find your N
 ```{r,eval=TRUE,include=TRUE,results="hide"}
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
-data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=c(0,5),II=c(0,24),CMT=1)|>
+data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1) |>
     NMaddSamples(TIME=0:(24*7),CMT=2)
-## data.sim <- NMreadCsv(system.file("examples/derived/dat_sim1.csv",
-##                                   package="NMsim"))
 ```
 
-## Control Parameter Values (`inits`)
+## Edit Model Parameters (`inits`)
+The `inits` argument is used to control the initial values, or more accurately all the information in parameter sections of the simulation control stream, such as `$THETA`, `OMEGA`, `SIGMA`, and even priors if those are used. 
 
-First, we collect an overview of the parameters in the model, their initial values as specified in the control stream, and the estimated values, as read from the `.ext` file. We are using functions from NMdata to get these. If you are interested in learning more about these functions, [This NMdata vignette]() is a good place to start.
+Before doing a simulation, we collect an overview of the parameters in the estimated model, their initial values as specified in the control stream, and the estimated values, as read from the `.ext` file. We are using functions from NMdata to get these. If you are interested in learning more about these functions, [This NMdata vignette]() is a good place to start.
 
 ```{r}
 partab <- NMreadParsText(file.mod,as.fun="data.table",format="%init;%symbol") |>
-    mergeCheck(NMreadExt(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE) ## |>
-## mergeCheck(NMreadInits(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE)
-## partab[,.(par.name,symbol,init,lower,upper,FIX,est)]
+    mergeCheck(NMreadExt(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE)
 partab[,.(par.name,symbol,init,est)]
 ```
+
 
 Let's run a simple simulation without specifying `inits`.
 
@@ -276,12 +188,38 @@ simres <- NMsim(file.mod=file.mod,
 simres <- NMreadSim("simres-modify/xgxr021_basicsim_MetaData.rds")
 ```
 
+The following compares the `$THETA`, `$OMEGA`, and `$SIGMA` sections
+of the estimated and the simulated control streams side-by-side. The
+values have been updated in the simulation control stream (to the right) based on the
+`.ext` file (compare to "init" and "est" columns in table above).
 
-```{r}
-diffr::diffr(file.mod,modTab(simres)$path.sim)
+```{r,echo=FALSE}
+my.file.diff <- function(file1,file2,sections=NULL,...){
+    if(is.null(sections)){
+        res.file1 <- readLines(file1)
+        res.file2 <- readLines(file2)
+    } else {
+        sections <- toupper(sections)
+        res.file1 <- setNames(lapply(sections,function(sec)NMreadSection(file=file1,section=sec)),sections)
+        res.file2 <- setNames(lapply(sections,function(sec)NMreadSection(file=file2,section=sec)),sections)
+    }
+    
+    waldo::compare(res.file1,res.file2,ignore_attr=FALSE,...)
+}
+## diffr::diffr(file.mod,modTab(simres)$path.sim)
+
+secs <- c("THETA","OMEGA","sigma")
+my.file.diff(file.mod,modTab(simres)$path.sim,sections=secs,x_arg="file.mod",y_arg="simulation")
+## res.file.mod <- setNames(lapply(secs,function(sec)NMreadSection(file=file.mod,section=sec)),secs)
+## res.res <- setNames(lapply(secs,function(sec)NMreadSection(file=modTab(simres)$path.sim,section=sec)),secs)
+## waldo::compare(res.file.mod,
+##                res.res
+##                )
 ```
 
-Now, adding some custom values
+To simulate the model without updating the parameters based on final model estimates, use `inits=list(method="none")`.
+
+We may want to customly specify individual parameter values. Let's now do rerun the simulation adding some custom values for `THETA(1)` and `OMEGA(3,3)`. Since we are not using `inits=list(method="none")` all other parameter values are updated with final estimates.
 
 ```{r,eval=FALSE}
 simres.inits1 <- NMsim(file.mod=file.mod,
@@ -296,21 +234,132 @@ simres.inits1 <- NMsim(file.mod=file.mod,
 simres.inits1 <- NMreadSim("simres-modify/xgxr021_inits1_MetaData.rds")
 ```
 
-```{r}
-diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
+```{r,echo=FALSE}
+## diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
+my.file.diff(file.mod,modTab(simres.inits1)$path.sim,sections=c("THETA","OMEGA","sigma"),
+             x_arg="file.mod",y_arg="simulation")
+```
+
+For simulation purposes, the initial value is probably going to be the only property of a parameter that needs to be controlled. For other purposes like estimation or optimal sampling, properties such as "FIX", lower and upper limits may also need to be modified. `inits` supports modification of any subset of these values. This would remove "FIX" and include bounds like `(0,0.54,10)`:
+
+```{r,eval=FALSE}
+simres.inits1b <- NMsim(file.mod=file.mod,
+                        data=data.sim,
+                        inits=list("theta(1)"=list(init=0.54,lower=0,upper=10,FIX=0)),
+                        name.sim="inits1b")
 ```
 
 
-# Example (`modify`): Change in formulation
+The `inits` argument provides multiple interfaces to specification of parameter values. The one used above is simple and easy for a few parameter specifications. You can also maintain a `data.frame` of parameters using (any subset of) columns named `init`, `FIX`, `lower`, `upper`. This may be more convenient for programming. Pass this as 
+
+```{r,eval=FALSE}
+inits=lists(inits.tab=my.df)
+```
+
+Also, you can use a specific format table used to represent parameter values, as obtained by `NMdata::NMreadExt()`. Read the parameters, modify, apply (here, adding 30% to `THETA(1)`):
+
+```{r,eval=FALSE}
+myext <- NMreadExt(file.mod)
+myext[myext$parameter=="THETA(1)",value=value*1.3]
+
+simres.inits1c <- NMsim(file.mod=file.mod,
+                        data=data.sim,
+                        inits=list(ext=myext),
+                        name.sim="inits1c")
+
+```
+
+
+
+
+# Edit the Control Stream Text (`modify`)
+
+While `inits` modifies parameter values (and other parameter
+properties), `modify` edits the control stream text directly. This is
+a powerful alternative because it can allow for modifications
+independent of parameter numbering, and the model can be modified very
+freely.
+
+
+
+
+<!-- ## Modify Parameter Values by Editing the `$PK` Section -->
+
+
+## Example (`modify`): Change in formulation 
+
+This example edits the `$PK` section of an estimated Nonmem model to
+adjust the model variable `KA`. Imagine we are considering a new
+formulation, and we want to simulate how a four-fold faster absorption
+would impact exposure. A simple way to do that is to add a line
+`KA=KA/4` to the `$PK` section. Easy:
+
+```{r ka4,eval=FALSE}
+simres.ka4 <- NMsim(file.mod=file.mod,
+                    data=data.sim,
+                    name.sim="sim-ka4",
+                    modify=list(PK=NMsim::add("KA=KA/4"))
+                    )
+```
+
+```{r ka4b-read,eval=TRUE}
+simres.ka4 <- NMreadSim("simres-modify/xgxr021_simka4_MetaData.rds")
+```
+
+
+Notice how the difference from the original simulation is that the control stream has a new line in `$PK` reading exactly `KA=KA/4`. This method works on the PK section alone and is independent of what `THETA` and `OMEGA` parameters are related to `KA`.
+
+```{r diff-ka,echo=FALSE}
+my.file.diff(modTab(simres)$path.sim,
+             modTab(simres.ka4)$path.sim,sections="PK",
+             x_arg="basic-sim",y_arg="sim-ka4")
+```
+
+The `modify` argument takes a list, where each element is named as the control stream section to be modified, in this case `$PK`. It can be 
+- A character vector: the entire secion is overwritten
+- A function: The function is applied to the section text
+
+In this case we used a function provided by NMsim called `add()`. This function actually returns a function which is a little complicated but serves the purpose of this example. The function it returns appends `KA=KA/4` to whatever character vector it receives. It would be equivalent to do
+
+```{r ka4b,eval=FALSE}
+simres.ka4 <- NMsim(file.mod=file.mod,
+                    data=data.sim,
+                    name.sim="sim-ka4",
+                    ## equivalent to
+                    ## modify=list(PK=NMsim::add("KA=KA/4"))
+                    modify=list(PK=function(...)(c(...,"KA=KA/4")))
+                    )
+```
+
+
+`NMsim::add()` may be a little easier to write and read. It can also
+prepend text, see the `pos` argument. There is also a function called
+`NMsim::overwrite()` which can replace text strings. Once you try this
+one or two times, you will hopefully appreciate how easily you can
+tweak control streams to do what you need, still benifiting from
+`NMsim()`'s handling of data, automated control stream generation etc.
+
+Let's compare the two simulation results. The absorption was slowed as expected.
+
+```{r}
+rbind(simres,simres.ka4) |>
+    ggplot(aes(TIME,PRED,colour=name.sim))+
+    geom_line()
+```
+
 
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 
 The section title can be improved to match the learning objective. I agree its good to "flavor" with interpretation and communicate potential uses of these features. But I'd suggest to move that into the text.
 Suggest: "Modify parameter values by editing the $PK section"-->
 
-The effect on the concentration-time profile of a change in formulation that reduces absorption rate `KA` is explored with the use of a scaling factor `KASCALE=c(1,4,10)` included to the NONMEM control stream via the `modify` argument. The absorption rate reduction is provided through the `NMsim` simulation data `dat.sim.varka` containing dosing events, simulation time steps and the value of `KASCALE` for each simulated patient. 
+## Controlling Variables Using The Simulation Data Set
 
-First `KASCALE` is added to the simulation data
+In the previous example `KA` was scaled by 4 by specicification in the `NMsim()` call. The following example uses a column in the simulation data set to scale the `KA` value. This allows for a more flexible exploration of the effect of different values of `KA`. 
+
+The effect on the concentration-time profile of a change in formulation that reduces absorption rate `KA` is explored with the use of a scaling factor `KASCALE` included to the NONMEM control stream via the `modify` argument. The values of `KASCALE` are provided through the `NMsim` simulation data `dat.sim.varka` containing dosing events. We simulate three distinct subjects, each with their own `KASCALE` value. `KASCALE` values 1, 4, and 10 are used, corresponding to an unchanged KA, a 4-fold, and a 10-fold larger KA. We will be looking at `PRED` (of concentrations) so this is effectively a typical subject analysis.
+
+First `KASCALE` is added to the simulation data by repeating the data set three for each value of `KASCALE`, and redefining `ID` to be distinct for each value of `KASCALE`. The code below uses `data.table` but any data manipulation tool (such as base R or dplyr) could be used.
 
 <!-- Philip comment: remove unused code -->
 
@@ -320,30 +369,34 @@ dat.sim.varka <- data.sim[,data.table(KASCALE=c(1,4,10)),by=data.sim]
 dat.sim.varka[,ID:=.GRP,by=.(KASCALE,ID)] # update patient IDs
 setorder(dat.sim.varka,ID,TIME,EVID) # order rows
 ```
-Then the `NMsim` function is used to run the simulation in which the `modify` argument is used to simulate a modified model with different absorption rates, scaled by the parameter `KASCALE`. Two different approaches are demonstrated:
+Then the `NMsim()` function is used to run the simulation in which the `modify` argument is used to simulate a modified model with different absorption rates, scaled by the parameter `KASCALE`. Two different approaches are demonstrated:
 
 (a) the effect of the scaling factor `KASCALE` is added at the end of the `PK` section in the NONMEM control stream.
 
 ```{r,echo=T,eval=F}
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
-                     ,name.sim="varka"
+                     ## ,name.sim="varka"
+                     ,name.sim="add(): Append KA/KASCALE"
                      ,modify=list(PK=add("KA=KA/KASCALE")))
 ```
 
 ```{r,echo=F,eval=T}
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
-                     ,name.sim="varka"
+                     ,name.sim="add(): Append KA/KASCALE"
                      ,modify=list(PK=add("KA=KA/KASCALE"))
-                     ,reuse.results = reuse.results)
+                     ,reuse.results = reuse.results
+                      )
 ```
 
-(b) the specific line that defines `TVKA` is modified to include the effect of the scaling factor `KASCALE`
+(b) the specific line that defines `TVKA` is modified to include the effect of the scaling factor `KASCALE`. This is done for illustration of `overwrite`, see the `inits` argument for how to edit parameter values directly.
+
 ```{r,echo=T,eval=F}
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
-                      ,name.sim="varka2"
+                       ##,name.sim="varka2"
+                      ,name.sim="overwrite(): Replace THETA(1) by THETA(1)/KASCALE"
                       ,modify=list(PK=overwrite("THETA(1)","THETA(1)/KASCALE"))
                        )
 ```
@@ -351,7 +404,8 @@ simres.varka2 <- NMsim(file.mod=file.mod
 ```{r,echo=F,eval=T}
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
-                      ,name.sim="varka2"
+                      ## ,name.sim="varka2"
+                      ,name.sim="overwrite(): Replace THETA(1) by THETA(1)/KASCALE"
                       ,modify=list(PK=overwrite("THETA(1)","THETA(1)/KASCALE"))
                                         # ,modify=list(PK=function(x) {
                                         # ## identify line number if first definition of TVKA
@@ -362,6 +416,7 @@ simres.varka2 <- NMsim(file.mod=file.mod
                                         # x})
                       ,reuse.results = reuse.results)
 ```
+
 The code below returns the plot
 
 <!-- Philip comment:
@@ -371,27 +426,21 @@ I suggest
 It would be very good to include some diffr() snippets to show what happened to the PK sections. If the PK section is simple, NMreadSection(sim.mod,section="PK") may be sufficient. sim.mod should be the generated simulation control streams. You may be able to run it on all of the control streams (the estimated, and the two simulated) at once, put it into a data.table, and show the control stream lines side by side as a table. -->
 
 ```{r,varka-sim-plot,eval=TRUE,echo=TRUE,fig.cap="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified models **a** (left) and **b** (right). The equivalence and robustness of the two modified models is supported by the matching results, corresponding to reduced `PRED` values for higher values of `KASCALE` (lower absorption rate)."}
-simres.varka=as.data.table(simres.varka)
-simres.varka2=as.data.table(simres.varka2)
-simres.both <- rbind(simres.varka[,method:="a. add()"],
-                     simres.varka2[,method:="b. custom/sub()"]
-                     )
+simres.both <- rbind(simres.varka,
+                     simres.varka2)
 
 ggplot(simres.both[EVID==2],aes(TIME,PRED,colour=factor(KASCALE)))+
     geom_line()+
     labs(colour="Fold absorption prolongation, KASCALE")+
     scale_x_continuous(breaks=seq(0,168,by=24))+
-    facet_wrap(~method)+
+    facet_wrap(~name.sim)+
     scale_color_manual(values=c("orange", "blue", "darkgreen"))
 ```
-NOTE: the NMsim `overwrite` function prior to version 0.1.6 has a bug that was fixed in the0.1.5.902 github release; it can be installed with
 
-```{r,echo=T,eval=F}
-library(remotes)
-install_github("NMautoverse/NMsim")
-```
+# Additional `modify` Examples
+<details>
+<summary>`modify` example: Drug-Drug Interaction (DDI)</summary>
 
-# Drug-Drug Interaction (DDI)
 The effect of DDI on clearance (`CL`) and bioavailability (`F1`) is simulated for the following  scenarios
 ```{r, ddi-table, echo=F,eval=T}
 data.table(scenario=c("noDDI","DDI.1","DDI.2")
@@ -438,7 +487,9 @@ ggplot(simres.DDI[simres.DDI$EVID==2,],aes(TIME,PRED,colour=factor(lab)))+
     scale_x_continuous(breaks=seq(0,168,by=24))+
     scale_color_manual(values=c("orange", "blue", "darkgreen"))
 ```
-# Dose delay
+
+<details>
+<summary>`modify` example: Conditional Dose Delay</summary>
 
 <!-- Philip comment: A little more intro would be useful. What are you simulating, and how are you doing that? The current wording aims at the ladder, but it is very technical - even I have to read it slowly to follow. -->
 
@@ -529,9 +580,10 @@ ggplot(sim.alag.AUC[DAY==3 & DELAYDOS%in%c(2,3)],aes(x=ALAG,y=AUC))+
     scale_x_continuous(breaks = seq(0, 24, by = 6))+
     facet_wrap(~DELAYDOS
               ,labeller = as_labeller(c("2"="Dose 2 delayed","3"="Dose 3 delayed")))
-```  
+```
 
-# AUC
+<details>
+<summary>`modify` example: Calculation of AUC</summary>
 
 <!-- Philip comment: A little more intro would be helpful. This is a more advanced example that modifies multiple sections. -->
 
@@ -629,3 +681,31 @@ ggplot(data=sres.final,aes(AUC.NMsim,AUC,colour=factor(time.step)))+
     xlab("AUC 0-24h by integration through $DES, on coarse grid")+
     geom_abline(slope=1, intercept=0)
 ```
+
+# Modify `$SIZES` using `sizes`
+For some NONMEM runs (simulations) it may be necessary to modify `$SIZES`. Remember that the simulation control stream is derived based on the estimation control stream, and so if `$SIZES` settings are found in the estimation control stream, those will by default also be in the simulation control stream generated by `NMsim()`. The `sizes` argument is hence only needed if the simulation `$SIZES` variables need to be different from those used during estimation. This will typically be the case due to properties of the simulation data. `NMsim()` by default calls NONMEM with options that should help guessing some of these options automatically, but here is how to do it if that fails.  
+
+`sizes` is very simple to use. As an example, this `NMsim()` call sets `$SIZES PD=100 LTV=70`
+
+```{r sizes,eval=FALSE}
+simres <- NMsim(file.mod=file.mod,
+                data=data.sim,
+                sizes=list(PD=100,LTV=70),
+                name.sim="sim-sizes")
+```
+
+`sizes` by default only overwrites matching `$SIZES` variables. If `$SIZES` already contained other variables than in this case `PD` and `LTV`, those would be left untouched. If you want to write the `$SIZES` section from scratch, add `wipe=TRUE`:
+
+```{r sizes2,eval=FALSE}
+simres <- NMsim(file.mod=file.mod,
+                data=data.sim,
+                sizes=list(PD=100,LTV=70,wipe=TRUE),
+                name.sim="sim-sizes")
+```
+
+
+# Modify `ACCEPT`/`IGNORE` Using `filters`
+
+The `filters` argument is an interface to control the `ACCEPT` and `IGNORE` (inclusion/exclusion) statements in NONMEM. This can be but is rarely used for simulation because the simulation data set is normally filtered for the simulation purpose. The common exception is for simlation of VPC. To avoid duplication of examples, please refer to 
+
+[VPC Simulations](NMsim-VPC.html#change-the-acceptignore-statements)

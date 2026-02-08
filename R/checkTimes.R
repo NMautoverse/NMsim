@@ -76,6 +76,7 @@ checkTimes <- function(file,use.input=TRUE,nminfo.input=NULL,file.mod,tz.lst=NUL
     }
     
     time.ok <- c()
+    
     if(!is.null(file.mod) &&
        file.exists(file.mod) ##&&
        ## filePathSimple(file.mod)!=filePathSimple(file)
@@ -112,17 +113,26 @@ checkTimes <- function(file,use.input=TRUE,nminfo.input=NULL,file.mod,tz.lst=NUL
 
     running <- NA
     if(use.tmp){
+        
         ## find all temp dirs from psn or NMsim and derive max mtime
         tempdirs <- list.files(dirname(file.mod),pattern=paste0(fnExtension(basename(file.mod),""),"[\\._]dir[0-9]*"),full.names=TRUE)
         running <- FALSE
         if(length(tempdirs)){
+            ### this has previously been tried. Not sure why it doesn't work
             ## mtime.tmpdirs <- max(file.mtime(tempdirs))
             ## if(mtime.tmpdirs>testtime.lst){
             ##     running <- TRUE
             ## }
             running <- sapply(tempdirs,function(d){
+
+                ## This doesnt work when Nonmem exits with error, it
+                ## may not report Stop Time in .lst. I think we should
+                ## create a text file saying "start (time) and ended
+                ## (time) that can be used unambiguously."
+               
                 lsts.tmp <- list.files(d,pattern=".*\\.lst",full.names=TRUE)
                 any(sapply(lsts.tmp,function(f) !grepl("Stop Time\\:",readLines(f)) ))
+                
             })
         }
     }

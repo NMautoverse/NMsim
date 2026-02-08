@@ -4,21 +4,29 @@
 \alias{NMsim_NWPRI}
 \title{Simulate with parameter variability using the NONMEM NWPRI subroutine}
 \usage{
-NMsim_NWPRI(file.sim, file.mod, data.sim, PLEV = 0.999, ...)
+NMsim_NWPRI(file.sim, file.mod, data.sim, PLEV = 0.999, add.diag, ...)
 }
 \arguments{
-\item{file.sim}{The path to the control stream to be edited. This function overwrites the contents of the file pointed to by file.sim.}
+\item{file.sim}{The path to the control stream to be edited. This
+function overwrites the contents of the file pointed to by
+file.sim.}
 
-\item{file.mod}{Path to the path to the original input control stream provided as `file.mod` to `NMsim()`.}
+\item{file.mod}{Path to the path to the original input control
+stream provided as `file.mod` to `NMsim()`.}
 
-\item{data.sim}{Included for compatibility with `NMsim()`. Not used.}
+\item{data.sim}{Included for compatibility with `NMsim()`. Not
+used.}
 
-\item{PLEV}{Used in \code{$PRIOR NWPRI PLEV=0.999}. This is a 
-NONMEM argument to the NWPRI subroutine. When PLEV < 1, a 
-value of THETA will actually be obtained using a truncated 
-multivariate normal distribution, i.e. from an ellipsoidal 
-region R1 over which  only  a fraction of mass of the 
-normal occurs. This fraction is given by PLEV.}
+\item{PLEV}{Used in \code{$PRIOR NWPRI PLEV=0.999}. This is a
+NONMEM argument to the NWPRI subroutine. When PLEV < 1, a
+value of THETA will actually be obtained using a truncated
+multivariate normal distribution, i.e. from an ellipsoidal
+region R1 over which only a fraction of mass of the normal
+occurs. This fraction is given by PLEV.}
+
+\item{add.diag}{A umeric value to add to the diagonal of the
+covariance matrix. This can be used in case of negative
+eigenvaluen in variance-covariance matrix.}
 
 \item{...}{Additional arguments passed to `NMsim_default()`.}
 }
@@ -46,7 +54,9 @@ simres <- NMsim(file.path,method.sim=NMsim_WPRI,typical=TRUE,subproblems=500)
 }
 }
 \references{
-\href{https://ascpt.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002\%2Fpsp4.12422&file=psp412422-sup-0001-Supinfo1.pdf}{inverse-Wishart degrees of freedom calculation for OMEGA and SIGMA: NONMEM tutorial part II, supplement 1, part C.}
+\href{https://ascpt.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002\%2Fpsp4.12422&file=psp412422-sup-0001-Supinfo1.pdf}{inverse-Wishart
+    degrees of freedom calculation for OMEGA and SIGMA: NONMEM
+    tutorial part II, supplement 1, part C.}
 }
 \seealso{
 NMsim_VarCov

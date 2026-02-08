@@ -2,20 +2,34 @@
 % Please edit documentation in R/modifyHelpers.R
 \name{overwrite}
 \alias{overwrite}
-\title{Create function that modifies text elements in a vector}
+\title{Create function that modifies text elements in a vector Namely
+used to feed functions to modify control streams using `NMsim()`
+arguments such as `modify`. Those functions are often onveniently
+passed a function. `add` and `overwrite` are simple shortcuts to
+creating such functions. Make sure to see examples.}
 \usage{
 overwrite(..., fixed = TRUE)
 }
 \arguments{
 \item{...}{Passed to `gsub()`}
 
-\item{fixed}{This is passed to gsub(), but `overwrite()`'s default behavior is the opposite of the one of `gsub()`. Default is `FALSE` which means that strings that are exactly matched will be replaced. This is useful because strings like `THETA(1)` contains special characters. Use `fixed=FALSE` to use regular expressions. Also, see other arguments accepted by `gsub()` for advanced features.}
+\item{fixed}{This is passed to gsub(), but `overwrite()`'s default
+behavior is the opposite of the one of `gsub()`. Default is
+`FALSE` which means that strings that are exactly matched will
+be replaced. This is useful because strings like `THETA(1)`
+contains special characters. Use `fixed=FALSE` to use regular
+expressions. Also, see other arguments accepted by `gsub()`
+for advanced features.}
 }
 \value{
 A function that runs `gsub` to character vectors
 }
 \description{
-Create function that modifies text elements in a vector
+Create function that modifies text elements in a vector Namely
+used to feed functions to modify control streams using `NMsim()`
+arguments such as `modify`. Those functions are often onveniently
+passed a function. `add` and `overwrite` are simple shortcuts to
+creating such functions. Make sure to see examples.
 }
 \examples{
 myfun <- overwrite("b","d")

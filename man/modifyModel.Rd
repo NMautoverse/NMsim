@@ -14,7 +14,9 @@ modifyModel(modify, dt.models = NULL, list.ctl = NULL)
 \item{list.ctl}{List of coontrol streams as lines}
 }
 \value{
-dt.models (data.table) or result list.ctl (list)
+dt.models (data.table) or result list.ctl (list) depending
+    on whether the `dt.models` or the `list.ctl` argument was
+    provided.
 }
 \description{
 Internal method for handling modify argument to NMsim

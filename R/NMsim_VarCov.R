@@ -34,7 +34,8 @@
 ##' @return Character vector of simulation control stream paths
 ##' @export
 
-NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm",ext,write.ext=NULL,...){
+NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm",ext,write.ext=NULL,
+                         ...){
 
 #### Section start: Dummy variables, only not to get NOTE's in package checks ####
 
@@ -129,7 +130,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
 
 
     if(!all(c("iblock","blocksize")%in%newpars)){
-        newpars <- addBlocks(newpars,col.model="submodel")
+        newpars <- NMdata:::addBlocks(newpars,col.model="submodel")
     }
 
     
@@ -139,23 +140,55 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
 
     
 ### create control streams one by one
-    res <- newpars[,
-                   NMreplaceInits(files=unique(path.sim.0)
-                                 ,fix=TRUE
-                                 ,newfile=unique(path.sim)
-                                 ,inits=.SD
-                                 ,quiet=TRUE)
-                  ,by="submodel"]
 
+    fast <- TRUE
+    if(!fast){
+        ## message("NMsim_VarCov: Inits")
+        res <- newpars[,
+                       NMreplaceInits(files=unique(path.sim.0)
+                                     ,fix=TRUE
+                                     ,newfile=unique(path.sim)
+                                     ,inits=.SD
+                                     ,quiet=TRUE)
+                      ,by="submodel"]
 
+        
 ### output tables.
-    ## gsub the sim name string with a new subsetted simname string.
-    sec.0 <- NMreadSection(file=path.sim.0,section="TABLE")
-    newpars[,{
-        sec.new <- gsub(run.sim.0,unique(run.sim),x=sec.0)
-        NMwriteSection(files=path.sim,section="TABLE",newlines=sec.new,quiet=TRUE,backup=FALSE)
-    },by=.(submodel)]
+        ## message("NMsim_VarCov: Output tables")
+        ## gsub the sim name string with a new subsetted simname string.
+        sec.0 <- NMreadSection(file=path.sim.0,section="TABLE")
 
+        newpars[,{
+            sec.new <- gsub(run.sim.0,unique(run.sim),x=sec.0)
+            NMwriteSection(files=path.sim,section="TABLE",newlines=sec.new,quiet=TRUE,backup=FALSE)
+            "dummy"
+        },by=.(submodel)]
+    }
+    
+    if(fast){
+        message("fast=TRUE is experimental.")
+        message("NMsim_VarCov: Inits and output tables")
+        ## writing files once instead of twice
+### create control streams one by one
+        ctls.0 <- lapply(unique(path.sim.0),readLines,warn=FALSE)
+        ctls <- lapply(ctls.0,function(ctl0){
+            res <- newpars[,
+            {
+                
+### do we have to skip parameters that are not in control stream?
+                ctl <- NMwriteInits(lines=ctl0,ext=.SD,update=FALSE)[[1]]
+                tab.0 <- NMreadSection(lines=ctl0,section="TABLE")
+                tab.new <- gsub(run.sim.0,unique(run.sim),x=tab.0)
+                ctl <- NMwriteSectionOne(lines=ctl,section="TABLE",newlines=tab.new,quiet=TRUE,backup=FALSE)
+                writeTextFile(ctl,file=unique(path.sim))
+                ctl}
+           ,by="submodel"]
+
+            res
+        })
+### TODO write all control streams
+    }
+    
 
     invisible(unique(newpars$path.sim))
 }

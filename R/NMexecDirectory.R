@@ -32,7 +32,7 @@
 
 ## do not export. NMexec will call this.
 
-NMexecDirectory <- function(file.mod,path.nonmem,files.needed,dir.data="..",system.type,clean,sge=nc>1,nc=1,pnm,fun.post=NULL){
+NMexecDirectory <- function(file.mod,path.nonmem,files.needed,dir.data="..",system.type,clean,sge=nc>1,nc=1,pnm,nmfe.options,fun.post=NULL){
     
     ## if(missing(method)||is.null(method)) method <- "directory"
     ## if(!(is.characther(method) && length(method)==1)||!method%in%cc(directory,direct)){
@@ -57,6 +57,15 @@ NMexecDirectory <- function(file.mod,path.nonmem,files.needed,dir.data="..",syst
     if(is.null(extr.data$exists.file.csv) && !is.null(extr.data$exists.file)){
         extr.data$exists.file.csv <- extr.data$exists.file
     }
+
+    ## nmfe.options
+    if(missing(nmfe.options)) nmfe.options <- NULL
+    nmfe.options <- simpleCharArg("nmfe.options"
+                                 ,nmfe.options
+                                 ,default="-maxlim=2"
+                                 ,accepted=NULL
+                                 ,clean=FALSE
+                                 ,lower=FALSE)
 
 
 ### checks
@@ -114,14 +123,14 @@ NMexecDirectory <- function(file.mod,path.nonmem,files.needed,dir.data="..",syst
     dir.mod.abs <- getAbsolutePath(dir.mod)
     if(system.type=="linux"){
 
-        lines.script <- NMrunLin(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem=path.nonmem,clean=clean,sge=sge,nc=nc,pnm=pnm,fun.post=fun.post)
+        lines.script <- NMrunLin(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem=path.nonmem,clean=clean,sge=sge,nc=nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
         path.script <- file.path(dir.tmp,"run_nonmem.sh")
         writeTextFile(lines.script,path.script)
         Sys.chmod(path.script, mode = "0777", use_umask = FALSE)
     }
     
     if(system.type=="windows"){
-        lines.script <- NMrunWin(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem=path.nonmem,clean=clean)
+        lines.script <- NMrunWin(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem=path.nonmem,clean=clean,nmfe.options=nmfe.options)
         path.script <- file.path(dir.tmp,"run_nonmem.bat")
         writeTextFile(lines.script,path.script)
     }

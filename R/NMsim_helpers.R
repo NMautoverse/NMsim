@@ -41,29 +41,11 @@ adjust.method.update.inits <- function(method.update.inits,system.type,dir.psn,c
     ## if method.execute is psn, default is psn. If not, it is NMsim.
     if(is.null(inits$method)) {
         inits$method <- "nmsim"
-        ## cmd.update.inits <- file.psn(dir.psn,"update_inits")
-
-        ## if(system.type=="windows"){
-        ##     ## We have seen problems with PSN on windows. Until
-        ##     ## clarified, internal method prefered on win.
-        ##     ## inits$method <- "nmsim.deprec"
-        ##     inits$method <- "nmsim"
-        ## }
-        
-        ## check if update_inits is avail
-        ## if(suppressWarnings(system(paste(cmd.update.inits,"-h"),show.output.on.console=FALSE)!=0)){
-        ## if(system.type=="linux"){
-            
-        ##     ## which.found <- system(paste("which",cmd.update.inits),ignore.stdout=T)
-        ##     ## if(which.found!=0){
-        ##     inits$method <- "nmsim"
-        ##     ## rm(cmd.update.inits)
-        ##     ## }
-        ## }
     }
 
 
-    inits$method <- simpleCharArg("inits$method",inits$method,"nmsim",c("psn","nmsim","nmsim.deprec","none"))
+    inits$method <- simpleCharArg("inits$method",inits$method,"nmsim",c("psn","nmsim","nmsim.deprec","simple","none"))
+    if(inits$method=="simple") inits$method <- "nmsim.deprec"
     ## if update.inits with psn, it needs to be available
     if(inits$method=="psn"){
         
@@ -77,15 +59,6 @@ adjust.method.update.inits <- function(method.update.inits,system.type,dir.psn,c
         stop("argument `file.ext` is not allowed when `inits=list(method='psn')`")
     }
 
-### nmsim2 requires NMdata 
-    ## if(inits$method=="nmsim"){
-    ##     if(packageVersion("NMdata")<"0.1.8.921"){
-    ##         stop("updating initial values using the nmsim2 method requires NMdata 0.1.9.")
-    ##     }
-    ## }
-
-
-    ## inits$method <-  method.update.inits
 
     inits
 }
@@ -108,7 +81,7 @@ cleanStrings <- function(x){
     ## x <- gsub("[ !?#:;<>/,[]\\{\\}\\|-=+&]", "", x)
 
 
-    x <- gsub("[ +!?#:;<>&/,\\{\\}\\|=]", "",x) 
+    x <- gsub("[ +!?#:;<>&/,\\{\\}\\|=\\(\\)]", "",x) 
     x <- gsub(pattern="-",replacement="",x=x,perl=TRUE) 
     x <- gsub(pattern="\n",replacement="",x=x)
     
@@ -131,19 +104,27 @@ file.psn <- function(dir.psn,file.psn){
 ##' @return Simplified paths as strings
 ##' @keywords internal
 simplePath <- function(path){
-        parts.list <- strsplit(path,"/")
-
-        sapply(parts.list,function(parts){
-    simple <- character(0)
     
-    for(p in parts){
-        if(p==""||p==".") next
-        if(p==".."){
-            if(length(simple)) simple <- head(simple,-1)
-        } else {
-            simple <- c(simple,p)
+    path <- NMdata:::cleanSpaces(path,double=FALSE)
+    parts.list <- strsplit(path,"/")
+
+    newpath <- sapply(parts.list,function(parts){
+        
+        simple <- character(0)
+        is.abs <- parts[1]==""
+        for(p in parts){
+            
+            if(p==""||p==".") next
+            if(p==".." && length(simple)){
+                simple <- head(simple,-1)
+            } else {
+                simple <- c(simple,p)
+            }
         }
-    }
-    paste(simple,collapse="/")
-})
+        res <- paste(simple,collapse="/")
+        if(is.abs) res <- paste0("/",res)
+        res
+    })
+    
+    return(newpath)
 }
