@@ -224,13 +224,8 @@ covs[,ID:=.GRP,by=.(type,covvar,covval)]
 covs
 ```
 
-We now have all combinations of covariates in the object called `covs`. Notice the `type` column which distinguishes the reference combination in contrast to the other simulations where one covariate is being varied at a time. 
+We now have all combinations of covariates in the object called `covs`. Notice the `type` column which distinguishes the reference combination in contrast to the other simulations where one covariate is being varied at a time. This is being combined with the previously defined dosing and sampling data so each scenario gets a full simulation data set.
 
-
-
-
-<details>
-<summary>Plots of Typical-Subject Simulations</summary>
 
 ```{r,dt.sim.covs}
 ## repeating the doses for all combinations of covariates. Using NMdata::egdt()
@@ -243,6 +238,11 @@ dt.sim.covs <- egdt(dt.sim.noid,covs)
 ##   cross_join(covs)
 setorder(dt.sim.covs,ID,TIME,EVID)
 ```
+
+
+<details>
+<summary>Plots of Typical-Subject Simulations</summary>
+
 
 ```{r NMsim-singlesubjs,eval=FALSE,include=TRUE}
 simres.typ <- NMsim(file.mod=file.mod,
