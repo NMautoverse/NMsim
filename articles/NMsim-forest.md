@@ -251,9 +251,8 @@ covs[,ID:=.GRP,by=.(type,covvar,covval)]
 We now have all combinations of covariates in the object called `covs`.
 Notice the `type` column which distinguishes the reference combination
 in contrast to the other simulations where one covariate is being varied
-at a time.
-
-Plots of Typical-Subject Simulations
+at a time. This is being combined with the previously defined dosing and
+sampling data so each scenario gets a full simulation data set.
 
 ``` r
 ## repeating the doses for all combinations of covariates. Using NMdata::egdt()
@@ -275,6 +274,8 @@ dt.sim.covs <- egdt(dt.sim.noid,covs)
 ##   cross_join(covs)
 setorder(dt.sim.covs,ID,TIME,EVID)
 ```
+
+Plots of Typical-Subject Simulations
 
 ``` r
 simres.typ <- NMsim(file.mod=file.mod,
@@ -418,11 +419,6 @@ sum.uncertain <- forestSummarize(simres,
                                  by=cc(period),
                                  cover.ci=.95
                                  )
-```
-
-``` r
-setDT(sum.uncertain)
-sum.uncertain[covlabel=="Bodyweigt (kg)",covlabel:="Bodyweight (kg)"]
 ```
 
 ## Plotting
