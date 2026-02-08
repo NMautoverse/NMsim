@@ -356,7 +356,7 @@ sum.uncertain <- forestSummarize(simres,
                                  )
 ```
 
-```{r typofix}
+```{r typofix,echo=FALSE}
 setDT(sum.uncertain)
 sum.uncertain[covlabel=="Bodyweigt (kg)",covlabel:="Bodyweight (kg)"]
 ```
