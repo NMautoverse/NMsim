@@ -5,3 +5,4 @@ xgxr[0-9]*.dir[0-9]*
 tests/testthat/testOutput/*
 vignettes/*html
 vignettes/simtmp*/*.lst
+.aider*
