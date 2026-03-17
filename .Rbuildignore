@@ -3,9 +3,13 @@
 ^\.Rproj\.user$
 ^\.github
 ^\.gitignore
-\\.Rhistory
-\\.\\.Rcheck
-\\.git
+\.Rhistory
+\.\.Rcheck
+\.git
+\.aider\.chat\.history\.md
+\.aider\.input\.history
+\.aiderignore
+\.aider\.tags\.cache\.v4
 ^doc$
 ^Meta$
 ^_pkgdown\.yml$
