@@ -5,10 +5,31 @@
 ### New Features
 
 - [`prioritizePaths()`](https://nmautoverse.github.io/NMsim/reference/prioritizePaths.md)
+  is a convenient function that allows the user to provide multiple
+  candidate paths and automatically pick the first one available. This
+  is convenient using `NMsim` because the Nonmem installation path often
+  varies from system to system when sharing code between users, or even
+  when as a user porting scripts between systems. For instance, this
+  could be to accommodate running on a linux and a windows system, and
+  sets the default to the first of the two available.
+
+&nbsp;
+
+    library(NMdata)
+    NMdataConf(path.nonmem = prioritizePaths(c(
+      "/opt/NONMEM/nm75/run/nmfe75",
+      "C:/nm75g64/run/nmfe75.bat"))
+      )
 
 ### Bugfixes
 
-- Prints of 1E-30
+- In some cases, `NMsim` needs to replace zeros by tiny numbers in
+  Nonmem control streams and it uses 1E-30 for this. In some cases, that
+  would be printed without scientific notation leading to too long
+  number representations, and Nonmem will throw an error. This has been
+  fixed so it now makes sure to print 1E-30 with scientific notation.
+  Thank you Chengjun Jiang for reporting this
+  (<https://github.com/NMautoverse/NMsim/issues/40>).
 
 ## NMsim 0.2.6
 

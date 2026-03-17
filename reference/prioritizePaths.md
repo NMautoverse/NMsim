@@ -19,3 +19,14 @@ prioritizePaths(paths, must.work = FALSE)
 - must.work:
 
   If TRUE, an error is thrown if no paths are valid.
+
+## Examples
+
+``` r
+library(NMdata)
+NMdataConf(path.nonmem = prioritizePaths(c(
+  "/opt/NONMEM/nm75/run/nmfe75",
+  "C:/nm75g64/run/nmfe75.bat")
+))
+#> No paths valid
+```

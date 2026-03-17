@@ -47,11 +47,17 @@
 <h2 class="pkg-version" data-toc-text="0.2.7" id="nmsim-027">NMsim 0.2.7<a class="anchor" aria-label="anchor" href="#nmsim-027"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-2-7">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-7"></a></h3>
-<ul><li><code><a href="../reference/prioritizePaths.html">prioritizePaths()</a></code></li>
-</ul></div>
+<ul><li>
+<code><a href="../reference/prioritizePaths.html">prioritizePaths()</a></code> is a convenient function that allows the user to provide multiple candidate paths and automatically pick the first one available. This is convenient using <code>NMsim</code> because the Nonmem installation path often varies from system to system when sharing code between users, or even when as a user porting scripts between systems. For instance, this could be to accommodate running on a linux and a windows system, and sets the default to the first of the two available.</li>
+</ul><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nmautoverse.github.io/NMdata/" class="external-link">NMdata</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span>path.nonmem <span class="op">=</span> <span class="fu"><a href="../reference/prioritizePaths.html">prioritizePaths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span>,</span>
+<span>  <span class="st">"C:/nm75g64/run/nmfe75.bat"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre>
+</div>
 <div class="section level3">
 <h3 id="bugfixes-0-2-7">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-7"></a></h3>
-<ul><li>Prints of 1E-30</li>
+<ul><li>In some cases, <code>NMsim</code> needs to replace zeros by tiny numbers in Nonmem control streams and it uses 1E-30 for this. In some cases, that would be printed without scientific notation leading to too long number representations, and Nonmem will throw an error. This has been fixed so it now makes sure to print 1E-30 with scientific notation. Thank you Chengjun Jiang for reporting this (<a href="https://github.com/NMautoverse/NMsim/issues/40" class="external-link uri">https://github.com/NMautoverse/NMsim/issues/40</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
