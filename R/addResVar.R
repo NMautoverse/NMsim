@@ -85,8 +85,8 @@ addResVar <- function(data,path.ext,prop=NULL,add=NULL,log=FALSE,par.type="SIGMA
     var <- NULL
     
 #### Section start: Pre-process arguments ####
-
-
+    
+    
     ## data - make sure data is a data.table but no edit by ref. If we
     ## are carefull in not overwriting anything, we can skip the copy
     ## for faster processing.
@@ -171,7 +171,8 @@ addResVar <- function(data,path.ext,prop=NULL,add=NULL,log=FALSE,par.type="SIGMA
     errs <- as.data.table(errs)
     setnames(errs,dt.err.names[order(i),name.err])
 
-
+    if(!"ERRadd" %in% colnames(errs)) errs[,ERRadd := 0]
+if(!"ERRprop" %in% colnames(errs)) errs[,ERRprop := 0]
 
     ## calc predictions
     if(log){
