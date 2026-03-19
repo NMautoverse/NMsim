@@ -1,5 +1,5 @@
 test_that("addResVar works with SIGMA parameters - proportional error only", {
-    skip_if_not_installed("NMdata")
+    skip_if_not_installed("NMdata",minimum_version = "0.2.3.920")
     
                                         # Create test data
     data <- data.frame(

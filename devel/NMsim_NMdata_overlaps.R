@@ -35,7 +35,7 @@ diffr_newdir <- function(file1, file2, parent_dir = tempdir(),
 
 
 dir.NMsim <- "~/wdirs/NMsim/R"
-dir.NMData <- "~/wdirs/NMsim/R"
+dir.NMdata <- "~/wdirs/NMdata/R"
 
 dt.pkgs <- data.table(pkg=cc(NMsim,NMdata))[
    ,dir:=sprintf("~/wdirs/%s/R",pkg)][]
@@ -70,13 +70,13 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 
 ## Maybe NMwriteSection belongs better in NMsim?
 ## NMctl. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
-## NMextractText. Belongs in NMdata. NMdata 0.2.2 required.
-## NMreadFilters. Belongs in NMdata. NMdata 0.2.2 required.
-## NMreadInits. Belongs in NMdata. NMdata 0.2.2 required.
-## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2.
-## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.2. (collapse arg)
-## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required.
-## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. 
+## NMextractText. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
+## NMreadFilters. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
+## NMreadInits. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
+## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2. Dropped in NMsim 0.2.7.
+## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.2. (collapse arg). Dropped in NMsim 0.2.7.
+## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
+## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. Dropped in NMsim 0.2.7.
 ## NMwriteFilters. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInitsOne. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.

@@ -60,8 +60,8 @@ test_that("Full covariance matrix",{
     cov1 <- NMreadCov(file.mod)
     
     cov.l <- NMdata::mat2dt(cov1,as.fun="data.table")
-    cov.l <- NMsim:::addParType(cov.l,suffix="i")
-    cov.l <- NMsim:::addParType(cov.l,suffix="j")
+    cov.l <- NMdata:::addParType(cov.l,suffix="i")
+    cov.l <- NMdata:::addParType(cov.l,suffix="j")
 
     res <- cov.l[par.type.i=="THETA" & par.type.j=="THETA" ] 
     res <- NMsim:::NMcreateMatLines(res,as.one.block=TRUE,fix=TRUE)

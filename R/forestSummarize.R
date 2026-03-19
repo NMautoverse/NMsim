@@ -38,6 +38,7 @@
 ##' \item `covref`: Reference value of the covariate of interest. Example: 80
 ##' \item `covval`: Value of the covariate of interest (not reference). Example 110.
 ##'}
+##' @import NMdata
 ##' @importFrom stats median reorder setNames
 ##' @return A data.frame
 ##' @export
@@ -66,7 +67,9 @@ forestSummarize <- function(data,funs.exposure,cover.ci=0.95,by,as.fun){
 
     if(missing(as.fun)) as.fun <- NULL
     as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
-    dcastSe <- NMdata:::dcastSe   
+    if(packageVersion("NMdata") < "0.2.4"){
+        dcastSe <- NMdata:::dcastSe
+    }
         
 ### this is using model and model.sim as introduced in NMsim 0.1.4
     ## will not work with earlier versions!

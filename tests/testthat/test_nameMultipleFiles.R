@@ -1,5 +1,6 @@
 context("nameMultipleFiles")
 
+
 test_that("All tests",{
     fileRef <- "testReference/nameMultipleFiles_01.rds"
 

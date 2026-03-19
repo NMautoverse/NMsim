@@ -76,6 +76,8 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     se <- NULL
     value <- NULL
 
+    addSameBlocks <- NMdata:::addSameBlocks
+    addParType <- NMdata:::addParType
 
 ### NMsim_default() is run because it inserts $SIMULATION instead of
 ### $ESTIMATION and a few other things that are always needed.

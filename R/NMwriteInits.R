@@ -102,9 +102,12 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     V1 <- NULL
 
     cleanSpaces <- NMdata:::cleanSpaces
-    if(packageVersion("NMdata") < "0.2.7"){
+    if(packageVersion("NMdata") < "0.2.4"){
         dcastSe <- NMdata:::dcastSe
     } 
+
+    addParType <- NMdata:::addParType
+    addParameter <- NMdata:::addParameter
 
     if(missing(file.mod)) file.mod <- NULL
     if(missing(lines)) lines <- NULL
@@ -163,14 +166,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
         setnames(tab.new,"fix","FIX",skip_absent = TRUE)
         toConvert[toConvert=="fix"] <- "FIX"
 
-        
-        ## if("parameter"%in%colnames(tab.new)){
-        ##     tab.new[,parameter:=toupper(parameter)]
-        ##     tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
-        ##     tab.new <- addParType(tab.new)
-        ## }
-        
-        
+                
         inits.l <- melt(tab.new,measure.vars=intersect(pars.init,toConvert),variable.name="type.elem",value.name="value.new")
 
         ## we allow THETA(1) but the real parameter name is THETA1
@@ -232,14 +228,6 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     
     ## if(length(file.mod)>1) stop("`file.mod` points to more than one model. `NMwriteInits()` can only one model in `file.mod`.")
 
-    ## if(missing(lines)){
-    ##     lines.old <- readLines(file.mod,warn=FALSE)
-    ##     lines <- lines.old
-    ## } else {
-    ##     lines.old <- lines
-    ## }
-
-    
     
     if(missing(values)) values <- NULL
     dots <- list(...)
