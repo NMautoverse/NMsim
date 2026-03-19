@@ -2,6 +2,8 @@
 
 ## NMsim 0.2.7
 
+CRAN release: 2026-03-19
+
 ### New Features
 
 - [`prioritizePaths()`](https://nmautoverse.github.io/NMsim/reference/prioritizePaths.md)

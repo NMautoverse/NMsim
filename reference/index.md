@@ -8,10 +8,6 @@
   : Easily and flexibly generate dosing records
 - [`NMexec()`](https://nmautoverse.github.io/NMsim/reference/NMexec.md)
   : Execute Nonmem and archive input data with model files
-- [`NMreadFilters()`](https://nmautoverse.github.io/NMsim/reference/NMreadFilters.md)
-  : Read data filters from a NONMEM model
-- [`NMreadInits()`](https://nmautoverse.github.io/NMsim/reference/NMreadInits.md)
-  : Tabulate information from parameter sections in control streams
 - [`NMreadSim()`](https://nmautoverse.github.io/NMsim/reference/NMreadSim.md)
   : Read simulation results based on NMsim's track of model runs
 - [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md) :
@@ -97,5 +93,3 @@
   \`forestSummarize()\`)
 - [`summary(`*`<NMsimRes>`*`)`](https://nmautoverse.github.io/NMsim/reference/summary.NMsimRes.md)
   : summary method for NMsim results (NMsimRes objects)
-- [`triagSize()`](https://nmautoverse.github.io/NMsim/reference/triagSize.md)
-  : Calculate number of elements for matrix specification
