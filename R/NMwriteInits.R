@@ -207,17 +207,18 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
                 inits.l[,c(cols.by,"value.new"),with=FALSE]
                ,by=cols.by,all=TRUE)
         }
-        
+
+      
         ## update
         pars.l[!is.na(value.new)&value.new!="SAME",
                value.elem:=value.new
                ]
+
         setnames(pars.l,"value.new",paste0("value.",name.step))
 
         pars.l
     }
     
-
 ### maybe more than one model could be allowed. If not, NMsim will break all the time?
     
 ### call getLines(,simplify=FALSE). Then test if length>1. Then simplify.
@@ -397,8 +398,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     pars.l[,iblock:=uniquePresent(iblock),by=.(par.type,i,j)]
     pars.l[,blocksize:=uniquePresent(blocksize),by=.(par.type,i,j)]
 
-    
-    
+     
     inits.w <- dcastSe(pars.l,
                        l=intersect(c("model","par.type","linenum","parnum","i","j","iblock","blocksize"),colnames(pars.l)),
                        r="type.elem",
@@ -453,7 +453,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
                     row.within.block:=1:.N,
                     by=c(bymodel,"iblock.unique")]
     }
-
+    
     
 ### fixing everything if any element in block is fixed
     ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
@@ -465,9 +465,10 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     if(!"row.within.block"%in%colnames(inits.w)) inits.w[,row.within.block:=1]
     inits.w[blocksize>1&is.na(row.within.block)|row.within.block!=1,
             value.elem_FIX:=""]
-
+    
 ### call NMwriteInitsOne()
     if("model"%in%colnames(inits.w)){
+      
         all.models <- inits.w[,unique(model)]
         lines.new <- lapply(all.models,function(this.mod){
             

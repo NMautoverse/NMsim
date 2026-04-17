@@ -160,8 +160,9 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     
     # Combine random effects after processing SAME/not SAME parameters
     pars.random = rbind(pars.random.same, pars.random.notsame)[order(par.type,i,j)]
-    
-    lines.omegap <- NMcreateMatLines(
+
+
+  lines.omegap <- NMcreateMatLines(
         pars.random[par.type=="OMEGA"]
        ,type="OMEGAP",as.one.block = FALSE)
     

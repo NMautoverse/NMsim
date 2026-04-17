@@ -5,6 +5,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
                               backup=TRUE,blank.append=TRUE,write,
                               quiet=FALSE){
 
+
     after <- NULL 
     before <- NULL
     mad.dl <- NULL

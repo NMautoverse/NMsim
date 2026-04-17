@@ -1174,11 +1174,12 @@ NMsim <- function(file.mod,data,
 
 
     if(is.null(data)){
+      ###### VPC mode
+      
         dt.models.split <- split(dt.models,by="file.mod")
         dt.split.res <- lapply(dt.models.split,function(dt){
             file.mod <- unique(dt$file.mod)
             
-###### VPC mode
             ## reading with recover.cols. This does not affect what
             ## will be written to the $INPUT section which is still
             ## copied from the control stream, then edited to include
@@ -1188,24 +1189,26 @@ NMsim <- function(file.mod,data,
 
             dt[,col.row:=col.row.this]
             
-            ## if(!col.row %in% colnames(data.this)){
-            ## data.this[,(col.row.this):=(1:.N)/1000]
             data.this[,(col.row.this):=(1:.N)]
             setcolorder(data.this,c(colnames(data.this)[1],col.row.this))
             
             section.input <- NMreadSection(file.mod,section="input",keep.name=FALSE)
+            ## remove comments, so list can collapse the rows to one long row
+            section.input <- sub(";.*","",section.input)
+            ## collapse lines to one line
             section.input <- paste(section.input,collapse=" ")
             section.input <- gsub(","," ",section.input)
-            section.input <- gsub("[ \\s]+"," ",section.input)
+            ##section.input <- gsub("[ \\s]+"," ",section.input)
+            section.input <- gsub("[[:space:]]+"," ",section.input)
             section.input <- NMdata:::cleanSpaces(section.input)
             section.input <- gsub(" *= *","=",section.input)
-            
+            ## Inject row counter in second position
             elems.input <- strsplit(section.input,split=" ")[[1]]
             elems.input <- c(elems.input[1],col.row.this,elems.input[-1])
             section.input <- paste("$INPUT",paste(elems.input,collapse=" "))
             
             
-### save data and replace $input and $data
+            ## save data and replace $input and $data
             
             nmtext <- NMwriteData(data.this,file=unique(dt$path.data),
                                   args.NMgenText=list(dir.data=".",col.flagn=col.flagn)
