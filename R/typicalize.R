@@ -11,46 +11,65 @@
 ##' @keywords internal
 
 typicalize <- function(file.mod,lines,section,newfile){
-    
-    blocksize <- NULL
-    file.sim <- NULL
-    FIX <- NULL
-    init <- NULL
-    par.type <- NULL
-    
+  
+  blocksize <- NULL
+  file.sim <- NULL
+  FIX <- NULL
+  init <- NULL
+  par.type <- NULL
+  
 
-    if(missing(file.mod)) file.mod <- NULL
-    if(missing(lines)) lines <- NULL
-    if(missing(section)) section <- NULL
-    if(missing(newfile)) newfile <- NULL
-    
-    lines <- NMdata:::getLines(file=file.mod,lines=lines,simplify=TRUE)
-    
-    if(is.null(section)){
-        section <- c("OMEGA","OMEGAP","OMEGAPD")
-    }
-    section <- NMdata:::cleanSpaces(section)
-    section <- toupper(section)
+  if(missing(file.mod)) file.mod <- NULL
+  if(missing(lines)) lines <- NULL
+  if(missing(section)) section <- NULL
+  if(missing(newfile)) newfile <- NULL
+  
+  lines <- NMdata:::getLines(file=file.mod,lines=lines,simplify=TRUE)
+  
+  if(is.null(section)){
+    section <- c("OMEGA","OMEGAP","OMEGAPD")
+  }
+  section <- NMdata:::cleanSpaces(section)
+  section <- toupper(section)
 
-    inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
-    inits[,init:=as.character(init)]
-    valc.0 <- "1E-30"
+  inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
+  inits[,init:=as.character(init)]
+  valc.0 <- "1E-30"
 
-    inits[par.type%in%section,init:="0"]
-    inits[par.type%in%section,FIX:=1]
-    if("blocksize"%in%colnames(inits)){
-        inits[par.type%in%section&blocksize>1,init:=valc.0]
-    }
+  inits[par.type%in%section,init:="0"]
+  inits[par.type%in%section,FIX:=1]
 
-    mod.new <- NMwriteInits(lines=lines,inits.tab=inits,update=FALSE)
+  
+  ######### SAME blocks must be properly handled by NMwriteInits()
+  ## inits <- inits[SAME!=1]
+  inits <- inits[sameblock==0]
+  ## inits[par.type%in%section&SAME!=1,init:="0"]
+  ## inits[par.type%in%section&SAME!=1,FIX:=1]
+  
 
-    ## write to file if requested
-    if(is.null(newfile)){
-        return(mod.new)            
-    }
+  if("blocksize"%in%colnames(inits)){
+    inits[par.type%in%section&blocksize>1,init:=valc.0]
+  }
 
-    writeTextFile(lines=mod.new,file=newfile)
+  ######## What is the right way to handle OMEGAP, OMEGAPD, SIGMAP and SIGMAPD for typical? Could we simply drop them?
 
-    return(file.sim)    
+  names.sections.rm <- intersect(toupper(section),c("OMEGAP","OMEGAPD","SIGMAP","SIGMAPD"))
+  if(length(names.sections.rm)){
+    list.sections.rm <- lapply(names.sections.rm,function(x) "")
+    names(list.sections.rm) <- names.sections.rm
+    lines <- NMwriteSectionOne(lines=lines,list.sections = list.sections.rm, quiet=TRUE)
+
+    inits <- inits[!par.type%in%names.sections.rm]
+  }
+  mod.new <- NMwriteInits(lines=lines,inits.tab=inits,update=FALSE)
+
+  ## write to file if requested
+  if(is.null(newfile)){
+    return(mod.new)            
+  }
+
+  writeTextFile(lines=mod.new,file=newfile)
+
+  return(file.sim)
 
 }
