@@ -16,12 +16,12 @@ test_that("basic",{
         readRDS(fileRef)
     }
 
-
 })
 
 
 test_that("Priors",{
     fileRef <- "testReference/typicalize_02.rds"
+    fileRef.priors <- "testReference/typicalize_02priors.rds"
 
     ##file.mod="testData/nonmem/xgxr011.mod"
     file.mod="testData/nonmem/xgxr032_sd1_NWPRI.mod"
@@ -33,7 +33,12 @@ test_that("Priors",{
     secs <- NMreadSection(lines=res0)
     
     res <- secs[intersect(names(secs),c("OMEGA","OMEGAP","OMEGAPD"))]
-    expect_equal_to_reference(res,fileRef)
+    if(all(c("OMEGAP","OMEGAPD")%in%names(res))) {
+      expect_equal_to_reference(res,fileRef.priors)
+    } else {
+      expect_equal_to_reference(res,fileRef)
+    }
+
 
     if(F){
         ref <- readRDS(fileRef)
@@ -41,7 +46,6 @@ test_that("Priors",{
         ref
     }
 
-    
 })
 
 
