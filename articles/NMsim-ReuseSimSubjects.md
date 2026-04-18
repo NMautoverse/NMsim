@@ -55,6 +55,7 @@ NMsim:::simPopEtas(file=file.mod,
                    file.phi="xgxr032_simEtas.phi"
                    )
 #> seed is deprecated. Use `seed.R`.
+#> table.name is not a column in data. Nothing done.
 #> Existing file not overwritten.
 ```
 

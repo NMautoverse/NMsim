@@ -24,7 +24,7 @@ prioritizePaths(paths, must.work = FALSE)
 
 ``` r
 library(NMdata)
-#> NMdata 0.2.3. Browse NMdata documentation at
+#> NMdata 0.2.4. Browse NMdata documentation at
 #> https://NMautoverse.github.io/NMdata/
 NMdataConf(path.nonmem = prioritizePaths(c(
   "/opt/NONMEM/nm75/run/nmfe75",

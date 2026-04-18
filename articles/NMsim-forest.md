@@ -372,6 +372,8 @@ NMdata::NMreadExt(file.mod,as.fun="data.table")[par.type=="THETA",.(RSE=se/value
     NMdata::mergeCheck(NMdata::NMrelate(file.mod,par.type="THETA",as.fun="data.table")[,.(par.name,code)],by="par.name",quiet=TRUE) 
 ```
 
+    ## table.name is not a column in data. Nothing done.
+
 | par.name | FIX |       RSE | code               |
 |:---------|----:|----------:|:-------------------|
 | THETA(1) |   0 | 0.0804007 | LTVKA=THETA(1)     |
