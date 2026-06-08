@@ -115,6 +115,11 @@ Allowed combinations of AMT, RATE, SS, II here:
 
 ``` r
 library(data.table)
+#> 
+#> Attaching package: ‘data.table’
+#> The following object is masked from ‘package:base’:
+#> 
+#>     %notin%
 ## Users should not use setDTthreads. This is for CRAN to only use 1 core.
 data.table::setDTthreads(1) 
 ## arguments are expanded - makes loading easy

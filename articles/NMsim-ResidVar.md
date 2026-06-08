@@ -31,6 +31,7 @@ component in `$SIGMA[1,1]` and the one for the additive component in
 simulation.
 
 ``` r
+
 file.mod <- file.project("nonmem/xgxr021.mod")
 
 simres <- NMsim(file.mod=file.mod,
@@ -38,6 +39,7 @@ simres <- NMsim(file.mod=file.mod,
 ```
 
 ``` r
+
 simres.with.resvar <- addResVar(simres,path.ext=fnExtension(file.mod,"ext"),par.type="SIGMA",prop=1,add=2)
 ```
 

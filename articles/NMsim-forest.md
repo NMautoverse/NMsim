@@ -93,6 +93,7 @@ in cases where simulation is not needed.
 ## Initialization
 
 ``` r
+
 library(data.table)
 library(NMsim)
 library(NMdata)  
@@ -114,6 +115,7 @@ NMdataConf(
 A model is selected.
 
 ``` r
+
 ## file.mod <- "NMsim-forest-models/xgxr134.mod"
 file.mod <- system.file("examples/nonmem/xgxr134.mod",package="NMsim")
 ```
@@ -128,6 +130,7 @@ simulate daily dosing of 30 mg. `col.id=NA` to omit a subject id in
 `doses` as we will instead reuse it for multiple subjects.
 
 ``` r
+
 doses <- NMcreateDoses(TIME=0,AMT=30,ADDL=30,II=24)
 doses
 ```
@@ -139,6 +142,7 @@ doses
 We sample every 15 minutes on the first day and one day in steady-state.
 
 ``` r
+
 ## add a sampling scheme
 time.sim <- c(
     seq(0,24,.25), ## Day 1
@@ -164,6 +168,7 @@ There is only one analyte in this data set. If for instance, you have a
 parent and a metabolite, adding sampling times could look like this:
 
 ``` r
+
 dt.sim.parent.metab <-
     NMaddSamples(doses,TIME=time.sim,CMT=data.frame(analyte=c("parent","metabolite"),CMT=c(2,3)))
 ```
@@ -172,6 +177,7 @@ We also add “Time after previous dose” which is helpful for plotting.
 This is done using `NMdata::TAPD()`
 
 ``` r
+
 dt.sim <- addTAPD(dt.sim)
 ```
 
@@ -194,6 +200,7 @@ continuous covariates and manually select “Female” as the reference for
 sex. Here is a short example:
 
 ``` r
+
 ## reading output and input tables from estimation. Used to determine
 ## reference values and quantiles.
 data.ref <- NMdata::NMscanData(file.mod,quiet=TRUE)
@@ -231,6 +238,7 @@ set, then derive the quantiles. Each subject hence contributes equally,
 independently of how many data points they contribute.
 
 ``` r
+
 ## adding distinct ID's for each combination of covariates
 covs[,ID:=.GRP,by=.(type,covvar,covval)]
 ```
@@ -255,6 +263,7 @@ at a time. This is being combined with the previously defined dosing and
 sampling data so each scenario gets a full simulation data set.
 
 ``` r
+
 ## repeating the doses for all combinations of covariates. Using NMdata::egdt()
 dt.sim.noid <- as.data.table(dt.sim)[,!("ID")]
 dt.sim.covs <- egdt(dt.sim.noid,covs)
@@ -267,6 +276,7 @@ dt.sim.covs <- egdt(dt.sim.noid,covs)
     ## 3: result  1950    23
 
 ``` r
+
 ### same thing, the data.table way
 ## dt.sim.covs <- covs[,dt.sim.noid[],by=covs]
 ### same thing, dplyr way
@@ -278,6 +288,7 @@ setorder(dt.sim.covs,ID,TIME,EVID)
 Plots of Typical-Subject Simulations
 
 ``` r
+
 simres.typ <- NMsim(file.mod=file.mod,
                 data=dt.sim.covs,
                 name.sim="singlesubj_covs",
@@ -287,6 +298,7 @@ simres.typ <- NMsim(file.mod=file.mod,
 ```
 
 ``` r
+
 simres.typ <- NMreadSim("simres-forest/xgxr134_singlesubj_covs_MetaData.rds",as.fun="data.table")
 simres.ref <- simres.typ[type=="ref"]
 
@@ -342,6 +354,7 @@ to
 [`NMsim-ParamUncertain.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html).
 
 ``` r
+
 simres.forest.nwpri <- NMsim(file.mod # path to NONMEM model
                             ,data=dt.sim.covs, # simulation dataset
                             ,name.sim="nwpri_forest" # output name suffix
@@ -368,6 +381,7 @@ the `.ext` file) and the automatic labeling of the parameters using
 [`NMdata::NMrelate()`](https://nmautoverse.github.io/NMdata/reference/NMrelate.html).
 
 ``` r
+
 NMdata::NMreadExt(file.mod,as.fun="data.table")[par.type=="THETA",.(RSE=se/value),by=.(par.name,FIX)] |>
     NMdata::mergeCheck(NMdata::NMrelate(file.mod,par.type="THETA",as.fun="data.table")[,.(par.name,code)],by="par.name",quiet=TRUE) 
 ```
@@ -409,6 +423,7 @@ depending on the Nonmem version, `NWPRI` works a little differently, and
 `IPRED` has to be used prior to Nonmem 7.6.0.
 
 ``` r
+
 ### Define exposure metrics
 funs.exposure <- list(
     "Cmax"=function(x) max(x$IPRED)
@@ -431,6 +446,7 @@ requires certain column names so we adjust those first. An acceptance
 region such as the 80%-125% bio equivalence is included.
 
 ``` r
+
 setDT(sum.uncertain)
 setnames(sum.uncertain,
          cc(covvalf,predmm,predml,predmu,metric.var),
@@ -481,6 +497,7 @@ forest.day1 <- fun.plot(sum.uncertain[period=="Day 1"])
 ![](NMsim-forest_files/figure-html/plot1-1.png)
 
 ``` r
+
 forest.ss <- fun.plot(sum.uncertain[period=="Steady-State"])
 ```
 
@@ -494,6 +511,7 @@ adequate for sampling `THETA`’s, it does not require additional software
 installed, other than Nonmem.
 
 ``` r
+
 ext.mvrnorm <- samplePars(file.mod=file.mod,nsim=1000,method="mvrnorm",seed.R=6789)
 
 simres.forest.mvrnorm <- NMsim(file.mod # path to NONMEM model
@@ -512,6 +530,7 @@ simres.forest.mvrnorm <- NMsim(file.mod # path to NONMEM model
 Simulation using simpar for parameter sampling
 
 ``` r
+
 ext.simpar <- samplePars(file.mod=file.mod,nsim=1000,method="simpar",seed.R=789)
 
 simres.forest.simpar <- NMsim(file.mod # path to NONMEM model
@@ -530,6 +549,7 @@ simres.forest.simpar <- NMsim(file.mod # path to NONMEM model
 Simulation using bootstrap for parameter sampling
 
 ``` r
+
 dir.bs <- "NMsim-forest-models/xgxr134_bs_N1000/m1"
 exts.bs <- list.files(dir.bs,pattern=".+\\.ext$",recursive=T,full.names = TRUE)
 ext.boot <- NMreadExt(exts.bs,as.fun="data.table")
@@ -561,6 +581,7 @@ cannot be generalized based on this.
 Collecting, Summarizing, and Plotting all Results
 
 ``` r
+
 simres.forest.nwpri <- NMreadSim(c("simres-forest/xgxr134_nwpri_forest_MetaData.rds"),as.fun="data.table")
 simres.forest.mvrnorm <- NMreadSim(c("simres-forest/xgxr134_mvrnorm_forest_MetaData.rds"),as.fun="data.table")
 simres.forest.simpar <- NMreadSim(c("simres-forest/xgxr134_simpar_forest_MetaData.rds"),wait=TRUE,as.fun="data.table")
@@ -586,6 +607,7 @@ unique(simres.forest.all[,.(method,model.sim,NMREP)])[,.N,by=.(method)]
 | Simpar    | 1000 |
 
 ``` r
+
 sum.uncertain <- forestSummarize(simres.forest.all,
                                  funs.exposure = funs.exposure,
                                  by=cc(method,period),
@@ -595,6 +617,7 @@ sum.uncertain <- forestSummarize(simres.forest.all,
 ```
 
 ``` r
+
 plot.compare <- ggplot(sum.uncertain[period=="Steady-State"],aes(predmm,covvalf,colour=method))+
     geom_rect(aes(xmin=.8,xmax=1.2,ymin=-Inf,ymax=Inf,colour=NULL),fill="grey85")+
     geom_rect(aes(xmin=predml,xmax=predmu,ymin=covvalf,ymax=covvalf),
@@ -629,6 +652,7 @@ Notice, the code below consists of snippets from the
 function. The code is not intended to be used on its own.
 
 ``` r
+
 ### use only simulated samples
 simres <- as.data.table(data)[EVID==2]
 

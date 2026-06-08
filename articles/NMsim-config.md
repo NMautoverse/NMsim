@@ -56,6 +56,7 @@ function. Say you want to run Nonmem with `/opt/NONMEM/nm75/run/nmfe`,
 insert this after loading `NMdata` in the beginning of your script
 
 ``` r
+
 NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
 ```
 
@@ -63,6 +64,7 @@ On Windows, the executable has a `.bat` extension. The path could look
 be
 
 ``` r
+
 NMdataConf(path.nonmem ="C:/nm75g64/run/nmfe75.bat")
 ```
 
@@ -79,6 +81,7 @@ installation paths, you can select between a prioritized set of paths
 like this, taking the first one found:
 
 ``` r
+
 paths.nm <- c("/opt/NONMEM/nm75/run/nmfe75",
               "/opt/nonmem/nm751/run/nmfe75",
               "C:/nm75g64/run/nmfe75.bat")
@@ -97,6 +100,7 @@ executables when running them (something like
 them. In this case, the easiest is loading NMdata and then running:
 
 ``` r
+
 NMdataConf(dir.psn="/opt/PSN")
 ```
 

@@ -88,6 +88,7 @@ predictions anyway. We could have omitted `ROW` in the input data set
 and done something as simple as
 
 ``` r
+
 simres <- NMsim(file.mod=file.mod,
                 data=dat.sim,
                 table.vars="PRED IPRED Y")
@@ -109,6 +110,7 @@ into a list of data sets and pass that list in the
 `data` argument.
 
 ``` r
+
 library(NMsim)
 library(data.table)
 

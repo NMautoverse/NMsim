@@ -14,6 +14,7 @@ internal Nonmem execution method. That means, we need to provide the
 path to the Nonmem executable.
 
 ``` r
+
 NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
 ```
 
@@ -67,6 +68,7 @@ First thing, we decide on a model (an input control stream of an
 estimated model) to use for the example:
 
 ``` r
+
 file.mod <- system.file("examples/nonmem/xgxr134.mod",package="NMsim")
 ```
 
@@ -75,6 +77,7 @@ by 6 doses (150 mg) every 24 hours. For smoothness plotted curves we use
 hourly sampling.
 
 ``` r
+
 doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)
 ## Now we add the sample records using `NMaddSamples()`. 
 dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
@@ -90,6 +93,7 @@ must be the same as in the estimation for NMsim to be able to find the
 eta’s for simulation.
 
 ``` r
+
 ## read model results just to extract the observed ID's. Notice, if
 ## your model uses covariates, those should be retrieved too.
 res.mod <- NMscanData(file.mod,quiet=TRUE)
@@ -123,6 +127,7 @@ simres.known <- NMsim(file.mod=file.mod,
 And the simulation results are plotted for each subject.
 
 ``` r
+
 ggplot(subset(simres.known,EVID==2),aes(TIME,IPRED,colour=factor(ID)))+
     geom_line()+
     theme(legend.position="none")
@@ -168,6 +173,7 @@ individual dosing history.
 Reading some example PD data:
 
 ``` r
+
 pd <- readRDS(system.file("examples/data/xgxr_pd.rds",package="NMsim"))
 ## some code below makes use of data.table features so we make it a data.table
 setDT(pd)
@@ -194,6 +200,7 @@ the PK data (without `DV`), but change observation records to simulation
 records (`EVID=2` instead of `EVID=0`).
 
 ``` r
+
 ## Take dose records from PK model estimation input data
 pkres <- NMscanData(file.mod,quiet=TRUE)
 pkdos <- pkres[EVID==1,.(ID, TIME, EVID, CMT, AMT)]
@@ -213,6 +220,7 @@ Nonmem `$TABLE` statement not to confuse PK predictions and PD
 predictions.
 
 ``` r
+
 simres.pksim <- NMsim(file.mod,
                       data=pdsim,
                       name.sim="pkpd",
@@ -222,6 +230,7 @@ simres.pksim <- NMsim(file.mod,
 ```
 
 ``` r
+
 ggplot(simres.pksim[!is.na(LIDV)&!is.na(PKIPRED)],aes(PKIPRED,LIDV))+
     geom_point()+
     labs(x="Individual PK prediction",y="Observed PD value")

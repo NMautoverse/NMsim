@@ -41,6 +41,7 @@ This is also discussed in
 ## Example
 
 ``` r
+
 file.project <- function(...)file.path(system.file("examples",package="NMsim"),...)
 file.mod <- file.project("nonmem/xgxr032.mod")
 ```
@@ -49,6 +50,7 @@ Let’s simulate 10,000 ETA combinations and store them in a file called
 `xgxr032_simEtas.phi`.
 
 ``` r
+
 NMsim:::simPopEtas(file=file.mod,
                    N=1e4,
                    seed=238861,
@@ -63,6 +65,7 @@ We’ll just use the simulation data set created in
 [`NMsim-DataCreate.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-DataCreate.html)
 
 ``` r
+
 dat.sim <- read_fst(path="simulate-results/dat_sim.fst",as.data.table=TRUE)
 ```
 
@@ -70,6 +73,7 @@ And now we can use
 [`NMsim_known()`](https://nmautoverse.github.io/NMsim/reference/NMsim_known.md).
 
 ``` r
+
 dat.sim.multiple <- egdt(dat.sim[,!("ID")],data.table(ID=c(1,4,89)))
 #>      data nrows ncols
 #>    <char> <int> <int>
@@ -80,6 +84,7 @@ setorder(dat.sim.multiple,ID,TIME,EVID)
 ```
 
 ``` r
+
 
 simres <- NMsim(
     file.mod=file.mod,
@@ -97,6 +102,7 @@ simres <- NMsim(
 ### Simulate the same simulated subjects on multiple regimens
 
 ``` r
+
 dat.sim.multiple.regs <- lapply(c(100,300,600),function(dose1){
     transform(dat.sim.multiple,AMT=AMT/300*dose1,trt=sprintf("%d mg then %d mg QD",dose1,dose1/2))
 }) |> rbindlist()

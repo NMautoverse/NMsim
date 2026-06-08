@@ -19,6 +19,7 @@ simulation we need for a VPC. We will use an example model included with
 NMsim:
 
 ``` r
+
 file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
 NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
 NMdataConf(dir.sims="simtmp-VPC",
@@ -27,6 +28,7 @@ NMdataConf(dir.sims="simtmp-VPC",
 ```
 
 ``` r
+
 ## notice the data argument is not used.
 simres.vpc <- NMsim(file.mod,
                     table.vars=c("PRED","IPRED", "Y"),
@@ -58,6 +60,7 @@ called `tidyvpc` offer those two things and is moreover implemented in
 from the results from `NMsim` to the VPC plot with `tidyvpc`.
 
 ``` r
+
 library(ggplot2)
 library(tidyvpc)
 #> tidyvpc is part of Certara.R!
@@ -112,6 +115,7 @@ NMsim provides a simple interface to modify the data filters
 (`ACCEPT`/`IGNORE`). First we read them into a data.frame.
 
 ``` r
+
 filters <- NMreadFilters(file.mod,as.fun="data.table")
 filters
 ```
@@ -123,6 +127,7 @@ way to handle this would be to have an exclusion based on `BLQ.NE.0`.
 Anyway, we simply edit that filter and re-run the simulation:
 
 ``` r
+
 filters[cond=="FLAG.NE.0",cond:="FLAG.GT.10"]
 filters
 
@@ -141,6 +146,7 @@ observations from the simulation results (from the preserved `DV`
 column, not from any of the simulated columns)
 
 ``` r
+
 ## read the data as it was used in the Nonmem model
 res <- simres.vpc.filters[simres.vpc.filters$NMREP==1,]
 ## only plot observation events from estimation data set

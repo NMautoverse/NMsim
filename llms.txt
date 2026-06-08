@@ -15,6 +15,7 @@ of the (estimated) model stored in “path/to/file.mod” using the
 simulation input data set stored in the variable `data.sim` this way:
 
 ``` r
+
 simres <- NMsim(file.mod="/path/to/file.mod",
                 data=data.sim)
 ```
@@ -23,6 +24,7 @@ You will quickly learn to do this on your own models, but if you can’t
 wait to see this working, you can do the following:
 
 ``` r
+
 data.sim <- read.csv(system.file("examples/derived/dat_sim1.csv",package="NMsim"))
 simres <- NMsim(file.mod=system.file("examples/nonmem/xgxr021.mod",package="NMsim"),
                 data=data.sim,
@@ -37,6 +39,7 @@ the provided simulation data set is sufficient to run it. We are ready
 to plot:
 
 ``` r
+
 library(ggplot2)
 datl <- as.data.table(simres) |>
     melt(measure.vars=cc(PRED,IPRED,Y))
@@ -262,6 +265,7 @@ be able to use `NMsim`.
 `NMsim` is on CRAN, MPN and github:
 
 ``` r
+
 ## From CRAN/MPN repositories
 install.packages("NMsim")
 ## From github

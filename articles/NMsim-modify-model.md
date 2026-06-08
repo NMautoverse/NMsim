@@ -63,6 +63,7 @@ in this document are unnecessary for those.
 ### Selecting a Model and Generating Simulation Data
 
 ``` r
+
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
 data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1) |>
@@ -85,6 +86,7 @@ vignette](https://nmautoverse.github.io/NMsim/articles/) is a good place
 to start.
 
 ``` r
+
 partab <- NMreadParsText(file.mod,as.fun="data.table",format="%init;%symbol") |>
     mergeCheck(NMreadExt(file.mod),by="parameter",all.x=TRUE,common.cols="drop.y",quiet=TRUE)
 partab[,.(par.name,symbol,init,est)]
@@ -108,6 +110,7 @@ partab[,.(par.name,symbol,init,est)]
 Let’s run a simple simulation without specifying `inits`.
 
 ``` r
+
 simres <- NMsim(file.mod=file.mod,
                 data=data.sim,
                 name.sim="basic-sim")
@@ -144,6 +147,7 @@ do rerun the simulation adding some custom values for `THETA(1)` and
 other parameter values are updated with final estimates.
 
 ``` r
+
 simres.inits1 <- NMsim(file.mod=file.mod,
                        data=data.sim,
                        inits=list("theta(1)"=list(init=0.54)
@@ -177,6 +181,7 @@ modification of any subset of these values. This would remove “FIX” and
 include bounds like `(0,0.54,10)`:
 
 ``` r
+
 simres.inits1b <- NMsim(file.mod=file.mod,
                         data=data.sim,
                         inits=list("theta(1)"=list(init=0.54,lower=0,upper=10,FIX=0)),
@@ -190,6 +195,7 @@ parameters using (any subset of) columns named `init`, `FIX`, `lower`,
 `upper`. This may be more convenient for programming. Pass this as
 
 ``` r
+
 inits=lists(inits.tab=my.df)
 ```
 
@@ -199,6 +205,7 @@ values, as obtained by
 Read the parameters, modify, apply (here, adding 30% to `THETA(1)`):
 
 ``` r
+
 myext <- NMreadExt(file.mod)
 myext[myext$parameter=="THETA(1)",value=value*1.3]
 
@@ -224,6 +231,7 @@ would impact exposure. A simple way to do that is to add a line
 `KA=KA/4` to the `$PK` section. Easy:
 
 ``` r
+
 simres.ka4 <- NMsim(file.mod=file.mod,
                     data=data.sim,
                     name.sim="sim-ka4",
@@ -232,6 +240,7 @@ simres.ka4 <- NMsim(file.mod=file.mod,
 ```
 
 ``` r
+
 simres.ka4 <- NMreadSim("simres-modify/xgxr021_simka4_MetaData.rds")
 ```
 
@@ -259,6 +268,7 @@ serves the purpose of this example. The function it returns appends
 equivalent to do
 
 ``` r
+
 simres.ka4 <- NMsim(file.mod=file.mod,
                     data=data.sim,
                     name.sim="sim-ka4",
@@ -282,6 +292,7 @@ Let’s compare the two simulation results. The absorption was slowed as
 expected.
 
 ``` r
+
 rbind(simres,simres.ka4) |>
     ggplot(aes(TIME,PRED,colour=name.sim))+
     geom_line()
@@ -313,6 +324,7 @@ distinct for each value of `KASCALE`. The code below uses `data.table`
 but any data manipulation tool (such as base R or dplyr) could be used.
 
 ``` r
+
 # add KASCALE and copy patient info for each value of KASCALE
 dat.sim.varka <- data.sim[,data.table(KASCALE=c(1,4,10)),by=data.sim] 
 dat.sim.varka[,ID:=.GRP,by=.(KASCALE,ID)] # update patient IDs
@@ -330,6 +342,7 @@ demonstrated:
     the `PK` section in the NONMEM control stream.
 
 ``` r
+
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
                      ## ,name.sim="varka"
@@ -343,6 +356,7 @@ simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
     edit parameter values directly.
 
 ``` r
+
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
                        ##,name.sim="varka2"
@@ -354,6 +368,7 @@ simres.varka2 <- NMsim(file.mod=file.mod
 The code below returns the plot
 
 ``` r
+
 simres.both <- rbind(simres.varka,
                      simres.varka2)
 
@@ -394,6 +409,7 @@ simulated for the following scenarios
 First the `CL` and `F1` data is added to the patient data
 
 ``` r
+
 ## 'Outer join'
 dat.sim.DDI=data.sim[,data.table(CLSCALE=c(1,1/2,1/3)
                                 ,FSCALE=c(1,1.2,1.1)
@@ -409,6 +425,7 @@ section of the NONMEM control stream via the `modify` argument in the
 function.
 
 ``` r
+
 simres.DDI <- NMsim(file.mod=file.mod
                    ,data=dat.sim.DDI
                    ,name.sim="DDI"
@@ -442,6 +459,7 @@ the specific number of the delayed dose `DELAYDOS` and the time delay
 `ALAG`.
 
 ``` r
+
 dat.sim.alag = data.sim |> NMexpandDoses() |> addTAPD() # expand doses and add dose number
 dat.sim.alag[,ROW:=.I] # restore ROW with correct value
                                         # add delayed dose
@@ -475,6 +493,7 @@ on compartment 1 `ALAG1` is modified for the dose with dose number
 `DOSCUMN` equal to the target delayed dose number `DELAYDOS`
 
 ``` r
+
 simres.alag <- NMsim(file.mod=file.mod
                     ,data=dat.sim.alag.final
                     ,name.sim="alag"
@@ -521,6 +540,7 @@ The following example computes daily exposure:
   labelled **AUC trapez**
 
 ``` r
+
 file.mod.auc <- system.file("examples/nonmem/xgxr046.mod",
                             package="NMsim")
 data.sim.auc <- NMreadCsv(system.file("examples/derived/dat_sim1.csv",
@@ -575,6 +595,7 @@ sim.auc.trapez<-sim.auc.final[DAY<8,.(AUC=NMcalc::trapez(TIME,PRED))
   sections.
 
 ``` r
+
 # AUC with NMsim -  time step 24hr
 data.sim2 <- addEVID2(data.sim.auc[EVID==1],CMT=2,time.sim=seq(0,by=24,length.out=9))
 
@@ -600,6 +621,7 @@ The plot comparing the `DES` and `trapez` AUC is obtained with the code
 below
 
 ``` r
+
 sres.final=mergeCheck(sim.auc.trapez[,.(DAY,AUC,time.step)]
                      ,sres.auc.des[,.(DAY,AUC.NMsim)]
                      ,by="DAY")
@@ -646,6 +668,7 @@ these options automatically, but here is how to do it if that fails.
 sets `$SIZES PD=100 LTV=70`
 
 ``` r
+
 simres <- NMsim(file.mod=file.mod,
                 data=data.sim,
                 sizes=list(PD=100,LTV=70),
@@ -658,6 +681,7 @@ simres <- NMsim(file.mod=file.mod,
 section from scratch, add `wipe=TRUE`:
 
 ``` r
+
 simres <- NMsim(file.mod=file.mod,
                 data=data.sim,
                 sizes=list(PD=100,LTV=70,wipe=TRUE),

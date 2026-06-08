@@ -11,6 +11,7 @@ simulation of new subjects, the `data` may be the only need argument In
 addition to a control stream file path.
 
 ``` r
+
 simres <- NMsim(file.mod=file.mod,data=data.sim)
 ```
 
@@ -46,6 +47,7 @@ compartment. These numbers depend on the model which the data set is
 intended to be used with.
 
 ``` r
+
 doses <- NMcreateDoses(TIME=seq(0,by=24,length.out=7),
                        AMT=c(300,150),CMT=1)
 doses
@@ -75,6 +77,7 @@ variables to match the lengths.
 We can also use `ADDL/II` to get an equivalent result.
 
 ``` r
+
 ### multiple dose regimens with loading are easily created with NMcreateDoses too
 ## We use ADDL+II (either method easy)
 doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)
@@ -93,6 +96,7 @@ dosing event (this behavior is controlled by the `addl.lastonly`
 argument).
 
 ``` r
+
 doses2 <- NMcreateDoses(TIME=seq(0,by=24,length.out=7),
                         AMT=c(300,150),CMT=1)
 ## doses2$trt <- "300 mg then 150 mg QD"
@@ -116,6 +120,7 @@ the expanded format is more convenient.
 expands the `ADDL` and `II`:
 
 ``` r
+
 NMexpandDoses(doses)
 ```
 
@@ -136,6 +141,7 @@ Additional `NMcreateDoses()` examples
 Arguments are expanded to match length of `TIME` - makes loading easy.
 
 ``` r
+
 NMcreateDoses(TIME=c(0,12,24,36),AMT=c(2,1))
 ```
 
@@ -153,6 +159,7 @@ subjects, `AMT` is of length two, hence they are expanded to match the
 length (3) of `TIME`.
 
 ``` r
+
 NMcreateDoses(TIME=c(0,12,24),AMT=data.table(AMT=c(2,1,4,2),DOSE=c(1,1,2,2))) 
 ```
 
@@ -172,6 +179,7 @@ Pass a data.frame to
 `CMT` argument to include multiple endpoints.
 
 ``` r
+
 NMaddSamples(doses,CMT=data.frame(CMT=c(2,3),DVID=c("Parent","Metabolite")),TIME=1:2)
 ```
 
@@ -198,6 +206,7 @@ Now we add the sample records using
 [`NMaddSamples()`](https://nmautoverse.github.io/NMsim/reference/NMaddSamples.md).
 
 ``` r
+
 ## Add simulation records - longer for QD regimens
 dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
 ```
@@ -210,12 +219,14 @@ specifically. Hence, a simple dosing data set with just two doses is
 used.
 
 ``` r
+
 dt.dos <- NMcreateDoses(TIME=c(0,12),AMT=c(1))
 ```
 
 Sampling based on time since previous dose:
 
 ``` r
+
 NMaddSamples(dt.dos,TAPD=1:2,CMT=2)
 ```
 
@@ -231,6 +242,7 @@ NMaddSamples(dt.dos,TAPD=1:2,CMT=2)
 `TIME` and `TAPD` can be combined - adding a follow-up
 
 ``` r
+
 NMaddSamples(dt.dos,TAPD=1:2,TIME=96,CMT=2)
 ```
 
@@ -245,6 +257,7 @@ NMaddSamples(dt.dos,TAPD=1:2,TIME=96,CMT=2)
 |   1 |   96 |    2 |   2 |  NA |   1 |   NA |
 
 ``` r
+
 ## sampling two compartments - naming them
 NMaddSamples(dt.dos,TAPD=1:2,CMT=data.frame(CMT=2:3,DVID=c("Parent","Metabolite")))
 ```
@@ -266,6 +279,7 @@ Use the `by` argument to specify separate sampling times for different
 subsets of subjects.
 
 ``` r
+
 dt.dos2 <- NMcreateDoses(TIME=c(0,12,24),AMT=data.table(AMT=c(2,1,4,2),DOSE=c(1,1,2,2))) 
 NMaddSamples(dt.dos2,TIME=data.frame(TIME=c(1:2,1:4),DOSE=c(rep(1,2),rep(2,4))),CMT=2,by="DOSE")
 ```
@@ -303,6 +317,7 @@ These are often useful to add to a simulation dataset, especially for
 postprocessing:
 
 ``` r
+
 dat.sim2 <- addTAPD(dat.sim)
 head(dat.sim2)
 ```
@@ -325,6 +340,7 @@ them to be considered post-dose, we have to specify how to order `EVID`
 numbers.
 
 ``` r
+
 ## order.evid=c(1,2) means doses are ordered before EVID=2 records
 dat.sim2 <- addTAPD(dat.sim,order.evid=c(1,2))
 ## now the TIME=0 sample has TAPD=0
@@ -361,6 +377,7 @@ can just as well be used. A row identifier (counter) is not needed for
 NMsim but it can make post-processing easier, so we add that too.
 
 ``` r
+
 ## sort data set 
 setorder(dat.sim,ID,TIME,EVID)
 dat.sim$ROW <- 1:nrow(dat.sim)
@@ -374,6 +391,7 @@ data row to plot for each dose. We also take the sum of the amounts by
 time point in case doses are simultaneous.
 
 ``` r
+
 dtplot <- NMdata::NMexpandDoses(dat.sim,as.fun="data.table")
 dtplot <- dtplot[,.(AMT=sum(AMT)),by=.(ID,CMT,TIME,EVID)]
 
@@ -397,6 +415,7 @@ A brief overview of the number of events broken down by event type
 `EVID` and dose amount `AMT`:
 
 ``` r
+
 NMexpandDoses(dat.sim)[,.(Nrows=.N),keyby=.(CMT,EVID,AMT)] 
 ```
 
@@ -427,6 +446,7 @@ in Nonmem data sets using
 and summarize the number of doses and observations:
 
 ``` r
+
 NMdata::NMcheckData(dat.sim,type.data="sim")
 #> No findings. Great!
 ```

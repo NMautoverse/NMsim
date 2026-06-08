@@ -25,6 +25,7 @@ and store intermediate files (`dir.sims`) and where to store final
 results (`dir.res`).
 
 ``` r
+
 library(NMdata)
 ## Point NMsim to your NONMEM exectuable - looks like this on linux/osx
 NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75")
@@ -44,6 +45,7 @@ When providing a simulation data set, the default
 behavior is to sample a new subject (ETA’s).
 
 ``` r
+
 ## Point to the model to estimate
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
@@ -60,6 +62,7 @@ returns a data.frame. Plot of simulation results (click to button show
 code):
 
 ``` r
+
 datl <- as.data.table(simres) |>
     melt(measure.vars=c("PRED","IPRED","Y"))
 
@@ -207,6 +210,7 @@ adds the sampling events. By default, doses are indicated using `EVID=1`
 and samples by `EVID=2`.
 
 ``` r
+
 doses <- NMcreateDoses(TIME=seq(0,by=24,length.out=7),
                         AMT=c(300,150),CMT=1)
 ```
@@ -227,6 +231,7 @@ groups (say different dosing regimens), and dosing times can be supplied
 relative to previous dosing times.
 
 ``` r
+
 dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
 ```
 
@@ -249,6 +254,7 @@ running
 [`NMcheckData()`](https://nmautoverse.github.io/NMdata/reference/NMcheckData.html):
 
 ``` r
+
 NMcheckData(dat.sim,type.data="sim")
 ```
 
@@ -264,6 +270,7 @@ for more details.
 - `typical=TRUE`: replace all `$OMEGA` values with zeros
 
 ``` r
+
 simres.typ <- NMsim(file.mod=file.mod,data=data.sim,
                     typical=TRUE,  ## FIX all OMEGA's to zero
                     name.sim="typical", ## simulation name - included in output
@@ -279,6 +286,7 @@ data.frames in the `data` argument. NMsim will return one data.frame
 with all the results for easy post-processing.
 
 ``` r
+
 file2.mod <- "models/xgxr114.mod"
 simres.typ2 <- NMsim(file.mod=c("2 compartments"=file.mod,
                                 "1 compartment"=file2.mod),
@@ -329,6 +337,7 @@ simulation input data, so you do not need variables like `ID` or `TIME`
 in `table.vars`.
 
 ``` r
+
 ## this example uses the same sim data for all subjects
 res <- NMscanData(file.mod,quiet=T)
 ids <- unique(res$ID)[1:5]
@@ -377,6 +386,7 @@ Notice the following reuses the input data set 1000 times, and a column
 called `NMREP` will count the subproblem number in the output.
 
 ``` r
+
 tablevars=cc(PRED,IPRED,Y)
 simres.subprob <- NMsim(file.mod=file.mod,
                         data=data.sim,
@@ -394,6 +404,7 @@ reflect unique combinations of `ID` and `NMREP`. With `data.table`, this
 can be done this way:
 
 ``` r
+
 ## data.table:
 as.data.table(simres.subprob)[,ID:=.GRP,by=.(NMREP,ID)]
 ## dplyr:
@@ -427,6 +438,7 @@ does exactly that. Notice two important features of
   correlation of the covariates from the analysis set to the simulation.
 
 ``` r
+
 ## read the analysis data set from the model we are simulating from
 dt.covs <- NMscanData(file.mod,quiet=T)
 ## replicate the simulation data set (one subject) to create 1000
@@ -455,6 +467,7 @@ simres.datarep <- NMsim(file.mod=file.mod,
 - Derive and plot 90% prediction intervals
 
 ``` r
+
 ## Collect and stack simulation results 
 simres.newpops <- rbind(as.data.table(simres.subprob),
                         simres.datarep,fill=T)[EVID==2]
@@ -493,6 +506,7 @@ files. Then read the results with
 To re-read the first simulation we did in this article, we can do this:
 
 ``` r
+
 simres <- NMreadSim("simres-intro/xgxr021_noname_MetaData.rds")
 ```
 

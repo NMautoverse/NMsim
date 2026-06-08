@@ -23,6 +23,7 @@ combination of these. Getting `NMsim` to run with all ETA’s equaling
 zero is this easy:
 
 ``` r
+
 simres.typ <- NMsim(file.mod=file.mod,
                     data=dat.sim,
                     name.sim="typSubj",
@@ -35,6 +36,7 @@ cases, but that depends on the model. The way to run a simulation with
 all ETA’s set to 0 is using `method.sim=NMsim_typical`.
 
 ``` r
+
 p.typ <- ggplot(simres.typ,aes(TIME,IPRED,color=trt))+geom_line()+
     geom_line(aes(y=PRED))
 p.typ

@@ -78,6 +78,7 @@ another one.
 Anyway, getting `NMsim` to do the work is as simple as this:
 
 ``` r
+
 set.seed(552)
 simlsts.VarCov <- NMsim(
     file.mod=file.mod,              ## Path to estimation input control stream
@@ -106,6 +107,7 @@ all the results using
 [`NMreadSim()`](https://nmautoverse.github.io/NMsim/reference/NMreadSim.md):
 
 ``` r
+
 simres.VarCov <- NMreadSim("simulate-results/NMsim_xgxr032_VarCov_paths.rds")
 ```
 
@@ -125,6 +127,7 @@ used `PSN`’s bootstrap. We can run the simulation on all the models this
 way:
 
 ``` r
+
 ## generate a vector with paths to all the input control streams
 mods.bootstrap <- list.files(path=file.project("nonmem/bs1_032_N1000/m1"),
                              pattern=".+\\.mod$",full.names = T)
@@ -145,6 +148,7 @@ file.res.bootstrap <- NMsim(
 ```
 
 ``` r
+
 simres.bootstrap <- NMreadSim("simulate-results/simres_bootstrap.rds")
 ```
 
@@ -165,6 +169,7 @@ methods (sampling from covariance steps and using the bootstrap
 samples).
 
 ``` r
+
 ## Stacking results from the two approaches to simulating with
 ## parameter uncertainty.
 allres <- rbind(simres.VarCov[,method:="Covariance step"],
@@ -196,6 +201,7 @@ covariance step the two confidence intervals are very similar. If you
 look hard, you can see minor differences.
 
 ``` r
+
 ggplot(sum.uncertain,aes(x=TIME,fill=pred.type))+
     geom_ribbon(aes(ymin=predml,ymax=predmu),alpha=.5)+
     geom_line(aes(y=predmm,colour=pred.type))+
