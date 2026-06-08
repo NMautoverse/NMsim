@@ -139,10 +139,6 @@ addEVID2 <- function(data,TIME,TAPD,CMT,EVID,DV,col.id="ID",args.NMexpandDoses,u
 
     if(missing(CMT)) CMT <- NULL
     
-    if("CMT"%in%colnames(data) && is.null(CMT)) {
-        stop("`CMT` column is present in `data`. In this case, the `CMT` argument must be provided.")
-    }
-
     col.evid <- "EVID"
     col.time <- "TIME"
     
@@ -151,12 +147,20 @@ addEVID2 <- function(data,TIME,TAPD,CMT,EVID,DV,col.id="ID",args.NMexpandDoses,u
     ## data <- NMdata:::deprecatedArg("doses","data",args=args)
     ## TIME <- NMdata:::deprecatedArg("time.sim","TIME",args=args)
     if(!is.null(doses)){
-        message("Argument doses is deprecated. Please use data instead.")
+        if(!is.null(data)){
+            stop("doses argument cannot be used together with data argument. Just use data.")
+        }
+        ## Not saying anything - addEVID2 is a deprecated function altogether
+        ## message("Argument doses is deprecated. Please use data instead.")
         data <- doses
     }
     if(!is.null(time.sim)){
         message("Argument time.sim is deprecated. Use TIME instead.")
         TIME <- time.sim
+    }
+
+    if("CMT"%in%colnames(data) && is.null(CMT)) {
+        stop("`CMT` column is present in `data`. In this case, the `CMT` argument must be provided.")
     }
 
     if(missing(DV)) DV <- NULL

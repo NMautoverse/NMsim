@@ -101,7 +101,7 @@ NMsim_EBE <- function(file.sim,file.mod,data.sim,file.phi,return.text=FALSE){
             genPhiFile(data=dt.res,file=file.phi)
         }
 
-#### NMreadPhi converts to long format R-friendly format. We prefer to manipulate the raw text lines for now. The alternative would be to read using NMreadPhi, then use genPhiFile(). However, that adds steps that may change format. For now, it is considered safer to just use the phi lines.
+#### NMreadPhi converts to a long R-friendly format. We prefer to manipulate the raw text lines for now. The alternative would be to read using NMreadPhi, then use genPhiFile(). However, that adds steps that may change format. For now, it is considered safer to just use the phi lines.
 ###### using the last table found in .phi to generate lines for a new .phi file. 
         phi.lines <- data.table(text=readLines(file.phi))
         phi.lines[,n:=.I]
@@ -129,8 +129,9 @@ NMsim_EBE <- function(file.sim,file.mod,data.sim,file.phi,return.text=FALSE){
 
 ### Error if subjects in data are not found in phi
         if(phi.use[,any(is.na(text))]){
-            message("IDs not found in nonmem results (phi file): ", paste(phi.use[is.na(text),ID],collapse=", "))
-            phi.use <- phi.use[!is.na(text)]
+          message("IDs not found in nonmem results (phi file): ", paste(phi.use[is.na(text),ID],collapse=", "),
+                  "\nEta values for those subjects will be sampled by Nonmem (like new subjects).")
+                  phi.use <- phi.use[!is.na(text)]
         }
         phi.use <- rbind(phi.lines[is.data==FALSE,.(text)],phi.use,fill=TRUE)
 
