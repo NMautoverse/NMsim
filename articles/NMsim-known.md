@@ -191,7 +191,6 @@ generate the data for the simulation are:
   like `ROW=1:nrow(pdsamples)`)
 - Stack (`rbind` for data.tables or `bind_rows` in tidyverse) `pkdos`
   and `pdsamples` to one data set (`pdsim`)
-- In `pdsim`, set `DV=NA`
 - Sort `pdsim` at least by `ID`, `TIME` and `EVID`. There could be more
   depending on trial design
 
@@ -208,8 +207,6 @@ pkdos <- pkres[EVID==1,.(ID, TIME, EVID, CMT, AMT)]
 pdsamples <- pd[EVID==0,.(ID,TIME,LIDV)]
 ## Stack `pkdos` and `pdsamples` to one data set (`pdsim`)
 pdsim <- rbind(pkdos,pdsamples,fill=TRUE)
-## Nonmem needs a DV column to run
-pdsim[,DV:=NA]
 ## only include subjects that were included in the PK model
 pdsim <- pdsim[ID%in%pkres$ID]
 setorder(pdsim,ID,TIME,EVID)

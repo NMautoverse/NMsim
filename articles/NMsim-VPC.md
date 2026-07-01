@@ -6,7 +6,9 @@ This vignette shows how to generate simulations for generation of VPC
 plots. While `NMsim` does not include any functionality for summarizing
 quantiles or plotting, it provides a powerful and simple interface to
 obtain the simulations. We shall see how the `tidyvpc` package easily
-creates VPC plots based on the simulation results.
+creates VPC plots based on the simulation results from `NMsim`. There
+are other R packages available for summarizing and plotting VPC’s that
+could be used instead of `tidyvpc`.
 
 ## Default Option: Reuse Estimation Data for Simulation
 
@@ -15,8 +17,8 @@ Normally, the two main arguments to
 the path to the input control stream (`file.mod`) and the simulation
 input data set (`data`). But if we leave out the the `data` argument,
 NMsim will re-use the estimation data for the simulation. That is the
-simulation we need for a VPC. We will use an example model included with
-NMsim:
+simulation we need for a (in-sample) VPC. We will use an example model
+included with NMsim:
 
 ``` r
 
@@ -51,13 +53,12 @@ function in `PSN`. However, there are some important differences.
 - No postprocessing of the results is being done by `NMsim`. See below
   how to easily do that.
 
-## Plotting using `tidyvpc`
+## Post-processing and Plotting using `tidyvpc`
 
 As mentioned, `NMsim` does not postprocess the simulation for generation
-of a VPC plot, nor does it offter any plotting functions. The R package
-called `tidyvpc` offer those two things and is moreover implemented in
-`data.table`, so it’s fast. The following simple code shows how to get
-from the results from `NMsim` to the VPC plot with `tidyvpc`.
+of a VPC plot, nor does it offer any plotting functions. The R package
+called `tidyvpc` offer those two things. The following simple code shows
+how to get from the results from `NMsim` to the VPC plot with `tidyvpc`.
 
 ``` r
 
@@ -120,6 +121,12 @@ filters <- NMreadFilters(file.mod,as.fun="data.table")
 filters
 ```
 
+| type | class       | cond       |
+|:-----|:------------|:-----------|
+| IGN  | single-char | @          |
+| IGN  | var-compare | FLAG.NE.0  |
+| IGN  | var-compare | DOSE.LT.30 |
+
 There is an exclusion `FLAG.NE.0`. The way this is used in this case is
 that FLAG is non-negative, besides 0 which is the analysis set,
 `FLAG=10` is the smallest values, and that’s the BLQ’s. A more common
@@ -130,6 +137,15 @@ Anyway, we simply edit that filter and re-run the simulation:
 
 filters[cond=="FLAG.NE.0",cond:="FLAG.GT.10"]
 filters
+```
+
+| type | class       | cond       |
+|:-----|:------------|:-----------|
+| IGN  | single-char | @          |
+| IGN  | var-compare | FLAG.GT.10 |
+| IGN  | var-compare | DOSE.LT.30 |
+
+``` r
 
 set.seed(43)
 ## notice the data argument is still not used.
@@ -166,7 +182,7 @@ vpc1 <-
 plot(vpc1)
 ```
 
-![](NMsim-VPC_files/figure-html/unnamed-chunk-10-1.png)
+![](NMsim-VPC_files/figure-html/unnamed-chunk-11-1.png)
 
 ### Manually Subset Data
 

@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">June 08, 2026 using NMsim
+            <h4 data-toc-skip class="date">July 01, 2026 using NMsim
 0.2.7.901</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
@@ -252,8 +252,6 @@ row counter, like <code>ROW=1:nrow(pdsamples)</code>)</li>
 <li>Stack (<code>rbind</code> for data.tables or <code>bind_rows</code>
 in tidyverse) <code>pkdos</code> and <code>pdsamples</code> to one data
 set (<code>pdsim</code>)</li>
-<li>In <code>pdsim</code>, set <code>DV=NA</code>
-</li>
 <li>Sort <code>pdsim</code> at least by <code>ID</code>,
 <code>TIME</code> and <code>EVID</code>. There could be more depending
 on trial design</li>
@@ -270,8 +268,6 @@ records to simulation records (<code>EVID=2</code> instead of
 <span><span class="va">pdsamples</span> <span class="op">&lt;-</span> <span class="va">pd</span><span class="op">[</span><span class="va">EVID</span><span class="op">==</span><span class="fl">0</span>,<span class="fu">.</span><span class="op">(</span><span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">LIDV</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">## Stack `pkdos` and `pdsamples` to one data set (`pdsim`)</span></span>
 <span><span class="va">pdsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">pkdos</span>,<span class="va">pdsamples</span>,fill<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## Nonmem needs a DV column to run</span></span>
-<span><span class="va">pdsim</span><span class="op">[</span>,<span class="va">DV</span><span class="op">:=</span><span class="cn">NA</span><span class="op">]</span></span>
 <span><span class="co">## only include subjects that were included in the PK model</span></span>
 <span><span class="va">pdsim</span> <span class="op">&lt;-</span> <span class="va">pdsim</span><span class="op">[</span><span class="va">ID</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">pkres</span><span class="op">$</span><span class="va">ID</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorder</a></span><span class="op">(</span><span class="va">pdsim</span>,<span class="va">ID</span>,<span class="va">TIME</span>,<span class="va">EVID</span><span class="op">)</span></span></code></pre></div>

@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
-            <h4 data-toc-skip class="date">June 08, 2026 using NMsim
+            <h4 data-toc-skip class="date">July 01, 2026 using NMsim
 0.2.7.901</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/vignettes/NMsim-VPC.Rmd" class="external-link"><code>vignettes/NMsim-VPC.Rmd</code></a></small>
@@ -88,7 +88,9 @@ plots. While <code>NMsim</code> does not include any functionality for
 summarizing quantiles or plotting, it provides a powerful and simple
 interface to obtain the simulations. We shall see how the
 <code>tidyvpc</code> package easily creates VPC plots based on the
-simulation results.</p>
+simulation results from <code>NMsim</code>. There are other R packages
+available for summarizing and plotting VPC’s that could be used instead
+of <code>tidyvpc</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="default-option-reuse-estimation-data-for-simulation">Default Option: Reuse Estimation Data for Simulation<a class="anchor" aria-label="anchor" href="#default-option-reuse-estimation-data-for-simulation"></a>
@@ -97,8 +99,8 @@ simulation results.</p>
 to the input control stream (<code>file.mod</code>) and the simulation
 input data set (<code>data</code>). But if we leave out the the
 <code>data</code> argument, NMsim will re-use the estimation data for
-the simulation. That is the simulation we need for a VPC. We will use an
-example model included with NMsim:</p>
+the simulation. That is the simulation we need for a (in-sample) VPC. We
+will use an example model included with NMsim:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/nonmem/xgxr032.mod"</span>,package<span class="op">=</span><span class="st">"NMsim"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMdataConf.html" class="external-link">NMdataConf</a></span><span class="op">(</span>path.nonmem<span class="op">=</span><span class="st">"/opt/NONMEM/nm75/run/nmfe75"</span><span class="op">)</span></span>
@@ -127,12 +129,11 @@ simulation results require.</p></li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="plotting-using-tidyvpc">Plotting using <code>tidyvpc</code><a class="anchor" aria-label="anchor" href="#plotting-using-tidyvpc"></a>
+<h2 id="post-processing-and-plotting-using-tidyvpc">Post-processing and Plotting using <code>tidyvpc</code><a class="anchor" aria-label="anchor" href="#post-processing-and-plotting-using-tidyvpc"></a>
 </h2>
 <p>As mentioned, <code>NMsim</code> does not postprocess the simulation
-for generation of a VPC plot, nor does it offter any plotting functions.
-The R package called <code>tidyvpc</code> offer those two things and is
-moreover implemented in <code>data.table</code>, so it’s fast. The
+for generation of a VPC plot, nor does it offer any plotting functions.
+The R package called <code>tidyvpc</code> offer those two things. The
 following simple code shows how to get from the results from
 <code>NMsim</code> to the VPC plot with <code>tidyvpc</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -191,6 +192,32 @@ data.frame.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/NMreadFilters.html" class="external-link">NMreadFilters</a></span><span class="op">(</span><span class="va">file.mod</span>,as.fun<span class="op">=</span><span class="st">"data.table"</span><span class="op">)</span></span>
 <span><span class="va">filters</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">type</th>
+<th align="left">class</th>
+<th align="left">cond</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">IGN</td>
+<td align="left">single-char</td>
+<td align="left">@</td>
+</tr>
+<tr class="even">
+<td align="left">IGN</td>
+<td align="left">var-compare</td>
+<td align="left">FLAG.NE.0</td>
+</tr>
+<tr class="odd">
+<td align="left">IGN</td>
+<td align="left">var-compare</td>
+<td align="left">DOSE.LT.30</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>There is an exclusion <code>FLAG.NE.0</code>. The way this is used in
 this case is that FLAG is non-negative, besides 0 which is the analysis
 set, <code>FLAG=10</code> is the smallest values, and that’s the BLQ’s.
@@ -199,9 +226,35 @@ A more common way to handle this would be to have an exclusion based on
 simulation:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filters</span><span class="op">[</span><span class="va">cond</span><span class="op">==</span><span class="st">"FLAG.NE.0"</span>,<span class="va">cond</span><span class="op">:=</span><span class="st">"FLAG.GT.10"</span><span class="op">]</span></span>
-<span><span class="va">filters</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">43</span><span class="op">)</span></span>
+<span><span class="va">filters</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">type</th>
+<th align="left">class</th>
+<th align="left">cond</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">IGN</td>
+<td align="left">single-char</td>
+<td align="left">@</td>
+</tr>
+<tr class="even">
+<td align="left">IGN</td>
+<td align="left">var-compare</td>
+<td align="left">FLAG.GT.10</td>
+</tr>
+<tr class="odd">
+<td align="left">IGN</td>
+<td align="left">var-compare</td>
+<td align="left">DOSE.LT.30</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">43</span><span class="op">)</span></span>
 <span><span class="co">## notice the data argument is still not used.</span></span>
 <span><span class="va">simres.vpc.filters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span><span class="va">file.mod</span>,</span>
 <span>                            table.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PRED"</span>,<span class="st">"IPRED"</span>, <span class="st">"Y"</span><span class="op">)</span>,</span>
@@ -212,7 +265,7 @@ simulation:</p>
 <p>The plotting can be done the same way. This time we extract the
 observations from the simulation results (from the preserved
 <code>DV</code> column, not from any of the simulated columns)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## read the data as it was used in the Nonmem model</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">simres.vpc.filters</span><span class="op">[</span><span class="va">simres.vpc.filters</span><span class="op">$</span><span class="va">NMREP</span><span class="op">==</span><span class="fl">1</span>,<span class="op">]</span></span>
 <span><span class="co">## only plot observation events from estimation data set</span></span>
@@ -230,7 +283,7 @@ observations from the simulation results (from the preserved
 <span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vpc1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-VPC_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672"></p>
+<p><img src="NMsim-VPC_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="manually-subset-data">Manually Subset Data<a class="anchor" aria-label="anchor" href="#manually-subset-data"></a>
