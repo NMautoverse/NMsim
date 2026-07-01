@@ -50,7 +50,7 @@ run.simuls <- FALSE
 
 ## Simulations for Visual Predictive Checks (VPC)  
 This vignette shows how to generate simulations for generation of VPC
-plots. While `NMsim` does not include any functionality for summarizing quantiles or plotting, it provides a powerful and simple interface to obtain the simulations. We shall see how the `tidyvpc` package easily creates VPC plots based on the simulation results.
+plots. While `NMsim` does not include any functionality for summarizing quantiles or plotting, it provides a powerful and simple interface to obtain the simulations. We shall see how the `tidyvpc` package easily creates VPC plots based on the simulation results from `NMsim`. There are other R packages available for summarizing and plotting VPC's that could be used instead of `tidyvpc`.
 
 
 ## Default Option: Reuse Estimation Data for Simulation
@@ -58,7 +58,7 @@ Normally, the two main arguments to `NMsim()` are the path to the input
 control stream (`file.mod`) and the simulation input data set
 (`data`). But if we leave out the the `data` argument, NMsim will
 re-use the estimation data for the simulation. That is the simulation
-we need for a VPC. We will use an example model included with NMsim:
+we need for a (in-sample) VPC. We will use an example model included with NMsim:
 
 ```{r,include=TRUE,eval=TRUE}
 file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
@@ -95,8 +95,8 @@ The performed simulation is similar to the one produced by the `VPC` function in
 * No postprocessing of the results is being done by `NMsim`. See below how to easily do that.
 
 
-## Plotting using `tidyvpc`
-As mentioned, `NMsim` does not postprocess the simulation for generation of a VPC plot, nor does it offter any plotting functions. The R package called `tidyvpc` offer those two things and is moreover implemented in `data.table`, so it's fast. The following simple code shows how to get from the results from `NMsim` to the VPC plot with `tidyvpc`.
+## Post-processing and Plotting using `tidyvpc`
+As mentioned, `NMsim` does not postprocess the simulation for generation of a VPC plot, nor does it offer any plotting functions. The R package called `tidyvpc` offer those two things. The following simple code shows how to get from the results from `NMsim` to the VPC plot with `tidyvpc`.
 
 
 ```{r,include=FALSE,eval=TRUE}
@@ -150,16 +150,18 @@ The manually subsetted data set is then passed to `NMsim()` in the `data` argume
 ### Change the ACCEPT/IGNORE Statements
 
 NMsim provides a simple interface to modify the data filters (`ACCEPT`/`IGNORE`). First we read them into a data.frame.
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 filters <- NMreadFilters(file.mod,as.fun="data.table")
 filters
 ```
 There is an exclusion `FLAG.NE.0`. The way this is used in this case is that FLAG is non-negative, besides 0 which is the analysis set, `FLAG=10` is the smallest values, and that's the BLQ's. A more common way to handle this would be to have an exclusion based on `BLQ.NE.0`. Anyway, we simply edit that filter and re-run the simulation:
 
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 filters[cond=="FLAG.NE.0",cond:="FLAG.GT.10"]
 filters
+```
 
+```{r,eval=FALSE}
 set.seed(43)
 ## notice the data argument is still not used.
 simres.vpc.filters <- NMsim(file.mod,

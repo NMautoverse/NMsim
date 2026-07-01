@@ -251,7 +251,6 @@ to generate the data for the simulation are:
 * Take PD data observation records (`pdsamples`). Just keep `ID`, `TIME`, and set `EVID=2`.
 * Add a unique row identifier to `pdsamples` (an integer row counter, like `ROW=1:nrow(pdsamples)`)
 * Stack (`rbind` for data.tables or `bind_rows` in tidyverse) `pkdos` and `pdsamples` to one data set (`pdsim`)
-* In `pdsim`, set `DV=NA`
 * Sort `pdsim` at least by `ID`, `TIME` and `EVID`. There could be more depending on trial design
 
 In case of time-varying covariates, you can keep all data records from the PK data (without `DV`), but change observation records to simulation records (`EVID=2` instead of `EVID=0`).
@@ -264,8 +263,6 @@ pkdos <- pkres[EVID==1,.(ID, TIME, EVID, CMT, AMT)]
 pdsamples <- pd[EVID==0,.(ID,TIME,LIDV)]
 ## Stack `pkdos` and `pdsamples` to one data set (`pdsim`)
 pdsim <- rbind(pkdos,pdsamples,fill=TRUE)
-## Nonmem needs a DV column to run
-pdsim[,DV:=NA]
 ## only include subjects that were included in the PK model
 pdsim <- pdsim[ID%in%pkres$ID]
 setorder(pdsim,ID,TIME,EVID)

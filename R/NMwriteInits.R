@@ -61,7 +61,7 @@
 ##' )
 ##' ## or put them in a list in the values argument
 ##' NMwriteInits(file.mod,
-##' values=list( "theta(2)"=list(init=1.4),
+##' values=list( "theta(2)"=list(init=1.4,FIX=1),
 ##'              "THETA(3)"=list(FIX=1),
 ##'              "omega(2,2)"=list(init=0.1))
 ##' )
@@ -172,10 +172,12 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
         ## we allow THETA(1) but the real parameter name is THETA1
         ## tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
         ## tab.new <- addParType(tab.new)
+      
         
-        
-        inits.l[type.elem=="FIX" & value.new=="0",value.new:=""]
-        inits.l[type.elem=="FIX" & value.new=="1",value.new:=" FIX"]
+      inits.l[type.elem=="FIX" & isFALSE(value.new) ,value.new:=""]
+      inits.l[type.elem=="FIX" & isTRUE(value.new) ,value.new:=" FIX"]
+        inits.l[type.elem=="FIX" & value.new%in%c("0","FALSE","F"),value.new:=""]
+        inits.l[type.elem=="FIX" & value.new%in%c("1","TRUE","T"),value.new:=" FIX"]
         ##inits.l[type.elem=="FIX" & value.new=="1",value.new:=""]
         
         ## while "model" is needed, the value does not matter 
