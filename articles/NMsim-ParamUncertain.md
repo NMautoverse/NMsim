@@ -2,12 +2,17 @@
 
 ## Other relevant material
 
-Please note the following ACOP2024 poster which is more recent and more
-comprehensive than this document:  
-[**Simulation of clinical trial predictions with model uncertainty using
+Please note the following two ACoP posters which are more recent and
+more comprehensive than this document:  
+1. [**Simulation of clinical trial predictions with model uncertainty
+using
 NMsim**](https://nmautoverse.github.io/NMsim/reference/figures/NMsim_param_uncertainty_web.pdf)
-(Poster T110)  
-Authors: **Sanaya Shroff**, **Philip Delff**
+(Poster T110) Authors: **Sanaya Shroff**, **Philip Delff**  
+2. [**Automated Simulation with Parameter Uncertainty from R with NONMEM
+and
+NMsim_NWPRI**](https://nmautoverse.github.io/NMsim/reference/figures/NMsimNWPRI_ACOP2025.pdf)
+(Poster S073) Authors: **Brian Reilly**, **Robert Bauer**, **Philip
+Delff**
 
 ## Objectives
 
