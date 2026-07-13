@@ -131,7 +131,7 @@
 ##' \url{https://nmautoverse.github.io/NMsim/articles/NMsim-modify-model.html}
 ##'
 ##' The `method` element controls which method is used to do this, and
-##'     this corresponds to the old `method.update.initxfgs`
+##'     this corresponds to the old `method.update.inits`
 ##'     argument. Normally, the user should not need to deal with this
 ##'     as the default `nmsim` method is very flexible and
 ##'     powerful. If using the new `method=nmsim` you can specify
