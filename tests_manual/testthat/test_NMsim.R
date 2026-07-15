@@ -76,6 +76,7 @@ identical_cols <- function(x,y){
 path.candidates <- c(## metworx
     "/opt/NONMEM/nm75/run/nmfe75"
     ## custom linux
+   ,"/opt/nonmem/nm760/run/nmfe76"
    ,"/opt/nonmem/nm751/run/nmfe75"
     ## a win path
    ,"c:/nm75g64/run/nmfe75.bat"
@@ -126,7 +127,8 @@ test_that("basic - default",{
                     data=dt.sim,
                     table.var="PRED IPRED",
                     dir.sims="testOutput",
-                    name.sim="default_01"
+                    name.sim="default_01",
+                    path.nonmem=path.nonmem
                     )
 
     
