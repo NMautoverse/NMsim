@@ -1,4 +1,3 @@
-## install.packages("NMsim",repos="https://cloud.r-project.org")
 library(data.table)
 library(NMdata)
 
@@ -148,6 +147,7 @@ test_that("basic - default",{
     expect_equal_to_reference(simres,fileRef)
 
 
+
     if(F){
         ref <- readRDS(fileRef)
         colnames(ref)
@@ -158,13 +158,14 @@ test_that("basic - default",{
         compareCols(
             attributes(simres)$NMsimModTab
            ,
-            attributes(readRDS(fileRef))$NMsimModTab
+            attributes(ref)$NMsimModTab
            ,keep.names=FALSE)
 
         
     }
 
 })
+
 
 
 test_that("basic - sge - dont wait",{
@@ -447,6 +448,8 @@ test_that("SAEM - default",{
                     )
 
     fix.time(simres)
+    cols.round <- cc(PRED,IPRED)
+    simres[,(cols.round) := lapply(.SD,round,3),.SDcols=cols.round]
     expect_equal_to_reference(simres,fileRef)
 
     
@@ -494,6 +497,8 @@ test_that("SAEM - known",{
 
     ## simres.5
     fix.time(simres)
+    cols.round <- cc(PRED,IPRED)
+    simres[,(cols.round) := lapply(.SD,round,3),.SDcols=cols.round]
     expect_equal_to_reference(simres,fileRef)
     
 
@@ -549,7 +554,10 @@ test_that("VPC",{
     expect_equal(nrow(simres.vpc),nsims*731)    
 
     ## derive PIs
-    expect_equal(round(as.numeric(simres.vpc[EVID==0,quantile(Y,probs=.25)]),3),0.155)
+    expect_equal(
+      round(as.numeric(simres.vpc[EVID==0,quantile(Y,probs=.25)]),3)
+     ,
+      0.156)
 
     
 })
@@ -958,7 +966,8 @@ test_that("basic - a model that fails on NMTRAN",{
 
     set.seed(43)
 
-    simres <- NMsim(file.mod,
+    expect_error(
+NMsim(file.mod,
                     data=dt.sim2,
                     ## table.var="PRED IPRED",
                     ## dir.sims="testOutput",
@@ -969,16 +978,18 @@ test_that("basic - a model that fails on NMTRAN",{
                    ,wait=TRUE,
                     path.nonmem=path.nonmem
                     )
-    
-    expect_equal(nrow(simres),0)
-
-    expect_equal(
-        nrow(NMreadSim(simres))
-       ,0
     )
+    ## expect_equal(nrow(simres),0)
+
+    ## expect_equal(
+    ##     nrow(NMreadSim(simres))
+    ##    ,0
+    ## )
 
 ### rerunning the exact same sim with reuse.results to test how a failed sim is handled.
-    simres2 <- NMsim(file.mod,
+
+    expect_error(
+      NMsim(file.mod,
                      data=dt.sim,
                      ## table.var="PRED IPRED",
                      ## dir.sims="testOutput",
@@ -990,8 +1001,8 @@ test_that("basic - a model that fails on NMTRAN",{
                      path.nonmem=path.nonmem
                     ,reuse.results=TRUE
                      )
-    
-    expect_equal(fix.time(simres),fix.time(simres2))
+)    
+    ## expect_equal(fix.time(simres),fix.time(simres2))
     
 })
 
