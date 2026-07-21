@@ -4,8 +4,10 @@ getwd()
 setwd("~/wdirs/NMsim")
 
 path.nonmem <- NMsim:::prioritizePaths(
-                           "/opt/nonmem/nm751/run/nmfe75",
-                           "/opt/NONMEM/nm75/run/nmfe75")
+  c("/opt/nonmem/nm751/run/nmfe75",
+    "/opt/NONMEM/nm75/run/nmfe75")
+)
+
 NMdataConf(path.nonmem=path.nonmem)
 NMdataConf(dir.psn="/opt/psn")
 

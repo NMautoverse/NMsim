@@ -583,3 +583,26 @@ test_that("Basic - deprecated update inits method",{
     ## readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     
 })
+
+test_that("limits",{
+
+###  On windows this gives and error that tmp.dat is not found.
+    fileRef <- "testReference/NMsim_11.rds"
+
+    file.mod <- "testData/nonmem/xgxr025.mod"
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="testOutput",
+                  name.sim = "sizes1",
+                  seed.nm=2342,
+                  execute=FALSE,
+                  sizes=list(LIM3=7000)
+                  )
+
+    ## ref <- readRDS(fileRef)
+    mod <- NMreadSection("testOutput/xgxr025_sizes1/xgxr025_sizes1.mod")
+    expect_equal_to_reference(mod,fileRef)
+
+    ## readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
+    
+})

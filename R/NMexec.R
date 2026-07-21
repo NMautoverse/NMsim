@@ -264,7 +264,8 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
 ### backup previous results if any:
             
             files.found <- c(
-                list.files(rundir,pattern=sprintf("%s%s",fnExtension(basename(file.mod),""),exts.string)),
+              list.files(rundir,pattern=sprintf("%s%s",fnExtension(basename(file.mod),""),exts.string))
+             ,
                 list.files(rundir,pattern=paste0("^(",paste(
                                                           NMscanTables(file.mod,meta.only=TRUE,as.fun="data.table")[,name]
                                                          ,collapse="|"),")$"))

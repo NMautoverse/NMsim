@@ -18,6 +18,7 @@
 ##' ))
 ##' 
 prioritizePaths <- function(paths,must.work=FALSE){
+
     paths <- paths[sapply(paths,file.exists)]
     if(!length(paths)){
         if(must.work){

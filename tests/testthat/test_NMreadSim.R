@@ -147,6 +147,62 @@ test_that("From different wd",{
 ## }
 
 
+test_that("use carry.out when reading results",{
+
+NMdataConf(
+    path.nonmem="/opt/NONMEM/nm75/run/nmfe75",
+    dir.sims="testOutput/simtmp"
+   ,dir.res="testOutput/simres")
+
+dt.amt <- data.table(DOSE=c(100,400))
+dt.amt[,AMT:=DOSE*1000]
+doses.sd <- NMcreateDoses(TIME=0,AMT=dt.amt,as.fun="data.table")
+doses.sd[,dose:=paste(DOSE,"mg")]
+doses.sd[,regimen:="SD"]
+
+
+## dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+dat.sim.sd <- NMaddSamples(doses.sd,TIME=0:24,CMT=2,as.fun="data.table")
+dat.sim <- copy(dat.sim.sd)
+
+## NMcheckData(dat.sim)
+
+dat.sim[,ROW:=.I]
+
+##head(dat.sim)
+
+dat.sim[,BBW:=75]
+  
+file.mod <- "testData/nonmem/xgxr032.mod"
+sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="testOutput",
+                  name.sim = "sd1_carryout",
+                  seed.nm=2342,
+              ## execute=FALSE
+              ## ,method.update.inits="nmsim",
+              ##wait=FALSE,
+              table.vars=cc(PRED,IPRED,Y)
+                  )
+
+sim1 <- NMreadSim("testOutput/simres/xgxr032_sd1_carryout_MetaData.rds")
+
+
+unlink("testOutput/simres/xgxr032_sd1_carryout_ResultsData.fst")
+
+sim2 <- NMreadSim("testOutput/simres/xgxr032_sd1_carryout_MetaData.rds",carry.out=c("ID", "DOSE"))
+
+names(sim1)
+names(sim2)
+ 
+  if(F){
+    ref <- readRDS(fileRef)
+    res
+    ref
+  }
+})
+
+
 
 if(F){
 ####### sim with dir.sims and dir.res being in ../
