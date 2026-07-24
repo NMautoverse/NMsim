@@ -604,5 +604,10 @@ test_that("limits",{
     expect_equal_to_reference(mod,fileRef)
 
     ## readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
+    }
     
 })

@@ -53,7 +53,7 @@ typicalize <- function(file.mod,lines,section,newfile){
         ,quiet=TRUE                                              
           )
   ## Not sure this is needed
-  mod.new <- mod.new[!grepl(paste(section.drop, collapse = "|"), mod.new)]
+  ## mod.new <- mod.new[!grepl(paste(section.drop, collapse = "|"), mod.new)]
 
     ## write to file if requested
     if(is.null(newfile)){

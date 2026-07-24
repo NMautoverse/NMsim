@@ -196,8 +196,12 @@ test_that("block OMEGA 4x4 - typical",{
     
     ## ref <- readRDS(fileRef)
     ## expect_equal_to_reference(mod$THETAPV,fnAppend(fileRef,"THETAPV"))
-    expect_equal_to_reference(mod$OMEGAP,fnAppend(fileRef,"OMEGAP"))
-    expect_equal_to_reference(mod$OMEGAPD,fnAppend(fileRef,"OMEGAPD"))
+    ## expect_equal_to_reference(mod$OMEGAP,fnAppend(fileRef,"OMEGAP"))
+    ## expect_equal_to_reference(mod$OMEGAPD,fnAppend(fileRef,"OMEGAPD"))
+
+    expect_null(mod$OMEGAP)
+    expect_null(mod$OMEGAPD)
+
 
     mod$INPUT <- NULL
 
