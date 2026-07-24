@@ -32,7 +32,8 @@ test_that("Priors",{
     
     secs <- NMreadSection(lines=res0)
     
-    res <- secs[c("OMEGA","OMEGAP","OMEGAPD")]
+    ## res <- secs[c("OMEGA","OMEGAP","OMEGAPD")]
+    res <- secs[names(secs)%in%c("OMEGA","OMEGAP","OMEGAPD")]
     expect_equal_to_reference(res,fileRef)
 
     if(F){
