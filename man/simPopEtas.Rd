@@ -20,7 +20,7 @@ simPopEtas(
 \arguments{
 \item{file}{Passed to `NMdata::NMreadExt()`. Path to ext file. By
 default, `NMreadExt()` uses a`auto.ext=TRUE` which means that
-the file name extension is replaced by `.ext`. If your ext
+the file name extension is replaced by `.ext` (so you can normally specify a control stream path too). If your ext
 file name extension is not `.ext`, add `auto.ext=FALSE` (see
 ...).}
 
@@ -37,7 +37,7 @@ file is available, it is most likely better to use the file
 argument.}
 
 \item{file.phi}{An optional phi file to write the generated
-subjects to.}
+subjects to. This will generate a Nonmem-style `.phi` file that can be reused in combination with `NMsim_EBE`.}
 
 \item{overwrite}{If `file.phi` exists already, overwrite it?
 Default is `FALSE`.}
@@ -58,5 +58,5 @@ NMdataConf.}
 A data.frame
 }
 \description{
-Generate a population based on a Nonmem model
+Rather than simulating new subjects for each simulation, use this to create eta's that can be (re-)used for simulations with `NMsim_BEE()`. Although setting a seed for a simulation ensures reproducibility of a specific simulation, changing details of the data set is likely to break that reproducibility. Use `simPopEtas()` to ensure that a subject with a specific ID will always be simulated with the same eta values. This can also be used to reuse subjects between treatments in a simulation.
 }

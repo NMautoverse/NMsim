@@ -85,6 +85,7 @@ path.candidates <- c(## metworx
 
 (path.nonmem <- NMsim:::prioritizePaths(path.candidates))
 
+
 ## if psn is not available
 ## warning("running without psn - some tests will fail.")
 ## NMdataConf(path.nonmem=path.nonmem)
@@ -128,7 +129,7 @@ test_that("basic - default",{
                     table.var="PRED IPRED",
                     dir.sims="testOutput",
                     name.sim="default_01",
-                    path.nonmem=path.nonmem
+                    ## path.nonmem=path.nonmem
                     )
 
     
@@ -149,7 +150,7 @@ test_that("basic - default",{
     expect_equal_to_reference(simres,fileRef)
 
 
-
+    
     if(F){
         ref <- readRDS(fileRef)
         colnames(ref)
@@ -794,6 +795,8 @@ test_that("default with renaming",{
 
 })
 
+
+
 test_that("multiple data sets with renaming",{
     file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
     data.multiple <- split(dt.sim.known[ID<=103],by="ID")
@@ -832,7 +835,7 @@ test_that("default with nc>1",{
                     name.sim="default_nc"
                    ,method.execute="nmsim"
                     ## ,method.execute="psn"
-                   ,nc=32
+                   ,nc=16
                    ,sge=TRUE
                    ,path.nonmem="/opt/NONMEM/nm75/run/nmfe75"
                    ,wait=F
@@ -1077,6 +1080,13 @@ test_that("Two named models on one rds",{
 
 test_that("basic - ctl",{
     
+NMdataConf(reset=TRUE)
+NMdataConf(dir.psn=NULL)
+NMdataConf(as.fun="data.table")
+NMdataConf(dir.sims="testOutput/simtmp")
+NMdataConf(dir.res="testOutput/simres")
+
+
     fileRef <- "testReference/NMsim_01_ctl.rds"
 
     file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
@@ -1101,7 +1111,7 @@ test_that("basic - ctl",{
                      name.sim="default_ctl_01"
                      )
 
-    simres <- NMreadSim("testOutput/simres/xgxr021_default_ctl_01_MetaData.rds")
+    simres <- NMreadSim(modTab(simres2)$path.rds)
 
     fix.time(simres1)
     fix.time(simres2)

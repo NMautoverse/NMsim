@@ -23,7 +23,7 @@ NMreadSimRes <- function(x){
 ##' @importFrom fst read_fst
 ##' @keywords internal
 NMreadSimResOne <- function(x){
-
+  
     if(is.character(x)){
         x <- read_fst(x,as.data.table=TRUE)
     }

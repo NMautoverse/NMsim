@@ -13,6 +13,8 @@ NMreadSim(
   progress,
   skip.missing = FALSE,
   rm.tmp = FALSE,
+  carry.out = NULL,
+  read.tmp = FALSE,
   as.fun
 )
 }

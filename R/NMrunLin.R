@@ -8,7 +8,10 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 
     
     rm.if.pres <- function(regex){
-        sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex)     
+sprintf("find . \\( -type d -or -type f \\) -name \"%s\" -exec rm -r {} \\;",regex)
+
+      ## sprintf("find . -type d -name \"%s\" -exec rm -r {} \\;",regex)
+      ##   sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex)     
     }
 
 
@@ -16,15 +19,20 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
     fn.lst <- fnExtension( fn.mod,".lst")
     line.run <- sprintf("%s %s %s %s",path.nonmem,fn.mod,fn.lst,nmfe.options)
 
-    if(sge){
-        ## executing from model execution dir.
+  if(sge){
+    path.qsub <- NMdataConf()$path.qsub
+    if(is.null("path.qsub")) path.qsub <- "qsub"
+    
+    
+    ## executing from model execution dir.
         jobname <- 
             sub(pattern="^ *",replacement="", x=basename(fn.mod) )
         ## qsub does not allow a jobname to start in a numeric
         if(grepl("^[0-9]",jobname)) {
             jobname <- paste0("NM",jobname)
         }
-        line.run <- sprintf('qsub -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background'
+    line.run <- sprintf('%s -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background'
+                        ,path.qsub
                            ,ifelse(nc>1,paste("-pe orte",nc),"")
                            ,"NMexec.err"
                            ,"NMexec.out"
@@ -57,10 +65,10 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 ### copy output tables back
 ### this would be simpler. Needs testing.
         ## ,sprintf("find . -type f -name \'%s\' -exec cp {} \'%s\' \\;",meta.tables[,name],dir.mod.abs)
-       ,paste0("find . -type f -name ",paste0("\'",meta.tables[,name],"\'")," -exec cp {} \'",dir.mod.abs,"\' \\;")
+       ,paste0("find . -type f -name ",paste0("\'",meta.tables[,name],"\'")," -exec mv {} \'",dir.mod.abs,"\' \\;")
 
 ### copy wanted files back to orig location of fn.mod 
-       ,paste0("find . -type f -name ",paste0("\'*.",exts.cp,"\'")," -exec cp {} \'",dir.mod.abs,"\' \\;")
+       ,paste0("find . -type f -name ",paste0("\'*.",exts.cp,"\'")," -exec mv {} \'",dir.mod.abs,"\' \\;")
        ,""
     )
 
@@ -92,3 +100,4 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
     
     lines.bash
 }
+

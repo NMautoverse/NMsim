@@ -55,7 +55,7 @@ test_that("Basic",{
                   execute=FALSE
                   ## ,method.update.inits="nmsim"
                   )
-
+    
     ## ref <- readRDS(fileRef)
     mod <- NMreadSection("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     expect_equal_to_reference(mod,fileRef)
@@ -78,7 +78,7 @@ if(FALSE){
     file.mod <- "testData/nonmem/xgxr021.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sims="testOutput",
+                  dir.sims="testOutput/sim",
                   suffix.sim = "sd1",
                   seed=2342,
                   ## execute=FALSE,

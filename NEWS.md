@@ -1,3 +1,16 @@
+# NMsim 0.2.8
+
+## New Features
+
+qsub path
+
+carry.out
+
+sampleCovs supports grouping for successful (parallel) simulations.
+
+## Bugfixes
+`typicalize` now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
+
 # NMsim 0.2.7
 
 ## New Features

@@ -34,7 +34,7 @@ typicalize <- function(file.mod,lines,section,newfile){
     ## section <- toupper(section)
   section <- stringToSection(section)
   section <- section[!grepl("P$|PD$",section)]
-  section.drop <- paste0(section[section%in%c("OMEGA","SIGMA")],c("P","PD"))
+  section.drop <- outer(section[section%in%c("OMEGA","SIGMA")],c("P","PD"),FUN=paste0)
 
     inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
     inits[,init:=as.character(init)]

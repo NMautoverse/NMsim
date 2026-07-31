@@ -90,7 +90,7 @@ NMwriteInits(file.mod,
 )
 ## or put them in a list in the values argument
 NMwriteInits(file.mod,
-values=list( "theta(2)"=list(init=1.4),
+values=list( "theta(2)"=list(init=1.4,FIX=1),
              "THETA(3)"=list(FIX=1),
              "omega(2,2)"=list(init=0.1))
 )

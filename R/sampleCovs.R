@@ -1,30 +1,29 @@
 ##' Sample subject-level covariates from an existing data set 
 ##'
-##' Repeats a data set with just one subject by sampling covariates
-##' from subjects in an existing data set. This can conveniently be
-##' used to generate new subjects with covariate resampling from an
-##' studied population.
+##' Repeats a data set with just one subject by sampling covariates from
+##' subjects (with replacement) in an existing data set. This can conveniently
+##' be used to generate new subjects with covariate resampling from an studied
+##' population.
 ##'
 ##' @param data A simulation data set with only one subject
-##' @param Nsubjs The number of subjects to be sampled. This can be
-##'     greater than the number of subjects in data.covs.
-##' @param col.id Name of the subject ID column in `data` (default is
-##'     "ID").
-##' @param col.id.covs Name of the subject ID column in `data.covs`
-##'     (default is "ID").
-##' @param data.covs The data set containing the subjects to sample
-##'     covariates from.
-##' @param covs The name of the covariates (columns) to sample from
-##'     `data.covs`.
+##' @param Nsubjs The number of subjects to be sampled. This can be greater than
+##'   the number of subjects in data.covs.
+##' @param col.id Name of the subject ID column in `data` (default is "ID").
+##' @param col.id.covs Name of the subject ID column in `data.covs` (default is
+##'   "ID").
+##' @param data.covs The data set containing the subjects to sample covariates
+##'   from.
+##' @param covs The name of the covariates (columns) to sample from `data.covs`.
+##' @param idco.redist
 ##' @param seed.R If provided, passed to `set.seed()`.
-##' @param as.fun The default is to return data as a data.frame. Pass
-##'     a function (say `tibble::as_tibble`) in as.fun to convert to
-##'     something else. If data.tables are wanted, use
-##'     as.fun="data.table". The default can be configured using
-##'     NMdataConf.
-##' @return A data.frame. Includes sampled covariates. The subject
-##'     ID's the covariates are sampled from will be included in a
-##'     column called `IDCOVS`.
+##' @param as.fun The default is to return data as a data.frame. Pass a function
+##'   (say `tibble::as_tibble`) in as.fun to convert to something else. If
+##'   data.tables are wanted, use as.fun="data.table". The default can be
+##'   configured using NMdataConf.
+##' @return A data.frame. Includes sampled covariates. The subject ID's the
+##'   covariates are sampled from will be included in a column called `IDCOVS`.
+##' @details Columns will be added in addition to covariates requested in
+##'   `covs`: IDCOVS, `IDCO`.
 ##' @examples
 ##' library(NMdata)
 ##' data.covs <- NMscanData(system.file("examples/nonmem/xgxr134.mod",package="NMsim"))
@@ -41,6 +40,7 @@ sampleCovs <- function(data,
                        col.id.covs = "ID",
                        data.covs,
                        covs,
+                       idco.redist=FALSE,
                        seed.R,
                        as.fun
                        ){
@@ -104,6 +104,18 @@ sampleCovs <- function(data,
                          ,by=dt.ids]
     setorderv(dt.sim.covs,cols=intersect(c("ID","TIME","EVID"),colnames(dt.sim.covs)))
 
+dt.sim.covs[,IDCO.0 := match(ID,unique(ID)),by=IDCOVS]
+dt.sim.covs[,IDCO := IDCO.0]
+## dt.sim.covs[,.(uniqueN(ID),.N),by=IDCO.0]
+
+  if(idco.redist){
+    
+  NO <- dt.sim.covs[,max(IDCO.0)]
+  dt.sim.covs[,IDCO := sample(1:NO,size=uniqueN(IDCO.0),replace=FALSE)[IDCO.0],by=ID]
+## dt.sim.covs[,.(uniqueN(ID),.N),keyby=IDOCC]  
+  }
+  dt.sim.covs[,IDCO.0 := NULL]
+  
     ## return dt.sim.covs
     as.fun(dt.sim.covs)
 }

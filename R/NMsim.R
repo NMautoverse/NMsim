@@ -1238,10 +1238,14 @@ NMsim <- function(file.mod,data,
                                 col.flagn=col.flagn,
                                 quiet=TRUE)
             
-            NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["INPUT"],
+            ## NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["INPUT"],
+            ##                            backup=FALSE,quiet=TRUE)
+            ## NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["DATA"],
+            ##                            backup=FALSE,quiet=TRUE)    
+
+            NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext[c("INPUT","DATA")],
                                        backup=FALSE,quiet=TRUE)
-            NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["DATA"],
-                                       backup=FALSE,quiet=TRUE)    
+ 
             
         },by=.(ROWMODEL)]
     }    
