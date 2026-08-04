@@ -14,7 +14,12 @@
 ##' @param data.covs The data set containing the subjects to sample covariates
 ##'   from.
 ##' @param covs The name of the covariates (columns) to sample from `data.covs`.
-##' @param idco.redist
+##' @param col.idcgrp The name of the column distinguishing repeated samples of
+##'   `IDCOVS`. This is only needed if there are such repetitions (not very
+##'   common), and if there are no repetitions, the default (`col.idcgrp=NULL`)
+##'   is to leave out the column. default name of the column when included is
+##'   `IDCGRP`. See details too if you need this.
+##' @param idcgrp.redist See details.
 ##' @param seed.R If provided, passed to `set.seed()`.
 ##' @param as.fun The default is to return data as a data.frame. Pass a function
 ##'   (say `tibble::as_tibble`) in as.fun to convert to something else. If
@@ -23,7 +28,19 @@
 ##' @return A data.frame. Includes sampled covariates. The subject ID's the
 ##'   covariates are sampled from will be included in a column called `IDCOVS`.
 ##' @details Columns will be added in addition to covariates requested in
-##'   `covs`: IDCOVS, `IDCO`.
+##'   `covs`: IDCOVS, and `IDCGRP`. `IDCOVS` is the subject id (`col.id.covs`)
+##'   from the covariate data set, for reference. `IDCGRP` is only needed when
+##'   covariates are sampled with replacement, and a subsequent Nonmem
+##'   simulation is done with `NMsim_EBE`. `NMsim_EBE` reuses the etas (from
+##'   estimation or another `.phi` file). Hence for such simulation you will
+##'   need to used IDCVOVS as ID in order to match the etas against the relevant
+##'   subject ID's. However, since IDCOVS are repeated (due to sampling with
+##'   replacement), the easiest is to split the data set so one subject is never
+##'   reused within one subset. `IDCGRP` holds a variable to split by so this
+##'   will work. By default, IDCGRP is simply the counter of the occurrence of a
+##'   (`IDCOVS`) subject. This is simple but impractical for splitting into sub
+##'   simulations because the group sizes will tend to be quite uneven.
+##'   `idcgrp.redist=TRUE` will reassign `IDCGRP` to balance the group sizes.
 ##' @examples
 ##' library(NMdata)
 ##' data.covs <- NMscanData(system.file("examples/nonmem/xgxr134.mod",package="NMsim"))
@@ -40,7 +57,8 @@ sampleCovs <- function(data,
                        col.id.covs = "ID",
                        data.covs,
                        covs,
-                       idco.redist=FALSE,
+                       col.idcgrp,
+                       idcgrp.redist=FALSE,
                        seed.R,
                        as.fun
                        ){
@@ -50,7 +68,6 @@ sampleCovs <- function(data,
     TIME <- NULL
     EVID <- NULL
 
-    
     data <- as.data.table(data)
     
     if(missing(seed.R)) seed.R <- NULL
@@ -104,18 +121,34 @@ sampleCovs <- function(data,
                          ,by=dt.ids]
     setorderv(dt.sim.covs,cols=intersect(c("ID","TIME","EVID"),colnames(dt.sim.covs)))
 
-dt.sim.covs[,IDCO.0 := match(ID,unique(ID)),by=IDCOVS]
-dt.sim.covs[,IDCO := IDCO.0]
-## dt.sim.covs[,.(uniqueN(ID),.N),by=IDCO.0]
-
-  if(idco.redist){
-    
-  NO <- dt.sim.covs[,max(IDCO.0)]
-  dt.sim.covs[,IDCO := sample(1:NO,size=uniqueN(IDCO.0),replace=FALSE)[IDCO.0],by=ID]
-## dt.sim.covs[,.(uniqueN(ID),.N),keyby=IDOCC]  
+  if(missing(col.idcgrp)) col.idcgrp <- NULL
+  if(is.null(col.idcgrp)) {
+    col.idcgrp <- "IDCGRP"
+    keep.idcgrp <- FALSE
+  } else {
+    keep.idcgrp <- TRUE
   }
-  dt.sim.covs[,IDCO.0 := NULL]
-  
-    ## return dt.sim.covs
-    as.fun(dt.sim.covs)
+
+  dt.sim.covs[,(col.idcgrp) := match(ID,unique(ID)),by=IDCOVS]
+  ## dt.sim.covs[,IDCGRP := IDCGRP.0]
+  ## dt.sim.covs[,.(uniqueN(ID),.N),by=IDCGRP.0]
+
+
+  if( idcgrp.redist ){
+    NO <- dt.sim.covs[,get(col.idcgrp)]
+    if(NO>1){
+      
+      dt.sim.covs[,Idcgrp := sample(1:NO,size=uniqueN(IDCGRP),replace=FALSE)[IDCGRP],by=ID,
+                  env=list(IDCGRP=col.idcgrp)]
+      ## dt.sim.covs[,.(uniqueN(ID),.N),keyby=IDOCC]
+      keep.idcgrp <- TRUE
+    }
+  }
+  ## dt.sim.covs[,IDCGRP.0 := NULL]
+  if(!keep.idcgrp){
+    dt.sim.covs[,(col.idcgrp) := NULL]
+  }
+
+  ## return dt.sim.covs
+  as.fun(dt.sim.covs)
 }
