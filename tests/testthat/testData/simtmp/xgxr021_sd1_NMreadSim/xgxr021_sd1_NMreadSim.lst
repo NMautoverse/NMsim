@@ -1,4 +1,4 @@
-Sun 26 Jul 2026 05:41:01 PM EDT
+Tue 04 Aug 2026 06:38:23 PM EDT
 ;; A comment 
 $PROBLEM    018 with 2 comp
 
@@ -85,8 +85,8 @@ Note: Analytical 2nd Derivatives are constructed in FSUBS but are never used.
 
 License Registered to: Vertex Pharmaceuticals Inc.
 Expiration Date:    14 JAN 2027
-Current Date:       26 JUL 2026
-Days until program expires : 173
+Current Date:        4 AUG 2026
+Days until program expires : 165
 1NONLINEAR MIXED EFFECTS MODEL PROGRAM (NONMEM) VERSION 7.5.1
  ORIGINALLY DEVELOPED BY STUART BEAL, LEWIS SHEINER, AND ALISON BOECKMANN
  CURRENT DEVELOPERS ARE ROBERT BAUER, ICON DEVELOPMENT SOLUTIONS,
@@ -227,6 +227,6 @@ SEED   1 RESET TO INITIAL: YES
  Elapsed simulation  time in seconds:     0.00
  ESTIMATION STEP OMITTED:                 YES
  Elapsed finaloutput time in seconds:     0.00
- #CPUT: Total CPU Time in Seconds,        0.004
+ #CPUT: Total CPU Time in Seconds,        0.003
 Stop Time:
-Sun 26 Jul 2026 05:41:04 PM EDT
+Tue 04 Aug 2026 06:38:26 PM EDT
