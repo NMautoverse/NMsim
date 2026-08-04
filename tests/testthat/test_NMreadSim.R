@@ -179,7 +179,8 @@ test_that("carry.out depends on fast.tables",{
                     read.tmp=TRUE
                    ,
                     carry.out=c("ID","EVID")
-                    ))
+              )
+  )
 
   expect_equal( dim(res1),c(4,29))
 
