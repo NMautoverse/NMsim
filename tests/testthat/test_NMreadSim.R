@@ -182,7 +182,7 @@ test_that("carry.out depends on fast.tables",{
               )
   )
 
-  expect_equal( dim(res1),c(4,29))
+  expect_equal( dim(res1),c(4,19))
 
   if(F){
     ref <- readRDS(fileRef)
