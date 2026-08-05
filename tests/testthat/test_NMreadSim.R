@@ -83,9 +83,13 @@ test_that("Basic",{
 
   fileRef <- "testReference/NMreadSim_01.rds"
   ## ref <- readRDS(fileRef)
-  ##res1 <- NMreadSim("testData/simres/xgxr021_sd1_NMreadSim_MetaData.rds")
+  file.fst <- "testData/simres/xgxr021_sd1_NMreadSim_ResultsData.fst"
+  ## if(file.exists(file.fst)) unlink(file.fst)
+
   res1 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"))
-  fix.time(res1)
+  res2 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"),read.tmp=TRUE)
+  
+fix.time(res1)
   
   expect_equal_to_reference(res1,fileRef)
 
@@ -221,9 +225,14 @@ test_that("NMsim with carry.out",{
   ##                     carry.out=c("ID","EVID")
   ##                     )
   file.rds <- file.path(dir.res,"xgxr032_sd1_carryout_MetaData.rds")
-
+  file.fst <- file.path(dir.res,"xgxr032_sd1_carryout_ResultsData.fst")
+  if(file.exists(file.fst)) unlink(file.fst)
 
   res1 <- NMreadSim(file.rds)
+  f.lst <- readRDS(file.rds)$path.sim.lst
+  file.exists(f.lst)
+  f.lst
+  
 
   ## not forcing reread
   res2 <- NMreadSim(file.rds
@@ -233,7 +242,7 @@ test_that("NMsim with carry.out",{
 
 
   
-  ## delete fst to reapply carry.out
+  ## delete fst to reapply carry.out. Expecting much narrower than res1
   unlink(file.path(dir.res,"xgxr032_sd1_carryout_ResultsData.fst"))
 
   res3 <- NMreadSim(file.rds
@@ -241,7 +250,7 @@ test_that("NMsim with carry.out",{
                     carry.out=c("ID","EVID")
                     )
 
-  ## forcing reread
+  ## forcing reread. Expecting one wider than res3
   res4 <- NMreadSim(file.rds,read.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
   
   ## colnames(res1)

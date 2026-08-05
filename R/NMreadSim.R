@@ -170,6 +170,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
     }
     
     if(sum(dt.x$method.read=="modtab")){
+      
       res.modTab <- NMreadSimModTab(x[dt.x[,method.read=="modtab"]],
                                     check.time=check.time,
                                     dir.sims=dir.sims,wait=wait,quiet=quiet,
