@@ -88,7 +88,8 @@ test_that("Basic",{
 
   res1 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"))
   res2 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"),read.tmp=TRUE)
-  fix.time(res1)
+  
+fix.time(res1)
   
   expect_equal_to_reference(res1,fileRef)
 

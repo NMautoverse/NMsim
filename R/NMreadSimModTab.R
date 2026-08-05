@@ -325,8 +325,9 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
       
       ## the rds table must keep NMscanData arguments
       args.NM <- args.NMscanData[[1]]
+      if(!is.null(..check.time)) args.NM$check.time <- ..check.time
+
       if( "file.mod" %in% names(args.NM)){
-        
         stop("Do not use file.mod in args.NMscanData. NMsim created the simulation control streams so as a user you do not need to help NMsim find them.")
       }
       ## 
