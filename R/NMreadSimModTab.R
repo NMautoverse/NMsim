@@ -207,7 +207,9 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
   if(read.fst){
     
     ### reads unique fsts
-    if (modtab[,all(file.exists(unique(path.results.read)))]){
+    if (
+      modtab[,all(file.exists(unique(path.results.read)))]
+        ){
       if(!is.null(arg.carry.out)&&!(length(arg.carry.out)==1&&use.carry.out==TRUE)){
         message("Ignoring carry.out, reading fst. Add `read.tmp=TRUE` to enable (requires simtmp folder is conserved).")
       }  
@@ -286,7 +288,7 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
       if(!is.null(arg.carry.out)) use.carry.out <- arg.carry.out
       use.carry.out <- unlist(use.carry.out)
 
-
+  
 if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
         if(!(length(use.carry.out)==1&&use.carry.out==TRUE)){
           warning("Ignoring carry.out. Call NMsim() with `table.vars` argument to enable")
