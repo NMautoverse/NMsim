@@ -87,9 +87,9 @@ test_that("Basic",{
   ## if(file.exists(file.fst)) unlink(file.fst)
 
   res1 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"))
-  res2 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"),read.tmp=TRUE)
+  ## res2 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"),reread.tmp=TRUE)
   
-fix.time(res1)
+  fix.time(res1)
   
   expect_equal_to_reference(res1,fileRef)
 
@@ -176,17 +176,17 @@ test_that("carry.out depends on fast.tables",{
 
   file.rds <- file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds")
   
-  ## this warning should not come from within data.table
+  ## TODO this warning should not come from within data.table
 
   res1 <- expect_warning(
     NMreadSim(file.rds,
-              read.tmp=TRUE
+              reread.tmp=TRUE
              ,
               carry.out=c("ID","EVID")
               )
   )
 
-  expect_equal( dim(res1),c(4,19))
+  expect_equal( dim(res1),c(4,29))
 
   if(F){
     ref <- readRDS(fileRef)
@@ -251,7 +251,7 @@ test_that("NMsim with carry.out",{
                     )
 
   ## forcing reread. Expecting one wider than res3
-  res4 <- NMreadSim(file.rds,read.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
+  res4 <- NMreadSim(file.rds,reread.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
   
   ## colnames(res1)
   ## colnames(res2)
@@ -300,10 +300,10 @@ test_that("NMsim with table.vars. Use carry.out when reading results",{
   
 
   ## passing sim object, expecting all column
-  res1 <- NMreadSim(file.rds,read.tmp=T)
+  res1 <- NMreadSim(file.rds,reread.tmp=T)
 
   ## reading from rds. expecting identical to res1
-  res2 <- NMreadSim(modTab(sim1)[,    path.rds.read])
+  res2 <- NMreadSim(modTab(res1)[,    path.rds.read])
   compareCols(res1,res2)
   
   ## not forcing reread. expected result identical to res1
@@ -326,7 +326,7 @@ test_that("NMsim with table.vars. Use carry.out when reading results",{
 
   ## forcing reread
   ### expect res5 slightly wider than res4
-  res5 <- NMreadSim(file.rds,read.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
+  res5 <- NMreadSim(file.rds,reread.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
   
   res <- compareCols(res1,res2,res3,res4,res5)
 

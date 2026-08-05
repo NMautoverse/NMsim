@@ -9,7 +9,9 @@ carry.out
 sampleCovs supports grouping for successful (parallel) simulations.
 
 ## Bugfixes
-`typicalize` now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
+`typicalize()` (invoked by `NMsim(typical=TRUE)`) now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
+
+`NMreadSim()` would not always respect the `check.time` argument. Now fixed.
 
 # NMsim 0.2.7
 

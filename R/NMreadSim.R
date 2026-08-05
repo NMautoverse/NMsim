@@ -50,7 +50,7 @@
 
 
 
-NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,skip.missing=FALSE,rm.tmp=FALSE,carry.out=NULL,read.tmp=FALSE,as.fun){
+NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,skip.missing=FALSE,rm.tmp=FALSE,carry.out=NULL,reread.tmp=FALSE,as.fun){
 
   #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
   
@@ -113,7 +113,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
   dt.x[is.simRes==TRUE,method.read := "simres"]
 
   ### forcing reread of nonmem output tables
-  if(read.tmp){
+  if(reread.tmp){
     Irs <- dt.x[method.read=="simres",Ix]
 
     x <- lapply(1:length(x),function(i){
@@ -137,7 +137,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
     dt.x[is.na(method.read) & fnExt=="fst",method.read := "simres"]
 
 
-    #### todo: message about limitations of read.tmp and carry.out, depending on simtmp availability.
+    #### todo: message about limitations of reread.tmp and carry.out, depending on simtmp availability.
 
   
 
@@ -178,7 +178,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
                                     ## fast.tables=fast.tables,
                                     carry.out=carry.out,
                                     skip.missing=skip.missing,
-                                    read.fst=!read.tmp
+                                    read.fst=!reread.tmp
                                     )
 
     }
