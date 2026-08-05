@@ -11,6 +11,8 @@ sampleCovs(
   col.id.covs = "ID",
   data.covs,
   covs,
+  col.idcgrp,
+  idcgrp.redist = FALSE,
   seed.R,
   as.fun
 )
@@ -18,39 +20,59 @@ sampleCovs(
 \arguments{
 \item{data}{A simulation data set with only one subject}
 
-\item{Nsubjs}{The number of subjects to be sampled. This can be
-greater than the number of subjects in data.covs.}
+\item{Nsubjs}{The number of subjects to be sampled. This can be greater than
+the number of subjects in data.covs.}
 
-\item{col.id}{Name of the subject ID column in `data` (default is
+\item{col.id}{Name of the subject ID column in `data` (default is "ID").}
+
+\item{col.id.covs}{Name of the subject ID column in `data.covs` (default is
 "ID").}
 
-\item{col.id.covs}{Name of the subject ID column in `data.covs`
-(default is "ID").}
+\item{data.covs}{The data set containing the subjects to sample covariates
+from.}
 
-\item{data.covs}{The data set containing the subjects to sample
-covariates from.}
+\item{covs}{The name of the covariates (columns) to sample from `data.covs`.}
 
-\item{covs}{The name of the covariates (columns) to sample from
-`data.covs`.}
+\item{col.idcgrp}{The name of the column distinguishing repeated samples of
+`IDCOVS`. This is only needed if there are such repetitions (not very
+common), and if there are no repetitions, the default (`col.idcgrp=NULL`)
+is to leave out the column. default name of the column when included is
+`IDCGRP`. See details too if you need this.}
+
+\item{idcgrp.redist}{See details.}
 
 \item{seed.R}{If provided, passed to `set.seed()`.}
 
-\item{as.fun}{The default is to return data as a data.frame. Pass
-a function (say `tibble::as_tibble`) in as.fun to convert to
-something else. If data.tables are wanted, use
-as.fun="data.table". The default can be configured using
-NMdataConf.}
+\item{as.fun}{The default is to return data as a data.frame. Pass a function
+(say `tibble::as_tibble`) in as.fun to convert to something else. If
+data.tables are wanted, use as.fun="data.table". The default can be
+configured using NMdataConf.}
 }
 \value{
-A data.frame. Includes sampled covariates. The subject
-    ID's the covariates are sampled from will be included in a
-    column called `IDCOVS`.
+A data.frame. Includes sampled covariates. The subject ID's the
+  covariates are sampled from will be included in a column called `IDCOVS`.
 }
 \description{
-Repeats a data set with just one subject by sampling covariates
-from subjects in an existing data set. This can conveniently be
-used to generate new subjects with covariate resampling from an
-studied population.
+Repeats a data set with just one subject by sampling covariates from
+subjects (with replacement) in an existing data set. This can conveniently
+be used to generate new subjects with covariate resampling from an studied
+population.
+}
+\details{
+Columns will be added in addition to covariates requested in
+  `covs`: IDCOVS, and `IDCGRP`. `IDCOVS` is the subject id (`col.id.covs`)
+  from the covariate data set, for reference. `IDCGRP` is only needed when
+  covariates are sampled with replacement, and a subsequent Nonmem
+  simulation is done with `NMsim_EBE`. `NMsim_EBE` reuses the etas (from
+  estimation or another `.phi` file). Hence for such simulation you will
+  need to used IDCVOVS as ID in order to match the etas against the relevant
+  subject ID's. However, since IDCOVS are repeated (due to sampling with
+  replacement), the easiest is to split the data set so one subject is never
+  reused within one subset. `IDCGRP` holds a variable to split by so this
+  will work. By default, IDCGRP is simply the counter of the occurrence of a
+  (`IDCOVS`) subject. This is simple but impractical for splitting into sub
+  simulations because the group sizes will tend to be quite uneven.
+  `idcgrp.redist=TRUE` will reassign `IDCGRP` to balance the group sizes.
 }
 \examples{
 library(NMdata)
