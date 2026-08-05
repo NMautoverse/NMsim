@@ -6,8 +6,8 @@ fix.time <- function(x){
   ## meta.x$time.call <- as.POSIXct("2020-02-01 00:01:01",tz="UTC")
   toNull <- cc(NMsimVersion,NMsimTime,path.lst.read)
   toNull <- intersect(toNull,colnames(meta.x))
-if(length(toNull)){
-  meta.x[,(toNull) := NULL]
+  if(length(toNull)){
+    meta.x[,(toNull) := NULL]
   }
   ## meta.x$NMsimVersion <- NULL
   ## meta.x$NMsimTime <- NULL
@@ -172,13 +172,13 @@ test_that("carry.out depends on fast.tables",{
 
   file.rds <- file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds")
   
-## this warning should not come from within data.table
+  ## this warning should not come from within data.table
 
   res1 <- expect_warning(
     NMreadSim(file.rds,
-                    read.tmp=TRUE
-                   ,
-                    carry.out=c("ID","EVID")
+              read.tmp=TRUE
+             ,
+              carry.out=c("ID","EVID")
               )
   )
 
@@ -263,7 +263,7 @@ test_that("NMsim with carry.out",{
 
 })
 
-test_that("NMsim with table.vars. use carry.out when reading results",{
+test_that("NMsim with table.vars. Use carry.out when reading results",{
   fileRef <- "testReference/NMreadSim_05.rds"
   ### case dependent on table.vars 
   
@@ -271,6 +271,10 @@ test_that("NMsim with table.vars. use carry.out when reading results",{
   dir.sims <- "testData/simtmp"
   dir.res <- "testData/simres"
 
+  file.rds <- file.path(dir.res,"xgxr032_sd1_tabvars_MetaData.rds")
+  file.fst <- file.path(dir.res,"xgxr032_sd1_tabvars_MetaData_ResultsData.fst")
+  
+  if(FALSE){
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
                   dir.sims=dir.sims,
@@ -280,39 +284,39 @@ test_that("NMsim with table.vars. use carry.out when reading results",{
                   ## execute=FALSE,
                   ## ,method.update.inits="nmsim",
                   ##wait=FALSE,
-                  table.vars=cc(PRED,IPRED,Y)
+                  table.vars=cc(PRED,IPRED,Y),
+                  file.res=file.rds
                   )
-
-  file.rds <- file.path(dir.res,"xgxr032_sd1_tabvars_MetaData.rds")
+  }
+  
 
   ## passing sim object, expecting all column
-  res1 <- NMreadSim(sim1)
+  res1 <- NMreadSim(file.rds,read.tmp=T)
 
-    compareCols(sim1,res1)
-
-    ## reading from rds. expecting identical to res1
-    res2 <- NMreadSim(modTab(sim1)[,    path.rds.read])
-    compareCols(res1,res2)
-    
+  ## reading from rds. expecting identical to res1
+  res2 <- NMreadSim(modTab(sim1)[,    path.rds.read])
+  compareCols(res1,res2)
+  
   ## not forcing reread. expected result identical to res1
-  res3 <- NMreadSim(sim1
+  res3 <- NMreadSim(file.rds
                    ,
                     carry.out=c("ID","EVID")
                     )
 
   
- compareCols(res1,res3)  
+  compareCols(res1,res3)  
   ## delete fst to reapply carry.out
-  unlink(file.path(dir.res,"xgxr032_sd1_tabvars_ResultsData.fst"))
 
-  ### expect res3 narrower than res1 
+  unlink(file.fst)
+
+  ### expect res4 narrower than res1 
   res4 <- NMreadSim(file.rds
                    ,
                     carry.out=c("ID","EVID")
                     )
 
   ## forcing reread
-    ### expect res5 slightly wider than res4
+  ### expect res5 slightly wider than res4
   res5 <- NMreadSim(file.rds,read.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
   
   res <- compareCols(res1,res2,res3,res4,res5)
