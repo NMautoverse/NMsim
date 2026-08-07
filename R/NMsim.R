@@ -7,84 +7,75 @@
 ##' once and more. Please see vignettes for an introduction to how to
 ##' get the most out of this.
 ##'
-##' @param file.mod Path(s) to the input control stream(s) to run the
-##'     simulation on. The output control stream is for now assumed to
-##'     be stored next to the input control stream and ending in .lst
-##'     instead of .mod. The .ext file must also be present. If
-##'     simulating known subjects, the .phi is necessary too.
-##' @param data The simulation data as a \code{data.frame} or a list
-##'     of \code{data.frame}s. If a list, the model(s) will be run on
-##'     each of the data sets in the list.
-##' @param dir.sims The directory in which NMsim will store all
-##'     generated files. Default is to create a folder called `NMsim`
-##'     next to `file.mod`.
-##' @param dir.res Provide a path to a directory in which to save rds
-##'     files with paths to results. Default is to use dir.sims. After
-##'     running `NMreadSim()` on these files, the original simulation
-##'     files can be deleted. Hence, providing both `dir.sims` and
-##'     `dir.res` provides a structure that is simple to
-##'     clean. `dir.sims` can be purged when `NMreadSim` has been run
-##'     and only small `rds` and `fst` files will be kept in
-##'     `dir.res`. Notice, in case multiple models are simulated,
-##'     multiple `rds` (to be read with `NMreadSim()`) files will be
-##'     created by default. In cases where multiple models are
-##'     simulated, see `file.res` to get just one file refering to all
-##'     simulation results.
-##' @param name.sim Give all filenames related to the simulation a
-##'     suffix. A short string describing the sim is recommended like
-##'     "ph3_regimens".
-##' @param subproblems Number of subproblems to use as
-##'     \code{SUBPROBLEMS} in \code{$SIMULATION} block in Nonmem. The
-##'     default is subproblem=0 which means not to use
-##'     \code{SUBPROBLEMS}.
-##' @param table.vars Variables to be printed in output table as a
-##'     character vector or a space-separated string of variable
-##'     names. The default is to export the same tables as listed in
-##'     the input control stream. If \code{table.vars} is provided,
-##'     all output tables in estimation control streams are dropped
-##'     and replaced by a new one with just the provided variables. If
-##'     many variables are exported, and much fewer are used, it can
-##'     speed up NMsim significantly to only export what is needed
-##'     (sometimes this is as little as "PRED IPRED"). Nonmem writes
-##'     data slowly so reducing output data can make a very big
-##'     difference in execution time. See \code{table.options} too.
-##' @param table.options A character vector or a string of
-##'     space-separated options. Only used if \code{table.vars} is
-##'     provided. If constructing a new output table with
-##'     \code{table.vars} the default is to add two options,
-##'     \code{NOAPPEND} and \code{NOPRINT}. You can modify that with
-##'     \code{table.options}. Do not try to modify output filename -
-##'     \code{NMsim} takes care of that. See `table.format` too.
-##' @param table.format A format for `$TABLE`. Only used if
-##'     `table.vars` is provided. Default is "s1PE16.9". NMsim needs a
-##'     high-resolution format. The Nonmem default "s1PE11.4" is
-##'     insufficient for simulation data sets of 1e5 rows or more.
-##' @param carry.out Variables from input data that should be included
-##'     in results. Default is to include everything. If working with
-##'     large data sets, it may be wanted to provide a subset of the
-##'     columns here. If doing very large simulations, this may also
-##'     be a way to save memory.
-##' @param reuse.results If simulation results found on file, should
-##'     they be used? If TRUE and reading the results fail, the
-##'     simulations will still be rerun.
-##' @param transform A list defining transformations to be applied
-##'     after the Nonmem simulations and before plotting. For each
-##'     list element, its name refers to the name of the column to
-##'     transform, the contents must be the function to apply.
-##' @param seed.R A value passed to \code{set.seed()}. It is
-##'     recommended to use \code{seed.R} rather than calling
-##'     \code{set.seed()} manually because the seed can then be
-##'     captured and stored by \code{NMsim()} for reproducibility. See
-##'     \code{seed.nm} for finer control of the seeds that are used in
-##'     the Nonmem control streams.
+##' @param file.mod Path(s) to the input control stream(s) to run the simulation
+##'   on. The output control stream is for now assumed to be stored next to the
+##'   input control stream and ending in .lst instead of .mod. The .ext file
+##'   must also be present. If simulating known subjects, the .phi is necessary
+##'   too.
+##' @param data The simulation data as a \code{data.frame} or a list of
+##'   \code{data.frame}s. If a list, the model(s) will be run on each of the
+##'   data sets in the list.
+##' @param dir.sims The directory in which NMsim will store all generated files.
+##'   Default is to create a folder called `NMsim` next to `file.mod`.
+##' @param dir.res Provide a path to a directory in which to save rds files with
+##'   paths to results. Default is to use dir.sims. After running `NMreadSim()`
+##'   on these files, the original simulation files can be deleted. Hence,
+##'   providing both `dir.sims` and `dir.res` provides a structure that is
+##'   simple to clean. `dir.sims` can be purged when `NMreadSim` has been run
+##'   and only small `rds` and `fst` files will be kept in `dir.res`. Notice, in
+##'   case multiple models are simulated, multiple `rds` (to be read with
+##'   `NMreadSim()`) files will be created by default. In cases where multiple
+##'   models are simulated, see `file.res` to get just one file refering to all
+##'   simulation results.
+##' @param name.sim Give all filenames related to the simulation a suffix. A
+##'   short string describing the sim is recommended like "ph3_regimens".
+##' @param subproblems Number of subproblems to use as \code{SUBPROBLEMS} in
+##'   \code{$SIMULATION} block in Nonmem. The default is subproblem=0 which
+##'   means not to use \code{SUBPROBLEMS}.
+##' @param table.vars Variables to be printed in output table as a character
+##'   vector or a space-separated string of variable names. The default is to
+##'   export the same tables as listed in the input control stream. If
+##'   \code{table.vars} is provided, all output tables in estimation control
+##'   streams are dropped and replaced by a new one with just the provided
+##'   variables. If many variables are exported, and much fewer are used, it can
+##'   speed up NMsim significantly to only export what is needed (sometimes this
+##'   is as little as "PRED IPRED"). Nonmem writes data slowly so reducing
+##'   output data can make a very big difference in execution time. See
+##'   \code{table.options} too.
+##' @param table.options A character vector or a string of space-separated
+##'   options. Only used if \code{table.vars} is provided. If constructing a new
+##'   output table with \code{table.vars} the default is to add two options,
+##'   \code{NOAPPEND} and \code{NOPRINT}. You can modify that with
+##'   \code{table.options}. Do not try to modify output filename - \code{NMsim}
+##'   takes care of that. See `table.format` too.
+##' @param table.format A format for `$TABLE`. Only used if `table.vars` is
+##'   provided. Default is "s1PE16.9". NMsim needs a high-resolution format. The
+##'   Nonmem default "s1PE11.4" is insufficient for simulation data sets of 1e5
+##'   rows or more.
+##' @param carry.out Variables from input data that should be included in
+##'   results. Default is to include everything. If working with large data
+##'   sets, it may be wanted to provide a subset of the columns here. If doing
+##'   very large simulations, this may also be a way to save memory. Notice,
+##'   `table.vars` must be provided to use carry.out.
+##' @param reuse.results If simulation results found on file, should they be
+##'   used? If TRUE and reading the results fail, the simulations will still be
+##'   rerun.
+##' @param transform A list defining transformations to be applied after the
+##'   Nonmem simulations and before plotting. For each list element, its name
+##'   refers to the name of the column to transform, the contents must be the
+##'   function to apply.
+##' @param seed.R A value passed to \code{set.seed()}. It is recommended to use
+##'   \code{seed.R} rather than calling \code{set.seed()} manually because the
+##'   seed can then be captured and stored by \code{NMsim()} for
+##'   reproducibility. See \code{seed.nm} for finer control of the seeds that
+##'   are used in the Nonmem control streams.
 ##' @param seed.nm Control Nonmem seeds. If a numeric, a vector or a
-##'     `data.frame`, these are used as the the seed values (a single
-##'     value or vector will be recycled so make sure the dimesnsions
-##'     are right, the number of columns in a \code{data.frame} will
-##'     dictate the number of seeds in each Nonmem control stream. Use
-##'     a list with elements `values`, and `dist` and others for
-##'     detailed control of the random sources. See \code{?NMseed} for
-##'     details on what arguments can be passed this way.
+##'   `data.frame`, these are used as the the seed values (a single value or
+##'   vector will be recycled so make sure the dimesnsions are right, the number
+##'   of columns in a \code{data.frame} will dictate the number of seeds in each
+##'   Nonmem control stream. Use a list with elements `values`, and `dist` and
+##'   others for detailed control of the random sources. See \code{?NMseed} for
+##'   details on what arguments can be passed this way.
 ##'
 ##' Default is to draw seeds betwen
 ##'     0 and 2147483647 (the values supported by Nonmem) for each

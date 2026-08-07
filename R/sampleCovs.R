@@ -64,7 +64,8 @@ sampleCovs <- function(data,
                        ){
 
     IDCOVS <- NULL
-    ID <- NULL
+  ID <- NULL
+  IDCGRP <- NULL
     TIME <- NULL
     EVID <- NULL
 
@@ -130,15 +131,12 @@ sampleCovs <- function(data,
   }
 
   dt.sim.covs[,(col.idcgrp) := match(ID,unique(ID)),by=IDCOVS]
-  ## dt.sim.covs[,IDCGRP := IDCGRP.0]
-  ## dt.sim.covs[,.(uniqueN(ID),.N),by=IDCGRP.0]
-
 
   if( idcgrp.redist ){
     NO <- dt.sim.covs[,get(col.idcgrp)]
     if(NO>1){
       
-      dt.sim.covs[,Idcgrp := sample(1:NO,size=uniqueN(IDCGRP),replace=FALSE)[IDCGRP],by=ID,
+      dt.sim.covs[,IDCGRP := sample(1:NO,size=uniqueN(IDCGRP),replace=FALSE)[IDCGRP],by=ID,
                   env=list(IDCGRP=col.idcgrp)]
       ## dt.sim.covs[,.(uniqueN(ID),.N),keyby=IDOCC]
       keep.idcgrp <- TRUE

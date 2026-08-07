@@ -126,6 +126,7 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
 NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,skip.missing=FALSE,progress,read.fst=NULL,fast.tables=NULL,carry.out=NULL,as.fun){
   
   . <- NULL
+  ..check.time <- NULL
   args.NMscanData <- NULL
   col.row <- NULL
   file.res.data <- NULL
