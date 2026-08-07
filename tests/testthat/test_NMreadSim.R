@@ -28,7 +28,7 @@ data.table::setDTthreads(1)
 NMdataConf(reset=TRUE)
 NMdataConf(
   path.nonmem="/opt/NONMEM/nm75/run/nmfe75",
-  dir.sims="testOutput/simtmp"
+  dir.sims="testOutput/keepsimtmp"
  ,dir.res="testOutput/simres")
 
 dt.amt <- data.table(DOSE=c(100,400))
@@ -55,7 +55,7 @@ if(F){
   ## testOutput/NMsim_xgxr021_sd1_NMreadSim_paths.rds
   file.mod <- "testData/nonmem/xgxr021.mod"
 
-  dir.sims <- "testData/simtmp"
+  dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
   sim1 <- NMsim(file.mod=file.mod,
@@ -78,7 +78,7 @@ if(F){
 
 
 test_that("Basic",{
-  dir.sims <- "testData/simtmp"
+  dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
   fileRef <- "testReference/NMreadSim_01.rds"
@@ -171,7 +171,7 @@ test_that("From different wd",{
 ## }
 
 test_that("carry.out depends on fast.tables",{
-  dir.sims <- "testData/simtmp"
+  dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
   file.rds <- file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds")
@@ -202,7 +202,7 @@ test_that("NMsim with carry.out",{
   ### case dependent on table.vars 
   
   file.mod <- "testData/nonmem/xgxr032.mod"
-  dir.sims <- "testData/simtmp"
+  dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
   if(FALSE){
@@ -277,7 +277,7 @@ test_that("NMsim with table.vars. Use carry.out when reading results",{
   ### case dependent on table.vars 
   
   file.mod <- "testData/nonmem/xgxr032.mod"
-  dir.sims <- "testData/simtmp"
+  dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
   file.rds <- file.path(dir.res,"xgxr032_sd1_tabvars_MetaData.rds")
