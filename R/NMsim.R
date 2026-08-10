@@ -675,6 +675,8 @@ NMsim <- function(file.mod,data,
 
     if(missing(subproblems)|| is.null(subproblems)) subproblems <- 0
 
+    if(missing(sizes)) sizes <- NULL
+  
 ###  Section end: Checking aguments
 
     dt.models <- data.table(file.mod=file.mod)
@@ -1145,6 +1147,8 @@ NMsim <- function(file.mod,data,
         dt.data.tmp <- unique(dt.models[,.(DATAROW,path.data)])
         dt.data.tmp[,tmprow:=.I]
         
+      ### TODO set $SIZES PD if with>something
+
         ## NMwriteData is run in lapply because genText=T may return
         ## incompatible objects - do not run as dt[,NMwriteData(),by]
         null <- lapply(split(dt.data.tmp,by="tmprow"),function(datrow){
@@ -1461,7 +1465,6 @@ NMsim <- function(file.mod,data,
     
 #### Section start: Additional control stream modifications specified by user - modify ####
 
-    if(missing(sizes)) sizes <- NULL
     if(!is.null(sizes)){
         dt.models[,{
             args.sizes <- append(list(file.mod=path.sim,newfile=path.sim,write=TRUE),sizes)

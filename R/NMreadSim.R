@@ -165,11 +165,6 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
   }
 
   
-  ### TODO, use a method.read column values "fst", "ModTab"
-  ## dt.x[,is.res:=is.fst|is.simRes]
-  ## dt.x[,is.ModTab:=is.rds|is.simModTab]
-
-
   ###### Reading results
   ## res.all <- NULL
   res.simRes <- NULL

@@ -250,7 +250,7 @@ test_that("NMsim with carry.out",{
                     )
 
   ## forcing reread. Expecting one wider than res3
-  res4 <- NMreadSim(file.rds,reread.tmp=TRUE,carry.out=c("ID","EVID","CMT"))
+  res4 <- NMreadSim(file.rds,reread.tmp=TRUE,carry.out=c("ID","EVID","AMT"))
   
   ## colnames(res1)
   ## colnames(res2)

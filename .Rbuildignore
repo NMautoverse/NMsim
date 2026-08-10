@@ -43,7 +43,7 @@ input.grd
 input.shk
 INTER
 LINK.LNK
-simtmp.*
+(^|/)simtmp.*
 ^man/figures/.*\.html
 ^man/figures/.*\.pdf
 ^inst/examples/data/xgxt021_bs.+
