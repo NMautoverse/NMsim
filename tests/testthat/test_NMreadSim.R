@@ -213,7 +213,7 @@ test_that("NMsim with carry.out",{
                   name.sim = "sd1_carryout",
                   carry.out=cc(ID,EVID,CMT),
                   seed.nm=2342,
-                  execute=FALSE,
+                  execute=TRUE,
                   table.vars=cc(PRED,IPRED,Y)
                   )
   }
