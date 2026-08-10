@@ -8,10 +8,10 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 
     
     rm.if.pres <- function(regex){
-sprintf("find . \\( -type d -or -type f \\) -name \"%s\" -exec rm -r {} \\;",regex)
+       sprintf("find . -depth \\( -type d -or -type f \\) -name \"%s\" -exec rm -r {} \\;",regex)
 
-      ## sprintf("find . -type d -name \"%s\" -exec rm -r {} \\;",regex)
-      ##   sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex)     
+      ## c(sprintf("find . -type d -name \"%s\" -exec rm -r {} \\;",regex),
+      ##   sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex) )    
     }
 
 
@@ -79,7 +79,7 @@ sprintf("find . \\( -type d -or -type f \\) -name \"%s\" -exec rm -r {} \\;",reg
                        ,paste(unlist(lapply(patterns.clean,
                                             rm.if.pres)),collapse="\n")
                         )
-        
+      
     }
     lines.bash <- c(lines.bash
                    ,"oldwd=$PWD"

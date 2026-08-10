@@ -6,9 +6,8 @@ cleaningPatterns <- function(clean){
 "LINKC.LNK",
 "LINK.LNK",
 "PRSIZES.f90"
-,"gfortran.txt","nonmem","worker*","FDATA*","fort.*","WK_*","temp_dir","thetair.f90","nmprd4p.mod")
-
-
-
+,"gfortran.txt","nonmem","worker*","FDATA*","fort.*","WK_*",
+"temp_dir",
+"thetair.f90","nmprd4p.mod")
 
 }

@@ -28,7 +28,7 @@ data.table::setDTthreads(1)
 NMdataConf(reset=TRUE)
 NMdataConf(
   path.nonmem="/opt/NONMEM/nm75/run/nmfe75",
-  dir.sims="testOutput/keepsimtmp"
+  dir.sims="testData/keepsimtmp"
  ,dir.res="testOutput/simres")
 
 dt.amt <- data.table(DOSE=c(100,400))
@@ -67,7 +67,6 @@ if(F){
                 seed.nm=2342
                 ## ,reuse.results=TRUE
                ,nmquiet=F)
-
 
   
   simres <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"))
@@ -353,7 +352,7 @@ if(F){
 
   sim1 <- NMsim(file.mod=file.mod,
                 data=dat.sim,
-                dir.sims="../testOutput2/simtmp",
+                dir.sims="../testOutput2/keepsimtmp",
                 dir.res="../testOutput2/simres",
                 name.sim = "NMreadSim_path..",
                 seed.nm=2342
