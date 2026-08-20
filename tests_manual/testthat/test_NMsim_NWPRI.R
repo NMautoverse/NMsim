@@ -187,6 +187,7 @@ test_that("typical",{
                     typical=TRUE
                     )
 
+    as.NMctl(modTab(simres)$path.sim.main)
 ## $SIZES inserted    
     
     ## attributes(NMreadSim("testOutput/NMsim_xgxr021_default_01_paths.rds"))
