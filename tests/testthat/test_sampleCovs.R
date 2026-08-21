@@ -37,7 +37,7 @@ test_that("without replacement",{
                       seed.R=1,
                        as.fun="data.table")
 
-expect_equal(res0,res1)
+    expect_equal(res0,res1)
     
     ## No Nsubjs
     res2 <- sampleCovs(data=data.sim.1,col.id.covs="ID",data.covs=data.covs,
