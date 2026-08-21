@@ -57,6 +57,7 @@ sampleCovs <- function(data,
                        col.id.covs = "ID",
                        data.covs,
                        covs,
+                       replace=TRUE,
                        col.idcgrp,
                        idcgrp.redist=FALSE,
                        seed.R,
@@ -79,7 +80,19 @@ sampleCovs <- function(data,
         message("No covariates requested.")
     }
 
-    if(missing(Nsubjs)) Nsubjs <- NULL
+  if(!col.id.covs%in%colnames(data.covs)) stop("col.id.covs must denote a column existing in data.covs")
+  if(!is.data.table(data.covs)) data.covs <- as.data.table(data.covs)
+  
+  if(missing(Nsubjs)){
+    if(replace) {
+      Nsubjs <- NULL
+    } else {
+      Nsubjs <- as.data.table(data.covs)[,uniqueN(id),env=list(id=col.id.covs)]
+    }
+  }
+
+  
+
     if(is.null(Nsubjs)) {
         stop("Nsubjs must be supplied.")
     }
@@ -114,7 +127,7 @@ sampleCovs <- function(data,
     setnames(dt.covs,col.id.covs,"IDCOVS")
     dt.ids <- data.table(ID=1:Nsubjs)
     setnames(dt.ids,"ID",col.id)
-    dt.ids[,IDCOVS:=sample(dt.covs[,IDCOVS],size=.N,replace=TRUE)]
+    dt.ids[,IDCOVS:=sample(dt.covs[,IDCOVS],size=.N,replace=replace)]
     dt.ids <- mergeCheck(dt.ids,dt.covs,by="IDCOVS",as.fun="data.table",quiet=TRUE)
 
     dt.sim.covs <- dt.ids[,
