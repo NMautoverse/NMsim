@@ -103,9 +103,9 @@ file which is a Nonmem-native format for storing emperical Bayes
 estimates (essentially individual parameters). It does so by reading and
 simulating from the estimated <code>OMEGA</code> matrix (random-effect
 variance-covariance matrix - a covariance step is not needed to get
-this). The simulation method called <code><a href="../reference/NMsim_known.html">NMsim_known()</a></code> can then
-be used to simulate subjects as stored in this file. See <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-known.html"><code>NMsim-known.html</code></a>
-for more information on <code>NMsim_known</code>.</p>
+this). The simulation method called <code><a href="../reference/NMsim_EBE.html">NMsim_EBE()</a></code> can then be
+used to simulate subjects as stored in this file. See <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-known.html"><code>NMsim-known.html</code></a>
+for more information on <code>NMsim_EBE</code>.</p>
 <div class="section level3">
 <h3 id="what-is-a-subject">What is a subject?<a class="anchor" aria-label="anchor" href="#what-is-a-subject"></a>
 </h3>
@@ -124,15 +124,14 @@ called <code>xgxr032_simEtas.phi</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">NMsim</span><span class="fu">:::</span><span class="fu"><a href="../reference/simPopEtas.html">simPopEtas</a></span><span class="op">(</span>file<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                   N<span class="op">=</span><span class="fl">1e4</span>,</span>
-<span>                   seed<span class="op">=</span><span class="fl">238861</span>,</span>
+<span>                   seed.R<span class="op">=</span><span class="fl">238861</span>,</span>
 <span>                   file.phi<span class="op">=</span><span class="st">"xgxr032_simEtas.phi"</span></span>
 <span>                   <span class="op">)</span></span>
-<span><span class="co">#&gt; seed is deprecated. Use `seed.R`.</span></span>
 <span><span class="co">#&gt; Existing file not overwritten.</span></span></code></pre></div>
 <p>We’ll just use the simulation data set created in <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-DataCreate.html"><code>NMsim-DataCreate.html</code></a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu">read_fst</span><span class="op">(</span>path<span class="op">=</span><span class="st">"simulate-results/dat_sim.fst"</span>,as.data.table<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>And now we can use <code><a href="../reference/NMsim_known.html">NMsim_known()</a></code>.</p>
+<p>And now we can use <code><a href="../reference/NMsim_EBE.html">NMsim_EBE()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.sim.multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nmautoverse.github.io/NMdata/reference/egdt.html" class="external-link">egdt</a></span><span class="op">(</span><span class="va">dat.sim</span><span class="op">[</span>,<span class="op">!</span><span class="op">(</span><span class="st">"ID"</span><span class="op">)</span><span class="op">]</span>,<span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>ID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">89</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      data nrows ncols</span></span>
@@ -146,7 +145,7 @@ called <code>xgxr032_simEtas.phi</code>.</p>
 <span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span></span>
 <span>    file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>    data<span class="op">=</span><span class="va">dat.sim.multiple</span>,</span>
-<span>    method.sim<span class="op">=</span><span class="va">NMsim_known</span>,</span>
+<span>    method.sim<span class="op">=</span><span class="va">NMsim_EBE</span>,</span>
 <span>    file.phi<span class="op">=</span><span class="st">"xgxr032_simEtas.phi"</span>,</span>
 <span>    name.sim<span class="op">=</span><span class="st">"reuseSubjs"</span>,</span>
 <span>    table.vars<span class="op">=</span><span class="st">"PRED IPRED"</span>,</span>
@@ -154,19 +153,14 @@ called <code>xgxr032_simEtas.phi</code>.</p>
 <span>    dir.sims<span class="op">=</span><span class="st">"simulate-tmp"</span>,</span>
 <span>    dir.res<span class="op">=</span><span class="st">"simulate-results"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="simulate-the-same-simulated-subjects-on-multiple-regimens">Simulate the same simulated subjects on multiple regimens<a class="anchor" aria-label="anchor" href="#simulate-the-same-simulated-subjects-on-multiple-regimens"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.sim.multiple.regs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">300</span>,<span class="fl">600</span><span class="op">)</span>,<span class="kw">function</span><span class="op">(</span><span class="va">dose1</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">dat.sim.multiple</span>,AMT<span class="op">=</span><span class="va">AMT</span><span class="op">/</span><span class="fl">300</span><span class="op">*</span><span class="va">dose1</span>,trt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%d mg then %d mg QD"</span>,<span class="va">dose1</span>,<span class="va">dose1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">dat.sim.multiple.regs</span><span class="op">[</span>,<span class="va">REC</span><span class="op">:=</span><span class="va">.I</span><span class="op">]</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="note-on-between-occasion-variability-supported">Note on between-occasion variability (supported)<a class="anchor" aria-label="anchor" href="#note-on-between-occasion-variability-supported"></a>
-</h2>
+<!-- ### Simulate the same simulated subjects on multiple regimens  -->
+<!-- ```{r} -->
+<!-- dat.sim.multiple.regs <- lapply(c(100,300,600),function(dose1){ -->
+<!--     transform(dat.sim.multiple,AMT=AMT/300*dose1,trt=sprintf("%d mg then %d mg QD",dose1,dose1/2)) -->
+<!-- }) |> rbindlist() -->
+<!-- dat.sim.multiple.regs[,REC:=.I] -->
+<p>```</p>
+<!-- ## Note on between-occasion variability (supported) -->
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

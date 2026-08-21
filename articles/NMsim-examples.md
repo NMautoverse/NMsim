@@ -96,13 +96,16 @@ Also, see recent
 - Specify the path to the Nonmem executable (`path.nonmem`).  
 - Set default values for `path.nonmem` and output directories.
 
-## Examples waiting for updates
+## [**Reuse simulated subjects**](https://nmautoverse.github.io/NMsim/articles/NMsim-ReuseSimSubjects.md)
 
-## [**Simulation of residual variability**](https://nmautoverse.github.io/NMsim/articles/NMsim-ResidVar.md)
+- Simulate eta’s prior to model simulation
+- Use `NMsim_EBE` to simulate models reusing already simulated eta’s
 
 #### Philip Delff
 
-## [**Reuse simulated subjects**](https://nmautoverse.github.io/NMsim/articles/NMsim-ReuseSimSubjects.md)
+## Examples waiting for updates
+
+## [**Simulation of residual variability**](https://nmautoverse.github.io/NMsim/articles/NMsim-ResidVar.md)
 
 #### Philip Delff
 

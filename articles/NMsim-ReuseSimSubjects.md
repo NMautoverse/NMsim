@@ -26,10 +26,10 @@ storing emperical Bayes estimates (essentially individual parameters).
 It does so by reading and simulating from the estimated `OMEGA` matrix
 (random-effect variance-covariance matrix - a covariance step is not
 needed to get this). The simulation method called
-[`NMsim_known()`](https://nmautoverse.github.io/NMsim/reference/NMsim_known.md)
+[`NMsim_EBE()`](https://nmautoverse.github.io/NMsim/reference/NMsim_EBE.md)
 can then be used to simulate subjects as stored in this file. See
 [`NMsim-known.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-known.html)
-for more information on `NMsim_known`.
+for more information on `NMsim_EBE`.
 
 ### What is a subject?
 
@@ -53,10 +53,9 @@ Let’s simulate 10,000 ETA combinations and store them in a file called
 
 NMsim:::simPopEtas(file=file.mod,
                    N=1e4,
-                   seed=238861,
+                   seed.R=238861,
                    file.phi="xgxr032_simEtas.phi"
                    )
-#> seed is deprecated. Use `seed.R`.
 #> Existing file not overwritten.
 ```
 
@@ -69,7 +68,7 @@ dat.sim <- read_fst(path="simulate-results/dat_sim.fst",as.data.table=TRUE)
 ```
 
 And now we can use
-[`NMsim_known()`](https://nmautoverse.github.io/NMsim/reference/NMsim_known.md).
+[`NMsim_EBE()`](https://nmautoverse.github.io/NMsim/reference/NMsim_EBE.md).
 
 ``` r
 
@@ -88,7 +87,7 @@ setorder(dat.sim.multiple,ID,TIME,EVID)
 simres <- NMsim(
     file.mod=file.mod,
     data=dat.sim.multiple,
-    method.sim=NMsim_known,
+    method.sim=NMsim_EBE,
     file.phi="xgxr032_simEtas.phi",
     name.sim="reuseSubjs",
     table.vars="PRED IPRED",
@@ -98,14 +97,4 @@ simres <- NMsim(
 )
 ```
 
-### Simulate the same simulated subjects on multiple regimens
-
-``` r
-
-dat.sim.multiple.regs <- lapply(c(100,300,600),function(dose1){
-    transform(dat.sim.multiple,AMT=AMT/300*dose1,trt=sprintf("%d mg then %d mg QD",dose1,dose1/2))
-}) |> rbindlist()
-dat.sim.multiple.regs[,REC:=.I]
-```
-
-## Note on between-occasion variability (supported)
+\`\`\`
