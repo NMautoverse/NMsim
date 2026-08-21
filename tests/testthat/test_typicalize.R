@@ -24,7 +24,7 @@ test_that("Priors",{
     fileRef <- "testReference/typicalize_02.rds"
 
     ##file.mod="testData/nonmem/xgxr011.mod"
-    file.mod="testData/nonmem/xgxr032_sd1_NWPRI.mod"
+    file.mod <- "testData/nonmem/xgxr032_sd1_NWPRI.mod"
 
     newfile <- "testOutput/typicalize1.mod"
 
