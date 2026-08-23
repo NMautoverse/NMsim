@@ -1,0 +1,21 @@
+To run the devel version of NMsim, run this:
+
+```{r install-github}
+library(remotes)
+unloadNamespace("NMsim")
+install_github("NMautoverse/NMsim@devel")
+library(NMsim)
+```
+
+Now you should be on the development version of NMsim
+
+Do the following to revert to a release version
+
+```{r revert-install}
+## revert to CRAN version or whatever you use
+unloadNamespace("NMsim")
+remove.packages("NMsim")
+install.packages("NMsim")
+library(NMsim)
+
+```
