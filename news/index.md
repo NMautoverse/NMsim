@@ -6,18 +6,32 @@
 
 qsub path
 
-The `carry.out` argument is better implemented in NMsim and NMreadSim().
-`carry.out` is used to specify what columns from the input data set to
-include in the simulation results (while `table.vars` is used to control
-what variables to include in Nonmem `$TABLE`).
+- The `carry.out` argument is better implemented in NMsim and
+  NMreadSim(). `carry.out` is used to specify what columns from the
+  input data set to include in the simulation results (while
+  `table.vars` is used to control what variables to include in Nonmem
+  `$TABLE`). This can be supplied to
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md),
+  and
+  [`NMreadSim()`](https://nmautoverse.github.io/NMsim/reference/NMreadSim.md)
+  reapplies `carry.out`. It is useful when performing very large
+  simulations where a wide input data set us memory demanding to merge
+  onto the simulation results.
 
-NMreadSim reapplies carry.out
+- [`NMreadSim()`](https://nmautoverse.github.io/NMsim/reference/NMreadSim.md)
+  has a new argument, `reread.tmp`, which can be used to force a re-read
+  of the Nonmem outputs (in contrast to the compressed simulation
+  results). This is especially useful if changing `carry.out`.
 
-NMreadSim: reread.tmp
+[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+supports grouping for successful (parallel) simulations. This is
+normally only used if
+[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+is used in combination with
+[`NMsim_EBE()`](https://nmautoverse.github.io/NMsim/reference/NMsim_EBE.md).
 
-sampleCovs supports grouping for successful (parallel) simulations.
-
-sampleCovs() with and without replace
+[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+with and without replace
 
 ### Bugfixes
 
