@@ -152,7 +152,7 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
   arg.fast.tables <- fast.tables
   arg.carry.out <- carry.out
   
-
+  
   
   if(!"path.results"%in%colnames(modtab)){
     if(! "NMsimVersion"%in%colnames(modtab) || !"file.res.data" %in% colnames(modtab)){
@@ -226,7 +226,7 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
   
   lsts.found <- modtab[,file.exists(path.lst.read)]
   done <- all(lsts.found)
-
+  
   if(!done){
     if(wait){
       turns <- 0
