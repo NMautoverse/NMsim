@@ -67,9 +67,6 @@ forestSummarize <- function(data,funs.exposure,cover.ci=0.95,by,as.fun){
 
     if(missing(as.fun)) as.fun <- NULL
     as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
-    if(packageVersion("NMdata") < "0.2.4"){
-        dcastSe <- NMdata:::dcastSe
-    }
         
 ### this is using model and model.sim as introduced in NMsim 0.1.4
     ## will not work with earlier versions!

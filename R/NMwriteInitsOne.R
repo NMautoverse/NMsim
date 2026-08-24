@@ -166,7 +166,7 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     newsection <- dt.lines[par.type==section,text]
     if(length(newsection)==0) return(lines.old)
     
-    NMwriteSectionOne(lines=lines.old,
+    NMdata:::NMwriteSectionOne(lines=lines.old,
                       section=section,
                       newlines=newsection,
                       location="replace",

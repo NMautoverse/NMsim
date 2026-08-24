@@ -179,7 +179,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
                 ctl <- NMwriteInits(lines=ctl0,ext=.SD,update=FALSE)[[1]]
                 tab.0 <- NMreadSection(lines=ctl0,section="TABLE")
                 tab.new <- gsub(run.sim.0,unique(run.sim),x=tab.0)
-                ctl <- NMwriteSectionOne(lines=ctl,section="TABLE",newlines=tab.new,quiet=TRUE,backup=FALSE)
+                ctl <- NMdata:::NMwriteSectionOne(lines=ctl,section="TABLE",newlines=tab.new,quiet=TRUE,backup=FALSE)
                 writeTextFile(ctl,file=unique(path.sim))
                 ctl}
            ,by="submodel"]
