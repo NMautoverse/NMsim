@@ -4,15 +4,13 @@
 
 qsub path
 
-The `carry.out` argument is better implemented in NMsim and NMreadSim(). `carry.out` is used to specify what columns from the input data set to include in the simulation results (while `table.vars` is used to control what variables to include in Nonmem `$TABLE`).
+* The `carry.out` argument is better implemented in NMsim and NMreadSim(). `carry.out` is used to specify what columns from the input data set to include in the simulation results (while `table.vars` is used to control what variables to include in Nonmem `$TABLE`). This can be supplied to `NMsim()`, and `NMreadSim()` reapplies `carry.out`. It is useful when performing very large simulations where a wide input data set us memory demanding to merge onto the simulation results.
 
-NMreadSim reapplies carry.out 
+* `NMreadSim()` has a new argument, `reread.tmp`, which can be used to force a re-read of the Nonmem outputs (in contrast to the compressed simulation results). This is especially useful if changing `carry.out`.
 
-NMreadSim: reread.tmp
+`sampleCovs()` supports grouping for successful (parallel) simulations. This is normally only used if `sampleCovs()` is used in combination with `NMsim_EBE()`.
 
-sampleCovs supports grouping for successful (parallel) simulations.
-
-sampleCovs() with and without replace
+`sampleCovs()` with and without replace
 
 ## Bugfixes
 * `typicalize()` (invoked by `NMsim(typical=TRUE)`) now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
