@@ -62,11 +62,15 @@ Notice, `file.mod` could point to any working Nonmem model as long as the provid
 data.sim <- read.csv(system.file("examples/derived/dat_sim1.csv",package="NMsim"))
 simres <- NMsim(file.mod=system.file("examples/nonmem/xgxr021.mod",package="NMsim"),
                 data=data.sim,
-                dir.sims="vignettes/simulate-results")
+                name.sim="readme1",
+                dir.sims="~/tmp/simtmp_nmsim_readme",
+                dir.res="vignettes/simulate-results")
+## "~/tmp/simtmp_nmsim_readme/xgxr021_readme1/xgxr021_readme1.mod"
 ```
 
 ```{r,include=FALSE,eval=TRUE}
-simres <- NMreadSim("vignettes/simulate-results/xgxr021_noname_MetaData.rds")
+## simres <- NMreadSim("vignettes/simulate-results/xgxr021_nonage_MetaData.rds")
+simres <- NMreadSim("vignettes/simulate-results/xgxr021_readme1_MetaData.rds")
 ```
 
 ```{r,simple-sim-show,eval=FALSE,fig.height = 4, fig.width = 7}

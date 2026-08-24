@@ -18,7 +18,6 @@ typicalize <- function(file.mod,lines,section,newfile){
     init <- NULL
     par.type <- NULL
     
-
     if(missing(file.mod)) file.mod <- NULL
     if(missing(lines)) lines <- NULL
     if(missing(section)) section <- NULL

@@ -4,14 +4,23 @@
 
 qsub path
 
-carry.out
+The `carry.out` argument is better implemented in NMsim and NMreadSim(). `carry.out` is used to specify what columns from the input data set to include in the simulation results (while `table.vars` is used to control what variables to include in Nonmem `$TABLE`).
+
+NMreadSim reapplies carry.out 
+
+NMreadSim: reread.tmp
 
 sampleCovs supports grouping for successful (parallel) simulations.
 
-## Bugfixes
-`typicalize()` (invoked by `NMsim(typical=TRUE)`) now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
+sampleCovs() with and without replace
 
-`NMreadSim()` would not always respect the `check.time` argument. Now fixed.
+## Bugfixes
+* `typicalize()` (invoked by `NMsim(typical=TRUE)`) now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
+
+* `NMreadSim()` would not always respect the `check.time` argument. Now fixed.
+
+* Paths would in some (not very common) cases get wrongly processed by NMsim, causing issues when reading simulation results. Fixed.
+
 
 # NMsim 0.2.7
 

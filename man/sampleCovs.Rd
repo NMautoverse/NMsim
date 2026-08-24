@@ -11,6 +11,7 @@ sampleCovs(
   col.id.covs = "ID",
   data.covs,
   covs,
+  replace = TRUE,
   col.idcgrp,
   idcgrp.redist = FALSE,
   seed.R,
@@ -21,7 +22,8 @@ sampleCovs(
 \item{data}{A simulation data set with only one subject}
 
 \item{Nsubjs}{The number of subjects to be sampled. This can be greater than
-the number of subjects in data.covs.}
+the number of subjects in data.covs. If `replace=FALSE`, default is to
+sample all ID's in `data.covs` exactly once.}
 
 \item{col.id}{Name of the subject ID column in `data` (default is "ID").}
 
@@ -32,6 +34,9 @@ the number of subjects in data.covs.}
 from.}
 
 \item{covs}{The name of the covariates (columns) to sample from `data.covs`.}
+
+\item{replace}{Sample from subjects in `data.covs` with replacement? Default
+is TRUE.}
 
 \item{col.idcgrp}{The name of the column distinguishing repeated samples of
 `IDCOVS`. This is only needed if there are such repetitions (not very

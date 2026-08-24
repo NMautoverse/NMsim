@@ -7,13 +7,16 @@
 ##'
 ##' @param data A simulation data set with only one subject
 ##' @param Nsubjs The number of subjects to be sampled. This can be greater than
-##'   the number of subjects in data.covs.
+##'   the number of subjects in data.covs. If `replace=FALSE`, default is to
+##'   sample all ID's in `data.covs` exactly once.
 ##' @param col.id Name of the subject ID column in `data` (default is "ID").
 ##' @param col.id.covs Name of the subject ID column in `data.covs` (default is
 ##'   "ID").
 ##' @param data.covs The data set containing the subjects to sample covariates
 ##'   from.
 ##' @param covs The name of the covariates (columns) to sample from `data.covs`.
+##' @param replace Sample from subjects in `data.covs` with replacement? Default
+##'   is TRUE.
 ##' @param col.idcgrp The name of the column distinguishing repeated samples of
 ##'   `IDCOVS`. This is only needed if there are such repetitions (not very
 ##'   common), and if there are no repetitions, the default (`col.idcgrp=NULL`)
@@ -66,6 +69,7 @@ sampleCovs <- function(data,
 
     IDCOVS <- NULL
   ID <- NULL
+  id <- NULL
   IDCGRP <- NULL
     TIME <- NULL
     EVID <- NULL

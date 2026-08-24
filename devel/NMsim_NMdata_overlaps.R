@@ -80,8 +80,8 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 ## NMwriteFilters. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInitsOne. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
-
 ## addBlocks. Belongs in NMdata (internal). Requires NMdata 0.2.1. Dropped in NMsim 0.2.6
+## stringToSection. Belongs in NMdata. NMdata 0.2.6 required.
 
 ## dtapply and lapplydt belong in NMdata
 

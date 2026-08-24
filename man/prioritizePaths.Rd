@@ -13,6 +13,9 @@ executables.}
 \item{must.work}{If TRUE, an error is thrown if no paths are
 valid.}
 }
+\value{
+A single path (character string)
+}
 \description{
 When using scripts on different systems, the Nonmem path may
 change from run to run. With this function you can specify a few

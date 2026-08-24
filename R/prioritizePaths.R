@@ -8,6 +8,7 @@
 ##'     executables.
 ##' @param must.work If TRUE, an error is thrown if no paths are
 ##'     valid.
+##' @return A single path (character string)
 ##' @export
 ##'
 ##' @examples

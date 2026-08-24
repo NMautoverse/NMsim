@@ -97,23 +97,23 @@ automation of most simulation-based analyses.
 `NMsim` has a flexible way to define simulation methods. The following
 methods are currently provided:
 
--   Simulation of new subjects (default or explicitly with
-    `method.sim=NMsim_default`)
--   Simulation of subjects already estimated in Nonmem model
-    (`method.sim=NMsim_EBE`)
--   Simulation with parameter uncertainty based on a Nonmem covariance
-    step (`method.sim=NMsim_VarCov` and `method.sim=NMsim_NWPRI`)
--   Simulation “as is” in case you already prepared a simulation control
-    stream and just want to automate the use of it in combination with
-    simulation data sets (`method.sim=NMsim_asis`)
+- Simulation of new subjects (default or explicitly with
+  `method.sim=NMsim_default`)
+- Simulation of subjects already estimated in Nonmem model
+  (`method.sim=NMsim_EBE`)
+- Simulation with parameter uncertainty based on a Nonmem covariance
+  step (`method.sim=NMsim_VarCov` and `method.sim=NMsim_NWPRI`)
+- Simulation “as is” in case you already prepared a simulation control
+  stream and just want to automate the use of it in combination with
+  simulation data sets (`method.sim=NMsim_asis`)
 
 In addition, `NMsim` provides other features to further modify the
 simulation control stream
 
--   Simulate of typical subjects with all ETAs equal 0 (`typical=TRUE`)
--   Specify parameter values, other than final estimates (`inits`
-    argument)
--   Custom modification of control stream sections (`modify` argument)
+- Simulate of typical subjects with all ETAs equal 0 (`typical=TRUE`)
+- Specify parameter values, other than final estimates (`inits`
+  argument)
+- Custom modification of control stream sections (`modify` argument)
 
 To learn how to run these simulations on your Nonmem models, get started
 with
@@ -131,17 +131,16 @@ simulation (or other job) you want to automate using `NMsim`.
 
 Many features are available. Prominent ones are:
 
--   Efficient simulation data set creation functions
--   Provides a simple interface `NMreadSim()` to read previously
-    performed simulation results.
--   Results on file can be reused if available using
-    `reuse.results=TRUE`.
--   Can use submit jobs to clusters. It can wait for the simulations to
-    be done and automatically collect the results.
--   Simulation replicates using Nonmem `SUBPROBLEMS` feature avaible
-    through the `subproblems` argument
--   Simulations of models on transformed observations can be
-    automatically transformed back using the `transform` argument.
+- Efficient simulation data set creation functions
+- Provides a simple interface `NMreadSim()` to read previously performed
+  simulation results.
+- Results on file can be reused if available using `reuse.results=TRUE`.
+- Can use submit jobs to clusters. It can wait for the simulations to be
+  done and automatically collect the results.
+- Simulation replicates using Nonmem `SUBPROBLEMS` feature avaible
+  through the `subproblems` argument
+- Simulations of models on transformed observations can be automatically
+  transformed back using the `transform` argument.
 
 If residual variability is not implemented in the simulated model,
 `NMsim` provides a way (`addResVar()`) to add residual variability in R
@@ -155,15 +154,15 @@ execution of NONMEM) and wraps it all into one R function. Provided with
 a path to a NONMEM control stream and a data.frame to simulate, `NMsim`
 will do the following:
 
--   Save the simulation input data in a csv file for NONMEM
--   Create a simulation input control stream based on `file.mod`
-    (`$INPUT` and `$DATA` matching the saved simulation data set;
-    `$SIMULATE` instead of `$ESTIMATION` and `$COVARIANCE`)
--   Update and fix initial values based on estimate (from `file.ext`)
--   Run NONMEM on the generated simulation control stream
--   Collect output data tables, combine them, and merge with the
-    simulation input data
--   Return the collected data in R
+- Save the simulation input data in a csv file for NONMEM
+- Create a simulation input control stream based on `file.mod` (`$INPUT`
+  and `$DATA` matching the saved simulation data set; `$SIMULATE`
+  instead of `$ESTIMATION` and `$COVARIANCE`)
+- Update and fix initial values based on estimate (from `file.ext`)
+- Run NONMEM on the generated simulation control stream
+- Collect output data tables, combine them, and merge with the
+  simulation input data
+- Return the collected data in R
 
 `NMsim` can call NONMEM directly or via `PSN`. If `NMsim` is run on a
 system where NONMEM cannot be executed, `NMsim` can still prepare the
@@ -256,10 +255,10 @@ together with the Nonmem control streams. This ensures that output data
 can be merged with input data as it went into the model, even if the
 input data file should be modified or lost.
 
--   Saves input data with Nonmem model
--   Provides a simple R command for submission of Nonmem jobs
--   Optionally handles cluster configuration
--   Saves the xml file by default
+- Saves input data with Nonmem model
+- Provides a simple R command for submission of Nonmem jobs
+- Optionally handles cluster configuration
+- Saves the xml file by default
 
 `NMexec` will submit model runs to a cluster by default. This can be
 switched off for running Nonmem locally. Please notice the jobs are
