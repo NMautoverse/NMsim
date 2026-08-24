@@ -163,7 +163,8 @@ NMsim(
   Variables from input data that should be included in results. Default
   is to include everything. If working with large data sets, it may be
   wanted to provide a subset of the columns here. If doing very large
-  simulations, this may also be a way to save memory.
+  simulations, this may also be a way to save memory. Notice,
+  \`table.vars\` must be provided to use carry.out.
 
 - method.sim:
 
@@ -197,7 +198,7 @@ NMsim(
   <https://nmautoverse.github.io/NMsim/articles/NMsim-modify-model.html>
 
   The \`method\` element controls which method is used to do this, and
-  this corresponds to the old \`method.update.initxfgs\` argument.
+  this corresponds to the old \`method.update.inits\` argument.
   Normally, the user should not need to deal with this as the default
   \`nmsim\` method is very flexible and powerful. If using the new
   \`method=nmsim\` you can specify parameter values, fix/unfix them, and

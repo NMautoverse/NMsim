@@ -1,9 +1,9 @@
 # Sample subject-level covariates from an existing data set
 
 Repeats a data set with just one subject by sampling covariates from
-subjects in an existing data set. This can conveniently be used to
-generate new subjects with covariate resampling from an studied
-population.
+subjects (with replacement) in an existing data set. This can
+conveniently be used to generate new subjects with covariate resampling
+from an studied population.
 
 ## Usage
 
@@ -15,6 +15,9 @@ sampleCovs(
   col.id.covs = "ID",
   data.covs,
   covs,
+  replace = TRUE,
+  col.idcgrp,
+  idcgrp.redist = FALSE,
   seed.R,
   as.fun
 )
@@ -29,7 +32,8 @@ sampleCovs(
 - Nsubjs:
 
   The number of subjects to be sampled. This can be greater than the
-  number of subjects in data.covs.
+  number of subjects in data.covs. If \`replace=FALSE\`, default is to
+  sample all ID's in \`data.covs\` exactly once.
 
 - col.id:
 
@@ -47,6 +51,23 @@ sampleCovs(
 
   The name of the covariates (columns) to sample from \`data.covs\`.
 
+- replace:
+
+  Sample from subjects in \`data.covs\` with replacement? Default is
+  TRUE.
+
+- col.idcgrp:
+
+  The name of the column distinguishing repeated samples of \`IDCOVS\`.
+  This is only needed if there are such repetitions (not very common),
+  and if there are no repetitions, the default (\`col.idcgrp=NULL\`) is
+  to leave out the column. default name of the column when included is
+  \`IDCGRP\`. See details too if you need this.
+
+- idcgrp.redist:
+
+  See details.
+
 - seed.R:
 
   If provided, passed to \`set.seed()\`.
@@ -63,6 +84,24 @@ sampleCovs(
 A data.frame. Includes sampled covariates. The subject ID's the
 covariates are sampled from will be included in a column called
 \`IDCOVS\`.
+
+## Details
+
+Columns will be added in addition to covariates requested in \`covs\`:
+IDCOVS, and \`IDCGRP\`. \`IDCOVS\` is the subject id (\`col.id.covs\`)
+from the covariate data set, for reference. \`IDCGRP\` is only needed
+when covariates are sampled with replacement, and a subsequent Nonmem
+simulation is done with \`NMsim_EBE\`. \`NMsim_EBE\` reuses the etas
+(from estimation or another \`.phi\` file). Hence for such simulation
+you will need to used IDCVOVS as ID in order to match the etas against
+the relevant subject ID's. However, since IDCOVS are repeated (due to
+sampling with replacement), the easiest is to split the data set so one
+subject is never reused within one subset. \`IDCGRP\` holds a variable
+to split by so this will work. By default, IDCGRP is simply the counter
+of the occurrence of a (\`IDCOVS\`) subject. This is simple but
+impractical for splitting into sub simulations because the group sizes
+will tend to be quite uneven. \`idcgrp.redist=TRUE\` will reassign
+\`IDCGRP\` to balance the group sizes.
 
 ## Examples
 

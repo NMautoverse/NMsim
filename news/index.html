@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7.901</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,24 @@
       <small>Source: <a href="https://github.com/nmautoverse/NMsim/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.8" id="nmsim-028">NMsim 0.2.8<a class="anchor" aria-label="anchor" href="#nmsim-028"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-2-8">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-8"></a></h3>
+<p>qsub path</p>
+<p>The <code>carry.out</code> argument is better implemented in NMsim and NMreadSim(). <code>carry.out</code> is used to specify what columns from the input data set to include in the simulation results (while <code>table.vars</code> is used to control what variables to include in Nonmem <code>$TABLE</code>).</p>
+<p>NMreadSim reapplies carry.out</p>
+<p>NMreadSim: reread.tmp</p>
+<p>sampleCovs supports grouping for successful (parallel) simulations.</p>
+<p>sampleCovs() with and without replace</p>
+</div>
+<div class="section level3">
+<h3 id="bugfixes-0-2-8">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-2-8"></a></h3>
+<ul><li><p><code><a href="../reference/typicalize.html">typicalize()</a></code> (invoked by <code>NMsim(typical=TRUE)</code>) now drops sections with priors (like <code>$OMEGAP</code>, <code>$OMEGAPD</code>) when the parameter section (like <code>$OMEGA</code>) is “typicalized”. This should resolve issues related to typical-subject simulations of models with between-occasion variability.</p></li>
+<li><p><code><a href="../reference/NMreadSim.html">NMreadSim()</a></code> would not always respect the <code>check.time</code> argument. Now fixed.</p></li>
+<li><p>Paths would in some (not very common) cases get wrongly processed by NMsim, causing issues when reading simulation results. Fixed.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.7" id="nmsim-027">NMsim 0.2.7<a class="anchor" aria-label="anchor" href="#nmsim-027"></a></h2><p class="text-muted">CRAN release: 2026-03-19</p>
 <div class="section level3">

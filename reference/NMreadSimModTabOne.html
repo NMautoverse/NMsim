@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7.901</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7.911</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,58 +70,63 @@
 
 
 <dl><dt id="arg-check-time">check.time<a class="anchor" aria-label="anchor" href="#arg-check-time"></a></dt>
-<dd><p>If found, check whether `fst` file modification
-time is newer than `rds` file. The `fst` is generated based on
-information in `rds`, but notice that some systems don't
-preserve the file modification times. Becasue of that,
-`check.time` is `FALSE` by default.</p></dd>
+<dd><p>If found, check whether `fst` file modification time is
+newer than `rds` file. The `fst` is generated based on information in
+`rds`, but notice that some systems don't preserve the file modification
+times. Becasue of that, `check.time` is `FALSE` by default.</p></dd>
 
 
 <dt id="arg-dir-sims">dir.sims<a class="anchor" aria-label="anchor" href="#arg-dir-sims"></a></dt>
-<dd><p>By default, `NMreadSim` will use information about
-the relative path from the results table file
-(`_MetaData.rds`) to the Nonmem simulation results. If these
-paths have changed, or for other reasons this doesn't work,
-you can use the `dir.sims` argument to specify where to find
-the Nonmem simulation results. If an `.fst` file was already
-generated and is found next to the `_MetaData.rds`, the path
-to the Nonmem simulation results is not used.</p></dd>
+<dd><p>By default, `NMreadSim` will use information about the
+relative path from the results table file (`_MetaData.rds`) to the Nonmem
+simulation results. If these paths have changed, or for other reasons this
+doesn't work, you can use the `dir.sims` argument to specify where to find
+the Nonmem simulation results. If an `.fst` file was already generated and
+is found next to the `_MetaData.rds`, the path to the Nonmem simulation
+results is not used.</p></dd>
 
 
 <dt id="arg-wait">wait<a class="anchor" aria-label="anchor" href="#arg-wait"></a></dt>
-<dd><p>If simulations seem to not be done yet, wait for them
-to finish? If not, an error will be thrown. If you choose to
-wait, the risk is results never come. `NMreadSim` will be
-waiting for an `lst` file. If Nonmem fails, it will normally
-generate an `lst` file. But if `NMTRAN` fails (checks of
-control stream prior to running Nonmem), the `lst` file is not
-generated.  Default is not to wait.</p></dd>
+<dd><p>If simulations seem to not be done yet, wait for them to finish?
+If not, an error will be thrown. If you choose to wait, the risk is
+results never come. `NMreadSim` will be waiting for an `lst` file. If
+Nonmem fails, it will normally generate an `lst` file. But if `NMTRAN`
+fails (checks of control stream prior to running Nonmem), the `lst` file
+is not generated. Default is not to wait.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
-<dd><p>Turn off some messages about what is going on?
-Default is to report the messages.</p></dd>
+<dd><p>Turn off some messages about what is going on? Default is to
+report the messages.</p></dd>
 
 
 <dt id="arg-skip-missing">skip.missing<a class="anchor" aria-label="anchor" href="#arg-skip-missing"></a></dt>
-<dd><p>Skip models where results are not available?
-Default is `FALSE` meaning an error will be thrown if one or
-more models do not have completed results.</p></dd>
+<dd><p>Skip models where results are not available? Default is
+`FALSE` meaning an error will be thrown if one or more models do not have
+completed results.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
-<dd><p>Track progress? Default is `TRUE` if `quiet` is
-FALSE and more than one model is being read. The progress
-tracking is based on the number of models completed/read, not
-the status of the individual models.</p></dd>
+<dd><p>Track progress? Default is `TRUE` if `quiet` is FALSE and
+more than one model is being read. The progress tracking is based on the
+number of models completed/read, not the status of the individual models.</p></dd>
+
+
+<dt id="arg-carry-out">carry.out<a class="anchor" aria-label="anchor" href="#arg-carry-out"></a></dt>
+<dd><p>Variables from input data that should be included in
+results. This feature is only available if `NMsim()` was called with the
+`table.vars` argument. Also, it will only be used when reading results
+from output tables. To save time and disk space, `NMreadSim()` will store
+compressed `.fst` files, and when these are subsequently read by
+`NMreadSim()` `carry.out` is not used. To re-read the output tables and
+regenerate the `.fst` file, use `reread.tmp=TRUE`.</p></dd>
 
 
 <dt id="arg-as-fun">as.fun<a class="anchor" aria-label="anchor" href="#arg-as-fun"></a></dt>
-<dd><p>The default is to return data as a data.frame. Pass
-a function (say `tibble::as_tibble`) in as.fun to convert to
-something else. If data.tables are wanted, use
-as.fun="data.table". The default can be configured using
-NMdataConf.</p></dd>
+<dd><p>The default is to return data as a data.frame. Pass a function
+(say `tibble::as_tibble`) in as.fun to convert to something else. If
+data.tables are wanted, use as.fun="data.table". The default can be
+configured using NMdataConf.</p></dd>
 
 </dl></div>
 

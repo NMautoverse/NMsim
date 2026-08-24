@@ -67,6 +67,17 @@ NMreadSimModTabOne(
   number of models completed/read, not the status of the individual
   models.
 
+- carry.out:
+
+  Variables from input data that should be included in results. This
+  feature is only available if \`NMsim()\` was called with the
+  \`table.vars\` argument. Also, it will only be used when reading
+  results from output tables. To save time and disk space,
+  \`NMreadSim()\` will store compressed \`.fst\` files, and when these
+  are subsequently read by \`NMreadSim()\` \`carry.out\` is not used. To
+  re-read the output tables and regenerate the \`.fst\` file, use
+  \`reread.tmp=TRUE\`.
+
 - as.fun:
 
   The default is to return data as a data.frame. Pass a function (say

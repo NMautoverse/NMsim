@@ -20,11 +20,15 @@ prioritizePaths(paths, must.work = FALSE)
 
   If TRUE, an error is thrown if no paths are valid.
 
+## Value
+
+A single path (character string)
+
 ## Examples
 
 ``` r
 library(NMdata)
-#> NMdata 0.2.5. Browse NMdata documentation at
+#> NMdata 0.2.6. Browse NMdata documentation at
 #> https://NMautoverse.github.io/NMdata/
 NMdataConf(path.nonmem = prioritizePaths(c(
   "/opt/NONMEM/nm75/run/nmfe75",
