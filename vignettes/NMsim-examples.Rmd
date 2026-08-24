@@ -180,6 +180,15 @@ Also, see recent [Publications](NMsim-publications.html).
 
 :::
 
+:::example
+## [**Reuse simulated subjects**](NMsim-ReuseSimSubjects.html)
+- Simulate eta's prior to model simulation
+- Use `NMsim_EBE` to simulate models reusing already simulated eta's
+
+#### Philip Delff {.authors}
+:::
+
+
 ## Examples waiting for updates
 	
 
@@ -189,12 +198,6 @@ Also, see recent [Publications](NMsim-publications.html).
 #### Philip Delff {.authors}
 :::
 
-
-:::example
-## [**Reuse simulated subjects**](NMsim-ReuseSimSubjects.html)
-
-#### Philip Delff {.authors}
-:::
 
 
 :::example
