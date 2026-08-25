@@ -4,8 +4,6 @@
 
 ### New Features
 
-qsub path
-
 - The `carry.out` argument is better implemented in NMsim and
   NMreadSim(). `carry.out` is used to specify what columns from the
   input data set to include in the simulation results (while
@@ -23,15 +21,44 @@ qsub path
   of the Nonmem outputs (in contrast to the compressed simulation
   results). This is especially useful if changing `carry.out`.
 
-[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
-supports grouping for successful (parallel) simulations. This is
-normally only used if
-[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
-is used in combination with
-[`NMsim_EBE()`](https://nmautoverse.github.io/NMsim/reference/NMsim_EBE.md).
+- [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+  can now sample with or without replacement - see new argument
+  `replace`.
 
-[`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
-with and without replace
+- [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+  supports grouping for successful (parallel) simulations. This is
+  normally only used if
+  [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+  is used in combination with
+  [`NMsim_EBE()`](https://nmautoverse.github.io/NMsim/reference/NMsim_EBE.md),
+  so if sampling from observed subjects to simulate with their empirical
+  Bayes’ estimates. This will likely lead to duplicated `ID` values.
+  [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+  now returns a column that can be used for splitting (using say
+  [`data.table::split()`](https://rdrr.io/pkg/data.table/man/split.html))
+  the data set into data sets without duplicated `ID` values.
+  [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
+  also offers the arguments `col.idcgrp` to name the returned column and
+  `idcgrp.redist` to redistribute the split to obtain (close to) equally
+  sized splits.
+
+- The `qsub` execution path can now be specified using
+  [`NMdata::NMdataConf()`](https://nmautoverse.github.io/NMdata/reference/NMdataConf.html),
+  like this:
+
+``` r
+
+NMdata::NMdataConf(path.qsub="/path/to/qsub")
+```
+
+This should normally not be necessary, but in some setups, `qsub` is not
+in the path to executables available to the shell that executes
+`Nonmem`, using `qsub` if `sge=TRUE`. On linux, you can most often find
+the `qsub` path by opening a terminal and executing
+
+``` shell
+which qsub
+```
 
 ### Bugfixes
 
