@@ -2,15 +2,25 @@
 
 ## New Features
 
-qsub path
-
 * The `carry.out` argument is better implemented in NMsim and NMreadSim(). `carry.out` is used to specify what columns from the input data set to include in the simulation results (while `table.vars` is used to control what variables to include in Nonmem `$TABLE`). This can be supplied to `NMsim()`, and `NMreadSim()` reapplies `carry.out`. It is useful when performing very large simulations where a wide input data set us memory demanding to merge onto the simulation results.
 
 * `NMreadSim()` has a new argument, `reread.tmp`, which can be used to force a re-read of the Nonmem outputs (in contrast to the compressed simulation results). This is especially useful if changing `carry.out`.
 
-`sampleCovs()` supports grouping for successful (parallel) simulations. This is normally only used if `sampleCovs()` is used in combination with `NMsim_EBE()`.
+* `sampleCovs()` can now sample with or without replacement - see new argument `replace`.
 
-`sampleCovs()` with and without replace
+* `sampleCovs()` supports grouping for successful (parallel) simulations. This is normally only used if `sampleCovs()` is used in combination with `NMsim_EBE()`, so if sampling from observed subjects to simulate with their empirical Bayes' estimates. This will likely lead to duplicated `ID` values. `sampleCovs()` now returns a column that can be used for splitting (using say `data.table::split()`) the data set into data sets without duplicated `ID` values. `sampleCovs()` also offers the arguments `col.idcgrp` to name the returned column and `idcgrp.redist` to redistribute the split to obtain (close to) equally sized splits.
+
+* The `qsub` execution path can now be specified using `NMdata::NMdataConf()`, like this:
+
+``` r
+NMdata::NMdataConf(path.qsub="/path/to/qsub")
+```
+
+This should normally not be necessary, but in some setups, `qsub` is not in the path to executables available to the shell that executes `Nonmem`, using `qsub` if `sge=TRUE`. On linux, you can most often find the `qsub` path by opening a terminal and executing
+
+``` shell
+which qsub
+```
 
 ## Bugfixes
 * `typicalize()` (invoked by `NMsim(typical=TRUE)`) now drops sections with priors (like `$OMEGAP`, `$OMEGAPD`) when the parameter section (like `$OMEGA`) is "typicalized". This should resolve issues related to typical-subject simulations of models with between-occasion variability.
