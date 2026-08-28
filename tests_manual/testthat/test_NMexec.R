@@ -12,6 +12,8 @@ dir.exists("C:/Users/Philip Delff/software/PsN-5.3.1/strawberry/perl/site/lib/Ps
 NMdataConf(dir.psn="C:/Users/Philip Delff/software/PsN-5.3.1/strawberry/perl/bin")
 NMsimTestConf()
 
+file.exists(path.nonmem)
+
 
 context("NMexec")
 

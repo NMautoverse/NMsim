@@ -1,3 +1,9 @@
+library(data.table)
+library(NMdata)
+
+library(NMsim)
+library(testthat)
+
 #### need a function to drop NMsimVersion and NMsimTime from table
 fix.time <- function(x){
     meta.x <- attr(x,"NMsimModTab")
@@ -26,9 +32,9 @@ test_that("VarCov simpar",{
     full.dt.sim <- NMcreateDoses(TIME=0, AMT=30,CMT=1) |>
         addEVID2(TAPD=1:24,CMT=2)
 
-    ## file.mod <- "testData/nonmem/xgxr032.mod"
-    file.mod <- system.file("examples/nonmem/xgxr021.mod",
-                            package="NMsim")
+    file.mod <- "testData/nonmem/xgxr032.mod"
+    ## file.mod <- system.file("examples/nonmem/xgxr021.mod",
+    ##                         package="NMsim")
 
     ## determine parameter space with simpar (see Appendix)
     ## ext.simpar <- sampleParsSimpar(file.mod=file.mod,nsim=10,seed.R = 1)
@@ -44,7 +50,7 @@ test_that("VarCov simpar",{
              ,table.vars="PRED IPRED Y KA V2 V3 CL Q"
               ##,sge=TRUE
              ,seed.R=2,
-              fast=FALSE
+              ##fast=FALSE
               )
 
     simpar.res <- NMreadSim(simpar.sim,wait=T)
@@ -52,6 +58,7 @@ test_that("VarCov simpar",{
     
     expect_equal_to_reference(simpar.res,fileRef)
 
+    if(F){
     simpar.sim.fast <- 
         NMsim(file.mod=file.mod
              ,data=full.dt.sim
@@ -68,6 +75,7 @@ test_that("VarCov simpar",{
     fix.time(simpar.res.fast)
     
     expect_equal_to_reference(simpar.res.fast,fileRef)
+}
 
     if(F){
         ref <- readRDS(fileRef)

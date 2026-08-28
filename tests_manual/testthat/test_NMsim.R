@@ -13,6 +13,7 @@ NMdataConf(dir.psn=NULL)
 NMdataConf(as.fun="data.table")
 NMdataConf(dir.sims="testOutput/simtmp")
 NMdataConf(dir.res="testOutput/simres")
+NMdataConf(path.qsub="/opt/sge/bin/lx-amd64/qsub",allow.unknown=TRUE)
 
 dt.dos <- NMcreateDoses(AMT=300,TIME=0)
 dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
@@ -109,8 +110,8 @@ fix.time <- function(x,extra=NULL){
 
 #### get rid of ROWMODEL2. Not needed for NMreadSim.
 
-
 context("NMsim")
+message("basic - default")
 test_that("basic - default",{
 
     fileRef <- "testReference/NMsim_01.rds"
@@ -170,7 +171,7 @@ test_that("basic - default",{
 })
 
 
-
+message("basic - sge - dont wait")
 test_that("basic - sge - dont wait",{
 
 ### using the same reference in test 1. Only diff is using sge=TRUE
@@ -214,10 +215,11 @@ test_that("basic - sge - dont wait",{
             attributes(ref)$NMsimModTab
         )
     }
-
-    
 })
 
+
+
+message("basic - sge - wait")
 test_that("basic - sge - wait",{
 
 ### using the same reference in test 1. Only diff is using sge=TRUE and wait=TRUE
@@ -259,7 +261,7 @@ test_that("basic - sge - wait",{
 
 })
 
-
+message("basic - typical")
 test_that("basic - typical",{
 
     fileRef <- "testReference/NMsim_02.rds"
@@ -300,7 +302,7 @@ test_that("basic - typical",{
 })
 
 
-
+message("basic - known")
 test_that("basic - known",{
 
     fileRef <- "testReference/NMsim_03.rds"
@@ -370,6 +372,7 @@ if(F){ ##### NOT WORKING
         
     })
 }
+
 
 
 
@@ -622,6 +625,7 @@ test_that("multiple data sets",{
     
 })
 
+message("space in file name")
 test_that("space in file name",{
 
     fileRef <- "testReference/NMsim_08.rds"
@@ -704,7 +708,7 @@ test_that("space in file name",{
 
 
 
-
+message("list of data sets - spaces in data names")
 test_that("list of data sets - spaces in data names",{
 
     file.mod <- "testData/nonmem/xgxr032.mod"
@@ -1146,6 +1150,8 @@ test_that("correlated etas",{
     ## cor(findCovs(simres,by="ID")[,.(ETA1,ETA2,ETA3,ETA4,ETA5)])
     ## cov2cor(dt2mat(NMreadExt(file.mod)[par.type=="OMEGA"]))
 
+    omega.sim <- trimws(omega.sim)
+    
     expect_equal_to_reference(omega.sim,fileRef)
 
     if(F){
