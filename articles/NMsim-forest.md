@@ -441,7 +441,7 @@ sum.uncertain <- forestSummarize(simres,
 We will use the R package `coveffectsplot` for plotting.
 [`coveffectsplot::forest_plot()`](https://smouksassi.github.io/coveffectsplot/reference/forest_plot.html)
 requires certain column names so we adjust those first. An acceptance
-region such as the 80%-125% bio equivalence is included.
+region such as the 80%-125% bio-equivalence is included.
 
 ``` r
 

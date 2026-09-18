@@ -1,5 +1,17 @@
 # Changelog
 
+## NMsim 0.2.9
+
+### Other Improvements
+
+[`forestDefineCovs()`](https://nmautoverse.github.io/NMsim/reference/forestDefineCovs.md)
+uses variable names as labels if label isn’t provided.
+
+[`forestSummarize()`](https://nmautoverse.github.io/NMsim/reference/forestSummarize.md)
+considers any `EVID%in%c(0,2)`. It used to consider only `EVID==2`. It
+also checks whether any simulation data is found before moving on to the
+post-processing.
+
 ## NMsim 0.2.8
 
 CRAN release: 2026-09-08
