@@ -549,7 +549,28 @@ NMsim <- function(file.mod,data,
     
     
     ## Section end: Dummy variables, only not to get NOTE's in pacakge checks
+
+  ## recycle
+  if (recycle) {
+
+    ## Capture all arguments except recycle-specific ones
+
+    .NMsim_recycle(as.list(environment()))
     
+
+
+    # Use recycle with the internal function
+
+
+    result <- recycle::recycle(
+      fun = .pkg_fun_internal,
+      args = args_to_pass,
+      path.res = path.res
+    )
+
+    return(result)
+  }
+  
 
     ## as.fun
     if(missing(as.fun)) as.fun <- NULL
