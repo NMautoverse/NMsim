@@ -1020,7 +1020,6 @@ NMsim <- function(file.mod,data,
     path.rds.exists <- dt.models[,file.exists(path.rds)]
 ### reading results from prior run
     ## if(reuse.results && all(dt.models[,path.rds.exists==TRUE])){
-    ## if(reuse.results && all(dt.models[,path.rds.exists==TRUE])){
     if(reuse.results && all(path.rds.exists==TRUE)){
         if(!quiet) message(sprintf("Reading from simulation results on file:\n%s",dt.models[,paste(simplePath(unique(path.rds)),collapse="\n")]))
         
