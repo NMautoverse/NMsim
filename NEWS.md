@@ -1,3 +1,10 @@
+# NMsim 0.2.9
+
+## Other Improvements
+`forestDefineCovs()` uses variable names as labels if label isn't provided.
+
+`forestSummarize()` considers any `EVID%in%c(0,2)`. It used to consider only `EVID==2`. It also checks whether any simulation data is found before moving on to the post-processing.
+
 # NMsim 0.2.8
 
 ## New Features

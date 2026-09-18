@@ -363,8 +363,7 @@ sum.uncertain[covlabel=="Bodyweigt (kg)",covlabel:="Bodyweight (kg)"]
 # Plotting 
 
 
-We will use the R package `coveffectsplot` for plotting. `coveffectsplot::forest_plot()` requires certain column names so we adjust those first. An acceptance region such as the 80%-125% bio
-equivalence is included.
+We will use the R package `coveffectsplot` for plotting. `coveffectsplot::forest_plot()` requires certain column names so we adjust those first. An acceptance region such as the 80%-125% bio-equivalence is included.
 
 
 ```{r plot1,fig.width=10,warning=FALSE}

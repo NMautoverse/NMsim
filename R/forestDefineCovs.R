@@ -69,10 +69,12 @@ forestDefineCovs <- function(...,data,col.id="ID",sigdigs=2,reduce.ref=TRUE,as.f
     covlists <- list(...)
     if(!is.null(names(covlists))){
         for(n in 1:length(covlists)){
-            covlists[[n]]$covvar <- names(covlists)[n]
+          covlists[[n]]$covvar <- names(covlists)[n]
+          if(is.null(covlists[[n]]$label)) covlists[[n]]$label <- covlists[[n]]$covvar
         }
     }
-    
+
+
     if(missing(data)) data <- NULL
     
     ## should add quantiles too
