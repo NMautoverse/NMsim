@@ -420,7 +420,6 @@
 
 NMsim <- function(file.mod,data,
                   subproblems=NULL,
-                  reuse.results=FALSE,
                   seed.R,
                   seed.nm,
                   name.sim,
@@ -437,6 +436,8 @@ NMsim <- function(file.mod,data,
                   path.nonmem=NULL,
                   sge=FALSE,
                   nc=1,
+                  reuse.results=FALSE,
+                  recycle=TRUE,
                   execute=TRUE,
                   script=NULL,
                   transform=NULL,
@@ -475,6 +476,23 @@ NMsim <- function(file.mod,data,
                   list.sections,
                   ...
                   ){
+
+  ## recycle
+    ## Capture all arguments except recycle-specific ones
+  
+  all.args.call <- as.list(environment())
+  ## names(all.args.call)
+## library(recycle)
+
+  if(F){
+    ## this can be done by check_need_run() later
+    library(devtools)
+    load_all("~/wdirs/recycle")
+    digests.args.call <- digest_elements(all.args.call,
+                                         funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE)
+                                                          )
+                                         )
+  }
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
     
@@ -550,26 +568,6 @@ NMsim <- function(file.mod,data,
     
     ## Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
-  ## recycle
-  if (recycle) {
-
-    ## Capture all arguments except recycle-specific ones
-
-    .NMsim_recycle(as.list(environment()))
-    
-
-
-    # Use recycle with the internal function
-
-
-    result <- recycle::recycle(
-      fun = .pkg_fun_internal,
-      args = args_to_pass,
-      path.res = path.res
-    )
-
-    return(result)
-  }
   
 
     ## as.fun
@@ -1009,12 +1007,25 @@ NMsim <- function(file.mod,data,
     
     if(is.null(file.res)){
         dt.models[,path.rds:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"MetaData"))]
+        dt.models[,path.digests:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"digests"))]
         ## dt.models[,path.rds:=pathSimMeta())]
         dt.models[,path.results:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"fst"),"ResultsData"))]
     } else {
-        dt.models[,path.rds:=fnExtension(file.res,"rds")]
-        dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
+      dt.models[,path.rds:=fnExtension(file.res,"rds")]
+      dt.models[,path.digests:=fnAppend(fnExtension(file.res,"rds"),"digests")]
+      dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
     }
+
+
+  if(recycle){
+    
+    dt.models[,recycle.need.rerun :=
+                     check_need_run(args=all.args.call, path.res=path.results, path.digest=path.digests, 
+                                    funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE)),
+                                    force=FALSE, quiet = FALSE)$run,
+              by=.(ROWMODEL)]
+  }
+
 
 ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
     path.rds.exists <- dt.models[,file.exists(path.rds)]
