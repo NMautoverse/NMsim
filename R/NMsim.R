@@ -1019,11 +1019,30 @@ NMsim <- function(file.mod,data,
 
   if(recycle){
     
-    dt.models[,recycle.need.rerun :=
-                     check_need_run(args=all.args.call, path.res=path.results, path.digest=path.digests, 
-                                    funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE)),
-                                    force=FALSE, quiet = FALSE)$run,
-              by=.(ROWMODEL)]
+    ## dt.models[,recycle.need.rerun :=
+    ##                  check_need_run(args=all.args.call, path.res=path.results, path.digest=path.digests, 
+    ##                                 funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE),
+    ##                                                  ),
+    ##                                 force=FALSE, quiet = FALSE)$run,
+    ##           by=.(ROWMODEL)]
+    
+    ## list.digests <- dt.models[, mapply(FUN=check_need_run, 
+    ##                                     path.res=path.results, path.digest=path.digests, force=FALSE,
+    ##                                    MoreArgs=list(args=all.args.call,
+    ##                                                  funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE))))
+    ##                           ]
+
+####### TODO: args that can be multiple models/data sets must be taken from dt.models instead of from the arguments directly
+    
+    list.digests <- lapplydt(dt.models,by="ROWMODEL",
+                             fun=function(x){check_need_run(args=all.args.call,, 
+                                                            path.res=x$path.results, path.digest=x$path.digests, force=FALSE,
+                                                            funs.unwrap = list(file.mod=function(x)readLines(x,warn=FALSE)))
+                             })
+
+    ## merge in run? Would be duplicate and unnecessary. Bu might make sense?  
+              
+    
   }
 
 

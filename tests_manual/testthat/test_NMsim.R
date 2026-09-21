@@ -108,7 +108,6 @@ fix.time <- function(x,extra=NULL){
 }
 
 
-#### get rid of ROWMODEL2. Not needed for NMreadSim.
 
 context("NMsim")
 message("basic - default")
@@ -1832,18 +1831,32 @@ test_that("model name incl .",{
 
 })
 
+library(devtools)
+unloadNamespace("recycle")
+unloadNamespace("NMwork")
+unloadNamespace("NMsim")
+unloadNamespace("NMdata")
+load_all("~/wdirs/NMdata")
+load_all("~/wdirs/NMsim")
+load_all("~/wdirs/NMwork")
+load_all("~/wdirs/recycle")
+
 test_that("recycle",{
   
   fileRef <- "testReference/NMsim_24.rds"
   
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
-  file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
+  file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod",
+                "../../tests/testthat/testData/nonmem/xgxr134.mod")
   ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
   ## library(nonmem2R)
   ## extload(file.mod)
 
   ## load_all(export_all=FALSE)
   set.seed(43)
+
+  dt.sim[,AGE := 50]
+  dt.sim[,WEIGHTB := 90]
   
   simres <- NMsim(file.mod,
                   data=dt.sim,
