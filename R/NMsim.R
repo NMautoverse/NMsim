@@ -481,6 +481,9 @@ NMsim <- function(file.mod,data,
     ## Capture all arguments except recycle-specific ones
   
   all.args.call <- as.list(environment())
+  
+  ## all.args.call <- all.args.call[!sapply(all.args.call,is.name)]
+  all.args.call[sapply(all.args.call,is.name)] <- NULL
   ## names(all.args.call)
 ## library(recycle)
 
@@ -1019,31 +1022,46 @@ NMsim <- function(file.mod,data,
 
   if(recycle){
     
-    ## dt.models[,recycle.need.rerun :=
-    ##                  check_need_run(args=all.args.call, path.res=path.results, path.digest=path.digests, 
-    ##                                 funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE),
-    ##                                                  ),
-    ##                                 force=FALSE, quiet = FALSE)$run,
-    ##           by=.(ROWMODEL)]
-    
-    ## list.digests <- dt.models[, mapply(FUN=check_need_run, 
-    ##                                     path.res=path.results, path.digest=path.digests, force=FALSE,
-    ##                                    MoreArgs=list(args=all.args.call,
-    ##                                                  funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE))))
-    ##                           ]
-
 ####### TODO: args that can be multiple models/data sets must be taken from dt.models instead of from the arguments directly
     
-    list.digests <- lapplydt(dt.models,by="ROWMODEL",
-                             fun=function(x){check_need_run(args=all.args.call,, 
-                                                            path.res=x$path.results, path.digest=x$path.digests, force=FALSE,
-                                                            funs.unwrap = list(file.mod=function(x)readLines(x,warn=FALSE)))
-                             })
+    list.digests <- lapplydt(
+      dt.models,by="ROWMODEL",
+      fun=function(x){
 
-    ## merge in run? Would be duplicate and unnecessary. Bu might make sense?  
-              
+        
+        
+        args.this <- all.args.call
+        args.this$file.mod <- x$file.mod
+
+        ## compareCols(args.this,x)
+        res <- check_need_run(args=args.this,
+                       path.res=x$path.results,
+                       path.digest=x$path.digests,
+                       force=FALSE,
+                       funs.unwrap = list(
+                         file.mod=function(x)readLines(x,warn=FALSE)
+                       )
+                       )
+        res$digest.all <- NULL
+        res
+      })
     
+    
+    
+    ## merge in run? Would be duplicate and unnecessary. Bu might make sense?
+    dt.run <- dtapply(list.digests,FUN=function(x)x$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
+    dt.run[,ROWMODEL := as.integer(ROWMODEL)]
+
+    dt.models <- mergeCheck(dt.models,dt.run,by="ROWMODEL")
+
+    dt.models.recycle <- dt.models[run==FALSE]
+    dt.models <- dt.models[run==TRUE]
+  
   }
+
+
+              
+
 
 
 ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
@@ -1062,8 +1080,9 @@ NMsim <- function(file.mod,data,
     }
 
 
-
-    
+if(nrow(dt.models)){
+  
+############### This should be internalized in NMexec     
 ### clear simulation directories so user does not end up with old results
     if(dir.sim.sub && sim.dir.from.scratch){
         dt.models[,if(dir.exists(dir.sim)) unlink(dir.sim,recursive=TRUE),by=.(ROWMODEL)]
@@ -1089,16 +1108,6 @@ NMsim <- function(file.mod,data,
         ## message(sprintf("* Writing %d simulation control stream(s) and simulation data set(s)",dt.models[,.N]))
         message(sprintf("* Writing simulation control stream(s) and simulation data set(s)"))
     }
-    
-### Generate the first version of file.sim.
-    ## if(missing(inits)){
-    ##     inits <- NULL
-    ## }
-
-    ##if(is.null(inits)) inits <- list(method="nmsim",update=TRUE)
-    
-    
-    
     
     ## It would not need to, but beware PSN's update_inits needs to
     ## create a new file - don't try to overwrite an existing one.
@@ -1679,8 +1688,16 @@ NMsim <- function(file.mod,data,
         ## if(!quiet) message("* Collecting Nonmem results")
         simres <- NMreadSim(unlist(files.rds),wait=wait,progress=progress,quiet=quiet,as.fun=as.fun)
     }
-    
 ### Section end: Read results if requested
+  }
+
+  if(recycle){
+    ## simres.recycle <- NMreadSim()
+  }
+
+
+  ## todo always save for future recycling 
+
 
 ##### return results to user
     

@@ -1831,6 +1831,10 @@ test_that("model name incl .",{
 
 })
 
+
+test_that("recycle",{     })
+
+
 library(devtools)
 unloadNamespace("recycle")
 unloadNamespace("NMwork")
@@ -1841,10 +1845,7 @@ load_all("~/wdirs/NMsim")
 load_all("~/wdirs/NMwork")
 load_all("~/wdirs/recycle")
 
-test_that("recycle",{
-  
   fileRef <- "testReference/NMsim_24.rds"
-  
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
   file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod",
                 "../../tests/testthat/testData/nonmem/xgxr134.mod")
