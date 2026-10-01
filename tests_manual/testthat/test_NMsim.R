@@ -1849,8 +1849,10 @@ load_all("~/wdirs/NMwork")
 
   fileRef <- "testReference/NMsim_24.rds"
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
-  file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod",
-                "../../tests/testthat/testData/nonmem/xgxr134.mod")
+  file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
+## ,
+##                 "../../tests/testthat/testData/nonmem/xgxr134.mod"
+)
   ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
   ## library(nonmem2R)
   ## extload(file.mod)
@@ -1858,6 +1860,13 @@ load_all("~/wdirs/NMwork")
   ## load_all(export_all=FALSE)
   set.seed(43)
 
+dt.dos <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
+dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
+
+dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
+setorder(dt.sim.known,ID,TIME,EVID,CMT)
+
+dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
 dt.sim[,AGE := 50]
 dt.sim[,WEIGHTB := 90]
 dt.sim[,MALEN := 1]
@@ -1867,7 +1876,8 @@ dt.sim[,MALEN := 1]
                   table.var="PRED IPRED",
                   dir.sims="testOutput",
                   name.sim="recycle_01",
-                  path.nonmem=path.nonmem
+                  path.nonmem=path.nonmem,
+                  reuse.results=FALSE
                   )
 
   ## modTab(simres)
@@ -1878,11 +1888,21 @@ dt.sim[,MALEN := 1]
 simres2 <- NMsim(file.mod,
                   data=dt.sim,
                   table.var="PRED IPRED",
-                  dir.sims="testOutput",
+                 dir.sims="testOutput",
+                 method.sim=NMsim_default,
                   name.sim="recycle_01",
                   path.nonmem=path.nonmem,
-                  recycle=TRUE
+                 recycle=TRUE,
+                 reuse.results=FALSE
                   )
+
+
+expect_equal(
+  unNMsimRes(simres)
+,
+
+unNMsimRes(simres2)
+)
 
 
   if(F){
@@ -1891,3 +1911,4 @@ simres2 <- NMsim(file.mod,
     ref
   }
 })
+

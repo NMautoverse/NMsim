@@ -437,7 +437,7 @@ NMsim <- function(file.mod,data,
                   sge=FALSE,
                   nc=1,
                   reuse.results=FALSE,
-                  recycle=TRUE,
+                  recycle=FALSE,
                   execute=TRUE,
                   script=NULL,
                   transform=NULL,
@@ -1020,7 +1020,7 @@ NMsim <- function(file.mod,data,
     dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
   }
 
-
+dt.models.recycle <- NULL
   if(recycle){
     
     ####### TODO: args that can be multiple models/data sets must be taken from dt.models instead of from the arguments directly
@@ -1037,10 +1037,10 @@ NMsim <- function(file.mod,data,
 
         ## compareCols(args.this,x)
         res <- check_need_run(args=args.this,
-                              path.res=x$path.results,
+                              path.results=x$path.rds,
                               path.digest=x$path.digests,
                               force=FALSE,
-                              funs.unwrap = list(
+                              args.unwrap = list(
                                 file.mod=function(x)readLines(x,warn=FALSE)
                               )
                               )
@@ -1054,7 +1054,9 @@ NMsim <- function(file.mod,data,
     dt.run <- dtapply(list.digests,FUN=function(x)x$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
     dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
-    dt.models <- mergeCheck(dt.models,dt.run,by="ROWMODEL")
+    
+
+    dt.models <- mergeCheck(dt.models,dt.run,by="ROWMODEL",quiet=TRUE)
 
     dt.models.recycle <- dt.models[run==FALSE]
     dt.models <- dt.models[run==TRUE]
@@ -1065,7 +1067,7 @@ NMsim <- function(file.mod,data,
   
 
 
-
+  simres <- NULL
   ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
   path.rds.exists <- dt.models[,file.exists(path.rds)]
   ### reading results from prior run
@@ -1693,71 +1695,79 @@ NMsim <- function(file.mod,data,
     ### Section end: Read results if requested
   }
 
+  simres.recycle <- NULL
   if(recycle && nrow(dt.models.recycle)){
-
-    dt.models.recycle  
+    
+    
     ## simres.recycle <- NMreadSim()
+    simres.recycle <- NMreadSim(dt.models.recycle[,path.rds],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun)
   }
 
-
-  ## todo always save digests for future recycling 
   
 
-  if(recycle){
-    ## TODO save UNIQUE dt.models$path.digest
+  simres.all <- rbind(simres,simres.recycle,fill=TRUE)
+  ##  todo: not sure how to reorder. Look at file.mod from arguments? 
+  ## setorder(simres.all,"ROWMODEL")
+ 
+ #### always save digests for future recycling ####
+
+  dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
+
+  dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
+
+  list.digests.all <- lapplydt(
+    dt.models.digest,by="RMODORIG",
+    fun=function(x){
+      
+      args.this <- all.args.call
+      args.this$file.mod <- x$file.mod
+      args.this$recycle <- NULL
+      
+      ## compareCols(args.this,x)
+      digs <- digest_list(args.this,
+                          path.results=x$path.rds,
+                          args.unwrap = list(
+                            file.mod=function(x)readLines(x,warn=FALSE)
+                          ))
+      digs <- list(digests=digs,path.digests=x$path.digests)
+      digs
+    })
+
+  list.digests.all
+  
+  ### extract new
+  ## digests <- lapply(list.digests,function(x)x$digest.new)
+  
+
+  if(length(list.digests.all)<1) {
+    warning("Digests failed. Future recycling of this run not possible.")
+  } else {
     
-    
-    dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
-
-    dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
-
-    list.digests.all <- lapplydt(
-      dt.models.digest,by="RMODORIG",
-      fun=function(x){
-        
-        args.this <- all.args.call
-        args.this$file.mod <- x$file.mod
-        args.this$recycle <- NULL
-
-        ## compareCols(args.this,x)
-        digs <- digest_list(args.this)
-    digs <- list(digests=digs,path.digests=x$path.digests)
-    digs
-      })
-
-    list.digests.all
-    
-    ### extract new
-## digests <- lapply(list.digests,function(x)x$digest.new)
-    
-
-if(length(list.digests.all)<1) {
-      warning("Digests failed. Future recycling of this run not possible.")
-    } else {
-      ## must extract path digests
-lapply(list.digests.all,function(x){
+    ## must extract path digests
+    lapply(list.digests.all,function(x){
 
       saveRDS(x$digests, x$path.digests)
 
-})
+    })
 
-    }
+  }
 
-}
+### End: always save digests for future recycling ###
+
  
-
+  
   ##### return results to user
   
   ## if(!wait) return(simres$lst)
   ## if(execute && (wait.exec||wait)){
-  if(is.NMsimRes(simres) || (execute && (wait.exec||wait))){
+  if(is.NMsimRes(simres.all) || (execute && (wait.exec||wait))){
     if(!quiet){
-      if(nrow(simres)==0){
+      if(nrow(simres.all)==0){
         message("Simulation results are empty. An empty data.frame is returned.")
       }
       message("\nSimulation results returned. Re-read them without re-simulating using:\n",paste(sprintf("  simres <- NMreadSim(\"%s\")",dt.models[,simplePath(unique(path.rds))]),collapse="\n"))
     }
-    return(returnSimres(simres))
+    return(returnSimres(simres.all))
   } else {
     if(!quiet & execute){
       message(sprintf("\nRead results with:\n  simres <- NMreadSim(c(\"%s\"))\nThe first time the results are read, they will be efficiently stored in the simulation results folder. Until then, they only exist as Nonmem result files.\nTrick: `NMreadSim()` also supports the `wait` argument to watch over Nonmem runs and return results once ready.",paste(dt.models[,simplePath(unique(path.rds))],collapse="\",\n    \"")))
