@@ -1840,10 +1840,12 @@ unloadNamespace("recycle")
 unloadNamespace("NMwork")
 unloadNamespace("NMsim")
 unloadNamespace("NMdata")
+
 load_all("~/wdirs/NMdata")
+load_all("~/wdirs/recycle")
 load_all("~/wdirs/NMsim")
 load_all("~/wdirs/NMwork")
-load_all("~/wdirs/recycle")
+
 
   fileRef <- "testReference/NMsim_24.rds"
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
@@ -1856,8 +1858,9 @@ load_all("~/wdirs/recycle")
   ## load_all(export_all=FALSE)
   set.seed(43)
 
-  dt.sim[,AGE := 50]
-  dt.sim[,WEIGHTB := 90]
+dt.sim[,AGE := 50]
+dt.sim[,WEIGHTB := 90]
+dt.sim[,MALEN := 1]
   
   simres <- NMsim(file.mod,
                   data=dt.sim,
@@ -1867,7 +1870,7 @@ load_all("~/wdirs/recycle")
                   path.nonmem=path.nonmem
                   )
 
-  modTab(simres)
+  ## modTab(simres)
 
 simres2 <- NMsim(file.mod,
                   data=dt.sim,
