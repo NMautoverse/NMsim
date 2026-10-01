@@ -1872,6 +1872,9 @@ dt.sim[,MALEN := 1]
 
   ## modTab(simres)
 
+### next steps
+## calc digests first, then check_need_run() on 
+
 simres2 <- NMsim(file.mod,
                   data=dt.sim,
                   table.var="PRED IPRED",

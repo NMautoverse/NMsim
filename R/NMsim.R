@@ -928,6 +928,7 @@ NMsim <- function(file.mod,data,
 
   
   dt.models[,ROWMODEL:=.I]
+  dt.models[,RMODORIG:=ROWMODEL]
 
   ####### TODO
   ## construct model-specific paths to data sets on file. say parent dir of fn.sim, then data/name_data.csv. They must be a column in dt.models
@@ -1700,19 +1701,18 @@ NMsim <- function(file.mod,data,
 
 
   ## todo always save digests for future recycling 
-  ##:ess-bp-start::browser@nil:##
-browser(expr=is.null(.ESSBP.[["@26@"]]));##:ess-bp-end:##
+  
 
-
-  if(F){
+  if(recycle){
     ## TODO save UNIQUE dt.models$path.digest
     
-    dt.models.all <- rbind(dt.models,dt.models.recycle)
+    
+    dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
-
+    dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
 
     list.digests.all <- lapplydt(
-      dt.models.all,by="ROWMODEL",
+      dt.models.digest,by="RMODORIG",
       fun=function(x){
         
         args.this <- all.args.call
@@ -1720,29 +1720,31 @@ browser(expr=is.null(.ESSBP.[["@26@"]]));##:ess-bp-end:##
         args.this$recycle <- NULL
 
         ## compareCols(args.this,x)
-        res <- check_need_run(args=args.this,
-                              path.res=x$path.results,
-                              path.digest=x$path.digests,
-                              force=FALSE,
-                              funs.unwrap = list(
-                                file.mod=function(x)readLines(x,warn=FALSE)
-                              )
-                              )
-        ## res$digest.all <- NULL
-        res
+        digs <- digest_list(args.this)
+    digs <- list(digests=digs,path.digests=x$path.digests)
+    digs
       })
 
-    lapply(list.digests,function(x)x$digest.new)
+    list.digests.all
     
+    ### extract new
+## digests <- lapply(list.digests,function(x)x$digest.new)
+    
+
+if(length(list.digests.all)<1) {
+      warning("Digests failed. Future recycling of this run not possible.")
+    } else {
+      ## must extract path digests
+lapply(list.digests.all,function(x){
+
+      saveRDS(x$digests, x$path.digests)
+
+})
+
+    }
 
 }
  
-  if(unique(dt.models,by="path.digests")[,.N] > 1){
-warning ("For recycling, only one digest path currently supported. recycling will not be possible in subsequent runs")
-} else {
- digests <- digest_list(all.args.call)
-  saveRDS(digests, dt.models[,unique(path.digests)])
-}
 
   ##### return results to user
   
