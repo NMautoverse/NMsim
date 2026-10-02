@@ -1836,9 +1836,9 @@ test_that("recycle",{     })
 
 
 library(devtools)
-unloadNamespace("recycle")
 unloadNamespace("NMwork")
 unloadNamespace("NMsim")
+unloadNamespace("recycle")
 unloadNamespace("NMdata")
 
 load_all("~/wdirs/NMdata")

@@ -8,7 +8,6 @@ NMsim(
   file.mod,
   data,
   subproblems = NULL,
-  reuse.results = FALSE,
   seed.R,
   seed.nm,
   name.sim,
@@ -25,6 +24,8 @@ NMsim(
   path.nonmem = NULL,
   sge = FALSE,
   nc = 1,
+  reuse.results = FALSE,
+  recycle = FALSE,
   execute = TRUE,
   script = NULL,
   transform = NULL,
@@ -77,10 +78,6 @@ data sets in the list.}
 \item{subproblems}{Number of subproblems to use as \code{SUBPROBLEMS} in
 \code{$SIMULATION} block in Nonmem. The default is subproblem=0 which
 means not to use \code{SUBPROBLEMS}.}
-
-\item{reuse.results}{If simulation results found on file, should they be
-used? If TRUE and reading the results fail, the simulations will still be
-rerun.}
 
 \item{seed.R}{A value passed to \code{set.seed()}. It is recommended to use
 \code{seed.R} rather than calling \code{set.seed()} manually because the
@@ -247,6 +244,10 @@ result.}
 
 \item{nc}{Number of cores used in parallelization. Only used if
 `sge=TRUE`.}
+
+\item{reuse.results}{If simulation results found on file, should they be
+used? If TRUE and reading the results fail, the simulations will still be
+rerun.}
 
 \item{execute}{Execute the simulation or only prepare it?
 `execute=FALSE` can be useful if you want to do additional
