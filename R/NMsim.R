@@ -83,7 +83,7 @@
 ##'     (say to choose a different pool of seeds to draw from).
 ##'
 ##' To avoid changing an exisiting seed in a control stream, use
-##' \code{seed.nm="asis"}.
+##' \code{seed.nm="asis"} or \code{seed.nm="FALSE"}.
 ##'
 ##' In case \code{method.sim=NMsim_EBE}, seeds are not used.
 ##'
@@ -652,11 +652,12 @@ NMsim <- function(file.mod,data,
     seed <- NULL
   }
 
-
   
   ## if(missing(seed)) seed <- NULL
   ## arg.seed is the user-supplied seed. Don't confuse with seed.args
-  ### in case of "asis", how should the user be allowed to disable touching the seed? seed.nm="asis"? 
+  ### in case of "asis", how should the user be allowed to disable touching the seed? seed.nm="asis"?
+
+  ## to not touch nonmem seed, set seed.nm to FALSE or "asis" 
   arg.seed.nm <- seed.nm
   do.seed <- TRUE
   if( (is.logical(seed.nm) && seed.nm==FALSE) ||
@@ -1034,6 +1035,8 @@ NMsim <- function(file.mod,data,
     list.digests <- lapplydt(
       dt.models,by="ROWMODEL",
       fun=function(x){
+
+        
         
         args.this <- all.args.call
         args.this$file.mod <- x$file.mod
@@ -1143,7 +1146,7 @@ NMsim <- function(file.mod,data,
     warning("Digests failed. Future recycling of this run not possible.")
   } else {
     
-    ## must extract path digests
+     ## must extract path digests
     lapply(list.digests.all,function(x){
 
       saveRDS(x$digests, x$path.digests)
@@ -1164,16 +1167,30 @@ NMsim <- function(file.mod,data,
     if(!quiet){
       if(nrow(simres.all)==0){
         message("Simulation results are empty. An empty data.frame is returned.")
+      } else {
+      ## message("\nSimulation results returned. Re-read them without re-simulating using:\n",paste(sprintf("  simres <- NMreadSim(\"%s\")",dt.models.all[,simplePath(unique(path.rds))]),collapse="\n"))
+        unique.path.rds <- dt.models.all[,simplePath(unique(path.rds))]
+        if(length(unique.path.rds)==1){
+          msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
+                   paste(sprintf("  simres <- NMreadSim(\"%s\")",unique.path.rds)))
+        }
+        if(length(unique.path.rds)>1){
+          msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
+                   paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
+                                 paste(unique.path.rds,collapse="\",\n     \"")
+                                 ))
+                   )          
+        }
       }
-      message("\nSimulation results returned. Re-read them without re-simulating using:\n",paste(sprintf("  simres <- NMreadSim(\"%s\")",dt.models[,simplePath(unique(path.rds))]),collapse="\n"))
+      message(msg)
+         return(returnSimres(simres.all))
     }
-    return(returnSimres(simres.all))
   } else {
     if(!quiet & execute){
       message(sprintf("\nRead results with:\n  simres <- NMreadSim(c(\"%s\"))\nThe first time the results are read, they will be efficiently stored in the simulation results folder. Until then, they only exist as Nonmem result files.\nTrick: `NMreadSim()` also supports the `wait` argument to watch over Nonmem runs and return results once ready.",paste(dt.models[,simplePath(unique(path.rds))],collapse="\",\n    \"")))
     }
     addClass(dt.models,"NMsimModTab")
-    return(invisible(dt.models[,unique(path.rds)]))
+    return(invisible(dt.models.all[,unique(path.rds)]))
   }
 
 }

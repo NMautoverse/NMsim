@@ -1850,8 +1850,8 @@ load_all("~/wdirs/NMwork")
   fileRef <- "testReference/NMsim_24.rds"
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
   file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
-## ,
-##                 "../../tests/testthat/testData/nonmem/xgxr134.mod"
+,
+                "../../tests/testthat/testData/nonmem/xgxr134.mod"
 )
   ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
   ## library(nonmem2R)
@@ -1889,8 +1889,7 @@ simres2 <- NMsim(file.mod,
                   data=dt.sim,
                   table.var="PRED IPRED",
                  dir.sims="testOutput",
-                 method.sim=NMsim_default,
-                  name.sim="recycle_01",
+                 name.sim="recycle_01",
                   path.nonmem=path.nonmem,
                  recycle=TRUE,
                  reuse.results=FALSE
