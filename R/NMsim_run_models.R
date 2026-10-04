@@ -8,9 +8,8 @@
 NMsim_run_models <- function(env){
   
 
-
   ## dir.sim.sub && sim.dir.from.scratch
-  ##quiet
+  ## quiet
   ## method.update.inits
   ## inits
   ## data

@@ -1891,6 +1891,7 @@ simres2 <- NMsim(file.mod,
                  dir.sims="testOutput",
                  name.sim="recycle_01",
                   path.nonmem=path.nonmem,
+                 subproblems = 2,
                  recycle=TRUE,
                  reuse.results=FALSE
                   )

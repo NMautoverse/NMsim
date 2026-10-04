@@ -481,6 +481,7 @@ NMsim <- function(file.mod,data,
   ## Capture all arguments except recycle-specific ones
   
   all.args.call <- as.list(environment())
+  all.args.call <- c(all.args.call,list(...))
   
   ## all.args.call <- all.args.call[!sapply(all.args.call,is.name)]
   all.args.call[sapply(all.args.call,is.name)] <- NULL
@@ -1021,8 +1022,26 @@ NMsim <- function(file.mod,data,
     dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
   }
 
-#### calculate digest for recycle ####
 
+  #### calculate digest for recycle ####
+
+  list.digests.all <- lapplydt(
+    dt.models,by="RMODORIG",
+    fun=function(x){
+      
+      args.this <- all.args.call
+      args.this$file.mod <- x$file.mod
+      args.this$recycle <- NULL
+      
+      ## compareCols(args.this,x)
+      digs <- digest_list(args.this,
+                          path.results=x$path.rds,
+                          args.unwrap = list(
+                            file.mod=function(x)readLines(x,warn=FALSE)
+                          ))
+      digs <- list(digests=digs,path.digests=x$path.digests)
+      digs
+    })
 
 
 ### End: calculate digest for recycle ###
@@ -1033,19 +1052,20 @@ NMsim <- function(file.mod,data,
   if(recycle){
     
     list.digests <- lapplydt(
-      dt.models,by="ROWMODEL",
+      ##unique(dt.models$RMODORIG),
+dt.models,by="RMODORIG",
+      ## FUN=function(rmod){
       fun=function(x){
-
-        
-        
+        ## x <- dt.models[RMODORIG==rmod]
         args.this <- all.args.call
         args.this$file.mod <- x$file.mod
         args.this$recycle <- NULL
-
+        rmod <- x[,RMODORIG]
         ## compareCols(args.this,x)
         res <- check_need_run(args=args.this,
                               path.results=x$path.rds,
                               path.digest=x$path.digests,
+                              digests=list.digests.all[[rmod]]$digests,
                               force=FALSE,
                               args.unwrap = list(
                                 file.mod=function(x)readLines(x,warn=FALSE)
@@ -1113,7 +1133,7 @@ NMsim <- function(file.mod,data,
   ## setorder(simres.all,"ROWMODEL")
  
  #### always save digests for future recycling ####
-  
+## if(FALSE){  
   dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
   dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
@@ -1136,9 +1156,10 @@ NMsim <- function(file.mod,data,
       digs
     })
 
-  list.digests.all
-  
-  ### extract new
+  ## list.digests.all
+## }  
+
+  ### extract new - not used
   ## digests <- lapply(list.digests,function(x)x$digest.new)
   
 
@@ -1147,10 +1168,8 @@ NMsim <- function(file.mod,data,
   } else {
     
      ## must extract path digests
-    lapply(list.digests.all,function(x){
-
+    tmp <- lapply(list.digests.all,function(x){
       saveRDS(x$digests, x$path.digests)
-
     })
 
   }
