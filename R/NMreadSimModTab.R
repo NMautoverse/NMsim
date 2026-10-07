@@ -35,6 +35,8 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
       
       tab.paths.list <- lapply(x,function(file){
         tab.paths <- readRDS(file)
+        
+        if(is.list(tab.paths)&&"models"%in%names(tab.paths)) tab.paths <- tab.paths$models
         if(!inherits(tab.paths,"NMsimModTab")) {
           if(!is.data.frame(tab.paths)){
             stop("The provided rds file does not contain a NMsimModTab object")
