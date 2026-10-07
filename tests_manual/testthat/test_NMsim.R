@@ -1896,6 +1896,8 @@ simres2 <- NMsim(file.mod,
                  reuse.results=FALSE
                   )
 
+names(attributes(simres2))
+names(readRDS("testOutput/xgxr021_recycle_01_MetaData.rds"))
 
 expect_equal(
   unNMsimRes(simres)
