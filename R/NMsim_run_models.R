@@ -601,15 +601,19 @@ NMsim_run_models <- function(env){
     }
     
     ###  Section end: Execute
-    
+  
     dt.models.save <- split(dt.models,by="path.rds")
     addClass(dt.models,"NMsimModTab")
-    files.rds <- lapply(1:length(dt.models.save),function(I){
 
+  files.rds <- lapply(1:length(dt.models.save),function(I){
+    rmod <- dt.models.save[[I]][,unique(RMODORIG)]
+    digests.this <- list.digests[[rmod]]
       ####### notify user where to find rds files
       fn.this.rds <- unique(dt.models.save[[I]][,path.rds])
-      addClass(dt.models.save[[I]],"NMsimModTab")
-      saveRDS(dt.models.save[[I]],file=fn.this.rds)
+    addClass(dt.models.save[[I]],"NMsimModTab")
+    meta.all <- list(models=dt.models.save[[I]],digests=digests.this)
+    ## saveRDS(dt.models.save[[I]],file=fn.this.rds)
+    saveRDS(meta.all,file=fn.this.rds)
       fn.this.rds
     })
 
@@ -622,7 +626,7 @@ NMsim_run_models <- function(env){
       simres <- NMreadSim(unlist(files.rds),wait=wait,progress=progress,quiet=quiet,as.fun=as.fun)
     }
     ### Section end: Read results if requested
-return(list(dt.models=dt.models,simres=simres))
+  return(list(dt.models=dt.models,simres=simres))
   }
-
+## 
   

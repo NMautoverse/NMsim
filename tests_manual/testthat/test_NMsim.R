@@ -1891,13 +1891,22 @@ simres2 <- NMsim(file.mod,
                  dir.sims="testOutput",
                  name.sim="recycle_01",
                   path.nonmem=path.nonmem,
-                 subproblems = 2,
+                 subproblems = 1,
                  recycle=TRUE,
                  reuse.results=FALSE
                   )
 
-names(attributes(simres2))
-names(readRDS("testOutput/xgxr021_recycle_01_MetaData.rds"))
+
+file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
+file.info(file.res)
+aa=readRDS(file.res)
+## bug: there should only be one result digest
+## bug: digests should be a data.table?
+aa$digests$digests.new
+aa$digests$digests.new[,.N,by=name]
+
+aa$digest
+aa[[1]]$digest
 
 expect_equal(
   unNMsimRes(simres)

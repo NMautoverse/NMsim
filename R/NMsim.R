@@ -1032,7 +1032,7 @@ NMsim <- function(file.mod,data,
       args.this <- all.args.call
       args.this$file.mod <- x$file.mod
       args.this$recycle <- NULL
-      
+
       ## compareCols(args.this,x)
       digs <- digest_list(args.this,
                           path.results=x$path.rds,
@@ -1050,22 +1050,34 @@ NMsim <- function(file.mod,data,
   
   dt.models.recycle <- NULL
   if(recycle){
-    
+
+
     list.digests <- lapplydt(
       ##unique(dt.models$RMODORIG),
 dt.models,by="RMODORIG",
       ## FUN=function(rmod){
       fun=function(x){
         ## x <- dt.models[RMODORIG==rmod]
+        
+      meta <- readRDS(x$path.rds)
+      digests.old <- NULL
+      if(!is.list(meta)||!is.null(meta$digests.old)){
+        digests.old <- meta$digests
+      }
+
+
         args.this <- all.args.call
         args.this$file.mod <- x$file.mod
         args.this$recycle <- NULL
         rmod <- x[,RMODORIG]
+
+        
         ## compareCols(args.this,x)
         res <- check_need_run(args=args.this,
                               path.results=x$path.rds,
                               path.digest=x$path.digests,
                               digests=list.digests.all[[rmod]]$digests,
+                              digests.old=digests.old,
                               force=FALSE,
                               args.unwrap = list(
                                 file.mod=function(x)readLines(x,warn=FALSE)
@@ -1078,7 +1090,7 @@ dt.models,by="RMODORIG",
     
     
     ## merge in run? Would be duplicate and unnecessary. But might make sense?
-    dt.run <- dtapply(list.digests,FUN=function(x)x$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
+    dt.run <- dtapply(list.digests,FUN=function(x)x$summary$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
     dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
