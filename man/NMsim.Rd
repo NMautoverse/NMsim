@@ -99,7 +99,7 @@ Default is to draw seeds betwen
     (say to choose a different pool of seeds to draw from).
 
 To avoid changing an exisiting seed in a control stream, use
-\code{seed.nm="asis"}.
+\code{seed.nm="asis"} or \code{seed.nm="FALSE"}.
 
 In case \code{method.sim=NMsim_EBE}, seeds are not used.}
 

@@ -2,6 +2,9 @@
 ##'
 ##' @param dt.models 
 ##' @return list with simulation results and updated dt.models
+##' @import data.table
+##' @import NMdata
+##' @import recycle
 ##' @author Philip Delff
 ##' @keywords internal
 
