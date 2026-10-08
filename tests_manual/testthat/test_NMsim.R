@@ -1847,18 +1847,18 @@ load_all("~/wdirs/NMsim")
 load_all("~/wdirs/NMwork")
 
 
-  fileRef <- "testReference/NMsim_24.rds"
+fileRef <- "testReference/NMsim_24.rds"
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
-  file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
-,
-                "../../tests/testthat/testData/nonmem/xgxr134.mod"
-)
+file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
+             ,
+              "../../tests/testthat/testData/nonmem/xgxr134.mod"
+              )
   ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
   ## library(nonmem2R)
   ## extload(file.mod)
 
   ## load_all(export_all=FALSE)
-  set.seed(43)
+set.seed(43)
 
 dt.dos <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
 dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
@@ -1871,14 +1871,28 @@ dt.sim[,AGE := 50]
 dt.sim[,WEIGHTB := 90]
 dt.sim[,MALEN := 1]
   
-  simres <- NMsim(file.mod,
-                  data=dt.sim,
-                  table.var="PRED IPRED",
-                  dir.sims="testOutput",
-                  name.sim="recycle_01",
-                  path.nonmem=path.nonmem,
-                  reuse.results=FALSE
-                  )
+simres <- NMsim(file.mod,
+                data=dt.sim,
+                table.var="PRED IPRED",
+                dir.sims="testOutput",
+                name.sim="recycle_01",
+                path.nonmem=path.nonmem,
+                reuse.results=FALSE
+                )
+
+names(attributes(simres))
+meta <- readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")
+class(meta)
+names(meta)
+meta$digests$digests
+
+
+
+meta$digests$digests[type=="results"]
+system("md5sum testOutput/xgxr021_recycle_01_ResultsData.fst")
+system("md5sum testOutput/*recycle*")
+names(attributes(readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")))
+
 
   ## modTab(simres)
 
@@ -1891,7 +1905,7 @@ simres2 <- NMsim(file.mod,
                  dir.sims="testOutput",
                  name.sim="recycle_01",
                   path.nonmem=path.nonmem,
-                 subproblems = 1,
+                 ## subproblems = 1,
                  recycle=TRUE,
                  reuse.results=FALSE
                   )
@@ -1900,10 +1914,9 @@ simres2 <- NMsim(file.mod,
 file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
 file.info(file.res)
 aa=readRDS(file.res)
-## bug: there should only be one result digest
-## bug: digests should be a data.table?
-aa$digests$digests.new
-aa$digests$digests.new[,.N,by=name]
+names(aa)
+aa$digests$digests
+aa$digests$digests[,.N,by=name][,.N,by=N]
 
 aa$digest
 aa[[1]]$digest
@@ -1911,8 +1924,7 @@ aa[[1]]$digest
 expect_equal(
   unNMsimRes(simres)
 ,
-
-unNMsimRes(simres2)
+  unNMsimRes(simres2)
 )
 
 

@@ -551,7 +551,7 @@ NMsim <- function(file.mod,data,
   pathResFromSims <- NULL
   pathSimsFromRes <- NULL
   path.sim <- NULL
-  path.digests <- NULL
+  ## path.digests <- NULL
   path.sim.lst <- NULL
   path.data <- NULL
   path.rds.exists <- NULL
@@ -810,7 +810,7 @@ NMsim <- function(file.mod,data,
   ## modelname <- NMdataDecideOption("modelname",modelname)
   if(is.null(modelname)) modelname <- function(fn) fnExtension(basename(fn),"")
 
- 
+  
   #### Section start: Defining additional paths based on arguments ####
 
   ## dir.sim
@@ -1013,12 +1013,12 @@ NMsim <- function(file.mod,data,
   
   if(is.null(file.res)){
     dt.models[,path.rds:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"MetaData"))]
-    dt.models[,path.digests:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"digests"))]
+    ## dt.models[,path.digests:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"digests"))]
     ## dt.models[,path.rds:=pathSimMeta())]
     dt.models[,path.results:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"fst"),"ResultsData"))]
   } else {
     dt.models[,path.rds:=fnExtension(file.res,"rds")]
-    dt.models[,path.digests:=fnAppend(fnExtension(file.res,"rds"),"digests")]
+    ## dt.models[,path.digests:=fnAppend(fnExtension(file.res,"rds"),"digests")]
     dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
   }
 
@@ -1035,16 +1035,17 @@ NMsim <- function(file.mod,data,
 
       ## compareCols(args.this,x)
       digs <- digest_list(args.this,
-                          path.results=x$path.rds,
+                          ## path.results=x$path.results,
                           args.unwrap = list(
                             file.mod=function(x)readLines(x,warn=FALSE)
                           ))
-      digs <- list(digests=digs,path.digests=x$path.digests)
+      ##       digs <- list(digests=digs,path.digests=x$path.digests)
+      digs <- list(digests=digs)
       digs
     })
 
 
-### End: calculate digest for recycle ###
+  ### End: calculate digest for recycle ###
 
 
   
@@ -1052,18 +1053,19 @@ NMsim <- function(file.mod,data,
   if(recycle){
 
 
-    list.digests <- lapplydt(
+    list.checkNeedRun <- lapplydt(
       ##unique(dt.models$RMODORIG),
-dt.models,by="RMODORIG",
+      dt.models,by="RMODORIG",
       ## FUN=function(rmod){
       fun=function(x){
         ## x <- dt.models[RMODORIG==rmod]
         
-      meta <- readRDS(x$path.rds)
-      digests.old <- NULL
-      if(!is.list(meta)||!is.null(meta$digests.old)){
-        digests.old <- meta$digests
-      }
+        meta <- readRDS(x$path.rds)
+        digests.old <- NULL
+        ## does this cover all allowed formats?
+        if(is.list(meta)&&!is.null(meta$digests)){
+          digests.old <- meta$digests$digests
+        }
 
 
         args.this <- all.args.call
@@ -1074,8 +1076,8 @@ dt.models,by="RMODORIG",
         
         ## compareCols(args.this,x)
         res <- check_need_run(args=args.this,
-                              path.results=x$path.rds,
-                              path.digest=x$path.digests,
+                              path.results=x$path.results,
+                              ## path.digest=x$path.digests,
                               digests=list.digests.all[[rmod]]$digests,
                               digests.old=digests.old,
                               force=FALSE,
@@ -1090,7 +1092,7 @@ dt.models,by="RMODORIG",
     
     
     ## merge in run? Would be duplicate and unnecessary. But might make sense?
-    dt.run <- dtapply(list.digests,FUN=function(x)x$summary$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
+    dt.run <- dtapply(list.checkNeedRun,FUN=function(x)x$summary$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
     dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
@@ -1123,7 +1125,7 @@ dt.models,by="RMODORIG",
   }
 
   f <- NMsim_run_models
-    environment(f) <- environment()
+  environment(f) <- environment()
   res <- f()
   ## res <- NMsim_run_models(dt.models,env=environment())
 
@@ -1143,9 +1145,9 @@ dt.models,by="RMODORIG",
   simres.all <- rbind(simres,simres.recycle,fill=TRUE)
   ##  todo: not sure how to reorder. Look at file.mod from arguments? 
   ## setorder(simres.all,"ROWMODEL")
- 
- #### always save digests for future recycling ####
-## if(FALSE){  
+  
+  #### always save digests for future recycling ####
+  ## if(FALSE){  
   dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
   dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
@@ -1160,16 +1162,17 @@ dt.models,by="RMODORIG",
       
       ## compareCols(args.this,x)
       digs <- digest_list(args.this,
-                          path.results=x$path.rds,
+                          ## path.results=x$path.results,
                           args.unwrap = list(
                             file.mod=function(x)readLines(x,warn=FALSE)
                           ))
-      digs <- list(digests=digs,path.digests=x$path.digests)
+      ## digs <- list(digests=digs,path.digests=x$path.digests)
+      digs <- list(digests=digs)
       digs
     })
 
   ## list.digests.all
-## }  
+  ## }  
 
   ### extract new - not used
   ## digests <- lapply(list.digests,function(x)x$digest.new)
@@ -1179,16 +1182,16 @@ dt.models,by="RMODORIG",
     warning("Digests failed. Future recycling of this run not possible.")
   } else {
     
-     ## must extract path digests
-    tmp <- lapply(list.digests.all,function(x){
-      saveRDS(x$digests, x$path.digests)
-    })
+    ## must extract path digests
+    ## tmp <- lapply(list.digests.all,function(x){
+    ##   saveRDS(x$digests, x$path.digests)
+    ## })
 
   }
 
-### End: always save digests for future recycling ###
+  ### End: always save digests for future recycling ###
 
- 
+  
   
   ##### return results to user
   
@@ -1199,22 +1202,30 @@ dt.models,by="RMODORIG",
       if(nrow(simres.all)==0){
         message("Simulation results are empty. An empty data.frame is returned.")
       } else {
-      ## message("\nSimulation results returned. Re-read them without re-simulating using:\n",paste(sprintf("  simres <- NMreadSim(\"%s\")",dt.models.all[,simplePath(unique(path.rds))]),collapse="\n"))
-        unique.path.rds <- dt.models.all[,simplePath(unique(path.rds))]
+        ## report recycling
+        rds.recycle <- dt.models.recycle[,unique(path.rds)]
+        msg.recycle <- NULL
+        if(length(rds.recycle)) {
+          msg.recycle <- sprintf("\nSimulation results recycled: %s",paste(rds.recycle,collapse=", "))
+        }
+        msg <- NULL
+        ## report simulated and reused
+        unique.path.rds <- dt.models[,simplePath(unique(path.rds))]
         if(length(unique.path.rds)==1){
           msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
-                   paste(sprintf("  simres <- NMreadSim(\"%s\")",unique.path.rds)))
+                       paste(sprintf("  simres <- NMreadSim(\"%s\")",unique.path.rds)))
         }
         if(length(unique.path.rds)>1){
           msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
-                   paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
-                                 paste(unique.path.rds,collapse="\",\n     \"")
-                                 ))
-                   )          
+                       paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
+                                     paste(unique.path.rds,collapse="\",\n     \"")
+                                     ))
+                       )          
         }
       }
-      message(msg)
-         return(returnSimres(simres.all))
+      if(!is.null(msg)) message(msg)
+      if(!is.null(msg.recycle)) message(msg.recycle)
+      return(returnSimres(simres.all))
     }
   } else {
     if(!quiet & execute){

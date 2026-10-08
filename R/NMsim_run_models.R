@@ -569,9 +569,7 @@ NMsim_run_models <- function(env){
             )
           }
           unlink(path.sim.lst)
-
         }
-        
         
         obj.exec <- NMexec(files=path.sim,sge=sge,nc=nc,wait=wait.exec,
                            args.psn.execute=args.psn.execute,nmquiet=nmquiet,quiet=TRUE,
@@ -590,7 +588,6 @@ NMsim_run_models <- function(env){
         ## simres.n
         if(do.pb){
           setTxtProgressBar(pb, .I)
-          
         }
         
         obj.exec$mod.exec
@@ -607,7 +604,7 @@ NMsim_run_models <- function(env){
 
   files.rds <- lapply(1:length(dt.models.save),function(I){
     rmod <- dt.models.save[[I]][,unique(RMODORIG)]
-    digests.this <- list.digests[[rmod]]
+    digests.this <- list.digests.all[[rmod]]
       ####### notify user where to find rds files
       fn.this.rds <- unique(dt.models.save[[I]][,path.rds])
     addClass(dt.models.save[[I]],"NMsimModTab")

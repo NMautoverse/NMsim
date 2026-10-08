@@ -212,6 +212,8 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
   }
 
   
+
+  
   res.all.modtab <- modTab(res.all)
   res.all <- as.fun(res.all)
   addClass(res.all,"NMsimRes")

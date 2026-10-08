@@ -110,6 +110,8 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
   
   
   res <- rbindlist(res.list,fill=TRUE)
+  
+
 
   list.ModTab <- lapply(res.list,function(y)attributes(y)$NMsimModTab)
   ModTab <- rbindlist(list.ModTab,fill=TRUE)
@@ -153,8 +155,14 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
 
   arg.fast.tables <- fast.tables
   arg.carry.out <- carry.out
+
   
   
+list.digests <- NULL
+  if(is.list(modtab)&&!is.data.frame(modtab)) {
+modtab <- modtab$models
+if(!is.null(modtab$digests)) list.digests <- modtab$digests
+} 
   
   if(!"path.results"%in%colnames(modtab)){
     if(! "NMsimVersion"%in%colnames(modtab) || !"file.res.data" %in% colnames(modtab)){
@@ -419,6 +427,7 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
 
   res <- as.fun(res)
   setattr(res,"NMsimModTab",modtab)
+  setattr(res,"digests",list.digests)
   addClass(res,"NMsimRes")
 
   ### if no models ran successfully, res will be a zero-row data table. Should that be saved?
@@ -439,3 +448,8 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
 
 
 }
+
+
+
+
+
