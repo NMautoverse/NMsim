@@ -60,6 +60,9 @@
 ##' @param reuse.results If simulation results found on file, should they be
 ##'   used? If TRUE and reading the results fail, the simulations will still be
 ##'   rerun.
+##' @param recycle Attempt to reuse results using the 'recycle' package (experimental).
+##'   This is based on comparing argument values and model file contents to when
+##'   NMsim was last run.
 ##' @param transform A list defining transformations to be applied after the
 ##'   Nonmem simulations and before plotting. For each list element, its name
 ##'   refers to the name of the column to transform, the contents must be the
@@ -483,93 +486,89 @@ NMsim <- function(file.mod,data,
   
   all.args.call <- as.list(environment())
   all.args.call <- c(all.args.call,list(...))
+  ## all.args.call <- append(all.args.call,list(dots=list(...)))
   
   ## all.args.call <- all.args.call[!sapply(all.args.call,is.name)]
   all.args.call[sapply(all.args.call,is.name)] <- NULL
   ## names(all.args.call)
   ## library(recycle)
 
-  if(F){
-    ## this can be done by check_need_run() later
-    library(devtools)
-    load_all("~/wdirs/recycle")
-    digests.args.call <- digest_elements(all.args.call,
-                                         funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE)
-                                                          )
-                                         )
-  }
 
   #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
-  
-  . <- NULL
-  ..carry.out <- NULL
-  ..dir.res <- NULL
-  ..name.sim <- NULL
-  col.row <- NULL
-  DATAROW <- NULL
-  data.name <- NULL
-  default <- NULL
-  direct <- NULL
-  directory <- NULL
-  dir.data.sim <- NULL
-  dir.sim <- NULL
-  DV <- NULL
-  est <- NULL
-  fast.tables <- NULL
-  fn.data <- NULL
-  f.exists <- NULL
-  fn.sim.predata <- NULL
-  files.needed <- NULL
-  files.res <- NULL
-  fn.sim.tmp <- NULL
-  fn <- NULL
-  fn.mod <- NULL
-  fn.sim <- NULL
-  funs.transform <- NULL
-  i <- NULL
-  ID <- NULL
-  is.data <- NULL
-  known <- NULL
-  lst <- NULL
-  MDV <- NULL
-  model <- NULL
-  model.sim <- NULL
-  mod <- NULL
-  n <- NULL
-  ## name.mod <- NULL
-  NEWMODEL <- NULL
-  nmsim <- NULL
-  NMsimTime <- NULL
-  NMsimVersion <- NULL
-  n.fn.sim <- NULL
-  none <- NULL
-  psn <- NULL
-  par.type <- NULL
-  path.mod.exec <- NULL
-  path.rds <- NULL
-  path.results <- NULL
-  pathResFromists <- NULL
-  pathResFromSims <- NULL
-  pathSimsFromRes <- NULL
-  path.sim <- NULL
-  ## path.digests <- NULL
-  path.sim.lst <- NULL
-  path.data <- NULL
-  path.rds.exists <- NULL
-  ROW <- NULL
-  ROWMODEL <- NULL
-  ## ROWMODEL2 <- NULL
-  ## rowtmp <- NULL
-  ##    run.mod <- NULL
-  ## run.sim <- NULL
-  sim <- NULL
-  tab.ext <- NULL
-  tmprow <- NULL
-  text <- NULL
-  textmod <- NULL
-  value <- NULL
-  variable <- NULL
-  
+
+  if(F){
+    . <- NULL
+    ..carry.out <- NULL
+    ..dir.res <- NULL
+    ..name.sim <- NULL
+    cmd.update.inits <- NULL
+    col.row <- NULL
+    DATAROW <- NULL
+    data.name <- NULL
+    default <- NULL
+    direct <- NULL
+    directory <- NULL
+    dir.data.sim <- NULL
+    dir.sim <- NULL
+    DV <- NULL
+    est <- NULL
+    fast.tables <- NULL
+    fn.data <- NULL
+    f.exists <- NULL
+    fn.sim.predata <- NULL
+    files.needed <- NULL
+    files.res <- NULL
+    fn.sim.tmp <- NULL
+    fn <- NULL
+    fn.mod <- NULL
+    fn.sim <- NULL
+    funs.transform <- NULL
+    i <- NULL
+    ID <- NULL
+    is.data <- NULL
+    known <- NULL
+    lst <- NULL
+    MDV <- NULL
+    model <- NULL
+    model.sim <- NULL
+    mod <- NULL
+    n <- NULL
+    ## name.mod <- NULL
+    NEWMODEL <- NULL
+    nmsim <- NULL
+    NMsimTime <- NULL
+    NMsimVersion <- NULL
+    n.fn.sim <- NULL
+    none <- NULL
+    psn <- NULL
+    par.type <- NULL
+    path.mod.exec <- NULL
+    path.rds <- NULL
+    path.results <- NULL
+    pathResFromists <- NULL
+    pathResFromSims <- NULL
+    pathSimsFromRes <- NULL
+    path.sim <- NULL
+    ## path.digests <- NULL
+    path.sim.lst <- NULL
+    path.data <- NULL
+    path.rds.exists <- NULL
+    ROW <- NULL
+    ROWMODEL <- NULL
+    RMODORIG <- NULL
+    ## ROWMODEL2 <- NULL
+    ## rowtmp <- NULL
+    ##    run.mod <- NULL
+    ## run.sim <- NULL
+    run <- NULL
+    sim <- NULL
+    tab.ext <- NULL
+    tmprow <- NULL
+    text <- NULL
+    textmod <- NULL
+    value <- NULL
+    variable <- NULL
+  }  
   
   ## Section end: Dummy variables, only not to get NOTE's in pacakge checks
 
@@ -1127,7 +1126,7 @@ NMsim <- function(file.mod,data,
 
   f <- NMsim_run_models
   environment(f) <- environment()
-  res <- f()
+  res <- f(...)
   ## res <- NMsim_run_models(dt.models,env=environment())
 
   simres <- res$simres

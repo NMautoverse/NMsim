@@ -15,6 +15,7 @@ Depends: R (>= 3.5.0)
 Imports:
   data.table,
   NMdata (>= 0.2.4),
+  recycle,
   R.utils,
   MASS,
   fst,

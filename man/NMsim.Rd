@@ -249,6 +249,10 @@ result.}
 used? If TRUE and reading the results fail, the simulations will still be
 rerun.}
 
+\item{recycle}{Attempt to reuse results using the 'recycle' package (experimental).
+This is based on comparing argument values and model file contents to when
+NMsim was last run.}
+
 \item{execute}{Execute the simulation or only prepare it?
 `execute=FALSE` can be useful if you want to do additional
 tweaks or simulate using other parameter estimates.}
