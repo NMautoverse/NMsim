@@ -1050,6 +1050,7 @@ NMsim <- function(file.mod,data,
 
   
   dt.models.recycle <- NULL
+  dt.models.all <- dt.models
   if(recycle){
 
 
@@ -1096,19 +1097,29 @@ NMsim <- function(file.mod,data,
     dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
+    dt.models.all <- mergeCheck(dt.models,dt.run,by="ROWMODEL",quiet=TRUE)
 
-    dt.models <- mergeCheck(dt.models,dt.run,by="ROWMODEL",quiet=TRUE)
-
-    dt.models.recycle <- dt.models[run==FALSE]
-    dt.models <- dt.models[run==TRUE]
+    dt.models.recycle <- dt.models.all[run==FALSE]
+    dt.models <- dt.models.all[run==TRUE]
     
   }
 
 
   
-
-
   simres <- NULL
+
+  simres.recycle <- NULL
+  if(recycle && nrow(dt.models.recycle)){
+    ## simres.recycle <- NMreadSim()
+    simres.recycle <- try(NMreadSim(dt.models.recycle[,path.rds],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun))
+    if(inherits(simres.recycle,"try-error")) {
+      message("Re-reading failed when attempting to recycle. Re-running all models.")
+      dt.models <- dt.models.all
+    }
+  }
+
+
+
   ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
   path.rds.exists <- dt.models[,file.exists(path.rds)]
   ### reading results from prior run
@@ -1132,13 +1143,6 @@ NMsim <- function(file.mod,data,
   simres <- res$simres
   dt.models <- res$dt.models
 
-  simres.recycle <- NULL
-  if(recycle && nrow(dt.models.recycle)){
-    
-    
-    ## simres.recycle <- NMreadSim()
-    simres.recycle <- NMreadSim(dt.models.recycle[,path.rds],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun)
-  }
 
   
 
@@ -1148,7 +1152,7 @@ NMsim <- function(file.mod,data,
   
   #### always save digests for future recycling ####
   ## if(FALSE){  
-  dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
+  ## dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
   dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
 
@@ -1192,40 +1196,38 @@ NMsim <- function(file.mod,data,
   ### End: always save digests for future recycling ###
 
   
-  
   ##### return results to user
   
-  ## if(!wait) return(simres$lst)
-  ## if(execute && (wait.exec||wait)){
   if(is.NMsimRes(simres.all) || (execute && (wait.exec||wait))){
     if(!quiet){
       if(nrow(simres.all)==0){
         message("Simulation results are empty. An empty data.frame is returned.")
       } else {
         ## report recycling
-        rds.recycle <- dt.models.recycle[,unique(path.rds)]
         msg.recycle <- NULL
-        if(length(rds.recycle)) {
-          msg.recycle <- sprintf("\nSimulation results recycled: %s",paste(rds.recycle,collapse=", "))
+        if(!is.null(dt.models.recycle)&&nrow(dt.models.recycle)) {
+          rds.recycle <- dt.models.recycle[,unique(path.rds)]
+   msg.recycle <- sprintf("\nSimulation results recycled: %s",paste(rds.recycle,collapse=", "))
         }
         msg <- NULL
         ## report simulated and reused
-        unique.path.rds <- dt.models[,simplePath(unique(path.rds))]
-        if(length(unique.path.rds)==1){
+        if(!is.null(dt.models)&&nrow(dt.models)){
+                  unique.path.rds <- dt.models[,simplePath(unique(path.rds))]
           msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
                        paste(sprintf("  simres <- NMreadSim(\"%s\")",unique.path.rds)))
-        }
+        
         if(length(unique.path.rds)>1){
           msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
                        paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
                                      paste(unique.path.rds,collapse="\",\n     \"")
                                      ))
                        )          
-        }
-      }
+        }}
+      
       if(!is.null(msg)) message(msg)
       if(!is.null(msg.recycle)) message(msg.recycle)
       return(returnSimres(simres.all))
+      }
     }
   } else {
     if(!quiet & execute){
