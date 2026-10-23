@@ -417,7 +417,6 @@
 ##' @import NMdata
 ##' @import data.table
 ##' @import utils
-##' @import recycle
 ##' @importFrom xfun relative_path
 ##' @export
 

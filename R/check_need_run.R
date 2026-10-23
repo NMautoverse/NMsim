@@ -23,8 +23,11 @@
 check_need_run <- function(args, path.results=NULL, path.digests, args.unwrap, digests, digests.old, force = FALSE, quiet = FALSE) {
 
   #### Section start: Dummy variables, only not to get NOTE's in package checks ####
+if(FALSE) {
+  res.old <- NULL
   res.new <- NULL
   name <- NULL
+}
   #### Section end: Dummy variables, only not to get NOTE's in package checks ####
 
   list.summary <- data.table(path.results=path.results)

@@ -129,7 +129,7 @@ test_that("basic - default",{
                   table.var="PRED IPRED",
                   dir.sims="testOutput",
                   name.sim="default_01",
-                  ## path.nonmem=path.nonmem
+                  path.nonmem=path.nonmem
                   )
 
   
@@ -188,7 +188,7 @@ test_that("basic - sge - dont wait",{
                   name.sim="default_01"
                  ,sge=TRUE
                   ## ,quiet=FALSE
-                  ## ,path.nonmem=path.nonmem
+                  ,path.nonmem=path.nonmem
                   ##,reuse.results=TRUE
                   ## ,file.res=simtab
                   )
@@ -214,6 +214,7 @@ test_that("basic - sge - dont wait",{
       attributes(ref)$NMsimModTab
     )
   }
+
 })
 
 
@@ -1832,19 +1833,19 @@ test_that("model name incl .",{
 })
 
 
-test_that("recycle",{     })
+test_that("recycle",{    
 
 
-library(devtools)
-unloadNamespace("NMwork")
-unloadNamespace("NMsim")
-unloadNamespace("recycle")
-unloadNamespace("NMdata")
+## library(devtools)
+## unloadNamespace("NMwork")
+## unloadNamespace("NMsim")
+## unloadNamespace("recycle")
+## unloadNamespace("NMdata")
 
-load_all("~/wdirs/NMdata")
-load_all("~/wdirs/recycle")
-load_all("~/wdirs/NMsim")
-load_all("~/wdirs/NMwork")
+## load_all("~/wdirs/NMdata")
+## load_all("~/wdirs/recycle")
+## load_all("~/wdirs/NMsim")
+## load_all("~/wdirs/NMwork")
 
 
 fileRef <- "testReference/NMsim_24.rds"
@@ -1933,5 +1934,6 @@ expect_equal(
     res
     ref
   }
+
 })
 
