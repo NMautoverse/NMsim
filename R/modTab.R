@@ -19,5 +19,8 @@
 
 
 modTab <- function(res){
+  if(is.character(res)) {
+    res <- readRDS(res)
+  }
     attributes(res)$NMsimModTab
 }
