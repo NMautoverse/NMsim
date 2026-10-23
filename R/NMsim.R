@@ -486,17 +486,8 @@ NMsim <- function(file.mod,data,
   ## all.args.call <- all.args.call[!sapply(all.args.call,is.name)]
   all.args.call[sapply(all.args.call,is.name)] <- NULL
   ## names(all.args.call)
-  ## library(recycle)
 
-  if(F){
-    ## this can be done by check_need_run() later
-    library(devtools)
-    load_all("~/wdirs/recycle")
-    digests.args.call <- digest_elements(all.args.call,
-                                         funs.unwrap=list(file.mod=function(x)readLines(x,warn=FALSE)
-                                                          )
-                                         )
-  }
+
 
   #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
   

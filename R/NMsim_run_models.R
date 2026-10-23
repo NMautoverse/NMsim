@@ -607,7 +607,7 @@ NMsim_run_models <- function(env){
 
   files.rds <- lapply(1:length(dt.models.save),function(I){
     rmod <- dt.models.save[[I]][,unique(RMODORIG)]
-    digests.this <- list.digests[[rmod]]
+    digests.this <- list.digests.all[[rmod]]
       ####### notify user where to find rds files
       fn.this.rds <- unique(dt.models.save[[I]][,path.rds])
     addClass(dt.models.save[[I]],"NMsimModTab")
