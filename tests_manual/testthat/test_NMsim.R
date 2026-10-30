@@ -4,10 +4,10 @@ library(NMdata)
 packageVersion("NMdata")
 library(NMsim)
 library(testthat)
-if(F){
+
   library(devtools)
   load_all(export_all=FALSE)
-}
+
 NMdataConf(reset=TRUE)
 NMdataConf(dir.psn=NULL)
 NMdataConf(as.fun="data.table")
@@ -110,11 +110,12 @@ fix.time <- function(x,extra=NULL){
 
 
 context("NMsim")
-message("basic - default")
+## message("basic - default")
 test_that("basic - default",{
 
   fileRef <- "testReference/NMsim_01.rds"
   fileRef.noMeta <- fnAppend(fileRef,"noMeta")
+  fileRef.modtab <- fnAppend(fileRef,"modtab")
 
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
   file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
@@ -144,11 +145,12 @@ test_that("basic - default",{
     ref.nometa
   }
   
+  ### model table
   ## attributes(NMreadSim("testOutput/NMsim_xgxr021_default_01_paths.rds"))
   fix.time(simres)
+  modtab <- modTab(simres)
   ## expect_equal_to_reference(simres[,!("sim")],fileRef)
-  expect_equal_to_reference(simres,fileRef)
-
+  expect_equal_to_reference(modtab,fileRef.modtab)
 
   
   if(F){
@@ -170,7 +172,7 @@ test_that("basic - default",{
 })
 
 
-message("basic - sge - dont wait")
+## message("basic - sge - dont wait")
 test_that("basic - sge - dont wait",{
 
   ### using the same reference in test 1. Only diff is using sge=TRUE
@@ -188,18 +190,20 @@ test_that("basic - sge - dont wait",{
                   name.sim="default_01"
                  ,sge=TRUE
                   ## ,quiet=FALSE
-                  ,path.nonmem=path.nonmem
+                 ,path.nonmem=path.nonmem
                   ##,reuse.results=TRUE
                   ## ,file.res=simtab
                   )
   ## }
+  
   simres2 <- NMreadSim(simtab,wait=T)
   ## simres3 <- NMreadSim(simtab,skip.missing = T)
 
 
   fix.time(simres2)
+  res <- unNMsimRes(simres2)
   
-  expect_equal_to_reference(simres2,fileRef)
+  expect_equal_to_reference(res,fileRef)
   
 
   if(F){
@@ -219,7 +223,7 @@ test_that("basic - sge - dont wait",{
 
 
 
-message("basic - sge - wait")
+## message("basic - sge - wait")
 test_that("basic - sge - wait",{
 
   ### using the same reference in test 1. Only diff is using sge=TRUE and wait=TRUE
@@ -242,13 +246,14 @@ test_that("basic - sge - wait",{
                    )
 
   simres3
-  fix.time(simres3)
+  ## fix.time(simres3)
+  res <- unNMsimRes(simres3)
   
-  expect_equal_to_reference(simres3,fileRef)
+  expect_equal_to_reference(res,fileRef)
 
   if(F){
     ref <- readRDS(fileRef)
-    compareCols(simres3,ref)
+    compareCols(res,ref)
     simres3
     ref
 
@@ -261,7 +266,7 @@ test_that("basic - sge - wait",{
 
 })
 
-message("basic - typical")
+## message("basic - typical")
 test_that("basic - typical",{
 
   fileRef <- "testReference/NMsim_02.rds"
@@ -302,7 +307,7 @@ test_that("basic - typical",{
 })
 
 
-message("basic - known")
+## message("basic - known")
 test_that("basic - known",{
 
   fileRef <- "testReference/NMsim_03.rds"
@@ -320,7 +325,7 @@ test_that("basic - known",{
                   path.nonmem=path.nonmem
                   )
 
-  fix.time(simres)
+  unNMsimRes(simres)
   expect_equal_to_reference(simres,fileRef)
 
 
@@ -424,8 +429,10 @@ test_that("basic - spaces in paths",{
                      method.update.inits="nmsim"
                      )
 
-  fix.time(simres.psn,"path.mod.exec")
-  fix.time(simres.nm,"path.mod.exec")
+  ## fix.time(simres.psn,"path.mod.exec")
+  ## fix.time(simres.nm,"path.mod.exec")
+  unNMsimRes(simres.psn)
+  unNMsimRes(simres.nm)
 
   expect_equal(simres.psn,simres.nm)
 
@@ -453,7 +460,7 @@ test_that("SAEM - default",{
                   name.sim="default_01"
                   )
 
-  fix.time(simres)
+  unNMsimRes(simres)
   cols.round <- cc(PRED,IPRED)
   simres[,(cols.round) := lapply(.SD,round,3),.SDcols=cols.round]
   expect_equal_to_reference(simres,fileRef)
@@ -502,7 +509,7 @@ test_that("SAEM - known",{
                   )
 
   ## simres.5
-  fix.time(simres)
+  unNMsimRes(simres)
   cols.round <- cc(PRED,IPRED)
   simres[,(cols.round) := lapply(.SD,round,3),.SDcols=cols.round]
   expect_equal_to_reference(simres,fileRef)
@@ -625,7 +632,7 @@ test_that("multiple data sets",{
   
 })
 
-message("space in file name")
+## message("space in file name")
 test_that("space in file name",{
 
   fileRef <- "testReference/NMsim_08.rds"
@@ -708,7 +715,7 @@ test_that("space in file name",{
 
 
 
-message("list of data sets - spaces in data names")
+## message("list of data sets - spaces in data names")
 test_that("list of data sets - spaces in data names",{
 
   file.mod <- "testData/nonmem/xgxr032.mod"
@@ -1836,97 +1843,97 @@ test_that("model name incl .",{
 test_that("recycle",{    
 
 
-## library(devtools)
-## unloadNamespace("NMwork")
-## unloadNamespace("NMsim")
-## unloadNamespace("recycle")
-## unloadNamespace("NMdata")
+  ## library(devtools)
+  ## unloadNamespace("NMwork")
+  ## unloadNamespace("NMsim")
+  ## unloadNamespace("recycle")
+  ## unloadNamespace("NMdata")
 
-## load_all("~/wdirs/NMdata")
-## load_all("~/wdirs/recycle")
-## load_all("~/wdirs/NMsim")
-## load_all("~/wdirs/NMwork")
+  ## load_all("~/wdirs/NMdata")
+  ## load_all("~/wdirs/recycle")
+  ## load_all("~/wdirs/NMsim")
+  ## load_all("~/wdirs/NMwork")
 
 
-fileRef <- "testReference/NMsim_24.rds"
+  fileRef <- "testReference/NMsim_24.rds"
   ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
-file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
-             ,
-              "../../tests/testthat/testData/nonmem/xgxr134.mod"
-              )
+  file.mod <- c("../../tests/testthat/testData/nonmem/xgxr021.mod"
+               ,
+                "../../tests/testthat/testData/nonmem/xgxr134.mod"
+                )
   ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
   ## library(nonmem2R)
   ## extload(file.mod)
 
   ## load_all(export_all=FALSE)
-set.seed(43)
+  set.seed(43)
 
-dt.dos <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
-dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
+  dt.dos <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
+  dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
 
-dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
-setorder(dt.sim.known,ID,TIME,EVID,CMT)
+  dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
+  setorder(dt.sim.known,ID,TIME,EVID,CMT)
 
-dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
-dt.sim[,AGE := 50]
-dt.sim[,WEIGHTB := 90]
-dt.sim[,MALEN := 1]
+  dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
+  dt.sim[,AGE := 50]
+  dt.sim[,WEIGHTB := 90]
+  dt.sim[,MALEN := 1]
   
-simres <- NMsim(file.mod,
-                data=dt.sim,
-                table.var="PRED IPRED",
-                dir.sims="testOutput",
-                name.sim="recycle_01",
-                path.nonmem=path.nonmem,
-                reuse.results=FALSE
-                )
+  simres <- NMsim(file.mod,
+                  data=dt.sim,
+                  table.var="PRED IPRED",
+                  dir.sims="testOutput",
+                  name.sim="recycle_01",
+                  path.nonmem=path.nonmem,
+                  reuse.results=FALSE
+                  )
 
-names(attributes(simres))
-meta <- readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")
-class(meta)
-names(meta)
-meta$digests$digests
+  names(attributes(simres))
+  meta <- readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")
+  class(meta)
+  names(meta)
+  meta$digests$digests
 
 
 
-meta$digests$digests[type=="results"]
-system("md5sum testOutput/xgxr021_recycle_01_ResultsData.fst")
-system("md5sum testOutput/*recycle*")
-names(attributes(readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")))
+  meta$digests$digests[type=="results"]
+  system("md5sum testOutput/xgxr021_recycle_01_ResultsData.fst")
+  system("md5sum testOutput/*recycle*")
+  names(attributes(readRDS("testOutput/xgxr021_recycle_01_MetaData.rds")))
 
 
   ## modTab(simres)
 
-### next steps
-## calc digests first, then check_need_run() on 
+  ### next steps
+  ## calc digests first, then check_need_run() on 
 
-simres2 <- NMsim(file.mod,
-                  data=dt.sim,
-                  table.var="PRED IPRED",
-                 dir.sims="testOutput",
-                 name.sim="recycle_01",
-                  path.nonmem=path.nonmem,
-                 ## subproblems = 1,
-                 recycle=TRUE,
-                 reuse.results=FALSE
-                  )
+  simres2 <- NMsim(file.mod,
+                   data=dt.sim,
+                   table.var="PRED IPRED",
+                   dir.sims="testOutput",
+                   name.sim="recycle_01",
+                   path.nonmem=path.nonmem,
+                   ## subproblems = 1,
+                   recycle=TRUE,
+                   reuse.results=FALSE
+                   )
 
 
-file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
-file.info(file.res)
-aa=readRDS(file.res)
-names(aa)
-aa$digests$digests
-aa$digests$digests[,.N,by=name][,.N,by=N]
+  file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
+  file.info(file.res)
+  aa=readRDS(file.res)
+  names(aa)
+  aa$digests$digests
+  aa$digests$digests[,.N,by=name][,.N,by=N]
 
-aa$digest
-aa[[1]]$digest
+  aa$digest
+  aa[[1]]$digest
 
-expect_equal(
-  unNMsimRes(simres)
-,
-  unNMsimRes(simres2)
-)
+  expect_equal(
+    unNMsimRes(simres)
+   ,
+    unNMsimRes(simres2)
+  )
 
 
   if(F){

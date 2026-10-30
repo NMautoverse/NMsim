@@ -676,10 +676,13 @@ if(F){
   dt.models.save <- split(dt.models,by="path.rds")
   addClass(dt.models,"NMsimModTab")
 
+  
+
   files.rds <- lapply(1:length(dt.models.save),function(I){
-    rmod <- dt.models.save[[I]][,unique(RMODORIG)]
+    ## rmod <- dt.models.save[[I]][,unique(RMODORIG)]
+    rmod <- dt.models.save[[I]][,unique(path.rds)]
     digests.this <- list.digests.all[[rmod]]
-    fn.this.rds <- unique(dt.models.save[[I]][,path.rds])
+    fn.this.rds <- unique(dt.models.save[[I]][,unique(path.rds)])
     addClass(dt.models.save[[I]],"NMsimModTab")
     meta.all <- list(models=dt.models.save[[I]],digests=digests.this)
     ## saveRDS(dt.models.save[[I]],file=fn.this.rds)

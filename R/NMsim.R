@@ -1022,13 +1022,14 @@ NMsim <- function(file.mod,data,
 
 
   #### calculate digest for recycle ####
-
+  
   list.digests.all <- lapplydt(
-    dt.models,by="RMODORIG",
+    ## dt.models,by="RMODORIG",
+    dt.models,by="path.rds",
     fun=function(x){
       
       args.this <- all.args.call
-      args.this$file.mod <- x$file.mod
+      args.this$file.mod <- x[,unique(file.mod)]
       args.this$recycle <- NULL
 
       ## compareCols(args.this,x)
@@ -1051,16 +1052,18 @@ NMsim <- function(file.mod,data,
   dt.models.all <- dt.models
   if(recycle){
 
-
     list.checkNeedRun <- lapplydt(
       ##unique(dt.models$RMODORIG),
-      dt.models,by="RMODORIG",
+      ## dt.models,by="RMODORIG",
+      dt.models,by="path.rds",
       ## FUN=function(rmod){
       fun=function(x){
         ## x <- dt.models[RMODORIG==rmod]
         
-        meta <- readRDS(x$path.rds)
         digests.old <- NULL
+
+        meta <- try(readRDS(x[,unique(path.rds)]),silent=TRUE)
+
         ## does this cover all allowed formats?
         if(is.list(meta)&&!is.null(meta$digests)){
           digests.old <- meta$digests$digests
@@ -1068,16 +1071,20 @@ NMsim <- function(file.mod,data,
 
 
         args.this <- all.args.call
-        args.this$file.mod <- x$file.mod
+        args.this$file.mod <- x[,unique(file.mod)]
         args.this$recycle <- NULL
-        rmod <- x[,RMODORIG]
-
+        args.this$reuse.results <- NULL
+        ## rmod <- x[,RMODORIG]
+        this.file.rds <- x[,unique(path.rds)]
+        
         
         ## compareCols(args.this,x)
         res <- check_need_run(args=args.this,
-                              path.results=x$path.results,
-                              ## path.digest=x$path.digests,
-                              digests=list.digests.all[[rmod]]$digests,
+                              ## cannot use path.results because fst may not have been generated. If results cant be read, models will be rerun anyway.
+                              ## path.results=x[,unique(path.results)],
+                              ##path.digests=x[,unique(path.digests)],
+                              path.digests=FALSE,
+                              digests=list.digests.all[[this.file.rds]]$digests,
                               digests.old=digests.old,
                               force=FALSE,
                               args.unwrap = list(
@@ -1089,33 +1096,29 @@ NMsim <- function(file.mod,data,
       })
     
     
-    
     ## merge in run? Would be duplicate and unnecessary. But might make sense?
-    dt.run <- dtapply(list.checkNeedRun,FUN=function(x)x$summary$run,element.name="ROWMODEL",value.names="run",as.fun="data.table")
-    dt.run[,ROWMODEL := as.integer(ROWMODEL)]
+    dt.run <- dtapply(list.checkNeedRun,FUN=function(x)x$summary$run,element.name="path.rds",value.names="run",as.fun="data.table")
+    ## dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
-    dt.models.all <- mergeCheck(dt.models,dt.run,by="ROWMODEL",quiet=TRUE)
+    dt.models.all <- mergeCheck(dt.models,dt.run,by="path.rds",quiet=TRUE)
 
     dt.models.recycle <- dt.models.all[run==FALSE]
     dt.models <- dt.models.all[run==TRUE]
     
   }
 
-
   
   simres <- NULL
-
   simres.recycle <- NULL
   if(recycle && nrow(dt.models.recycle)){
     ## simres.recycle <- NMreadSim()
-    simres.recycle <- try(NMreadSim(dt.models.recycle[,path.rds],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun))
+    simres.recycle <- try(NMreadSim(dt.models.recycle[,unique(path.rds)],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun))
     if(inherits(simres.recycle,"try-error")) {
       message("Re-reading failed when attempting to recycle. Re-running all models.")
       dt.models <- dt.models.all
     }
   }
-
 
 
   ### path.rds.exists is whether the metadata rds existed prior to this function call. We don't want to save that in dt.models
@@ -1152,14 +1155,16 @@ NMsim <- function(file.mod,data,
   ## if(FALSE){  
   ## dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
-  dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
+  ## dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
+  dt.models.digest <- unique(dt.models.all,by=c("path.rds"))
 
   list.digests.all <- lapplydt(
-    dt.models.digest,by="RMODORIG",
+    ## dt.models.digest,by="RMODORIG",
+    dt.models.digest,by="path.rds",
     fun=function(x){
       
       args.this <- all.args.call
-      args.this$file.mod <- x$file.mod
+      args.this$file.mod <- x[,unique(file.mod)]
       args.this$recycle <- NULL
       
       ## compareCols(args.this,x)
@@ -1205,26 +1210,26 @@ NMsim <- function(file.mod,data,
         msg.recycle <- NULL
         if(!is.null(dt.models.recycle)&&nrow(dt.models.recycle)) {
           rds.recycle <- dt.models.recycle[,unique(path.rds)]
-   msg.recycle <- sprintf("\nSimulation results recycled: %s",paste(rds.recycle,collapse=", "))
+          msg.recycle <- sprintf("\nSimulation results recycled: %s",paste(rds.recycle,collapse=", "))
         }
         msg <- NULL
         ## report simulated and reused
         if(!is.null(dt.models)&&nrow(dt.models)){
-                  unique.path.rds <- dt.models[,simplePath(unique(path.rds))]
+          unique.path.rds <- dt.models[,simplePath(unique(path.rds))]
           msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
                        paste(sprintf("  simres <- NMreadSim(\"%s\")",unique.path.rds)))
+          
+          if(length(unique.path.rds)>1){
+            msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
+                         paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
+                                       paste(unique.path.rds,collapse="\",\n     \"")
+                                       ))
+                         )          
+          }}
         
-        if(length(unique.path.rds)>1){
-          msg <- paste("\nSimulation results returned. Re-read them without re-simulating using:\n",
-                       paste(sprintf("  simres <- NMreadSim(\n     \"%s\")",
-                                     paste(unique.path.rds,collapse="\",\n     \"")
-                                     ))
-                       )          
-        }}
-      
-      if(!is.null(msg)) message(msg)
-      if(!is.null(msg.recycle)) message(msg.recycle)
-      return(returnSimres(simres.all))
+        if(!is.null(msg)) message(msg)
+        if(!is.null(msg.recycle)) message(msg.recycle)
+        return(returnSimres(simres.all))
       }
     }
   } else {
