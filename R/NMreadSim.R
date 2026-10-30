@@ -60,6 +60,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
 
   #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
   
+if(FALSE){
   . <- NULL
   fnExt <- NULL
   isChar <- NULL
@@ -78,6 +79,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
   pathResFromSims <- NULL
   run.sim <- NULL
   x.class <- NULL
+}
 
   ### Section end: Dummy variables, only not to get NOTE's in pacakge checks
   
@@ -108,13 +110,16 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
    ,method.read := NA_character_
   ]
   
-  dt.x[is.simRes,method.read := "simres"]
+  ## dt.x[is.simRes,method.read := "simres"]
   
   dt.x[,isChar:=unlist(lapply(x,is.character))]
   dt.x[isChar==TRUE,x.class:="char"]
-  dt.x[x.class=="char"
+  dt.x[,fnExt := NA_character_]
+  if(nrow(dt.x[!is.na(x.class)&x.class=="char"])){
+  dt.x[!is.na(x.class)&x.class=="char"
       ,fnExt:=tolower(fnExtension(x))
        ]
+  }
   ## dt.x[,is.fst:=unlist(lapply(x,function(x)is.character(x)&&fnExtension(x)=="fst"))]
   
   ### is.simRes if it has already been read and collected by NMreadSim
@@ -151,7 +156,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
 
   
 
-  dt.x[is.simModTab,method.read := "modtab"]
+  dt.x[is.simModTab==TRUE,method.read := "modtab"]
   dt.x[is.na(method.read) & fnExt=="rds",method.read := "modtab"]
 
   dt.x[is.na(method.read) & fnExt=="lst",method.read := "lst"]

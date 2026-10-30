@@ -186,7 +186,11 @@ if(!is.null(modtab$digests)) list.digests <- modtab$digests
     
     funs <- list(...)
     for(name.fun in names(funs)){
-      dt[,(name.fun):=funs[[name.fun]](get(name.fun))]
+      if(name.fun%in%names(dt)){
+        dt[,(name.fun):=funs[[name.fun]](get(name.fun))]
+      } else {
+        message(paste("Transformation of",name.fun,"skipped. Column not found in results."))
+      }
     }
     dt
   }
@@ -375,7 +379,7 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
       }
       if(inherits(this.res,"try-error")){
         if(!quiet) {
-          message()
+          message("")
           message(sprintf("Results could not be read from %s\nPasting the bottom of output control stream.",path.lst.read))
           reportFailedRun(lst=path.lst.read)
         }

@@ -6,7 +6,7 @@
 
 
 NMreadSimRes <- function(x){
-
+  
     
     res.list <- lapply(x,NMreadSimResOne)
     ## res <- rbindlist(res.list,fill=TRUE)

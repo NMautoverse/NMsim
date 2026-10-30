@@ -1,4 +1,3 @@
-
 ##' Execute Nonmem inside a dedicated directory
 ##'
 ##' Like PSN's execute with less features. But easier to control from
@@ -122,7 +121,7 @@ NMexecDirectory <- function(file.mod,path.nonmem,files.needed,dir.data="..",syst
 
     dir.mod.abs <- getAbsolutePath(dir.mod)
     if(system.type=="linux"){
-
+      
         lines.script <- NMrunLin(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem=path.nonmem,clean=clean,sge=sge,nc=nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
         path.script <- file.path(dir.tmp,"run_nonmem.sh")
         writeTextFile(lines.script,path.script)
