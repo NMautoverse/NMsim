@@ -4,11 +4,11 @@
 ##' @export
 ##' @rdname NMsimResOperations
 unNMsimRes <- function(x){
-    if(!is.null(x)){
-        ## setattr(x,"NMsimRes",NULL)
-        setattr(x,"NMsimModTab",NULL)
-        setattr(x,"class",setdiff(class(x),"NMsimRes"))
-    }
+  if(!is.null(x)){
+    ## setattr(x,"NMsimRes",NULL)
+    setattr(x,"NMsimModTab",NULL)
+    setattr(x,"class",setdiff(class(x),"NMsimRes"))
+  }
 }
 
 
@@ -18,7 +18,7 @@ unNMsimRes <- function(x){
 ##' @export
 ##' @rdname NMsimResOperations
 is.NMsimRes <- function(x){
-    inherits(x,"NMsimRes")
+  inherits(x,"NMsimRes")
 }
 
 
@@ -41,53 +41,155 @@ NULL
 ##' @rdname NMsimResOperations
 ##' @export
 merge.NMsimRes <- function(x,...){
-    unNMsimRes(x)
-    merge(x,...)
+  unNMsimRes(x)
+  merge(x,...)
 }
 
 ##' @rdname NMsimResOperations
 ##' @export
 t.NMsimRes <- function(x,...){
-    unNMsimRes(x)
-    t(x,...)
+  unNMsimRes(x)
+  t(x,...)
 }
 
 ##' @rdname NMsimResOperations
 ##' @export
 dimnames.NMsimRes <- function(x,...){
-    unNMsimRes(x)
-    dimnames(x,...)
+  unNMsimRes(x)
+  dimnames(x,...)
 }
 
 ##' @rdname NMsimResOperations
 ##' @export
 rbind.NMsimRes <- function(x,...){
+
+
+  
+  use.meta <- FALSE
+  metas <- try(lapply(c(list(x),list(...)),function(y)attributes(y)$meta),silent=TRUE)
+  if(!inherits(metas,"try-error")) {
+    meta <- NULL
     
-    list.ModTab <- lapply(c(list(x),list(...)),function(y)attributes(y)$NMsimModTab)
+    if(any(!sapply(metas,is.null))){
+      meta <- lapply(metas,rbindlist,fill=TRUE)
+    }
+    if(!inherits(meta,"try-error") && !is.null(meta) ) {
+      use.meta <- TRUE
+    }
+  }
+
+  if(!use.meta){
+    
+    list.ModTab <- lapply(c(list(x),list(...)),modTab)
     ## list.ModTab <- list.ModTab[!sapply(list.ModTab,is.null)]
     ModTab <- rbindlist(list.ModTab,fill=TRUE)
+  }
 
-### solution 1
-    ## unNMsimRes(x)
-    x <- as.data.table(x)
-    ## lapply(c(x,list(...)),unNMsimRes)
-    res <- rbind(x,...)
-    
-    ## args.res.list <- c(x,list(...))
-    ## args.res.list <- args.res.list[!sapply(args.res.list,is.null)]
-    ## res <- do.call(rbind,args.res.list)
-### solution 2
-    ## res <- data.table:::rbind.data.table(x,...)
 
-    addClass(res,"NMsimRes")
+
+  ### solution 1
+  ## unNMsimRes(x)
+  x <- as.data.table(x)
+  ## lapply(c(x,list(...)),unNMsimRes)
+  res <- rbind(x,...)
+  
+  ## args.res.list <- c(x,list(...))
+  ## args.res.list <- args.res.list[!sapply(args.res.list,is.null)]
+  ## res <- do.call(rbind,args.res.list)
+  ### solution 2
+  ## res <- data.table:::rbind.data.table(x,...)
+  addClass(res,"NMsimRes")
+
+  
+  if(use.meta){
+    setattr(res,"meta",meta)
+  } else {
     setattr(res,"NMsimModTab",ModTab)
-    res
+  }
+
+  res
 }
 
 ##' @rdname NMsimResOperations
 ##' @export
 cbind.NMsimRes <- function(x,...){
-    unNMsimRes(x)
-    cbind(x,...)
+  unNMsimRes(x)
+  cbind(x,...)
 }
+
+##' @keywords internal
+setNMsimRes <- function(res,models,digests){
+  ## meta <- list(models=models,digests=digests)
+  addClass(models,"NMsimModTab")
+  meta <- as.NMsimResMeta(models=models,digests=digests)
+  addClass(res,"NMsimRes")
+  setattr(res,"meta",meta)
+  invisible(res)
+}
+
+
+is.NMsimResMeta <- function(meta){
+  inherits(meta,"NMsimResMeta")
+}
+
+##' @keywords internal
+as.NMsimResMeta <- function(meta,models,digests){
+  
+  if(xor(missing(models),missing(digests))) {stop("use either meta of both of models and digests.")}
+
+  if(!missing(meta)){
+    if(!is.list(meta)&&!is.NMsimResMeta(meta)){
+      stop("meta must be a NMsimResMeta object or at list a compatible list.")
+    }
+    if(!is.NMsimResMeta(meta)){
+      if(!"models"%in%names(meta)){
+        stop("meta must contain an element called models") 
+      }
+      addClass(meta,"NMsimResMeta")
+      return(meta)
+    }
+  }
+
+  if(missing(models)) stop("meta or models must be provided")
+  if(missing(digests)) digests <- NULL
+
+  addClass(models,"NMsimModTab")
+  meta <- list(models=models,digests=digests)
+  
+  addClass(meta,"NMsimResMeta")
+  meta
+}
+
+## rbind.NMsimResMeta <- function(x,...){
+##   list.all <- c(x,list(...))
+##   allnames <- unique(do.call(c,lapply(list.all,names)))
+##   res <- lapply(allnames,function(name){
+##     rbindlist(lapply(list.all,function(x) x[[name]]))
+##   })
+##   addClass(res,"NMrsimResMeta")
+##   res
+## }
+
+rbind.NMsimResMeta <- function(x,...){
+  list.all <- c(x,list(...))
+
+  allnames <- unique(unlist(lapply(list.all, names)))
+
+  res <- setNames(
+    lapply(all_names, function(nm) {
+      rbindlist(lapply(alist, `[[`, nm), use.names = TRUE, fill = TRUE)
+    }),
+    allnames
+  )
+  addClass(res,"NMsimResMeta")
+
+  res
+}
+
+saveNMsimMeta <- function(simres,file){
+  if(!is.NMsimRes(simres)) stop("simres is not a NMsimRes object. Can't save metadata")
+  meta <- attributes(simres)$meta
+  saveRDS(meta,file)
+}
+
 

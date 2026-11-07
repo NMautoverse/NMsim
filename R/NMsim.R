@@ -582,7 +582,7 @@ NMsim <- function(file.mod,data,
   }
   
   #### Section start: Checking aguments ####
-  
+ 
   if(missing(file.mod)) stop("file.mod must be supplied. It must be one or more paths to existing control streams.")
   if(any(!file.exists(file.mod))) stop("All elements in file.mod must be paths to existing input control streams.")
   ## Check control streams for potential problems
@@ -900,9 +900,6 @@ NMsim <- function(file.mod,data,
   ## dt.models[,model:=modelname(fn.sim)]
   
 
-  
-
-  
   ### file.ext
   if(is.null(file.ext)) {
     dt.models[,file.ext:=fnExtension(file.mod,"ext"),by=.(ROWMODEL)]
@@ -1026,18 +1023,22 @@ NMsim <- function(file.mod,data,
   list.digests.all <- lapplydt(
     ## dt.models,by="RMODORIG",
     dt.models,by="path.rds",
-    fun=function(x){
+    fun=function(x,.nm){
       
       args.this <- all.args.call
       args.this$file.mod <- x[,unique(file.mod)]
       args.this$recycle <- NULL
 
       ## compareCols(args.this,x)
-      digs <- digest_list(args.this,
+      digs <- digest_list(
+                          args.this,
                           ## path.results=x$path.results,
                           args.unwrap = list(
                             file.mod=function(x)readLines(x,warn=FALSE)
                           ))
+      
+      digs[,path.rds:=.nm]
+      setcolorder(digs,"path.rds")
       ##       digs <- list(digests=digs,path.digests=x$path.digests)
       digs <- list(digests=digs)
       digs
@@ -1144,7 +1145,6 @@ NMsim <- function(file.mod,data,
   simres <- res$simres
   dt.models <- res$dt.models
 
-
   
 
   simres.all <- rbind(simres,simres.recycle,fill=TRUE)
@@ -1161,18 +1161,21 @@ NMsim <- function(file.mod,data,
   list.digests.all <- lapplydt(
     ## dt.models.digest,by="RMODORIG",
     dt.models.digest,by="path.rds",
-    fun=function(x){
+    fun=function(x,.nm){
       
       args.this <- all.args.call
       args.this$file.mod <- x[,unique(file.mod)]
       args.this$recycle <- NULL
       
       ## compareCols(args.this,x)
-      digs <- digest_list(args.this,
+      digs <- digest_list(
+                          args.this,
                           ## path.results=x$path.results,
                           args.unwrap = list(
                             file.mod=function(x)readLines(x,warn=FALSE)
                           ))
+      digs[,path.rds:=.nm]
+      setcolorder(digs,"path.rds")
       ## digs <- list(digests=digs,path.digests=x$path.digests)
       digs <- list(digests=digs)
       digs

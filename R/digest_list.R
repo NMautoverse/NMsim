@@ -50,6 +50,6 @@ if(!missing(path.results) && !is.null(path.results)){
                              ))
 }
 
-
+  addClass(result,"recycle_digests")
   return(result)
 }

@@ -23,58 +23,21 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
   if(missing(progress)) progress <- NULL
   
 
-  ## read all rds files to get everything into just one table.
-  unwrapRDS <- function(x){
-    path.rds.read <- NULL
-    file.res.data <- NULL
-    path.results.read <- NULL
-    path.results <- NULL
 
-    if(is.character(x)) {
-      ##  an rds, read it, make sure its NMSimModels, check for fst,  and proceed with NMSimModels
-      
-      tab.paths.list <- lapply(x,function(file){
-        tab.paths <- readRDS(file)
-        
-        if(is.list(tab.paths)&&"models"%in%names(tab.paths)) tab.paths <- tab.paths$models
-        if(!inherits(tab.paths,"NMsimModTab")) {
-          if(!is.data.frame(tab.paths)){
-            stop("The provided rds file does not contain a NMsimModTab object")
-          }
-          message("x is not a NMsimModTab object. This can be OK if it was generated using earlier versions of NMsim. However, you may need to provide `dir.sims` for this to work.")
-        }
-        
-        tab.paths[,path.rds.read:=file]
-        #### path.results does not exist for all old versions. Move to ..One and make dependent on version?
-        ## tab.paths[,path.results.read:=file.path(dirname(file),basename(path.results))]
-      })
+  meta.list <- lapply(x,unwrapRDS)
+  ## modtab <- rbindlist(meta.list,fill=TRUE)
+  meta <- rbind(meta.list)
 
-      tab.paths <- rbindlist(tab.paths.list,fill=TRUE)
-      ## tab.paths[,file.res.data:=fnAppend(fnExtension(x,"fst"),"res")]
-
-      
-    } else if(is.NMsimModTab(x)){
-      ## a NMSimModels already, go to procecssing that
-      tab.paths <- x
-    } else {
-      stop("x is not recognized as an NMsimModTab object")
-    }
-    tab.paths
-  }
-
-  res.list <- lapply(x,unwrapRDS)
-  modtab <- rbindlist(res.list,fill=TRUE)
-  
   ## add in usable path to sim results. This has to be dir.sims followed by the path to the resulting lst, relative to dir.sims. dir.sims is an argument to this function.
-  modtab[,ROWTMP:=.I]
-  modtab[,path.lst.read:={
+  meta$models[,path.rds.read:=file]
+  meta$models[,ROWTMP:=.I]
+  meta$models[,path.lst.read:={
     
     if(is.null(dir.sims)){
       dirSims <- file.path(dirname(path.rds.read),pathSimsFromRes)
     } else {
       dirSims <- dir.sims           
     }
-    
     
     simplePath(
       file.path(dirSims,
@@ -96,32 +59,102 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
   ## by=.(ROWMODEL2)
   by=.(ROWTMP)
   ]
-  
-  
-  modtab[,ROWTMP:=NULL]
+
+  meta$models[,ROWTMP:=NULL]
   
   ### rather than reading one rds at a time, we should read all the
   ### rds's, stack them, and then read the object as
-  ### one. NMreadSimModTabOne checks that there is only one rds but I'm
+  ##
+  # one. NMreadSimModTabOne checks that there is only one rds but I'm
   ### sure that requirement is needed anymore. Could try to combine
   ### these and run at once. Would require more testing.
   
-  res.list <- lapply(split(modtab,by="path.rds.read"),NMreadSimModTabOne,check.time=check.time,dir.sims=dir.sims,wait=wait,skip.missing=skip.missing,quiet=quiet,fast.tables=fast.tables,read.fst=read.fst,carry.out=carry.out,as.fun=as.fun,progress=progress)
-  
+  res.list <- lapply(split(meta$models,by="path.rds.read"),NMreadSimModTabOne,check.time=check.time,dir.sims=dir.sims,wait=wait,skip.missing=skip.missing,quiet=quiet,fast.tables=fast.tables,read.fst=read.fst,carry.out=carry.out,as.fun=as.fun,progress=progress)
   
   res <- rbindlist(res.list,fill=TRUE)
-  
 
+  ## list.ModTab <- lapply(res.list,function(y)attributes(y)$NMsimModTab)
+  ## list.ModTab <- lapply(res.list,modTab)
+  ## ModTab <- rbindlist(list.ModTab,fill=TRUE)
 
-  list.ModTab <- lapply(res.list,function(y)attributes(y)$NMsimModTab)
-  ModTab <- rbindlist(list.ModTab,fill=TRUE)
+  ## addClass(res,"NMsimRes")
+  ## setattr(res,"NMsimModTab",ModTab)
 
-  addClass(res,"NMsimRes")
-  setattr(res,"NMsimModTab",ModTab)
-
+  res <- setNMsimRes(res,meta$models,meta$digests)
   res
 
 }
+
+##' Internal function: read meta data rds and format for use by NMreadModTab()
+##' @keywords internal
+
+## read all rds files to get everything into just one table.
+unwrapRDS <- function(x){
+  path.rds.read <- NULL
+  file.res.data <- NULL
+  path.results.read <- NULL
+  path.results <- NULL
+
+  
+
+  if(is.character(x)) {
+    ##  an rds, read it, make sure its NMSimModels, check for fst,  and proceed with NMSimModels
+    
+    x <- lapply(x,function(file){
+      
+      ## meta <- readRDS(file)
+      meta <- readRDS(file)
+      ### in case it's meta data, reduce to model table. This should preserve meta structure instead.  
+      ## if(is.list(meta)&&"models"%in%names(meta)) meta <- meta$models
+    })}
+
+  if(!is.list(x)||is.data.frame(x)) x <- list(x)
+
+  x <- lapply(x,function(meta){
+
+    
+
+      if(inherits(meta,"NMsimModTab")) {
+        meta <- as.NMsimResMeta(models=meta)
+      }
+
+      if(!inherits(meta,"NMsimModTab") && !inherits(meta,"NMsimResMeta")) {
+        if(!is.data.frame(meta)){
+          stop("The provided rds file does not contain a NMsimModTab object")
+        }
+        message("x is not a NMsimModTab object. This can be OK if it was generated using earlier versions of NMsim. However, you may need to provide `dir.sims` for this to work.")
+        meta <- as.NMsimResMeta(models=meta)
+      }
+      
+      #### path.results does not exist for all old versions. Move to ..One and make dependent on version?
+      ## meta[,path.results.read:=file.path(dirname(file),basename(path.results))]
+  meta
+  })
+
+    #### todo: broken. only rds file paths are currently handled, and they are not wrapped up into meta.list, I think.
+
+  
+  
+    ## tab.paths <- rbindlist(tab.paths.list,fill=TRUE)
+  ## meta <- rbindlist(x)
+  meta <- do.call(rbind,x)
+
+    ## tab.paths[,file.res.data:=fnAppend(fnExtension(x,"fst"),"res")]
+    ## addClass(meta,"NMsimResMeta")
+  ## }
+  
+  if(is.NMsimModTab(meta)){
+    ## a NMSimModels already, go to procecssing that
+    ## tab.paths <- x
+    meta <- as.NMsimResMeta(meta)
+  }
+  
+  if(!is.NMsimResMeta(meta)){
+    stop("x is not recognized as an NMsimModTab object")
+  }
+  meta
+}
+
 
 ##' Read simulation results from an rds or a NMsimModTab object
 ##' @inheritParams NMreadSim
@@ -158,16 +191,21 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
 
   
   
-list.digests <- NULL
-  if(is.list(modtab)&&!is.data.frame(modtab)) {
-modtab <- modtab$models
-if(!is.null(modtab$digests)) list.digests <- modtab$digests
-} 
+  list.digests <- NULL
+  ##   if(is.list(modtab)&&!is.data.frame(modtab)) {
+  ## modtab <- modtab$models
+  ## if(!is.null(modtab$digests)) list.digests <- modtab$digests
+  ##   }
+  if(inherits(modtab,"NMsimResMeta")){
+    modtab <- meta$models
+    list.digests <- modtab$digests
+  }
   
   if(!"path.results"%in%colnames(modtab)){
     if(! "NMsimVersion"%in%colnames(modtab) || !"file.res.data" %in% colnames(modtab)){
       modtab[,path.results:=fnExtension(fnAppend(path.rds.read,"res"),"fst")]
     } else {
+      ### this is to support results from earlier NMsim versions
       modtab[NMsimVersion<="0.1.0.941",path.results:=file.res.data]
     }
   }
@@ -224,7 +262,7 @@ if(!is.null(modtab$digests)) list.digests <- modtab$digests
     ### reads unique fsts
     if (
       modtab[,all(file.exists(unique(path.results.read)))]
-        ){
+    ){
       if(!is.null(arg.carry.out)&&!(length(arg.carry.out)==1&&use.carry.out==TRUE)){
         message("Ignoring carry.out, reading fst. Add `read.tmp=TRUE` to enable (requires simtmp folder is conserved).")
       }  
@@ -299,16 +337,16 @@ if(!is.null(modtab$digests)) list.digests <- modtab$digests
   ## if(!quiet) message("Reading Nonmem results")
   
   if(is.null(arg.fast.tables)) arg.fast.tables <- FALSE
-      use.carry.out <- unique(modtab$carry.out)
-      if(!is.null(arg.carry.out)) use.carry.out <- arg.carry.out
-      use.carry.out <- unlist(use.carry.out)
+  use.carry.out <- unique(modtab$carry.out)
+  if(!is.null(arg.carry.out)) use.carry.out <- arg.carry.out
+  use.carry.out <- unlist(use.carry.out)
 
   
-if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
-        if(!(length(use.carry.out)==1&&use.carry.out==TRUE)){
-          warning("Ignoring carry.out. Call NMsim() with `table.vars` argument to enable")
-        }
-}
+  if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
+    if(!(length(use.carry.out)==1&&use.carry.out==TRUE)){
+      warning("Ignoring carry.out. Call NMsim() with `table.vars` argument to enable")
+    }
+  }
 
 
   if("ROWMODEL2" %in%colnames(modtab)) modtab[,ROWMODEL:=.GRP,by=.(ROWMODEL,ROWMODEL2)]
@@ -430,9 +468,11 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
                     ))
 
   res <- as.fun(res)
-  setattr(res,"NMsimModTab",modtab)
-  setattr(res,"digests",list.digests)
-  addClass(res,"NMsimRes")
+  
+  setNMsimRes(res,models=modtab,digests=list.digests)
+  ## setattr(res,"NMsimModTab",modtab)
+  ## setattr(res,"digests",list.digests)
+  ## addClass(res,"NMsimRes")
 
   ### if no models ran successfully, res will be a zero-row data table. Should that be saved?
   if(!is.null(rdstab$path.results.read) ){
@@ -448,12 +488,6 @@ if(!(arg.fast.tables || all(unique(modtab$fast.tables)==TRUE))){
       message("Results empty.")
     }
   }
+
   res
-
-
 }
-
-
-
-
-

@@ -135,5 +135,6 @@ if(FALSE) {
   
   # No changes detected
   list.summary[,run := run]
+## list(summary=list.summary, digests.new = digests.new, digests.all = digests.all)
   return(list(summary=list.summary, digests.new = digests.new, digests.all = digests.all))
 }

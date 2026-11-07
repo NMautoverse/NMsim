@@ -1,3 +1,14 @@
+# NMsim 0.3.0
+
+## New Features
+
+*  Recycling of unchanged model runs. 
+
+* New function to keep nodes available in sge clusters. `qpoke()`. Please use with caution as keeping nodes running may be associated with a cost.
+
+## Bugfixes
+* `qsub`
+
 # NMsim 0.2.8
 
 ## New Features

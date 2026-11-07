@@ -694,8 +694,16 @@ test_that("space in file name",{
   expect_equal_to_reference(tab.covs,fileRef)
   if(F){
     ref <- readRDS(fileRef)
-    tab.covs
+    ref
+tab.covs
 
+    names(attributes(ref))
+    names(attributes(tab.covs))
+
+    compareCols(attributes(ref)$NMsimModTab,
+    attributes(tab.covs)$NMsimModTab)
+
+    
     expect_equal(modTab(ref),
                  modTab(tab.covs)
                  )
@@ -783,10 +791,9 @@ test_that("default with renaming",{
 
   expect_equal(unique(simres$model.sim),"ref_default_01")
   
-  fix.time(simres)
+  unNMsimRes(simres)
   expect_equal_to_reference(simres,fileRef)
   
-
 
   if(F){
     ref <- readRDS(fileRef)

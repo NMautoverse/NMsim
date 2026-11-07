@@ -272,6 +272,7 @@ test_that("NMsim with carry.out",{
 })
 
 test_that("NMsim with table.vars. Use carry.out when reading results",{
+
   fileRef <- "testReference/NMreadSim_05.rds"
   ### case dependent on table.vars 
   

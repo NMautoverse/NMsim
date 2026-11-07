@@ -676,17 +676,20 @@ if(F){
   dt.models.save <- split(dt.models,by="path.rds")
   addClass(dt.models,"NMsimModTab")
 
-  
-
   files.rds <- lapply(1:length(dt.models.save),function(I){
     ## rmod <- dt.models.save[[I]][,unique(RMODORIG)]
     rmod <- dt.models.save[[I]][,unique(path.rds)]
     digests.this <- list.digests.all[[rmod]]
     fn.this.rds <- unique(dt.models.save[[I]][,unique(path.rds)])
-    addClass(dt.models.save[[I]],"NMsimModTab")
-    meta.all <- list(models=dt.models.save[[I]],digests=digests.this)
-    ## saveRDS(dt.models.save[[I]],file=fn.this.rds)
+
+    ## addClass(dt.models.save[[I]],"NMsimModTab")
+    ## meta.all <- list(models=dt.models.save[[I]],digests=digests.this)
+    
+    meta.all <- as.NMsimResMeta(models=dt.models.save[[I]],digests=digests.this)
+
+## saveRDS(dt.models.save[[I]],file=fn.this.rds)
     saveRDS(meta.all,file=fn.this.rds)
+
     fn.this.rds
   })
 
@@ -699,7 +702,7 @@ if(F){
     simres <- NMreadSim(unlist(files.rds),wait=wait,progress=progress,quiet=quiet,as.fun=as.fun)
   }
   ### Section end: Read results if requested
-  return(list(dt.models=dt.models,simres=simres))
+  return(list(dt.models=dt.models,digests=list.digests.all,simres=simres))
 }
 ## 
 
