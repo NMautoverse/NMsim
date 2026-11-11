@@ -1,9 +1,9 @@
 ##' Sample subject-level covariates from an existing data set 
 ##'
-##' Repeats a data set with just one subject by sampling covariates from
-##' subjects (with replacement) in an existing data set. This can conveniently
-##' be used to generate new subjects with covariate resampling from an studied
-##' population.
+##' Repeats a data set with just one subject by sampling subject-level
+##' covariates from subjects (with replacement) in an existing data set. This
+##' can conveniently be used to generate new subjects with covariate resampling
+##' from an studied population.
 ##'
 ##' @param data A simulation data set with only one subject
 ##' @param Nsubjs The number of subjects to be sampled. This can be greater than
@@ -13,7 +13,8 @@
 ##' @param col.id.covs Name of the subject ID column in `data.covs` (default is
 ##'   "ID").
 ##' @param data.covs The data set containing the subjects to sample covariates
-##'   from.
+##'   from. Notice, this data set can be a longitudinal data set - covariates
+##'   will be sampled after reducing to unique id-covariate combinations.
 ##' @param covs The name of the covariates (columns) to sample from `data.covs`.
 ##' @param replace Sample from subjects in `data.covs` with replacement? Default
 ##'   is TRUE.
