@@ -417,6 +417,7 @@
 ##' @import NMdata
 ##' @import data.table
 ##' @import utils
+##' @import digest
 ##' @importFrom xfun relative_path
 ##' @export
 
@@ -910,6 +911,20 @@ NMsim <- function(file.mod,data,
   }
   
 
+  args.unwrap.nmsim <- list(
+                            ## file.mod=function(x)readLines(x,warn=FALSE)
+                            ## file.mod=digest::digest
+                            file.mod=function(x) unlist(lapply(x, readLines, warn = FALSE)),
+                            ## transform is potentially a list of functions. All functions must be stripped of environments.
+                            transform=function(x)lapply(x,function(y){
+                              if(is.function(y)){
+                                list(as.character(body(y)), formals(y))
+                              } else {
+                                y
+                              }                              
+                            })
+                          )
+
   ### prepare data sets
   data <- NMsimDataPrepare(data,auto.dv=auto.dv,order.columns=order.columns)
 
@@ -927,15 +942,11 @@ NMsim <- function(file.mod,data,
   dt.models[,ROWMODEL:=.I]
   dt.models[,RMODORIG:=ROWMODEL]
 
-  ####### TODO
   ## construct model-specific paths to data sets on file. say parent dir of fn.sim, then data/name_data.csv. They must be a column in dt.models
   
   ## save the unique data:datapath combinations
 
   ## indicate for those that data should not be re-saved. The caveat is the VPC style probably has te be different.
-
-  ## rewrite where NMwriteData is done to only generate text. Or even do that here?
-  
 
   
   if(is.null(data)){
@@ -1008,21 +1019,20 @@ NMsim <- function(file.mod,data,
   
   if(is.null(file.res)){
     dt.models[,path.rds:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"MetaData"))]
-    ## dt.models[,path.digests:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"rds"),"digests"))]
-    ## dt.models[,path.rds:=pathSimMeta())]
-    dt.models[,path.results:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"fst"),"ResultsData"))]
+     dt.models[,path.results:=file.path(dir.res,fnAppend(fnExtension(fn.sim.predata,"fst"),"ResultsData"))]
   } else {
     dt.models[,path.rds:=fnExtension(file.res,"rds")]
-    ## dt.models[,path.digests:=fnAppend(fnExtension(file.res,"rds"),"digests")]
     dt.models[,path.results:=fnAppend(fnExtension(file.res,"fst"),"ResultsData")]
   }
 
 
   #### calculate digest for recycle ####
   
+  dt.models.digest <- unique(dt.models,by=c("path.rds"))
+
   list.digests.all <- lapplydt(
     ## dt.models,by="RMODORIG",
-    dt.models,by="path.rds",
+    dt.models.digest,by="path.rds",
     fun=function(x,.nm){
       
       args.this <- all.args.call
@@ -1033,40 +1043,35 @@ NMsim <- function(file.mod,data,
       digs <- digest_list(
                           args.this,
                           ## path.results=x$path.results,
-                          args.unwrap = list(
-                            file.mod=function(x)readLines(x,warn=FALSE)
-                          ))
+                          args.unwrap=args.unwrap.nmsim
+      )
       
       digs[,path.rds:=.nm]
       setcolorder(digs,"path.rds")
       ##       digs <- list(digests=digs,path.digests=x$path.digests)
       digs <- list(digests=digs)
+      addClass(digs,"recycle_digests")
       digs
     })
 
-
   ### End: calculate digest for recycle ###
-
 
   
   dt.models.recycle <- NULL
-  dt.models.all <- dt.models
+  dt.models.all <- copy(dt.models)
+dt.models.all[,run := TRUE]
+
   if(recycle){
 
     list.checkNeedRun <- lapplydt(
-      ##unique(dt.models$RMODORIG),
-      ## dt.models,by="RMODORIG",
-      dt.models,by="path.rds",
-      ## FUN=function(rmod){
-      fun=function(x){
-        ## x <- dt.models[RMODORIG==rmod]
-        
+       dt.models,by="path.rds",
+       fun=function(x){
+         
         digests.old <- NULL
 
-        meta <- try(readRDS(x[,unique(path.rds)]),silent=TRUE)
+         meta <- try(suppressWarnings(readRDS(x[,unique(path.rds)])),silent=TRUE)
 
-        ## does this cover all allowed formats?
-        if(is.list(meta)&&!is.null(meta$digests)){
+         if(is.list(meta)&&!is.null(meta$digests)){
           digests.old <- meta$digests$digests
         }
 
@@ -1075,12 +1080,9 @@ NMsim <- function(file.mod,data,
         args.this$file.mod <- x[,unique(file.mod)]
         args.this$recycle <- NULL
         args.this$reuse.results <- NULL
-        ## rmod <- x[,RMODORIG]
-        this.file.rds <- x[,unique(path.rds)]
+         this.file.rds <- x[,unique(path.rds)]
         
-        
-        ## compareCols(args.this,x)
-        res <- check_need_run(args=args.this,
+          res <- check_need_run(args=args.this,
                               ## cannot use path.results because fst may not have been generated. If results cant be read, models will be rerun anyway.
                               ## path.results=x[,unique(path.results)],
                               ##path.digests=x[,unique(path.digests)],
@@ -1088,11 +1090,9 @@ NMsim <- function(file.mod,data,
                               digests=list.digests.all[[this.file.rds]]$digests,
                               digests.old=digests.old,
                               force=FALSE,
-                              args.unwrap = list(
-                                file.mod=function(x)readLines(x,warn=FALSE)
+                              args.unwrap = args.unwrap.nmsim
                               )
-                              )
-        ## res$digest.all <- NULL
+ 
         res
       })
     
@@ -1102,7 +1102,8 @@ NMsim <- function(file.mod,data,
     ## dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
-    dt.models.all <- mergeCheck(dt.models,dt.run,by="path.rds",quiet=TRUE)
+    dt.models.all <- mergeCheck(dt.models[,setdiff(colnames(dt.models),"run"),with=FALSE]
+                               ,dt.run,by="path.rds",quiet=TRUE,as.fun="data.table")
 
     dt.models.recycle <- dt.models.all[run==FALSE]
     dt.models <- dt.models.all[run==TRUE]
@@ -1117,7 +1118,7 @@ NMsim <- function(file.mod,data,
     simres.recycle <- try(NMreadSim(dt.models.recycle[,unique(path.rds)],wait=wait,progress=FALSE,quiet=quiet,as.fun=as.fun))
     if(inherits(simres.recycle,"try-error")) {
       message("Re-reading failed when attempting to recycle. Re-running all models.")
-      dt.models <- dt.models.all
+      dt.models <- copy(dt.models.all)
     }
   }
 
@@ -1155,7 +1156,11 @@ NMsim <- function(file.mod,data,
   ## if(FALSE){  
   ## dt.models.all <- rbind(dt.models,dt.models.recycle,fill=TRUE)
 
-  ## dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))
+
+
+
+  if(FALSE) {
+  ## dt.models.digest <- unique(dt.models.all,by=c("RMODORIG"))    
   dt.models.digest <- unique(dt.models.all,by=c("path.rds"))
 
   list.digests.all <- lapplydt(
@@ -1171,33 +1176,23 @@ NMsim <- function(file.mod,data,
       digs <- digest_list(
                           args.this,
                           ## path.results=x$path.results,
-                          args.unwrap = list(
-                            file.mod=function(x)readLines(x,warn=FALSE)
-                          ))
+                          args.unwrap = args.unwrap.nmsim
+      )
       digs[,path.rds:=.nm]
       setcolorder(digs,"path.rds")
       ## digs <- list(digests=digs,path.digests=x$path.digests)
       digs <- list(digests=digs)
+      addClass(digs,"recycle_digests")
       digs
     })
 
-  ## list.digests.all
-  ## }  
-
-  ### extract new - not used
-  ## digests <- lapply(list.digests,function(x)x$digest.new)
-  
 
   if(length(list.digests.all)<1) {
     warning("Digests failed. Future recycling of this run not possible.")
   } else {
-    
-    ## must extract path digests
-    ## tmp <- lapply(list.digests.all,function(x){
-    ##   saveRDS(x$digests, x$path.digests)
-    ## })
-
+ 
   }
+}
 
   ### End: always save digests for future recycling ###
 
@@ -1232,9 +1227,9 @@ NMsim <- function(file.mod,data,
         
         if(!is.null(msg)) message(msg)
         if(!is.null(msg.recycle)) message(msg.recycle)
-        return(returnSimres(simres.all))
       }
     }
+    return(returnSimres(simres.all))
   } else {
     if(!quiet & execute){
       message(sprintf("\nRead results with:\n  simres <- NMreadSim(c(\"%s\"))\nThe first time the results are read, they will be efficiently stored in the simulation results folder. Until then, they only exist as Nonmem result files.\nTrick: `NMreadSim()` also supports the `wait` argument to watch over Nonmem runs and return results once ready.",paste(dt.models[,simplePath(unique(path.rds))],collapse="\",\n    \"")))

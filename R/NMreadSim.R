@@ -192,8 +192,8 @@ if(FALSE){
                                   )
 
   }
-
-  res.all <- rbind(res.simRes,res.modTab,fill=TRUE)  
+  
+  res.all <- rbind(res.simRes,res.modTab)
   
   if("nmout"%in%colnames(res.all) && is.logical(res.all$nmout)){
     res.all[,nmout:=NULL]
@@ -217,14 +217,14 @@ if(FALSE){
   }
 
   
-
+  
   
   res.all.modtab <- modTab(res.all)
   res.all <- as.fun(res.all)
   addClass(res.all,"NMsimRes")
-  if(!is.null(res.all.modtab)){
-    setattr(res.all,"NMsimModTab",res.all.modtab)
-  }
+  ## if(!is.null(res.all.modtab)){
+  ##   setattr(res.all,"NMsimModTab",res.all.modtab)
+  ## }
   return(res.all)
 }
 

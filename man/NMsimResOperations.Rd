@@ -9,6 +9,7 @@
 \alias{dimnames.NMsimRes}
 \alias{rbind.NMsimRes}
 \alias{cbind.NMsimRes}
+\alias{rbind.NMsimResMeta}
 \title{Remove NMsimRes class and discard NMsimRes meta data}
 \usage{
 unNMsimRes(x)
@@ -24,6 +25,8 @@ is.NMsimRes(x)
 \method{rbind}{NMsimRes}(x, ...)
 
 \method{cbind}{NMsimRes}(x, ...)
+
+\method{rbind}{NMsimResMeta}(x, ...)
 }
 \arguments{
 \item{x}{an NMsimRes object}

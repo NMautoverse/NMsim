@@ -10,26 +10,31 @@
 
 NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=FALSE,quiet=FALSE,progress,read.fst=NULL,fast.tables=NULL,carry.out=NULL,as.fun){
   
-  
-  ROWTMP <- NULL
+  if(FALSE) {
+      ROWTMP <- NULL
   path.lst.read <- NULL
+  path.rds <- NULL
   path.rds.read <- NULL
   pathSimsFromRes <- NULL
   path.sim.lst <- NULL
   . <- NULL
+  }
 
   if(missing(as.fun)) as.fun <- NULL
   as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
   if(missing(progress)) progress <- NULL
   
 
-
+  
   meta.list <- lapply(x,unwrapRDS)
   ## modtab <- rbindlist(meta.list,fill=TRUE)
-  meta <- rbind(meta.list)
+  ## meta <- rbind(meta.list)
+meta <- do.call(rbind,meta.list)
 
   ## add in usable path to sim results. This has to be dir.sims followed by the path to the resulting lst, relative to dir.sims. dir.sims is an argument to this function.
-  meta$models[,path.rds.read:=file]
+  
+   ## meta$models[,path.rds.read:=file]
+  meta$models[,path.rds.read:=path.rds]
   meta$models[,ROWTMP:=.I]
   meta$models[,path.lst.read:={
     
@@ -90,11 +95,13 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
 
 ## read all rds files to get everything into just one table.
 unwrapRDS <- function(x){
-  path.rds.read <- NULL
+
+  if(FALSE) {
+    path.rds.read <- NULL
   file.res.data <- NULL
   path.results.read <- NULL
   path.results <- NULL
-
+  }
   
 
   if(is.character(x)) {
@@ -106,16 +113,16 @@ unwrapRDS <- function(x){
       meta <- readRDS(file)
       ### in case it's meta data, reduce to model table. This should preserve meta structure instead.  
       ## if(is.list(meta)&&"models"%in%names(meta)) meta <- meta$models
-    })}
+  meta
+  })}
 
   if(!is.list(x)||is.data.frame(x)) x <- list(x)
 
   x <- lapply(x,function(meta){
 
     
-
       if(inherits(meta,"NMsimModTab")) {
-        meta <- as.NMsimResMeta(models=meta)
+        meta <- as.NMsimResMeta(models=meta,digests=NULL)
       }
 
       if(!inherits(meta,"NMsimModTab") && !inherits(meta,"NMsimResMeta")) {
@@ -162,12 +169,14 @@ unwrapRDS <- function(x){
 ##' @import utils
 NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,skip.missing=FALSE,progress,read.fst=NULL,fast.tables=NULL,carry.out=NULL,as.fun){
   
+if(FALSE){
   . <- NULL
   ..check.time <- NULL
   args.NMscanData <- NULL
   col.row <- NULL
   file.res.data <- NULL
   funs.transform <- NULL
+  meta <- NULL
   NMsimVersion <- NULL
   path.rds.read <- NULL
   path.sim <- NULL
@@ -181,7 +190,8 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
   ROWTMP <- NULL
   simres <- NULL
   variable <- NULL
-  
+  }
+
   if(missing(progress)) progress <- NULL
   if(is.null(progress)) progress <- TRUE
   ## Previous versions did not save path.results, so 

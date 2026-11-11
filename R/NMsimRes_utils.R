@@ -7,6 +7,7 @@ unNMsimRes <- function(x){
   if(!is.null(x)){
     ## setattr(x,"NMsimRes",NULL)
     setattr(x,"NMsimModTab",NULL)
+    setattr(x,"meta",NULL)
     setattr(x,"class",setdiff(class(x),"NMsimRes"))
   }
 }
@@ -63,15 +64,14 @@ dimnames.NMsimRes <- function(x,...){
 ##' @export
 rbind.NMsimRes <- function(x,...){
 
-
-  
   use.meta <- FALSE
   metas <- try(lapply(c(list(x),list(...)),function(y)attributes(y)$meta),silent=TRUE)
   if(!inherits(metas,"try-error")) {
     meta <- NULL
     
     if(any(!sapply(metas,is.null))){
-      meta <- lapply(metas,rbindlist,fill=TRUE)
+      ## meta <- lapply(metas,rbindlist,fill=TRUE)
+      meta <- do.call(rbind,metas)
     }
     if(!inherits(meta,"try-error") && !is.null(meta) ) {
       use.meta <- TRUE
@@ -82,7 +82,8 @@ rbind.NMsimRes <- function(x,...){
     
     list.ModTab <- lapply(c(list(x),list(...)),modTab)
     ## list.ModTab <- list.ModTab[!sapply(list.ModTab,is.null)]
-    ModTab <- rbindlist(list.ModTab,fill=TRUE)
+    ## ModTab <- rbindlist(list.ModTab,fill=TRUE)
+    ModTab <- do.call(rbind, c(list.ModTab))
   }
 
 
@@ -160,24 +161,27 @@ as.NMsimResMeta <- function(meta,models,digests){
   meta
 }
 
-## rbind.NMsimResMeta <- function(x,...){
-##   list.all <- c(x,list(...))
-##   allnames <- unique(do.call(c,lapply(list.all,names)))
-##   res <- lapply(allnames,function(name){
-##     rbindlist(lapply(list.all,function(x) x[[name]]))
-##   })
-##   addClass(res,"NMrsimResMeta")
-##   res
-## }
 
+##' @rdname NMsimResOperations
+##' @export
 rbind.NMsimResMeta <- function(x,...){
-  list.all <- c(x,list(...))
+  list.all <- c(list(x),list(...))
 
+  list.all <- list.all[!sapply(list.all,is.null)]
+
+  if(length(list.all)==1){
+    res <- list.all[[1]]
+    addClass(res,"NMsimResMeta")
+    return(res)
+  }
+  
   allnames <- unique(unlist(lapply(list.all, names)))
 
   res <- setNames(
-    lapply(all_names, function(nm) {
-      rbindlist(lapply(alist, `[[`, nm), use.names = TRUE, fill = TRUE)
+    lapply(allnames, function(nm) {
+      ## rbindlist(lapply(list.all, `[[`, nm), use.names = TRUE, fill = TRUE)
+      do.call(rbind, lapply(list.all, `[[`, nm))
+      ## do.call(rbind, c(lapply(list.all, `[[`, nm),list(fill=TRUE)))
     }),
     allnames
   )
