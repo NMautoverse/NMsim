@@ -1,7 +1,7 @@
 ;; A comment 
 $PROBLEM    018 with 2 comp
 
-$INPUT NMROW ID TIME EVID CMT AMT DV MDV BBW ROW
+$INPUT NMROW ID TIME EVID CMT AMT DV MDV
 
 $DATA NMsimData_xgxr021_nmtranfail.csv
 IGN=@

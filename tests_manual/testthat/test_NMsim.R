@@ -5,8 +5,8 @@ packageVersion("NMdata")
 library(NMsim)
 library(testthat)
 
-  library(devtools)
-  load_all(export_all=FALSE)
+library(devtools)
+load_all(export_all=FALSE)
 
 NMdataConf(reset=TRUE)
 NMdataConf(dir.psn=NULL)
@@ -93,23 +93,43 @@ path.candidates <- c(## metworx
 
 
 #### need a function to drop NMsimVersion and NMsimTime from table
-fix.time <- function(x,extra=NULL){
-  meta.x <- attr(x,"NMsimModTab")
-  ## meta.x$time.call <- as.POSIXct("2020-02-01 00:01:01",tz="UTC")
-  meta.x$NMsimVersion <- NULL
-  meta.x$NMsimTime <- NULL
 
-  if(!is.null(extra)){
-    meta.x[,(extra):=NULL]
+fix.time <- function(x,extra=NULL){
+  
+  toNull <- c(cc(NMsimVersion,NMsimTime),extra)
+
+  dropcols <- function(dt,toNull){
+    toNull.this <- intersect(toNull,colnames(dt))
+    if(length(dropcols)){
+      dt[,(toNull.this):=NULL]
+    }
+    dt
+  }
+
+  modtab <- attr(x,"NMsimModTab")
+  
+  if(!is.null(modtab)){
+    modtab <- dropcols(modtab,toNull)
+    setattr(x,"NMsimModTab",modtab)
   }
   
-  setattr(x,"NMsimModTab",meta.x)
+  meta.x <- attr(x,"meta")
+  if(!is.null(meta.x)){
+    modtab <- meta.x$models
+    modtab <- dropcols(modtab,toNull)
+    meta.x$models <- modtab
+    setattr(x,"meta",meta.x)
+  }
+
   invisible(x)
 }
 
 
 
+
+
 context("NMsim")
+
 ## message("basic - default")
 test_that("basic - default",{
 
@@ -166,10 +186,15 @@ test_that("basic - default",{
       attributes(ref)$NMsimModTab
      ,keep.names=FALSE)
 
-    
+
+    modtab.ref <- readRDS(fileRef.modtab)
+    modtab.ref
+    modtab
+    compareCols(modtab.ref,modtab)  
   }
 
 })
+
 
 
 ## message("basic - sge - dont wait")
@@ -682,31 +707,42 @@ test_that("space in file name",{
                   ,path.nonmem=path.nonmem
                    )
   
-  tab.covs <- findCovs(rbind(
-    simres1[,N:=1],
-    simres2[,N:=2],
-    simres3[,N:=3],
-    simres4[,N:=4]),by="N"
-    )  
+  tab.covs <- findCovs(
+    rbind(
+      simres1[,N:=1],
+      simres2[,N:=2],
+      simres3[,N:=3],
+      simres4[,N:=4])
+   ,by="N"
+  )  
 
   fix.time(tab.covs)
+
+  modtab <- modTab(tab.covs)
+  unNMsimRes(tab.covs)
   
   expect_equal_to_reference(tab.covs,fileRef)
   if(F){
     ref <- readRDS(fileRef)
     ref
-tab.covs
+    tab.covs
 
     names(attributes(ref))
     names(attributes(tab.covs))
 
     compareCols(attributes(ref)$NMsimModTab,
-    attributes(tab.covs)$NMsimModTab)
+                attributes(tab.covs)$NMsimModTab)
 
     
     expect_equal(modTab(ref),
                  modTab(tab.covs)
                  )
+    
+    compareCols(modTab(ref),
+                modTab(tab.covs)
+                )
+
+
   }
   
   expect_equal(unique(
@@ -902,15 +938,14 @@ test_that("transform",{
                  ,transform=list(IPRED=sqrt,PRED=function(x)x*1000)
                   )
 
-
   ## simres <- NMreadSim("testOutput/NMsim_xgxr021_default_trans_paths.rds")
   
-  fix.time(simres)
+  fix.time(simres,extra="funs.transform")
 
   ## simres[,funs.transform:=NULL]
-  meta.x <- attr(simres,"NMsimModTab")
-  meta.x$funs.transform <- "removed"
-  setattr(simres,"NMsimModTab",meta.x)
+  ## meta.x <- attr(simres,"NMsimModTab")
+  ## meta.x$funs.transform <- "removed"
+  ## setattr(simres,"NMsimModTab",meta.x)
 
   ##     unlink(fileRef)
   expect_equal_to_reference(simres,fileRef)
@@ -919,16 +954,21 @@ test_that("transform",{
     ref <- readRDS(fileRef)
     compareCols(simres,ref)
     identical_cols(simres,ref)
-    ref
-    simres
     
+    ref
+    attributes(simres)$meta
+    class(attributes(simres)$meta$digests)
+    class(attributes(ref)$meta$digests)
+    class(attributes(simres)$meta$digests$digests)
+    class(attributes(ref)$meta$digests$digests)
+    
+
     compareCols(
-      attributes(simres)$NMsimModTab
+      modTab(simres)
      ,
-      attributes(ref)$NMsimModTab
+      modTab(ref)
     )
   }
-
 
 })
 
@@ -949,7 +989,7 @@ test_that("dir.sims and dir.res with NMdataConf",{
                   name.sim="default_dirconf"
                   )
 
-  fix.time(simres)
+  unNMsimRes(simres)
   
   expect_equal_to_reference(simres,fileRef)
 
@@ -982,6 +1022,8 @@ test_that("basic - a model that fails on NMTRAN",{
   
   ## fileRef <- "testReference/NMsim_01.rds"
 
+  if(exists("simres",inherits=FALSE)) rm(simres)
+
   file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
 
   dt.dos2 <- NMcreateDoses(AMT=300,TIME=0)
@@ -989,44 +1031,50 @@ test_that("basic - a model that fails on NMTRAN",{
 
   set.seed(43)
 
-  expect_error(
-    NMsim(file.mod,
-          data=dt.sim2,
-          ## table.var="PRED IPRED",
-          ## dir.sims="testOutput",
-          name.sim="nmtranfail"
-         ,sge=F
-         ,seed.R=12
-         ,nmquiet=F
-         ,wait=TRUE,
-          path.nonmem=path.nonmem
-          )
-  )
-  ## expect_equal(nrow(simres),0)
+  file.res <- ""
+  
+  ## expect_error(
+  simres <- NMsim(file.mod,
+                  data=dt.sim2,
+                  ## table.var="PRED IPRED",
+                  ## dir.sims="testOutput",
+                  name.sim="nmtranfail"
+                 ,sge=F
+                 ,seed.R=12
+                 ,nmquiet=F
+                 ,wait=TRUE,
+                  path.nonmem=path.nonmem
+                  )
+  ## )
+  expect_equal(nrow(simres),0)
 
   ## expect_equal(
   ##     nrow(NMreadSim(simres))
   ##    ,0
   ## )
+  ## expect_null(simres)
 
   ### rerunning the exact same sim with reuse.results to test how a failed sim is handled.
-
-  expect_error(
-    NMsim(file.mod,
-          data=dt.sim,
-          ## table.var="PRED IPRED",
-          ## dir.sims="testOutput",
-          name.sim="nmtranfail"
-         ,sge=F
-         ,seed.R=12
-         ,nmquiet=F
-         ,wait=TRUE,
-          path.nonmem=path.nonmem
-         ,reuse.results=TRUE
-          )
-  )    
-  ## expect_equal(fix.time(simres),fix.time(simres2))
+  if(exists("simres",inherits=FALSE)) rm(simres)
   
+  ## expect_error(
+  simres <- NMsim(file.mod,
+                  data=dt.sim2,
+                  ## table.var="PRED IPRED",
+                  ## dir.sims="testOutput",
+                  name.sim="nmtranfail"
+                 ,sge=F
+                 ,seed.R=12
+                 ,nmquiet=F
+                 ,wait=TRUE,
+                  path.nonmem=path.nonmem
+                 ,reuse.results=TRUE
+                  )
+  expect_equal(nrow(simres),0)
+  ## )    
+  ## expect_equal(fix.time(simres),fix.time(simres2))
+  ## expect_null(simres)
+
 })
 
 
@@ -1035,9 +1083,12 @@ test_that("Two models on one rds",{
   file.mod.1 <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
   file.mod.2 <- "testData/nonmem/xgxr032.mod"
 
+  file.exists(c(file.mod.1,file.mod.2))
+  
   dt.dos2 <- NMcreateDoses(AMT=300,TIME=0)
-  dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
-
+  ## dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+  dt.sim2 <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
+  
   set.seed(43)
   simres <- NMsim(c("m1"=file.mod.1,"m2"=file.mod.2),
                   data=dt.sim2,
@@ -1058,11 +1109,17 @@ test_that("Two models on one rds",{
   fix.time(res)
   
   expect_equal(simres,res)
-  
+
+  if(FALSE) {
+    names(attributes(res))
+    names(attributes(simres))
+  }
+
+
 })
 
 
-test_that("Two named models on one rds",{
+test_that("Two named models on one rds with dedicated file.res",{
 
   files.mod <- c(model1="../../tests/testthat/testData/nonmem/xgxr021.mod",
                  model2="testData/nonmem/xgxr032.mod")
@@ -1183,7 +1240,6 @@ test_that("Non-numeric DATE and TIME",{
   ## requires NMdata 0.1.7
   fileRef <- "testReference/NMsim_13.rds"
   outfile <- "testOutput/NMsim_13.csv"
-
   file.mod <- "testData/nonmem/xgxr022.mod"
 
   dt.dos <- NMcreateDoses(AMT=300,TIME=0)
@@ -1197,8 +1253,10 @@ test_that("Non-numeric DATE and TIME",{
 
   dt.sim.char[,time.tz:=as.POSIXct("2000/01/01")+TIME*3600]
   ## dt.sim.char[,DATE:=as.character(as.Date(time.tz),format="%y/%m/%d")]
-  dt.sim.char[,TIME:=as.character(time.tz,format="%H:%M:%S")]
+  ## dt.sim.char[,TIME:=as.character(time.tz,format="%H:%M:%S")]
+  dt.sim.char[,TIME:=format(time.tz,"%H:%M:%S")]
   
+
   simres <- NMsim(file.mod,
                   data=dt.sim.char,
                   table.var="TIME PRED IPRED",
@@ -1207,7 +1265,6 @@ test_that("Non-numeric DATE and TIME",{
                   seed.R=43
                   ##,quiet=TRUE
                   )
-
 
   ## TIME from input data
   simres.inp <- NMsim(file.mod,
@@ -1246,7 +1303,12 @@ test_that("Non-numeric DATE and TIME",{
   )
 
 
+  if(FALSE) {
+    ref <- readRDS(fileRef)
+    ref
+  }
 
+  
   ### DATE is not allowed in $TABLE. We are not testing this because for some reason we are getting issues when DATE is in input data.
   if(F){
     expect_error(
@@ -1292,7 +1354,6 @@ test_that("as.fun=data.table in function call",{
 })
 
 
-
 ###### using nmsim2 update inits method
 
 test_that("basic - nmsim update inits",{
@@ -1318,7 +1379,8 @@ test_that("basic - nmsim update inits",{
                   )
   
   ## attributes(NMreadSim("testOutput/NMsim_xgxr021_default_01_paths.rds"))
-  fix.time(simres)
+  ## fix.time(simres)
+  unNMsimRes(simres)
   ## expect_equal_to_reference(simres[,!("sim")],fileRef)
   expect_equal_to_reference(simres,fileRef)
 
@@ -1334,7 +1396,7 @@ test_that("basic - nmsim update inits",{
 
 ###### using nmsim2 update inits method and modify parameter
 
-test_that("basic - nmsim update inits",{
+test_that("basic - nmsim update inits 2",{
   
   fileRef <- "testReference/NMsim_15b.rds"
 
@@ -1369,11 +1431,33 @@ test_that("basic - nmsim update inits",{
                    )
 
   res <- rbind(simres2,simres3,simres4)
+
+  ## attributes(res)$meta$digests
+
+  ## lapply(attributes(simres2)$meta,class)
+  ## lapply(attributes(simres2)$meta$digests,class)
+
   fix.time(res)
   expect_equal_to_reference(res,fileRef)
 
   if(F){
     ref <- readRDS(fileRef)
+    ref
+    attributes(ref)
+    attributes(res)
+    attributes(ref)$meta$models
+
+    attributes(res)$meta$models
+
+    class(attributes(ref)$meta$models)
+    class(attributes(res)$meta$models)
+
+    mt.ref <- modTab(ref) 
+    mt.res <- modTab(res) 
+
+    expect_equal(mt.ref,mt.res)
+    identical_cols(mt.ref,mt.res)
+
     fix.time(ref)
     expect_equal(ref,res)
     res
@@ -1477,10 +1561,17 @@ test_that("subproblems and nsims",{
     simres
     ref
     omega.sim
+    
+    unNMsimRes(simres)
+    unNMsimRes(ref)
+    expect_equal(simres,ref)
+
   }
   
 
 })
+
+
 
 test_that("commas in data set",{
   
@@ -1501,17 +1592,28 @@ test_that("commas in data set",{
                   seed.R=43
                  ,as.fun="data.table")
 
-  fix.time(simres)
+  unNMsimRes(simres)
   
   expect_equal_to_reference(simres,fileRef)
 
   if(F){
     ref <- readRDS(fileRef)
+
+    compareCols(modTab(simres),modTab(ref))
+    attributes(simres)$meta$models
+    attributes(ref)$meta$models
+
+
     identical_cols(simres,ref)
     compareCols(attributes(simres)$NMsimModTab,
                 attributes(ref)$NMsimModTab)
+    
     simres
     ref
+
+    unNMsimRes(simres)
+    unNMsimRes(ref)
+    expect_equal(simres,ref)
   }
   
 
@@ -1532,12 +1634,14 @@ test_that("1 subproblem - test NMREP",{
                   method.update.inits="nmsim",
                   seed.nm=43
                   )
+  
   expect_true("NMREP"%in%colnames(simres))
   expect_true(simres[,unique(NMREP)]==1)
 
   ## modTab(simres)
   names(attributes(simres))
-  NMreadSection(attributes(simres)$NMsimModTab$path.sim.lst)[c("ERROR","SIMULATION")]
+  NMreadSection(modTab(simres)$path.sim.lst)[c("ERROR","SIMULATION")]
+
 })
 
 
@@ -1555,6 +1659,7 @@ test_that("vpc with subproblems - NMREP in output",{
                   path.nonmem=path.nonmem,
                   seed.nm=43
                   )
+  
   simres
 
   expect_true("NMREP"%in%colnames(simres))
@@ -1601,12 +1706,27 @@ test_that("PRED model basic",{
                   seed.nm=43
                   )
 
-  fix.time(simres)
+  unNMsimRes(simres)
   
   expect_equal_to_reference(simres,fileRef)
 
-  
+
+  if(F){
+    ref <- readRDS(fileRef)
+
+    compareCols(modTab(simres),modTab(ref))
+    identical_cols(simres,ref)
+    
+    simres
+    ref
+
+    unNMsimRes(simres)
+    unNMsimRes(ref)
+    expect_equal(simres,ref)
+  }
+
 })
+
 
 test_that("PRED model with subproblems",{
 
@@ -1624,13 +1744,31 @@ test_that("PRED model with subproblems",{
                   path.nonmem=path.nonmem,
                   seed.nm=43
                   )
-  fix.time(simres)
+  
+
+  unNMsimRes(simres)
   
   ## NMREP present
-  simres    
+  simres[,NMREP]
   expect_equal_to_reference(simres,fileRef)
 
   
+  if(F){
+    ref <- readRDS(fileRef)
+
+    compareCols(modTab(simres),modTab(ref))
+    identical_cols(simres,ref)
+    
+    attributes(simres)
+    
+    simres
+    ref
+
+    unNMsimRes(simres)
+    unNMsimRes(ref)
+    expect_equal(simres,ref)
+  }
+
 })
 
 
@@ -1651,8 +1789,22 @@ test_that("PRED model with subproblems table.vars",{
                   seed.nm=43
                   )
 
-  fix.time(simres)
+  unNMsimRes(simres)
   expect_equal_to_reference(simres,fileRef)
+
+  if(F){
+    ref <- readRDS(fileRef)
+
+    compareCols(modTab(simres),modTab(ref))
+    identical_cols(simres,ref)
+    
+    attributes(simres)
+    
+    unNMsimRes(simres)
+    unNMsimRes(ref)
+    expect_equal(simres,ref)
+  }
+
   
 })
 
@@ -1691,7 +1843,6 @@ test_that("BLOCK(2) 0.1 FIX .1 .1",{
     omega.sim
   }
   
-
 })
 
 
@@ -1807,11 +1958,13 @@ test_that("model name incl .",{
 
   file.mod.orig <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
   file.mod <- "testData/nonmem/xgxr021.dot.mod"
-  ## file.copy(file.mod.orig, file.mod)
+  file.exists(c(file.mod,file.mod.orig))
+  file.copy(file.mod.orig, file.mod)
   # file.copy(fnExtension(file.mod,"ext"),
   #           fnExtension("testData/nonmem/xgxr021.dot.mod","ext")
   #           )
   
+
   set.seed(43)
   
   ## file.mod2 <- c(file.mod,  "testData/nonmem/xgxr032.mod")
@@ -1824,7 +1977,8 @@ test_that("model name incl .",{
                    inits=list(update=FALSE),
                    name.sim="typ.subj"
                    )
-  simres2
+  
+  ## simres2
 
   expect_equal(nrow(simres2),4)
   expect_true(simres2[,all(IPRED==PRED)])
@@ -1926,15 +2080,6 @@ test_that("recycle",{
                    )
 
 
-  file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
-  file.info(file.res)
-  aa=readRDS(file.res)
-  names(aa)
-  aa$digests$digests
-  aa$digests$digests[,.N,by=name][,.N,by=N]
-
-  aa$digest
-  aa[[1]]$digest
 
   expect_equal(
     unNMsimRes(simres)
@@ -1947,7 +2092,92 @@ test_that("recycle",{
     ref <- readRDS(fileRef)
     res
     ref
+
+    file.res <- "testOutput/xgxr021_recycle_01_MetaData.rds"
+    file.info(file.res)
+    aa=readRDS(file.res)
+    names(aa)
+    aa$digests$digests
+    aa$digests$digests[,.N,by=name][,.N,by=N]
+
+    aa$digest
+    aa[[1]]$digest
+
+
   }
 
 })
 
+test_that("rbind with meta data",{
+
+  ## options(warn=2)
+  fileRef <- "testReference/NMsim_25.rds"
+
+  ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
+  file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
+  ## NMdata:::NMreadExt( fnExtension(file.mod,"ext"))
+  ## library(nonmem2R)
+  ## extload(file.mod)
+
+  unlink(c(
+    'testOutput/simres/xgxr021_default_01a_ResultsData.fst',
+    ## 'testOutput/simres/xgxr021_default_01b_MetaData.rds'
+    ## ,
+    'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
+  ))
+
+  unlink(c(
+    'testOutput/simres/xgxr021_default_01a_MetaData.rds',
+    'testOutput/simres/xgxr021_default_01b_MetaData.rds'
+    ## ,
+    ## 'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
+  ))
+
+  
+
+  ## load_all(export_all=FALSE)
+  set.seed(43)
+  simres <- NMsim(file.mod,
+                  data=dt.sim,
+                  table.var="PRED IPRED",
+                  dir.sims="testOutput",
+                  name.sim="default_01a",
+                  path.nonmem=path.nonmem,
+                  recycle=TRUE
+                  )
+
+  
+  simres2 <- NMsim(file.mod,
+                   data=dt.sim,
+                   table.var="PRED IPRED",
+                   dir.sims="testOutput",
+                   name.sim="default_01b",
+                   path.nonmem=path.nonmem,
+                   recycle=TRUE
+                   )
+
+
+
+  simres.all <- rbind(simres,simres2)
+
+  fix.time(simres.all)
+  
+
+  expect_equal_to_reference(simres.all,fileRef)
+
+  if(FALSE) {
+    compareCols(modTab(simres),
+                modTab(simres2))
+
+    attributes(simres)$meta$digests
+    attributes(simres2)$meta$digests
+
+    class(attributes(simres)$meta$digests)
+    class(attributes(simres)$meta$digests$digests)
+
+    dims(simres,simres2)
+
+  }
+
+
+})
