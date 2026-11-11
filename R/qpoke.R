@@ -6,11 +6,14 @@
 #' spin up when submitting a "real" job after a period of queue inactivity.
 #' Jobs are submitted in bursts, repeated at a fixed interval, and the whole
 #' process is launched in the background (fully detached using `setsid`) so
-#' \code{qpoke} returns immediately. Each batch is skipped if too many
-#' `qpoke` jobs are already queued, to avoid an unbounded backlog if the
-#' cluster cannot keep up with node provisioning.
+#' \code{qpoke} returns immediately. Each batch tops up the total number of
+#' jobs in the queue (any job, not just `qpoke` jobs) to `n`, submitting
+#' only as many new `qpoke` jobs as needed to reach that target.
 #'
-#' @param n Number of dummy jobs to submit per batch.
+#' @param n Target total number of jobs (of any kind, not just `qpoke`
+#' jobs) to maintain in the queue. Each batch submits enough new `qpoke`
+#' jobs to bring the total queue size up to `n`. If the queue already has
+#' `n` or more jobs, no new jobs are submitted in that batch.
 #' @param dur Total duration (in minutes) to keep poking the queue. If
 #' provided (not `NULL`), this overrides `nrep` by calculating
 #' `nrep <- dur/nsecs*60`.
@@ -50,22 +53,25 @@ qpoke <- function(n=1,dur,nrep=1,nsecs=10){
     return(invisible(NULL))
   }
   
-  nsecs.sleep <- 1
+  nsecs.sleep <- nsecs+10
 
-  cmd <- c(sprintf("for I in $(seq 1 %d); do",n),
-           sprintf("echo \"sleep %d\" | qsub -N qpoke${J:-0}_$I -o /dev/null -e /dev/null > /dev/null 2>&1",nsecs.sleep),
-           "done"
-           )
+  ## submit enough qpoke jobs to bring the total queue size up to n;
+  ## does nothing if the queue already has n or more jobs
+  cmd.batch <- c(
+    "NQ=$(qstat | tail -n +3 | wc -l)",
+    sprintf("NADD=$((%d - NQ))",n),
+    "if [ \"$NADD\" -gt 0 ]; then",
+    "for I in $(seq 1 $NADD); do",
+    sprintf("echo \"sleep %d\" | qsub -N qpoke${J:-0}_$I -o /dev/null -e /dev/null > /dev/null 2>&1",nsecs.sleep),
+    "done",
+    "fi"
+  )
+
+  cmd <- cmd.batch
 
   if(nrep>1) {
     cmd <- c(sprintf("for J in $(seq 1 %d); do",nrep),
-             ## skip this batch if too many qpoke jobs are already
-             ## queued/pending - avoids unbounded backlog if the
-             ## cluster can't keep up with node provisioning
-             "NQ=$(qstat | grep -c qpoke)",
-             sprintf("if [ \"$NQ\" -lt %d ]; then",2),
-             cmd,
-             "fi",
+             cmd.batch,
              sprintf("sleep %d",nsecs),
              "done"
              )
