@@ -85,7 +85,7 @@ meta <- do.call(rbind,meta.list)
   ## addClass(res,"NMsimRes")
   ## setattr(res,"NMsimModTab",ModTab)
 
-  res <- setNMsimRes(res,meta$models,meta$digests)
+  res <- setNMsimRes(res,models=meta$models,digests=meta$digests)
   res
 
 }

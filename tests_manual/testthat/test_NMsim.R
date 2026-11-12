@@ -51,7 +51,7 @@ identical_cols <- function(x,y){
 
   if(!all(res.ident)) {
     dt.diff <- c(dt.diff,"difference in columns")
-    message("differences in",paste(cols.x[!res.ident],collapse=", "))
+    message("differences in ",paste(cols.x[!res.ident],collapse=", "))
   }
 
   if(length(dt.diff)){
@@ -1531,7 +1531,8 @@ test_that("fast tables",{
 
 
 test_that("subproblems and nsims",{
-  
+  ### testing modTab
+
   fileRef <- "testReference/NMsim_16.rds"
 
   file.mod <- "testData/nonmem/xgxr022.mod"
@@ -1556,8 +1557,8 @@ test_that("subproblems and nsims",{
   if(F){
     ref <- readRDS(fileRef)
     identical_cols(simres,ref)
-    compareCols(attributes(simres)$NMsimModTab,
-                attributes(ref)$NMsimModTab)
+    compareCols(modTab(simres),
+                modTab(ref))
     simres
     ref
     omega.sim
@@ -2119,31 +2120,33 @@ test_that("rbind with meta data",{
   ## library(nonmem2R)
   ## extload(file.mod)
 
-  unlink(c(
-    'testOutput/simres/xgxr021_default_01a_ResultsData.fst',
-    ## 'testOutput/simres/xgxr021_default_01b_MetaData.rds'
-    ## ,
-    'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
-  ))
+  if(FALSE) {
+    
+    unlink(c(
+      'testOutput/simres/xgxr021_default_01a_ResultsData.fst',
+      ## 'testOutput/simres/xgxr021_default_01b_MetaData.rds'
+      ## ,
+      'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
+    ))
 
-  unlink(c(
-    'testOutput/simres/xgxr021_default_01a_MetaData.rds',
-    'testOutput/simres/xgxr021_default_01b_MetaData.rds'
-    ## ,
-    ## 'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
-  ))
-
+    unlink(c(
+      'testOutput/simres/xgxr021_default_01a_MetaData.rds',
+      'testOutput/simres/xgxr021_default_01b_MetaData.rds'
+      ## ,
+      ## 'testOutput/simres/xgxr021_default_01b_ResultsData.fst'
+    ))
+  }
   
 
   ## load_all(export_all=FALSE)
   set.seed(43)
-  simres <- NMsim(file.mod,
+  simres1 <- NMsim(file.mod,
                   data=dt.sim,
                   table.var="PRED IPRED",
                   dir.sims="testOutput",
                   name.sim="default_01a",
                   path.nonmem=path.nonmem,
-                  recycle=TRUE
+                  recycle=FALSE
                   )
 
   
@@ -2153,12 +2156,12 @@ test_that("rbind with meta data",{
                    dir.sims="testOutput",
                    name.sim="default_01b",
                    path.nonmem=path.nonmem,
-                   recycle=TRUE
+                   recycle=FALSE
                    )
 
 
 
-  simres.all <- rbind(simres,simres2)
+  simres.all <- rbind(simres1,simres2)
 
   fix.time(simres.all)
   
@@ -2166,16 +2169,25 @@ test_that("rbind with meta data",{
   expect_equal_to_reference(simres.all,fileRef)
 
   if(FALSE) {
-    compareCols(modTab(simres),
+  ref <- readRDS(fileRef)
+
+  compareCols(modTab(simres1),
                 modTab(simres2))
 
-    attributes(simres)$meta$digests
+    attributes(simres1)$meta$digests
     attributes(simres2)$meta$digests
 
-    class(attributes(simres)$meta$digests)
-    class(attributes(simres)$meta$digests$digests)
+    class(attributes(simres1)$meta$digests)
+    class(attributes(simres1)$meta$digests$digests)
 
-    dims(simres,simres2)
+    dims(simres1,simres2)
+
+  modTab(simres.all) |> class()
+  modTab(ref) |> class()
+
+compareCols(modTab(simres.all),
+            modTab(ref))
+
 
   }
 

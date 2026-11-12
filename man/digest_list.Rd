@@ -9,7 +9,7 @@ digest_list(list, args.unwrap = NULL, path.results)
 \arguments{
 \item{list}{Named list of elements to digest}
 
-\item{funs.unwrap}{Named list of functions to be applied to elements (matched on names) in `args`. Optional.}
+\item{args.unwrap}{Named list of functions to be applied to elements (matched on names) in `args`. Optional.}
 }
 \value{
 A data.table with columns 'name' and 'res' (digest values)

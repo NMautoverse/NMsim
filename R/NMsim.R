@@ -60,9 +60,10 @@
 ##' @param reuse.results If simulation results found on file, should they be
 ##'   used? If TRUE and reading the results fail, the simulations will still be
 ##'   rerun.
-##' @param recycle Attempt to reuse results using the 'recycle' package (experimental).
-##'   This is based on comparing argument values and model file contents to when
-##'   NMsim was last run.
+##' @param recycle Attempt to reuse results using the 'recycle' package. This is
+##'   based on comparing argument values and model files contents to when NMsim
+##'   was last run. If anything has changed, NMsim() will rerun, if not results
+##'   will be recycled from previous run.
 ##' @param transform A list defining transformations to be applied after the
 ##'   Nonmem simulations and before plotting. For each list element, its name
 ##'   refers to the name of the column to transform, the contents must be the
@@ -576,11 +577,30 @@ NMsim <- function(file.mod,data,
   ## as.fun
   if(missing(as.fun)) as.fun <- NULL
   as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
+  ## returnSimres <- function(simres){
+  ##   simres <- as.fun(simres)
+  ##   addClass(simres,"NMsimRes")
+  ##   return(simres)
+  ## }
+
   returnSimres <- function(simres){
+    meta <- attr(simres,"meta")
+    ## attr(simres,"meta") <- NULL
+    unNMsimRes(simres)
     simres <- as.fun(simres)
-    addClass(simres,"NMsimRes")
+
+    ## addClass(simres,"NMsimRes")
+
+    if(is.null(meta)){
+      addClass(simres,"NMsimRes")
+      } else {
+        setNMsimRes(simres,meta=meta)
+      ## setattr(simres,"meta",meta)
+    }
+    
     return(simres)
-  }
+}
+
   
   #### Section start: Checking aguments ####
  
@@ -910,20 +930,25 @@ NMsim <- function(file.mod,data,
     }
   }
   
+  if(method.update.inits=="none") {
+    unwrap.file.mod <- function(x) unlist(lapply(x, readLines, warn = FALSE))
+  } else {
+    unwrap.file.mod <- function(x) unlist(lapply(c(x,file.ext), readLines, warn = FALSE))
+  }
 
   args.unwrap.nmsim <- list(
-                            ## file.mod=function(x)readLines(x,warn=FALSE)
-                            ## file.mod=digest::digest
-                            file.mod=function(x) unlist(lapply(x, readLines, warn = FALSE)),
-                            ## transform is potentially a list of functions. All functions must be stripped of environments.
-                            transform=function(x)lapply(x,function(y){
-                              if(is.function(y)){
-                                list(as.character(body(y)), formals(y))
-                              } else {
-                                y
-                              }                              
-                            })
-                          )
+    ## file.mod=function(x)readLines(x,warn=FALSE)
+    ## file.mod=digest::digest
+    file.mod=unwrap.file.mod,
+    ## transform is potentially a list of functions. All functions must be stripped of environments.
+    transform=function(x)lapply(x,function(y){
+      if(is.function(y)){
+        list(as.character(body(y)), formals(y))
+      } else {
+        y
+      }                              
+    })
+  )
 
   ### prepare data sets
   data <- NMsimDataPrepare(data,auto.dv=auto.dv,order.columns=order.columns)
@@ -1058,8 +1083,9 @@ NMsim <- function(file.mod,data,
 
   
   dt.models.recycle <- NULL
+  dt.models[,recycle := FALSE]
   dt.models.all <- copy(dt.models)
-dt.models.all[,run := TRUE]
+
 
   if(recycle){
 
@@ -1085,7 +1111,7 @@ dt.models.all[,run := TRUE]
           res <- check_need_run(args=args.this,
                               ## cannot use path.results because fst may not have been generated. If results cant be read, models will be rerun anyway.
                               ## path.results=x[,unique(path.results)],
-                              ##path.digests=x[,unique(path.digests)],
+                                ##path.digests=x[,unique(path.digests)],
                               path.digests=FALSE,
                               digests=list.digests.all[[this.file.rds]]$digests,
                               digests.old=digests.old,
@@ -1098,15 +1124,15 @@ dt.models.all[,run := TRUE]
     
     
     ## merge in run? Would be duplicate and unnecessary. But might make sense?
-    dt.run <- dtapply(list.checkNeedRun,FUN=function(x)x$summary$run,element.name="path.rds",value.names="run",as.fun="data.table")
+    dt.run <- dtapply(list.checkNeedRun,FUN=function(x)x$summary$recycle,element.name="path.rds",value.names="recycle",as.fun="data.table")
     ## dt.run[,ROWMODEL := as.integer(ROWMODEL)]
 
     
-    dt.models.all <- mergeCheck(dt.models[,setdiff(colnames(dt.models),"run"),with=FALSE]
+    dt.models.all <- mergeCheck(dt.models[,setdiff(colnames(dt.models),"recycle"),with=FALSE]
                                ,dt.run,by="path.rds",quiet=TRUE,as.fun="data.table")
 
-    dt.models.recycle <- dt.models.all[run==FALSE]
-    dt.models <- dt.models.all[run==TRUE]
+    dt.models.recycle <- dt.models.all[recycle==TRUE]
+    dt.models <- dt.models.all[recycle==FALSE]
     
   }
 

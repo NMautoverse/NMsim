@@ -119,10 +119,13 @@ cbind.NMsimRes <- function(x,...){
 }
 
 ##' @keywords internal
-setNMsimRes <- function(res,models,digests){
+setNMsimRes <- function(res,meta,models,digests){
   ## meta <- list(models=models,digests=digests)
+if(!missing(models)){
   addClass(models,"NMsimModTab")
   meta <- as.NMsimResMeta(models=models,digests=digests)
+  }
+
   addClass(res,"NMsimRes")
   setattr(res,"meta",meta)
   invisible(res)
@@ -136,7 +139,7 @@ is.NMsimResMeta <- function(meta){
 ##' @keywords internal
 as.NMsimResMeta <- function(meta,models,digests){
   
-  if(xor(missing(models),missing(digests))) {stop("use either meta of both of models and digests.")}
+  if(xor(missing(models),missing(digests))) {stop("use either meta or both of models and digests.")}
 
   if(!missing(meta)){
     if(!is.list(meta)&&!is.NMsimResMeta(meta)){
@@ -166,8 +169,9 @@ as.NMsimResMeta <- function(meta,models,digests){
 ##' @export
 rbind.NMsimResMeta <- function(x,...){
   list.all <- c(list(x),list(...))
-
   list.all <- list.all[!sapply(list.all,is.null)]
+
+  
 
   if(length(list.all)==1){
     res <- list.all[[1]]

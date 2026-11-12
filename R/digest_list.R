@@ -5,7 +5,7 @@
 ##' reading contents of a file where the file path is an argument.
 ##' 
 ##' @param list Named list of elements to digest
-##' @param funs.unwrap Named list of functions to be applied to elements (matched on names) in `args`. Optional.
+##' @param args.unwrap Named list of functions to be applied to elements (matched on names) in `args`. Optional.
 ##' @return A data.table with columns 'name' and 'res' (digest values)
 ##' @importFrom digest digest
 ##' @importFrom tools md5sum

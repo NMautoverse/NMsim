@@ -53,7 +53,9 @@ qpoke <- function(n=1,dur,nrep=1,nsecs=10){
     return(invisible(NULL))
   }
   
-  nsecs.sleep <- nsecs+10
+  ## nsecs.sleep is the duration (sleeping time) of a job on the cluster.
+  ## Notice, nsecs is the (sleeping) time between generation of jobs.
+  nsecs.sleep <- 1
 
   ## submit enough qpoke jobs to bring the total queue size up to n;
   ## does nothing if the queue already has n or more jobs
