@@ -2,6 +2,8 @@
 
 ## NMsim 0.3.0
 
+CRAN release: 2026-11-13
+
 ### New Features
 
 - [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
