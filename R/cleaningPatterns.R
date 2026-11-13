@@ -2,7 +2,7 @@ cleaningPatterns <- function(clean){
     if(! clean %in% 1:4){
         stop ("only clean values 1, 2, 3, and 4 are supported")
     }
-    c("FSUBS*","FCON","INTER",
+    c("FSUBS*","FCON","FWORK","INTER",
 "LINKC.LNK",
 "LINK.LNK",
 "PRSIZES.f90"

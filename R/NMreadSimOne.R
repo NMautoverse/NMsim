@@ -6,12 +6,15 @@
 
 
 NMreadSimRes <- function(x){
-
+  
     
     res.list <- lapply(x,NMreadSimResOne)
     ## res <- rbindlist(res.list,fill=TRUE)
 
-    res <- do.call(rbind,c(res.list,fill=TRUE))
+  
+  
+  ## res <- do.call(rbind,c(res.list,list(fill=TRUE)))
+  res <- do.call(rbind,res.list)
 
     addClass(res,"NMsimRes")
     res

@@ -19,5 +19,19 @@
 
 
 modTab <- function(res){
-    attributes(res)$NMsimModTab
+  modtab <- NULL
+  if(is.character(res)) {
+    res <- readRDS(res)
+    modtab <- res
+  }
+  if(is.NMsimRes(res)){
+    attrs <- attributes(res)
+    if(!is.null(attrs$NMsimModTab)){
+      modtab <-  attrs$NMsimModTab
+    }
+    if(!is.null(attrs$meta)){
+      modtab <-  attrs$meta$models
+    }
+  } 
+  modtab
 }

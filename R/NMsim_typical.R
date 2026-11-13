@@ -18,7 +18,8 @@
 
 NMsim_typical <- function(file.sim,file.mod,data.sim,return.text=FALSE){
 
-    message("NMsim_typical() is deprecated. Use `typical=TRUE` in combination with other simulation methods instead. The old `method.sim=NMsim_typical` is equivalent to combining `typical=TRUE` with the default simulation method `method.sim=NMsim_default`.")
+    message("NMsim_typical() is deprecated. Use `typical=TRUE` in combination with other simulation methods instead. 
+Specifically, instead of the old `method.sim=NMsim_typical`, combine`typical=TRUE` with the default simulation method `method.sim=NMsim_default`.")
     
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
 

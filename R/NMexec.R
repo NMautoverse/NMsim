@@ -164,7 +164,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
     if(missing(method.execute)) method.execute <- NULL
     if(missing(system.type)) system.type <- NULL
     if(missing(files.needed)) files.needed <- NULL
-    
+  
     NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,method.execute=method.execute,system.type=system.type,must.work=TRUE)
     ## todo integrate in NMsimTestConf
 
@@ -248,6 +248,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
     
     list.obj.exec <- 
         lapply(1:length(files.exec),function(I){
+          
             file.mod <- NMdata:::filePathSimple(files.exec[I])
             if(!quiet) message(paste0("Executing ",file.mod))
             if(!file.exists(file.mod)){
@@ -298,6 +299,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
 
 
             ##if((sge && nc > 1)||(sge && NMsimConf$method.execute=="psn")){
+          pnm <- NULL
             if( sge ){
                 if(nc>1){
                     file.pnm <- file.path(rundir,fnExtension(basename(file.mod),"pnm"))
@@ -332,8 +334,11 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
 
             
             if(NMsimConf$method.execute=="nmsim"){
-                
-                obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge,nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
+
+              ##debug
+              list(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge=sge,nc=nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
+              
+              obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge=sge,nc=nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
                 ##obj.exec$dir <- dirname(obj.exec$cmd)
 
                 if(NMsimConf$system.type=="linux"){

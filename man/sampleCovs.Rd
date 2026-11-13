@@ -31,7 +31,8 @@ sample all ID's in `data.covs` exactly once.}
 "ID").}
 
 \item{data.covs}{The data set containing the subjects to sample covariates
-from.}
+from. Notice, this data set can be a longitudinal data set - covariates
+will be sampled after reducing to unique id-covariate combinations.}
 
 \item{covs}{The name of the covariates (columns) to sample from `data.covs`.}
 
@@ -58,10 +59,10 @@ A data.frame. Includes sampled covariates. The subject ID's the
   covariates are sampled from will be included in a column called `IDCOVS`.
 }
 \description{
-Repeats a data set with just one subject by sampling covariates from
-subjects (with replacement) in an existing data set. This can conveniently
-be used to generate new subjects with covariate resampling from an studied
-population.
+Repeats a data set with just one subject by sampling subject-level
+covariates from subjects (with replacement) in an existing data set. This
+can conveniently be used to generate new subjects with covariate resampling
+from an studied population.
 }
 \details{
 Columns will be added in addition to covariates requested in

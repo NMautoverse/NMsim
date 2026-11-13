@@ -4,8 +4,12 @@
 ##' @export
 ##' @rdname NMsimModTabOperations
 unNMsimModTab <- function(x){
+  
     setattr(x,"NMsimModTab",NULL)
+  if(!is.null(x)){
     setattr(x,"class",setdiff(class(x),"NMsimModTab"))
+  }
+  invisible(x)
 }
 
 
@@ -59,9 +63,20 @@ dimnames.NMsimModTab <- function(x,...){
 ##' @rdname NMsimModTabOperations
 ##' @export
 rbind.NMsimModTab <- function(x,...){
+    list.all <- c(list(x),list(...))
+    list.all <- list.all[!sapply(list.all,is.null)]
+    if(!length(list.all)) return(NULL)
+
+  if(length(list.all)==1){
+    res <- list.all[[1]]
+    return(res)
+  }
     
+
     unNMsimModTab(x)
-    rbind(x,...)
+    res <- rbind(x,...,fill=TRUE)
+    addClass(res,"NMsimModTab")
+    res
 }
 
 ##' @rdname NMsimModTabOperations

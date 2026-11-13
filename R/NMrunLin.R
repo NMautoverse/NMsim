@@ -14,14 +14,15 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
       ##   sprintf("find . -type f -name \"%s\" -exec rm {} \\;",regex) )    
     }
 
-
+  
     name <- NULL
     fn.lst <- fnExtension( fn.mod,".lst")
     line.run <- sprintf("%s %s %s %s",path.nonmem,fn.mod,fn.lst,nmfe.options)
 
   if(sge){
+    
     path.qsub <- NMdataConf()$path.qsub
-    if(is.null("path.qsub")) path.qsub <- "qsub"
+    if(is.null(path.qsub)) path.qsub <- "qsub"
     
     
     ## executing from model execution dir.

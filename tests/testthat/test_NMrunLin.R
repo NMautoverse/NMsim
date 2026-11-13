@@ -14,6 +14,9 @@ expect_equal_to_reference(res,fileRef)
     ref <- readRDS(fileRef)
     res
     ref
-  }
-})
 
+cat(res,"\n")
+cat(ref,"\n")
+
+}
+})

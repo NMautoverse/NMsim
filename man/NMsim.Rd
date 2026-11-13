@@ -8,7 +8,6 @@ NMsim(
   file.mod,
   data,
   subproblems = NULL,
-  reuse.results = FALSE,
   seed.R,
   seed.nm,
   name.sim,
@@ -25,6 +24,8 @@ NMsim(
   path.nonmem = NULL,
   sge = FALSE,
   nc = 1,
+  reuse.results = FALSE,
+  recycle = FALSE,
   execute = TRUE,
   script = NULL,
   transform = NULL,
@@ -78,10 +79,6 @@ data sets in the list.}
 \code{$SIMULATION} block in Nonmem. The default is subproblem=0 which
 means not to use \code{SUBPROBLEMS}.}
 
-\item{reuse.results}{If simulation results found on file, should they be
-used? If TRUE and reading the results fail, the simulations will still be
-rerun.}
-
 \item{seed.R}{A value passed to \code{set.seed()}. It is recommended to use
 \code{seed.R} rather than calling \code{set.seed()} manually because the
 seed can then be captured and stored by \code{NMsim()} for
@@ -102,7 +99,7 @@ Default is to draw seeds betwen
     (say to choose a different pool of seeds to draw from).
 
 To avoid changing an exisiting seed in a control stream, use
-\code{seed.nm="asis"}.
+\code{seed.nm="asis"} or \code{seed.nm="FALSE"}.
 
 In case \code{method.sim=NMsim_EBE}, seeds are not used.}
 
@@ -247,6 +244,15 @@ result.}
 
 \item{nc}{Number of cores used in parallelization. Only used if
 `sge=TRUE`.}
+
+\item{reuse.results}{If simulation results found on file, should they be
+used? If TRUE and reading the results fail, the simulations will still be
+rerun.}
+
+\item{recycle}{Attempt to reuse results using the 'recycle' package. This is
+based on comparing argument values and model files contents to when NMsim
+was last run. If anything has changed, NMsim() will rerun, if not results
+will be recycled from previous run.}
 
 \item{execute}{Execute the simulation or only prepare it?
 `execute=FALSE` can be useful if you want to do additional

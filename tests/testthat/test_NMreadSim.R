@@ -1,22 +1,37 @@
 context("NMreadSim")
 
-#### need a function to drop NMsimVersion and NMsimTime from table
-fix.time <- function(x){
-  meta.x <- attr(x,"NMsimModTab")
-  ## meta.x$time.call <- as.POSIXct("2020-02-01 00:01:01",tz="UTC")
-  toNull <- cc(NMsimVersion,NMsimTime,path.lst.read)
-  toNull <- intersect(toNull,colnames(meta.x))
-  if(length(toNull)){
-    meta.x[,(toNull) := NULL]
-  }
-  ## meta.x$NMsimVersion <- NULL
-  ## meta.x$NMsimTime <- NULL
 
-  ## meta.x$path.lst.read <- NULL
+fix.time <- function(x,extra=NULL){
+
+  toNull <- c(cc(NMsimVersion,NMsimTime,path.lst.read),extra)
+
+  dropcols <- function(dt,toNull){
+    toNull.this <- intersect(toNull,colnames(dt))
+    if(length(dropcols)){
+      dt[,(toNull.this):=NULL]
+    }
+    dt
+  }
+
+
+  modtab <- attr(x,"NMsimModTab")
   
-  setattr(x,"NMsimModTab",meta.x)
+  if(!is.null(modtab)){
+    modtab <- dropcols(modtab,toNull)
+    setattr(x,"NMsimModTab",modtab)
+  }
+  
+  meta.x <- attr(x,"meta")
+  if(!is.null(meta.x)){
+    modtab <- meta.x$models
+    modtab <- dropcols(modtab,toNull)    
+    meta.x$models <- modtab
+    setattr(x,"meta",meta.x)
+  }
+
   invisible(x)
 }
+
 
 library(NMdata)
 library(data.table)
@@ -77,6 +92,7 @@ if(F){
 
 
 test_that("Basic",{
+  
   dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
@@ -87,7 +103,7 @@ test_that("Basic",{
 
   res1 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"))
   ## res2 <- NMreadSim(file.path(dir.res,"xgxr021_sd1_NMreadSim_MetaData.rds"),reread.tmp=TRUE)
-  
+
   fix.time(res1)
   
   expect_equal_to_reference(res1,fileRef)
@@ -99,10 +115,20 @@ test_that("Basic",{
     head(ref)
     head(res1)
 
+    res1.dt <- copy(res1)
+    unNMsimRes(res1.dt)
+    ref.dt <- copy(ref)
+    unNMsimRes(ref.dt)
+
+  expect_equal(res1.dt,
+               ref.dt
+               )
+
+
     compareCols(
-      attributes(res1)$NMsimModTab
+    modTab(res1)
      ,
-      attributes(ref)$NMsimModTab
+     modTab(ref)
      ,keep.names=FALSE)
   }
 
@@ -158,6 +184,16 @@ test_that("From different wd",{
     head(res1)
     head(ref)
     
+    res1.dt <- copy(res1)
+    unNMsimRes(res1.dt)
+    ref.dt <- copy(ref)
+    unNMsimRes(ref.dt)
+
+  expect_equal(res1.dt,
+               ref.dt
+               )
+
+
     compareCols(
       attributes(res1)$NMsimModTab
      ,
@@ -170,6 +206,7 @@ test_that("From different wd",{
 ## }
 
 test_that("carry.out depends on fast.tables",{
+
   dir.sims <- "testData/keepsimtmp"
   dir.res <- "testData/simres"
 
@@ -272,6 +309,7 @@ test_that("NMsim with carry.out",{
 })
 
 test_that("NMsim with table.vars. Use carry.out when reading results",{
+
   fileRef <- "testReference/NMreadSim_05.rds"
   ### case dependent on table.vars 
   

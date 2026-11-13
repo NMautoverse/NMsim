@@ -437,7 +437,7 @@ test_that("No ONLYSIM",{
     ## ref <- readRDS(fileRef)
     expect_equal_to_reference(sim1,fileRef)
 
-    res1 <- NMreadSection(readRDS(sim1)$path.sim,section="sim")
+    res1 <- NMreadSection(readRDS(sim1)$models$path.sim,section="sim")
     res1 <- NMdata:::cleanSpaces(res1)
 
     expect_equal(res1,"$SIMULATION (2342)")

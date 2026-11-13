@@ -6,3 +6,4 @@ tests/testthat/testOutput/*
 vignettes/*html
 vignettes/simtmp*/*.lst
 .aider*
+*.xml
