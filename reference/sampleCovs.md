@@ -1,9 +1,9 @@
 # Sample subject-level covariates from an existing data set
 
-Repeats a data set with just one subject by sampling covariates from
-subjects (with replacement) in an existing data set. This can
-conveniently be used to generate new subjects with covariate resampling
-from an studied population.
+Repeats a data set with just one subject by sampling subject-level
+covariates from subjects (with replacement) in an existing data set.
+This can conveniently be used to generate new subjects with covariate
+resampling from an studied population.
 
 ## Usage
 
@@ -46,6 +46,8 @@ sampleCovs(
 - data.covs:
 
   The data set containing the subjects to sample covariates from.
+  Notice, this data set can be a longitudinal data set - covariates will
+  be sampled after reducing to unique id-covariate combinations.
 
 - covs:
 

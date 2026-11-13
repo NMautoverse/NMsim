@@ -1,16 +1,50 @@
 # Changelog
 
-## NMsim 0.2.9
+## NMsim 0.3.0
+
+### New Features
+
+- [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
+  gains a new (experimental) argument `recycle`. When `recycle=TRUE`,
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
+  will compare the arguments used to call
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md) as
+  well as the contents of the input control stream(s) (and a few other
+  input files) to what was used the last time
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
+  was run for the same model (tracked via a digest stored in the results
+  metadata `rds` file). If nothing relevant has changed, the existing
+  simulation results are reused (“recycled”) instead of rerunning
+  Nonmem, which can save significant time when repeatedly developing or
+  re-running scripts that call
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
+  for unchanged models. If something has changed, that model is
+  automatically simulated again. This is independent per model when
+  multiple models are passed in `file.mod`, so some models can be
+  recycled while others are rerun. Feedback is welcome.
+
+- New function to keep nodes available in sge clusters.
+  [`qpoke()`](https://nmautoverse.github.io/NMsim/reference/qpoke.md).
+  Please use with caution as keeping nodes running may be associated
+  with a cost.
+
+### Bugfixes
+
+- `qsub`
 
 ### Other Improvements
 
-[`forestDefineCovs()`](https://nmautoverse.github.io/NMsim/reference/forestDefineCovs.md)
-uses variable names as labels if label isn’t provided.
+- [`forestDefineCovs()`](https://nmautoverse.github.io/NMsim/reference/forestDefineCovs.md)
+  uses variable names as labels if `label` isn’t provided.
 
-[`forestSummarize()`](https://nmautoverse.github.io/NMsim/reference/forestSummarize.md)
-considers any `EVID%in%c(0,2)`. It used to consider only `EVID==2`. It
-also checks whether any simulation data is found before moving on to the
-post-processing.
+- [`forestSummarize()`](https://nmautoverse.github.io/NMsim/reference/forestSummarize.md)
+  considers any `EVID%in%c(0,2)`. It used to consider only `EVID==2`. It
+  also checks whether any simulation data is found before moving on to
+  the post-processing.
+
+- Additional files are being cleaned up after Nonmem execution. This
+  further reduces the disk space usage of the temporary model execution
+  folders (`dir.sims`).
 
 ## NMsim 0.2.8
 

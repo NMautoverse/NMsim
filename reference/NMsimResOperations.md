@@ -27,6 +27,9 @@ rbind(x, ...)
 
 # S3 method for class 'NMsimRes'
 cbind(x, ...)
+
+# S3 method for class 'NMsimResMeta'
+rbind(x, ...)
 ```
 
 ## Arguments

@@ -16,7 +16,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.8.901</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.8.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +44,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.9" id="nmsim-029">NMsim 0.2.9<a class="anchor" aria-label="anchor" href="#nmsim-029"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="nmsim-030">NMsim 0.3.0<a class="anchor" aria-label="anchor" href="#nmsim-030"></a></h2>
 <div class="section level3">
-<h3 id="other-improvements-0-2-9">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-2-9"></a></h3>
-<p><code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code> uses variable names as labels if label isn’t provided.</p>
-<p><code><a href="../reference/forestSummarize.html">forestSummarize()</a></code> considers any <code>EVID%in%c(0,2)</code>. It used to consider only <code>EVID==2</code>. It also checks whether any simulation data is found before moving on to the post-processing.</p>
-</div>
+<h3 id="new-features-0-3-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
+<ul><li><p><code><a href="../reference/NMsim.html">NMsim()</a></code> gains a new (experimental) argument <code>recycle</code>. When <code>recycle=TRUE</code>, <code><a href="../reference/NMsim.html">NMsim()</a></code> will compare the arguments used to call <code><a href="../reference/NMsim.html">NMsim()</a></code> as well as the contents of the input control stream(s) (and a few other input files) to what was used the last time <code><a href="../reference/NMsim.html">NMsim()</a></code> was run for the same model (tracked via a digest stored in the results metadata <code>rds</code> file). If nothing relevant has changed, the existing simulation results are reused (“recycled”) instead of rerunning Nonmem, which can save significant time when repeatedly developing or re-running scripts that call <code><a href="../reference/NMsim.html">NMsim()</a></code> for unchanged models. If something has changed, that model is automatically simulated again. This is independent per model when multiple models are passed in <code>file.mod</code>, so some models can be recycled while others are rerun. Feedback is welcome.</p></li>
+<li><p>New function to keep nodes available in sge clusters. <code><a href="../reference/qpoke.html">qpoke()</a></code>. Please use with caution as keeping nodes running may be associated with a cost.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-0-3-0">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-3-0"></a></h3>
+<ul><li><code>qsub</code></li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-improvements-0-3-0">Other Improvements<a class="anchor" aria-label="anchor" href="#other-improvements-0-3-0"></a></h3>
+<ul><li><p><code><a href="../reference/forestDefineCovs.html">forestDefineCovs()</a></code> uses variable names as labels if <code>label</code> isn’t provided.</p></li>
+<li><p><code><a href="../reference/forestSummarize.html">forestSummarize()</a></code> considers any <code>EVID%in%c(0,2)</code>. It used to consider only <code>EVID==2</code>. It also checks whether any simulation data is found before moving on to the post-processing.</p></li>
+<li><p>Additional files are being cleaned up after Nonmem execution. This further reduces the disk space usage of the temporary model execution folders (<code>dir.sims</code>).</p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.8" id="nmsim-028">NMsim 0.2.8<a class="anchor" aria-label="anchor" href="#nmsim-028"></a></h2><p class="text-muted">CRAN release: 2026-09-08</p>

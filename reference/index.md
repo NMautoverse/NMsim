@@ -27,6 +27,7 @@
   [`dimnames(`*`<NMsimRes>`*`)`](https://nmautoverse.github.io/NMsim/reference/NMsimResOperations.md)
   [`rbind(`*`<NMsimRes>`*`)`](https://nmautoverse.github.io/NMsim/reference/NMsimResOperations.md)
   [`cbind(`*`<NMsimRes>`*`)`](https://nmautoverse.github.io/NMsim/reference/NMsimResOperations.md)
+  [`rbind(`*`<NMsimResMeta>`*`)`](https://nmautoverse.github.io/NMsim/reference/NMsimResOperations.md)
   : Remove NMsimRes class and discard NMsimRes meta data
 - [`NMsimTestConf()`](https://nmautoverse.github.io/NMsim/reference/NMsimTestConf.md)
   : Summarize and test NMsim configuration
@@ -78,6 +79,8 @@
   : print method for NMsimRes summaries
 - [`prioritizePaths()`](https://nmautoverse.github.io/NMsim/reference/prioritizePaths.md)
   : first path that works
+- [`qpoke()`](https://nmautoverse.github.io/NMsim/reference/qpoke.md) :
+  Keep queuing system nodes warm/available
 - [`readParsWide()`](https://nmautoverse.github.io/NMsim/reference/readParsWide.md)
   : Parameter data from csv
 - [`sampleCovs()`](https://nmautoverse.github.io/NMsim/reference/sampleCovs.md)
