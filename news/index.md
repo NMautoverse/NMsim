@@ -32,7 +32,10 @@ CRAN release: 2026-11-13
 
 ### Bugfixes
 
-- `qsub`
+- The
+  [`NMsim()`](https://nmautoverse.github.io/NMsim/reference/NMsim.md)
+  parallelization feature (the `sge` argument) was essentially broken in
+  version 0.2.8. This has been fixed.
 
 ### Other Improvements
 
