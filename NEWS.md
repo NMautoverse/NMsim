@@ -7,7 +7,7 @@
 * New function to keep nodes available in sge clusters. `qpoke()`. Please use with caution as keeping nodes running may be associated with a cost.
 
 ## Bugfixes
-* `qsub` 
+* The `NMsim()` parallelization feature (the `sge` argument) was essentially broken in version 0.2.8. This has been fixed. 
 
 ## Other Improvements
 * `forestDefineCovs()` uses variable names as labels if `label` isn't provided.
