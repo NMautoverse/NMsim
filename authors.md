@@ -13,7 +13,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/nmautoverse/NMsim/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/nmautoverse/NMsim/blob/v0.3.0/DESCRIPTION)
 
 Delff P (2026). *NMsim: Seamless 'Nonmem' Simulation Platform*. R
 package version 0.3.0, <https://nmautoverse.github.io/NMsim/>.
